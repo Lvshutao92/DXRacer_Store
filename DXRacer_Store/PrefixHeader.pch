@@ -1,0 +1,158 @@
+//
+//  PrefixHeader.pch
+//  DMS
+//
+//  Created by 吕书涛 on 2018/3/5.
+//  Copyright © 2018年 吕书涛. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+
+#import <AFNetworking/AFNetworking.h>
+#import <MBProgressHUD/MBProgressHUD.h>
+#import <MJRefresh/MJRefresh.h>
+#import <MJExtension/MJExtension.h>
+#import <XYQRegexPattern/XYQRegexPatternHelper.h>
+#import <UIImageView+WebCache.h>
+#import <IQKeyboardManager/IQKeyboardManager.h>
+#import <Masonry/Masonry.h>
+/// iOS 9前的框架
+#import <AddressBook/AddressBook.h>
+#import <AddressBookUI/AddressBookUI.h>
+/// iOS 9的新框架
+#import <ContactsUI/ContactsUI.h>
+
+
+#import "Manager.h"
+#import "MainTabbarViewController.h"
+#import "MainNavigationViewController.h"
+#import "LoginViewController.h"
+#import "RegisterViewController.h"
+
+//控件
+#import "HJCAjustNumButton.h"
+#import "KGCustomButton.h"
+#import "SQCustomButton.h"
+#import "SDCycleScrollView.h"
+#import "PYSearch.h"
+#import "IrregularLabel.h"
+#import "EasyAlertView.h"
+#import "CZHDatePickerView.h"
+#import "DatePickerHeader.h"
+
+#import "DXSearchBar.h"
+#import "LLPhotoBrowser.h"
+
+//cell view
+#import "PersonCell.h"
+#import "ShoopingCell.h"
+#import "GetACouponCell.h"
+#import "PInfoCell.h"
+#import "AddressCell.h"
+
+#import "FL_1_Cell.h"
+#import "FL_2_Cell.h"
+#import "Collec_1_Cell.h"
+#import "Collec_2_Cell.h"
+#import "Collec_3_Cell.h"
+#import "Table_4_Cell.h"
+
+#import "CreateOrderCell.h"
+#import "BigImgTableViewCell.h"
+//model
+#import "Model.h"
+
+
+#import "XTGuidePagesViewController.h"
+#import "CALayer+Transition.h"
+
+//判断 iOS 8 或更高的系统版本
+#define IOS_VERSION_8_OR_LATER (([[[UIDevice currentDevice] systemVersion] floatValue] >=8.0)? (YES):(NO))
+
+#define IOS_VERSION_9_OR_LATER (([[[UIDevice currentDevice] systemVersion] floatValue] >=9.0)? (YES):(NO))
+
+
+//获取当前语言
+#define LRCurrentLanguage ([[NSLocale preferredLanguages] objectAtIndex:0])
+//由角度转换弧度 由弧度转换角度
+#define LRDegreesToRadian(x) (M_PI * (x) / 180.0)
+#define LRRadianToDegrees(radian) (radian*180.0)/(M_PI)
+//设置 view 圆角和边框
+#define LRViewBorderRadius(View, Radius, Width, Color)\
+\
+[View.layer setCornerRadius:(Radius)];\
+[View.layer setMasksToBounds:YES];\
+[View.layer setBorderWidth:(Width)];\
+[View.layer setBorderColor:[Color CGColor]]
+
+//弱引用/强引用
+#define LRWeakSelf(type)  __weak typeof(type) weak##type = type;
+#define LRStrongSelf(type)  __strong typeof(type) type = weak##type;
+//获取屏幕 宽度、高度
+#define SCREEN_WIDTH ([UIScreen mainScreen].bounds.size.width)
+#define SCREEN_HEIGHT ([UIScreen mainScreen].bounds.size.height)
+//以iPhone6为基础
+#define SCALE_WIDTH SCREEN_WIDTH/375
+#define SCALE_HEIGHT SCREEN_HEIGHT/667
+//获取系统版本
+#define IOS_VERSION [[[UIDevice currentDevice] systemVersion] floatValue]
+#define CurrentSystemVersion [[UIDevice currentDevice] systemVersion]
+//rgb alpha颜色
+#define RGBACOLOR(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)]
+
+
+
+//获取当前语言
+#define CurrentLanguage ([[NSLocale preferredLanguages] objectAtIndex:0])
+//判断设备的操做系统ios8.0
+#define IOS8 ([[UIDevice currentDevice].systemVersion doubleValue] >= 8.0])
+//根视图
+#define KWINDOW_ROOT [[[UIApplication sharedApplication] delegate] window].rootViewController
+//屏幕大小
+#define kScreenBounds [UIScreen mainScreen].bounds
+
+
+//显示头像的域名是
+#define NSString(str) [NSString stringWithFormat:@"http://test-shop-img.dxracer.com.cn/%@",str]
+#define CHECKWORD @""
+//#define KURLNSString(str) [NSString stringWithFormat:@"http://10.0.0.30:8080/dxracer-mall-api/app/%@",str]
+
+//#define KURLNSString(str) [NSString stringWithFormat:@"http://10.0.0.2:8081/mall/app/%@",str]
+
+
+
+
+#define KURLNSString(str) [NSString stringWithFormat:@"http://test-shop.dxracer.com.cn:8084/mall/app/%@",str]
+
+
+
+
+#import "UIView+DWQExtension.h"
+
+#define FONT(s)       [UIFont systemFontOfSize:s]
+#define screen_Width [UIScreen mainScreen].bounds.size.width
+#define screen_Height [UIScreen mainScreen].bounds.size.height
+
+#define BackgroundColor [UIColor colorWithRed:240/255.0f green:240/255.0f blue:244/255.0f alpha:1]
+#define SelectColor        [UIColor colorWithRed:238/255.0f green:10/255.0f blue:35/255.0f alpha:1]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#endif /* PrefixHeader_pch */
