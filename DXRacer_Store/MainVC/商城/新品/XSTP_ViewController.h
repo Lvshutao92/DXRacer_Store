@@ -1,13 +1,13 @@
 //
-//  XiLieViewController.h
+//  XSTP_ViewController.h
 //  DXRacer_Store
 //
-//  Created by ilovedxracer on 2018/5/2.
+//  Created by ilovedxracer on 2018/5/21.
 //  Copyright © 2018年 ilovedxracer. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface XiLieViewController : UIViewController
+@interface XSTP_ViewController : UIViewController
 
 @end

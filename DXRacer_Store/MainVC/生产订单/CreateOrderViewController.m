@@ -10,8 +10,7 @@
 #import "AddrViewController.h"
 #import "CartModel.h"
 
-#import "TFSheetView.h"
-
+#import "ProductOrder_TwoDetails_ViewController.h"
 #import "ProductOrderDetailsViewController.h"
 
 #import <AlipaySDK/AlipaySDK.h>
@@ -199,7 +198,10 @@
                 weakSelf.tfSheetView = [[TFSheetView alloc]init];
                 //取消
                 weakSelf.tfSheetView.cancelBlock = ^{
-                    NSLog(@"取消");
+                    ProductOrder_TwoDetails_ViewController *or = [[ProductOrder_TwoDetails_ViewController alloc]init];
+                    or.orderNo = [diction objectForKey:@"msg"];
+                    or.orderStatus = @"待付款";
+                    [self.navigationController pushViewController:or animated:YES];
                     [weakSelf.tfSheetView disMissView];
                 };
                 //微信支付

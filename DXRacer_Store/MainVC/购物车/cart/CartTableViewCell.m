@@ -74,9 +74,11 @@
 
 -(void)reloadDataWith:(CartModel*)model
 {
-
-    NSLog(@"------%@",NSString(model.image));
-    [self.imageView_cell sd_setImageWithURL:[NSURL URLWithString:NSString(model.image)]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.imageView_cell sd_setImageWithURL:[NSURL URLWithString:NSString(model.image)]placeholderImage:[UIImage imageNamed:@""]];
+    });
+    //NSLog(@"------%@",NSString(model.image));
+    
     self.nameLabel.text = model.productName;
 //    self.priceLabel.text = [Manager jinegeshi:model.salePrice];
     self.dateLabel.text = [Manager jinegeshi:model.salePrice];
@@ -245,7 +247,7 @@
     [self.numberLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(addBtn.mas_left);
         make.bottom.equalTo(addBtn);
-        make.width.equalTo(addBtn);
+        make.width.equalTo(@40);
         make.height.equalTo(addBtn);
     }];
     

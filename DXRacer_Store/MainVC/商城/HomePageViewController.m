@@ -8,14 +8,24 @@
 
 #import "HomePageViewController.h"
 #import "SearchController.h"
+#import "XSTP_ViewController.h"
+#import "XPPD_ViewController.h"
+#import "ProductXiangqingViewController.h"
 @interface HomePageViewController ()<UITableViewDelegate,UITableViewDataSource,SDCycleScrollViewDelegate,UISearchBarDelegate,UIScrollViewDelegate,PYSearchViewControllerDelegate,UICollectionViewDelegate,UICollectionViewDataSource>
 {
     UIView *view_bar;
     UIView *headerV;
+    UIView *centerV;
     UIView *footerV;
     
     UILabel *cenLab1;
     UILabel *cenLab2;
+    
+    
+    UIImageView *img1;
+    UIImageView *img2;
+    
+    NSInteger index_j;
 }
 @property(nonatomic,strong)UISearchBar *customSearchBar;
 
@@ -48,6 +58,7 @@
         if ([code isEqualToString:@"200"]){
             if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"object"]] == YES) {
                 NSMutableArray *arr = [diction objectForKey:@"object"];
+                [weakSelf.lunboArray removeAllObjects];
                 for (NSDictionary *dicc in arr) {
                     Model *model = [Model mj_objectWithKeyValues:dicc];
                     [weakSelf.lunboArray addObject:model];
@@ -74,47 +85,50 @@
     __weak typeof(self) weakSelf = self;
     [Manager requestGETWithURLStr:KURLNSString(@"index/advert") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSLog(@"******%@",diction);
+        //NSLog(@"******%@",diction);
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
-            
             if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"object"]] == YES) {
                 NSMutableArray *arr = [diction objectForKey:@"object"];
-//-------------collectionView1--------------------------------------
-                NSMutableArray *arr1 = [arr[0] objectForKey:@"list"];
-                for (NSDictionary *dic in arr1) {
-                    Model *model = [Model mj_objectWithKeyValues:dic];
-                    //CGFloat wid = [model.proportion floatValue];
-                    [weakSelf.dataArray1 addObject:model];
+                
+                CGFloat gao = SCREEN_WIDTH/2*18/32;
+                //NSLog(@"-------%lf",gao);
+                self->img1.frame = CGRectMake(0, 200+arr.count*185+10, SCREEN_WIDTH/2, gao);
+                self->img2.frame = CGRectMake(SCREEN_WIDTH/2, 200+arr.count*185+10, SCREEN_WIDTH/2, gao);
+                self->centerV.frame = CGRectMake(0, 220+arr.count*185+gao, SCREEN_WIDTH, 100);
+                self->headerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, 200+arr.count*185+130+gao);
+                
+                for (int j = 0; j<arr.count; j++) {
+                    self->index_j = j;
+                    NSMutableArray *arr1 = [arr[j] objectForKey:@"list"];
+                    [weakSelf.dataArray1 removeAllObjects];
+                    for (NSDictionary *dic in arr1) {
+                        Model *model = [Model mj_objectWithKeyValues:dic];
+                        [weakSelf.dataArray1 addObject:model];
+                    }
+                    CGFloat heit = 0.0;
+                    for (int i = 0; i<weakSelf.dataArray1.count; i++) {
+                        Model *model = [weakSelf.dataArray1 objectAtIndex:i];
+                        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+                        CGFloat wid = [model.proportion floatValue]/100*SCREEN_WIDTH;
+                        btn.frame = CGRectMake(heit, 200+j*185, wid, 185);
+                        LRViewBorderRadius(btn, 0, .5, [UIColor colorWithWhite:.8 alpha:.3]);
+                        
+                        [btn addTarget:self action:@selector(clickbt:) forControlEvents:UIControlEventTouchUpInside];
+                        
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [btn setTitle:model.id forState:UIControlStateNormal];
+                            [btn setImage:[Manager imageFromURLString:NSString(model.imgUrl)] forState:UIControlStateNormal];
+                        });
+                        
+                        btn.tag = i;
+                        [self->headerV addSubview:btn];
+                        
+                        heit = heit + wid;
+                    }
+                   
                 }
-                CGFloat heit = 0.0;
-                for (int i = 0; i<weakSelf.dataArray1.count; i++) {
-                    Model *model = [weakSelf.dataArray1 objectAtIndex:i];
-                    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-                    CGFloat wid = [model.proportion floatValue]/100*SCREEN_WIDTH;
-                    btn.frame = CGRectMake(heit, 200, wid, 185);
-                    LRViewBorderRadius(btn, 0, .5, [UIColor colorWithWhite:.8 alpha:.3]);
-                    [btn setImage:[Manager imageFromURLString:NSString(model.imgUrl)] forState:UIControlStateNormal];
-                    [self->headerV addSubview:btn];
-                    heit = heit + wid;
-                }
-//-------------collectionView2------------------------------------
-                NSMutableArray *arr2 = [arr[1] objectForKey:@"list"];
-                for (NSDictionary *dic in arr2) {
-                    Model *model = [Model mj_objectWithKeyValues:dic];
-                    [weakSelf.dataArray2 addObject:model];
-                }
-                CGFloat heits = 0.0;
-                for (int i = 0; i<weakSelf.dataArray2.count; i++) {
-                    Model *model = [weakSelf.dataArray2 objectAtIndex:i];
-                    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-                    CGFloat wids = [model.proportion floatValue]/100*SCREEN_WIDTH;
-                    btn.frame = CGRectMake(heits, 385, wids, 120);
-                    LRViewBorderRadius(btn, 0, .5, [UIColor colorWithWhite:.8 alpha:.3]);
-                    [btn setImage:[Manager imageFromURLString:NSString(model.imgUrl)] forState:UIControlStateNormal];
-                    [self->headerV addSubview:btn];
-                    heits = heits + wids;
-                }
+                
             }
         }
 
@@ -122,7 +136,24 @@
         NSLog(@"------%@",error);
     }];
 }
+- (void)clickbt:(UIButton *)sender{
+    NSLog(@"---------%@",sender.titleLabel.text);
+    ProductXiangqingViewController *details = [[ProductXiangqingViewController alloc]init];
+    details.idStr = sender.titleLabel.text;
+    [self.navigationController pushViewController:details animated:YES];
+}
 
+- (void)clickbtn1:(UITapGestureRecognizer *)tap{
+    XSTP_ViewController *xstp = [[XSTP_ViewController alloc]init];
+    xstp.navigationItem.title = @"新手特权";
+    [self.navigationController pushViewController:xstp animated:YES];
+}
+
+- (void)clickbtn2:(UITapGestureRecognizer *)tap{
+    XPPD_ViewController *xppd = [[XPPD_ViewController alloc]init];
+    xppd.navigationItem.title = @"新品频道";
+    [self.navigationController pushViewController:xppd animated:YES];
+}
 
 
 
@@ -145,19 +176,36 @@
     [self.tableview registerNib:[UINib nibWithNibName:@"Table_4_Cell" bundle:nil] forCellReuseIdentifier:@"Table_4_Cell"];
     [self.view addSubview:self.tableview];
     
-    headerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 625)];
-    self.tableview.tableHeaderView = headerV;
-    footerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 900)];
-    self.tableview.tableFooterView = footerV;
+    headerV = [[UIView alloc]init];
     headerV.backgroundColor =RGBACOLOR(237, 236, 242, 1);
-    footerV.backgroundColor =RGBACOLOR(237, 236, 242, 1);
+    self.tableview.tableHeaderView = headerV;
     
     self.cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 200) delegate:self placeholderImage:[UIImage imageNamed:@"placeholder"]];
     self.cycleScrollView.currentPageDotImage = [UIImage imageNamed:@"pageControlCurrentDot"];
     self.cycleScrollView.pageDotImage = [UIImage imageNamed:@"pageControlDot"];
     [headerV addSubview:self.cycleScrollView];
     
-    UIView *centerV = [[UIView alloc]initWithFrame:CGRectMake(0, 515, SCREEN_WIDTH, 100)];
+    
+    img1 = [[UIImageView alloc]init];
+    LRViewBorderRadius(img1, 0, .5, [UIColor colorWithWhite:.8 alpha:.3]);
+    img1.image = [UIImage imageNamed:@"xstq.jpg"];
+    img1.userInteractionEnabled = YES;
+    img1.contentMode = UIViewContentModeScaleAspectFit;
+    UITapGestureRecognizer *tap1 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickbtn1:)];
+    [img1 addGestureRecognizer:tap1];
+    [self->headerV addSubview:img1];
+    
+    img2 = [[UIImageView alloc]init];
+    LRViewBorderRadius(img2, 0, .5, [UIColor colorWithWhite:.8 alpha:.3]);
+    img2.image = [UIImage imageNamed:@"xppd.jpg"];
+    img2.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tap2 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickbtn2:)];
+    [img2 addGestureRecognizer:tap2];
+    [self->headerV addSubview:img2];
+    
+    
+    
+    centerV = [[UIView alloc]init];
     centerV.backgroundColor = [UIColor whiteColor];
     [headerV addSubview:centerV];
     cenLab1 = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, SCREEN_WIDTH, 40)];
@@ -173,13 +221,13 @@
     [centerV addSubview:cenLab2];
     
     
+    
+    footerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 900)];
+    self.tableview.tableFooterView = footerV;
+    footerV.backgroundColor =RGBACOLOR(237, 236, 242, 1);
     UIView *centerFooterV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 60)];
     centerFooterV.backgroundColor = [UIColor whiteColor];
     [footerV addSubview:centerFooterV];
-    
-    
-    
-    
     
     
     
@@ -188,8 +236,7 @@
     
     [self initCollectionView3];
     
-    [self getTopPic];
-    [self getGuanggao];
+    
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 2;
@@ -201,11 +248,16 @@
     
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    Table_4_Cell *cell = [tableView dequeueReusableCellWithIdentifier:@"Table_4_Cell" forIndexPath:indexPath];
+    static NSString *identifierCell = @"Table_4_Cell";
+    Table_4_Cell *cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+    if (cell == nil) {
+        cell = [[Table_4_Cell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifierCell];
+    }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.line.backgroundColor = RGBACOLOR(237, 236, 242, 1);
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    cell.img.image = [UIImage imageNamed:@"chiji.jpg"];
+    cell.img.image = [UIImage imageNamed:@""];
     cell.img.contentMode = UIViewContentModeScaleAspectFill;
     cell.img.clipsToBounds = YES;
     
@@ -305,9 +357,10 @@
     // 由于其子控件是懒加载模式, 所以找之前先将其显示
     [_customSearchBar setShowsCancelButton:NO animated:YES];
     
-    UIImage *theImage = [UIImage imageNamed:@"btn_nav_scan"];
+    UIImage *theImage = [UIImage imageNamed:@"dx.jpg"];
     //    theImage = [theImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     UIButton* meBtn=[[UIButton alloc]initWithFrame:CGRectMake(15, 20+(hei-30)/2+2, 30, 30)];
+    LRViewBorderRadius(meBtn, 15, 0, [UIColor clearColor]);
     [meBtn setBackgroundImage:theImage forState:UIControlStateNormal];
     //    [meBtn setTintColor:[UIColor blackColor]];
     [meBtn addTarget:self action:@selector(onLeftNavBtnClick) forControlEvents:UIControlEventTouchUpInside];
@@ -478,6 +531,9 @@
     self.tabBarController.tabBar.hidden = NO;
     [self SetNavBarHidden:YES];
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    
+    [self getTopPic];
+    [self getGuanggao];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{

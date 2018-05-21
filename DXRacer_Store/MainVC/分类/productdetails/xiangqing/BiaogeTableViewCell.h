@@ -14,5 +14,4 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *lab2;
 
-
 @end

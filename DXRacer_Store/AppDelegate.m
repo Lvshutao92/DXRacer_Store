@@ -179,7 +179,7 @@ UIBackgroundTaskIdentifier taskId;
     if ([url.host isEqualToString:@"safepay"]) {
         // 支付跳转支付宝钱包进行支付，处理支付结果
         [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
-//            NSLog(@"^^^^^^^^^^^^^^^^^^^ result = %@",resultDic);
+            NSLog(@"^^^^^^^^^^^^^^^^^^^ result = %@",resultDic);
             
             NSData *jsonData = [[resultDic objectForKey:@"result"] dataUsingEncoding:NSUTF8StringEncoding];
             NSError *err;
@@ -190,6 +190,7 @@ UIBackgroundTaskIdentifier taskId;
             
             if ([str isEqualToString:@"10000"]) {
                 ProductOrderDetailsViewController *vvv = [[ProductOrderDetailsViewController alloc]init];
+                vvv.orderNo = [[dic objectForKey:@"alipay_trade_app_pay_response"]objectForKey:@"out_trade_no"];
                 // 取到tabbarcontroller
                 UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
                 // 取到navigationcontroller
@@ -203,7 +204,7 @@ UIBackgroundTaskIdentifier taskId;
         
         // 授权跳转支付宝钱包进行支付，处理支付结果
         [[AlipaySDK defaultService] processAuth_V2Result:url standbyCallback:^(NSDictionary *resultDic) {
-//            NSLog(@"&&&&&&&&&&&&&&&&&&&&&&& result = %@",resultDic);
+            NSLog(@"&&&&&&&&&&&&&&&&&&&&&&& result = %@",resultDic);
             
             
             
@@ -217,6 +218,7 @@ UIBackgroundTaskIdentifier taskId;
             
             if ([str isEqualToString:@"10000"]) {
                 ProductOrderDetailsViewController *vvv = [[ProductOrderDetailsViewController alloc]init];
+                vvv.orderNo = [[dic objectForKey:@"alipay_trade_app_pay_response"]objectForKey:@"out_trade_no"];
                 // 取到tabbarcontroller
                 UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
                 // 取到navigationcontroller
@@ -251,7 +253,7 @@ UIBackgroundTaskIdentifier taskId;
     if ([url.host isEqualToString:@"safepay"]) {
         // 支付跳转支付宝钱包进行支付，处理支付结果
         [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
-            
+            NSLog(@"$$$$$$$$$$$$$$$$$$$---result = %@",resultDic);
             NSData *jsonData = [[resultDic objectForKey:@"result"] dataUsingEncoding:NSUTF8StringEncoding];
             NSError *err;
             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData
@@ -261,6 +263,7 @@ UIBackgroundTaskIdentifier taskId;
             
             if ([str isEqualToString:@"10000"]) {
                 ProductOrderDetailsViewController *vvv = [[ProductOrderDetailsViewController alloc]init];
+                vvv.orderNo = [[dic objectForKey:@"alipay_trade_app_pay_response"]objectForKey:@"out_trade_no"];
                 // 取到tabbarcontroller
                 UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
                 // 取到navigationcontroller
@@ -272,7 +275,7 @@ UIBackgroundTaskIdentifier taskId;
         
         // 授权跳转支付宝钱包进行支付，处理支付结果
         [[AlipaySDK defaultService] processAuth_V2Result:url standbyCallback:^(NSDictionary *resultDic) {
-//       NSLog(@"--------------------------------result = %@",resultDic);
+       NSLog(@"--------------------------------result = %@",resultDic);
             
             
             NSData *jsonData = [[resultDic objectForKey:@"result"] dataUsingEncoding:NSUTF8StringEncoding];
@@ -284,6 +287,7 @@ UIBackgroundTaskIdentifier taskId;
             
             if ([str isEqualToString:@"10000"]) {
                 ProductOrderDetailsViewController *vvv = [[ProductOrderDetailsViewController alloc]init];
+                vvv.orderNo = [[dic objectForKey:@"alipay_trade_app_pay_response"]objectForKey:@"out_trade_no"];
                 // 取到tabbarcontroller
                 UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
                 // 取到navigationcontroller

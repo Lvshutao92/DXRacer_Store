@@ -45,6 +45,7 @@
 #import "DXSearchBar.h"
 #import "LLPhotoBrowser.h"
 
+#import "TFSheetView.h"
 //cell view
 #import "PersonCell.h"
 #import "ShoopingCell.h"

@@ -8,6 +8,8 @@
 
 #import "BiaogeTableViewCell.h"
 
+
+
 @implementation BiaogeTableViewCell
 
 - (void)awakeFromNib {
@@ -20,5 +22,11 @@
 
     // Configure the view for the selected state
 }
+
+
+
+
+
+
 
 @end

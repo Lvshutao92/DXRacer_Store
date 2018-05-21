@@ -1,20 +1,32 @@
 //
-//  ProductOrderDetailsViewController.m
+//  ProductOrder_TwoDetails_ViewController.m
 //  DXRacer_Store
 //
-//  Created by ilovedxracer on 2018/5/18.
+//  Created by ilovedxracer on 2018/5/21.
 //  Copyright © 2018年 ilovedxracer. All rights reserved.
 //
 
-#import "ProductOrderDetailsViewController.h"
+#import "ProductOrder_TwoDetails_ViewController.h"
 #import "DZFOrderCell.h"
-@interface ProductOrderDetailsViewController ()<UITableViewDelegate,UITableViewDataSource>
+
+#import <AlipaySDK/AlipaySDK.h>
+
+#import "APAuthInfo.h"
+#import "APOrderInfo.h"
+#import "APRSASigner.h"
+
+
+#define AP_SUBVIEW_XGAP   (20.0f)
+#define AP_SUBVIEW_YGAP   (30.0f)
+#define AP_SUBVIEW_WIDTH  (([UIScreen mainScreen].bounds.size.width) - 2*(AP_SUBVIEW_XGAP))
+
+#define AP_BUTTON_HEIGHT  (60.0f)
+#define AP_INFO_HEIGHT    (200.0f)
+@interface ProductOrder_TwoDetails_ViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
     //bottom
     NSString *btn1Title;
     NSString *btn2Title;
-    NSString *btn3Title;
-    NSString *btn4Title;
     
     //header
     UIImageView *imgV;
@@ -26,7 +38,6 @@
     UILabel *orderCreatetimeLab;
     
     UILabel *payTypeLab;
-    UILabel *payCreatetimeLab;
     
     UILabel *invioceTypeLab;
     UILabel *invioceTitleLab;
@@ -40,22 +51,22 @@
 @property(nonatomic,strong)UITableView *tableview;
 @property(nonatomic,strong)NSMutableArray *dataArray;//数据源
 
+
+@property(nonatomic,strong)TFSheetView *tfSheetView;
 @end
 
-@implementation ProductOrderDetailsViewController
+@implementation ProductOrder_TwoDetails_ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = RGBACOLOR(237, 236, 242, 1);
     self.navigationItem.title = @"订单详情";
     
-    btn1Title = @"确认收货";
-    btn2Title = @"再次购买";
-    btn3Title = @"我要催单";
+    btn1Title = @"去支付";
+    btn2Title = @"取消订单";
     
     
     self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-61) style:UITableViewStylePlain];
-//    self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
     [self.tableview registerNib:[UINib nibWithNibName:@"DZFOrderCell" bundle:nil] forCellReuseIdentifier:@"DZFOrderCell"];
@@ -64,13 +75,6 @@
     
     [self setUpHeaderView];
     [self setUpFooterView];
-    
-    
-    
-    
-    
-    
-    
     
     
     [self setupDibuView];
@@ -90,13 +94,15 @@
         NSDictionary *diction = [Manager returndictiondata:responseObject];
         NSLog(@"==////======%@",diction);
         
-        //物流
         //地址
         NSDictionary *addressDic = [diction objectForKey:@"shippingAddress"];
+        
         self->namelab.text = [NSString stringWithFormat:@"收货人：%@   %@",[addressDic objectForKey:@"receiverName"],[addressDic objectForKey:@"receiverMobile"]];
+        
         CGFloat titleHeight = [Manager getLabelHeightWithContent:[NSString stringWithFormat:@"收货地址：%@%@%@%@",[addressDic objectForKey:@"receiverState"],[addressDic objectForKey:@"receiverCity"],[addressDic objectForKey:@"receiverDistrict"],[addressDic objectForKey:@"receiverAddress"]] andLabelWidth:SCREEN_WIDTH-65 andLabelFontSize:14];
-        self->addresslab.frame = CGRectMake(35, 170, SCREEN_WIDTH-65, titleHeight);
+        self->addresslab.frame = CGRectMake(35, 45, SCREEN_WIDTH-65, titleHeight);
         self->addresslab.text = [NSString stringWithFormat:@"收货地址：%@%@%@%@",[addressDic objectForKey:@"receiverState"],[addressDic objectForKey:@"receiverCity"],[addressDic objectForKey:@"receiverDistrict"],[addressDic objectForKey:@"receiverAddress"]];
+        
         
         //产品信息
         [weakSelf.dataArray removeAllObjects];
@@ -109,12 +115,11 @@
         self->orderNumLab.text = [orderDic objectForKey:@"orderNo"];
         self->orderCreatetimeLab.text = [Manager TimeCuoToTimes:[orderDic objectForKey:@"createTime"]];
         
-        self->payCreatetimeLab.text = [Manager TimeCuoToTimes:[orderDic objectForKey:@"paiedTime"]];
         
         self->ProductTotalPriceLab.text = [Manager jinegeshi:[orderDic objectForKey:@"productFee"]];
         self->freightLab.text = [Manager jinegeshi:[orderDic objectForKey:@"orderTotalFee"]];
         
-        NSMutableAttributedString *noteStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"实付款：%@",[Manager jinegeshi:[orderDic objectForKey:@"orderTotalFee"]]]];
+        NSMutableAttributedString *noteStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"需付款：%@",[Manager jinegeshi:[orderDic objectForKey:@"orderTotalFee"]]]];
         NSRange range1 = NSMakeRange(0, 4);
         [noteStr addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:range1];
         [self->shifukuanLab setAttributedText:noteStr];
@@ -128,42 +133,36 @@
 
 
 - (void)setUpHeaderView{
-    UIView *headerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 330)];
+    UIView *headerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 170)];
     headerV.backgroundColor = RGBACOLOR(237, 236, 242, 1);
     self.tableview.tableHeaderView = headerV;
-    imgV = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 150)];
+    imgV = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 100)];
     imgV.image = [UIImage imageNamed:@"topUser"];
     imgV.contentMode = UIViewContentModeScaleAspectFill;
     imgV.clipsToBounds=YES;
     [headerV addSubview:imgV];
-    UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(0, 150, SCREEN_WIDTH, 170)];
+    UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(0, 100, SCREEN_WIDTH, 60)];
     lab.backgroundColor = [UIColor whiteColor];
     [headerV addSubview:lab];
     
     UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     leftBtn.frame = CGRectMake(10, 15, 100, 30);
-    [leftBtn setTitle:@"已付款" forState:UIControlStateNormal];
+    [leftBtn setTitle:self.orderStatus forState:UIControlStateNormal];
     [imgV addSubview:leftBtn];
-    UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    rightBtn.frame = CGRectMake(SCREEN_WIDTH-90, 15, 80, 30);
-    [rightBtn setTitle:@"申通快递" forState:UIControlStateNormal];
-    [imgV addSubview:rightBtn];
+
     
-    
-    UILabel *bglab = [[UILabel alloc]initWithFrame:CGRectMake(10, 60, SCREEN_WIDTH-20, 240)];
+    UILabel *bglab = [[UILabel alloc]initWithFrame:CGRectMake(10, 50, SCREEN_WIDTH-20, 100)];
     bglab.backgroundColor = [UIColor whiteColor];
     LRViewBorderRadius(bglab, 10, .5, [UIColor colorWithWhite:.8 alpha:.3]);
     [headerV addSubview:bglab];
     //物流信息
     
     
-    
-    
     //地址
-    UIImageView *addreimg = [[UIImageView alloc]initWithFrame:CGRectMake(5, 150, 25, 25)];
+    UIImageView *addreimg = [[UIImageView alloc]initWithFrame:CGRectMake(5, 37.5, 25, 25)];
     addreimg.image = [UIImage imageNamed:@"sz1"];
     [bglab addSubview:addreimg];
-    namelab = [[UILabel alloc]initWithFrame:CGRectMake(35, 140, SCREEN_WIDTH-50, 25)];
+    namelab = [[UILabel alloc]initWithFrame:CGRectMake(35, 15, SCREEN_WIDTH-50, 25)];
     namelab.font = [UIFont systemFontOfSize:14];
     [bglab addSubview:namelab];
     addresslab = [[UILabel alloc]init];
@@ -176,11 +175,11 @@
 
 
 - (void)setUpFooterView{
-    UIView *footerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 345)];
+    UIView *footerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 315)];
     footerV.backgroundColor = RGBACOLOR(237, 236, 242, 1);
     self.tableview.tableFooterView = footerV;
     
-    UIView *footerBgv = [[UIView alloc]initWithFrame:CGRectMake(0, 10, SCREEN_WIDTH, 230)];
+    UIView *footerBgv = [[UIView alloc]initWithFrame:CGRectMake(0, 10, SCREEN_WIDTH, 200)];
     footerBgv.backgroundColor = [UIColor whiteColor];
     [footerV addSubview:footerBgv];
     
@@ -209,44 +208,36 @@
     lab3.text = @"支付方式：";
     lab3.font = [UIFont systemFontOfSize:15];
     [footerBgv addSubview:lab3];
-    UILabel *lab4 = [[UILabel alloc]initWithFrame:CGRectMake(10, 100, 80, 30)];
-    lab4.text = @"支付时间：";
-    lab4.font = [UIFont systemFontOfSize:15];
-    [footerBgv addSubview:lab4];
     payTypeLab = [[UILabel alloc]initWithFrame:CGRectMake(90, 70, SCREEN_WIDTH-100, 30)];
     payTypeLab.textColor = [UIColor grayColor];
     [footerBgv addSubview:payTypeLab];
-    payCreatetimeLab = [[UILabel alloc]initWithFrame:CGRectMake(90, 100, SCREEN_WIDTH-100, 30)];
-    payCreatetimeLab.textColor = [UIColor grayColor];
-    [footerBgv addSubview:payCreatetimeLab];
     payTypeLab.font = [UIFont systemFontOfSize:14];
-    payCreatetimeLab.font = [UIFont systemFontOfSize:14];
-    UILabel *line2 = [[UILabel alloc]initWithFrame:CGRectMake(0, 134, SCREEN_WIDTH, 1)];
+    UILabel *line2 = [[UILabel alloc]initWithFrame:CGRectMake(0, 104, SCREEN_WIDTH, 1)];
     line2.backgroundColor = RGBACOLOR(237, 236, 242, 1);
     [footerBgv addSubview:line2];
     
     
     
     
-    UILabel *lab5 = [[UILabel alloc]initWithFrame:CGRectMake(10, 140, 80, 30)];
+    UILabel *lab5 = [[UILabel alloc]initWithFrame:CGRectMake(10, 110, 80, 30)];
     lab5.text = @"发票类型：";
     lab5.font = [UIFont systemFontOfSize:15];
     [footerBgv addSubview:lab5];
-    UILabel *lab6 = [[UILabel alloc]initWithFrame:CGRectMake(10, 170, 80, 30)];
+    UILabel *lab6 = [[UILabel alloc]initWithFrame:CGRectMake(10, 140, 80, 30)];
     lab6.text = @"发票抬头：";
     lab6.font = [UIFont systemFontOfSize:15];
     [footerBgv addSubview:lab6];
-    UILabel *lab7 = [[UILabel alloc]initWithFrame:CGRectMake(10, 200, 80, 30)];
+    UILabel *lab7 = [[UILabel alloc]initWithFrame:CGRectMake(10, 170, 80, 30)];
     lab7.text = @"发票内容：";
     lab7.font = [UIFont systemFontOfSize:15];
     [footerBgv addSubview:lab7];
-    invioceTypeLab = [[UILabel alloc]initWithFrame:CGRectMake(90, 140, SCREEN_WIDTH-100, 30)];
+    invioceTypeLab = [[UILabel alloc]initWithFrame:CGRectMake(90, 110, SCREEN_WIDTH-100, 30)];
     invioceTypeLab.textColor = [UIColor grayColor];
     [footerBgv addSubview:invioceTypeLab];
-    invioceTitleLab = [[UILabel alloc]initWithFrame:CGRectMake(90, 170, SCREEN_WIDTH-100, 30)];
+    invioceTitleLab = [[UILabel alloc]initWithFrame:CGRectMake(90, 140, SCREEN_WIDTH-100, 30)];
     invioceTitleLab.textColor = [UIColor grayColor];
     [footerBgv addSubview:invioceTitleLab];
-    invioceContentLab = [[UILabel alloc]initWithFrame:CGRectMake(90, 200, SCREEN_WIDTH-100, 30)];
+    invioceContentLab = [[UILabel alloc]initWithFrame:CGRectMake(90, 170, SCREEN_WIDTH-100, 30)];
     invioceContentLab.textColor = [UIColor grayColor];
     [footerBgv addSubview:invioceContentLab];
     invioceTypeLab.font = [UIFont systemFontOfSize:14];
@@ -255,7 +246,7 @@
     
     
     
-    UIView *footerBgv1 = [[UIView alloc]initWithFrame:CGRectMake(0, 245, SCREEN_WIDTH, 100)];
+    UIView *footerBgv1 = [[UIView alloc]initWithFrame:CGRectMake(0, 215, SCREEN_WIDTH, 100)];
     footerBgv1.backgroundColor = [UIColor whiteColor];
     [footerV addSubview:footerBgv1];
     UILabel *label1 = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, 80, 30)];
@@ -269,13 +260,18 @@
     UILabel *line3 = [[UILabel alloc]initWithFrame:CGRectMake(0, 60, SCREEN_WIDTH, 1)];
     line3.backgroundColor = RGBACOLOR(237, 236, 242, 1);
     [footerBgv1 addSubview:line3];
-   
     
     ProductTotalPriceLab = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-90, 0, 80, 30)];
     [footerBgv1 addSubview:ProductTotalPriceLab];
     
     freightLab = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-90, 30, 80, 30)];
     [footerBgv1 addSubview:freightLab];
+    
+    
+//    UILabel *label3 = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-150, 61, 70, 39)];
+//    label3.text = @"需付款：";
+//    label3.font = [UIFont systemFontOfSize:15];
+//    [footerBgv1 addSubview:label3];
     
     shifukuanLab = [[UILabel alloc]initWithFrame:CGRectMake(20, 61, SCREEN_WIDTH-40, 39)];
     shifukuanLab.textColor = [UIColor redColor];
@@ -330,7 +326,40 @@
 
 
 
-
+- (void)clickPay{
+     __weak typeof(self) weakSelf = self;
+    self.tfSheetView = [[TFSheetView alloc]init];
+    //取消
+    self.tfSheetView.cancelBlock = ^{
+        NSLog(@"取消");
+        [weakSelf.tfSheetView disMissView];
+    };
+    //微信支付
+    self.tfSheetView.wxBlock = ^{
+        NSLog(@"微信支付");
+        [weakSelf.tfSheetView disMissView];
+    };
+    //支付宝支付
+    self.tfSheetView.zfbBlock = ^{
+        NSLog(@"支付宝支付");
+        //        [weakSelf doAPPay:orderNo];
+        [weakSelf.tfSheetView disMissView];
+    };
+    [self.tfSheetView showInView:self.view];
+}
+#pragma mark   ==============点击订单模拟支付行为==============
+- (void)doAPPay:(NSString *)orderNo
+{
+    NSString *str = [NSString stringWithFormat:@"order/alipay/%@",orderNo];
+    [Manager requestPOSTWithURLStr:KURLNSString(str) paramDic:nil token:nil finish:^(id responseObject) {
+        NSString *base64Decoded = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+        [[AlipaySDK defaultService] payOrder:base64Decoded fromScheme:@"dxracerdiruikesi" callback:^(NSDictionary *resultDic) {
+            //                NSLog(@"*****************************result%@",resultDic);
+        }];
+    } enError:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
 
 
 
@@ -356,6 +385,7 @@
     btn.titleLabel.font = [UIFont systemFontOfSize:14];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     LRViewBorderRadius(btn, 13, 0, [UIColor clearColor]);
+    [btn addTarget:self action:@selector(clickPay) forControlEvents:UIControlEventTouchUpInside];
     [v addSubview:btn];
     
     UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -366,16 +396,6 @@
     [btn1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     LRViewBorderRadius(btn1, 13, 1, [UIColor blackColor]);
     [v addSubview:btn1];
-    
-    UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn2.backgroundColor = [UIColor whiteColor];
-    btn2.frame = CGRectMake(SCREEN_WIDTH-305, 15, 90, 30);
-    [btn2 setTitle:btn3Title forState:UIControlStateNormal];
-    btn2.titleLabel.font = [UIFont systemFontOfSize:14];
-    [btn2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    LRViewBorderRadius(btn2, 13, 1, [UIColor blackColor]);
-    [v addSubview:btn2];
-    
 }
 
 - (NSMutableArray *)dataArray {
@@ -384,4 +404,5 @@
     }
     return _dataArray;
 }
+
 @end

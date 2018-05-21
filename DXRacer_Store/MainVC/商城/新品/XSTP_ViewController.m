@@ -1,21 +1,18 @@
 //
-//  SearchController.m
+//  XSTP_ViewController.m
 //  DXRacer_Store
 //
-//  Created by ilovedxracer on 2018/5/3.
+//  Created by ilovedxracer on 2018/5/21.
 //  Copyright © 2018年 ilovedxracer. All rights reserved.
 //
 
-#import "SearchController.h"
-
+#import "XSTP_ViewController.h"
 #import "ProductXiangqingViewController.h"
-@interface SearchController ()<UICollectionViewDelegate,UICollectionViewDataSource,UISearchBarDelegate>
+@interface XSTP_ViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UISearchBarDelegate>
 {
     NSInteger page;
     NSInteger number;
     
-    UILabel *lab1;
-    UILabel *lab2;
     
     UIButton *picBtn;
 }
@@ -32,14 +29,15 @@
 
 @end
 
-@implementation SearchController
-
+@implementation XSTP_ViewController
 - (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    self.tabBarController.tabBar.hidden = NO;
-    self.navigationController.navigationBarHidden = NO;
+    self.tabBarController.tabBar.hidden = YES;
+    self.navigationController.navigationBar.hidden = NO;
+    [self getTopPic];
 }
-
+- (void)viewWillDisappear:(BOOL)animated{
+    self.tabBarController.tabBar.hidden = YES;
+}
 
 //懒加载
 -(UICollectionViewFlowLayout *)flowLayout{
@@ -78,7 +76,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    self.navigationItem.title = @"产品";
+    self.navigationItem.title = @"新手特权";
     [self initCollectionView];
     
 }
@@ -107,29 +105,6 @@
     self.navigationItem.rightBarButtonItem = bar;
     
     
-    
-    UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-80, SCREEN_HEIGHT-170, 60, 60)];
-    LRViewBorderRadius(lab, 30, 0, [UIColor clearColor]);
-    lab.backgroundColor = RGBACOLOR(237, 236, 242, 1);
-    [self.view addSubview:lab];
-    [self.view bringSubviewToFront:lab];
-    
-    lab1 = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 60, 29.5)];
-    lab1.text = @"1";
-    lab1.textAlignment = NSTextAlignmentCenter;
-    [lab addSubview:lab1];
-    
-    UILabel *line = [[UILabel alloc]initWithFrame:CGRectMake(0, 29.5, 60, 1)];
-    line.backgroundColor = [UIColor colorWithWhite:.8 alpha:.5];
-    [lab addSubview:line];
-    
-    
-    lab2 = [[UILabel alloc]initWithFrame:CGRectMake(0, 30.5, 60, 30)];
-    lab2.textAlignment = NSTextAlignmentCenter;
-    [lab addSubview:lab2];
-    
-    
-    [self setUpReflash];
 }
 
 - (void)clickqiehuan{
@@ -157,108 +132,26 @@
 
 
 
-
-
-
-//刷新数据
--(void)setUpReflash
-{
-    __weak typeof (self) weakSelf = self;
-    self.goosdCollectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        [weakSelf loddeList];
-    }];
-    [self.goosdCollectionView.mj_header beginRefreshing];
-    self.goosdCollectionView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-        if (self.dataArray.count == self->number) {
-            [self.goosdCollectionView.mj_footer setState:MJRefreshStateNoMoreData];
-        }else {
-            [weakSelf loddeSLList];
-        }
-    }];
-}
-- (void)loddeList{
-    [self.goosdCollectionView.mj_footer endRefreshing];
+- (void)getTopPic{
     __weak typeof(self) weakSelf = self;
-    NSString *str = [NSString stringWithFormat:@"product/search?keyword=%@&startRow=1&pageSize=10",self.str];
-    NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    
-    [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
+    [Manager requestGETWithURLStr:KURLNSString(@"index/product/new") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        //        NSLog(@"******%@",diction);
-        [weakSelf.dataArray removeAllObjects];
-        self->number = [[diction objectForKey:@"total"] integerValue];
-        
-        NSInteger yeshu;
-        if (self->number % 10 != 0) {
-            yeshu = self->number/10+1;
-        }else{
-            yeshu = self->number/10;
-        }
-        if (yeshu == 0) {
-            yeshu = 1;
-        }
-        self->lab2.text = [NSString stringWithFormat:@"%ld",yeshu];
-        
-        if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"itemsList"]] == YES) {
-            NSMutableArray *arr = [diction objectForKey:@"itemsList"];
-            for (NSDictionary *dicc in arr) {
-                Model *model = [Model mj_objectWithKeyValues:dicc];
-                [weakSelf.dataArray addObject:model];
+        //NSLog(@"******%@",diction);
+        NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
+        if ([code isEqualToString:@"200"]){
+            if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"object"]] == YES) {
+                NSMutableArray *arr = [diction objectForKey:@"object"];
+                [weakSelf.dataArray removeAllObjects];
+                for (NSDictionary *dicc in arr) {
+                    Model *model = [Model mj_objectWithKeyValues:dicc];
+                    [weakSelf.dataArray addObject:model];
+                }
             }
         }
-        self->page = 2;
         [weakSelf.goosdCollectionView reloadData];
-        [weakSelf.goosdCollectionView.mj_header endRefreshing];
     } enError:^(NSError *error) {
         NSLog(@"------%@",error);
     }];
-}
-- (void)loddeSLList{
-    [self.goosdCollectionView.mj_header endRefreshing];
-    __weak typeof(self) weakSelf = self;
-    NSString *str = [NSString stringWithFormat:@"product/search?keyword=%@&startRow=%ld&pageSize=10",self.str,page];
-    NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
-        NSDictionary *diction = [Manager returndictiondata:responseObject];
-        if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"itemsList"]] == YES) {
-            NSMutableArray *arr = [diction objectForKey:@"itemsList"];
-            for (NSDictionary *dicc in arr) {
-                Model *model = [Model mj_objectWithKeyValues:dicc];
-                [weakSelf.dataArray addObject:model];
-            }
-        }
-        self->page++;
-        [weakSelf.goosdCollectionView reloadData];
-        [weakSelf.goosdCollectionView.mj_footer endRefreshing];
-    } enError:^(NSError *error) {
-        NSLog(@"------%@",error);
-    }];
-}
-
-
-
-
-
-
-
-- (void)collectionView:(UICollectionView *)collectionView
-  didEndDisplayingCell:(UICollectionViewCell *)cell
-    forItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSIndexPath *firstIndexPath = [[self.goosdCollectionView indexPathsForVisibleItems] firstObject];
-    // 赋值给记录当前坐标的变量
-    NSInteger yeshu;
-    if (firstIndexPath.row % 10 != 0) {
-        yeshu = firstIndexPath.row/10+1;
-    }else{
-        yeshu = firstIndexPath.row/10;
-    }
-    
-    if (yeshu == 0) {
-        yeshu = 1;
-    }
-    
-    self->lab1.text = [NSString stringWithFormat:@"%ld",yeshu];
-    
 }
 
 
@@ -286,8 +179,9 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             [cell.img sd_setImageWithURL:[NSURL URLWithString:NSString(model.model_img)]placeholderImage:[UIImage imageNamed:@""]];
         });
+
         cell.lab1.text       = model.model_name;
-        cell.lab2.text     = model.sale_price;
+        cell.lab2.text     = [Manager jinegeshi:model.sale_price];
         cell.lab3.text = model.series_name;
         return cell;
         
@@ -296,14 +190,12 @@
         FL_2_Cell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FL_2_Cell" forIndexPath:indexPath];
         Model *model = [self.dataArray objectAtIndex:indexPath.row];
         LRViewBorderRadius(cell.bgv, 0, .5, [UIColor colorWithWhite:.8 alpha:.3]);
-        
         dispatch_async(dispatch_get_main_queue(), ^{
             [cell.img sd_setImageWithURL:[NSURL URLWithString:NSString(model.model_img)]placeholderImage:[UIImage imageNamed:@""]];
         });
-        
-        
+
         cell.lab1.text       = model.model_name;
-        cell.lab3.text     = model.sale_price;
+        cell.lab3.text     = [Manager jinegeshi:model.sale_price];
         cell.lab2.text = model.series_name;
         return cell;
         

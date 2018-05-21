@@ -86,6 +86,7 @@
         if ([code isEqualToString:@"200"]){
             NSMutableArray *array = [diction objectForKey:@"object"];
             [self->dataArray removeAllObjects];
+            [self->dataArray removeAllObjects];
             for (NSDictionary *dic in array) {
                 CartModel *model = [CartModel mj_objectWithKeyValues:dic];
                 [self->dataArray addObject:model];
@@ -93,7 +94,7 @@
             
             self->dataArray = (NSMutableArray *)[[self->dataArray reverseObjectEnumerator] allObjects];
         }
-        if (self->myTableView) {
+        if (self->myTableView && self->dataArray.count > 0) {
             [self->myTableView reloadData];
         }
         else
@@ -485,6 +486,14 @@
                     //延迟0.5s刷新一下,否则数据会乱
                     [weakSelf performSelector:@selector(reloadTable) withObject:nil afterDelay:0.5];
                     self->myTableView.editing = NO;
+                    
+                    
+                    if (self->myTableView && self->dataArray.count > 0) {
+                    }
+                    else
+                    {
+                        [weakSelf setupMainView];
+                    }
                 }
             } enError:^(NSError *error) {
             }];

@@ -11,6 +11,7 @@
 #import "FrankDropBounsView.h"
 #import <MJRefresh/MJRefresh.h>
 #import "BiaogeTableViewCell.h"
+#import "CreateOrderViewController.h"
 @interface ProductXiangqingViewController ()<FrankDetailDropDelegate,UITableViewDataSource,UITableViewDelegate,SDCycleScrollViewDelegate, UIScrollViewDelegate , UIWebViewDelegate,SelectAttributesDelegate,LLPhotoBrowserDelegate>
 {
     
@@ -30,8 +31,6 @@
     NSString *stringImg;
     NSString *itemNo;
     
-    
-    UIView *view_bar;
     
     UIView *headerV;
     UIView *footerV;
@@ -85,6 +84,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationItem.title = @"宝贝";
+    
+    UIImage *theImage1 = [UIImage imageNamed:@"3"];
+    UIView *ve = [[UIView alloc]initWithFrame:CGRectMake(0, [Manager returnDianchitiaoHeight], 44, 44)];
+    UIButton * readerBtn=[[UIButton alloc] initWithFrame:CGRectMake(10, 5, 25, 25)];
+    [readerBtn setBackgroundImage:theImage1 forState:UIControlStateNormal];
+    [readerBtn addTarget:self action:@selector(onRightNavBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    [ve addSubview:readerBtn];
+    UIBarButtonItem *bar = [[UIBarButtonItem alloc]initWithCustomView:ve];
+    self.navigationItem.rightBarButtonItem = bar;
+    
     
     productItemList_Arr = [NSMutableArray arrayWithCapacity:1];
     productnumber = @"1";
@@ -138,16 +148,12 @@
     [headerV addSubview:line2];
     
     
-    
-    
-    
-    
     [self getDetailsInfo];
     
     [self getIndexOneInfomation];
     [self getIndexTwoInfomation];
     
-    [self NavigationBa];
+   
     
 }
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index{
@@ -163,79 +169,6 @@
 }
 
 
-
-#pragma mark - NavItem
--(void) SetNavBarHidden:(BOOL) isHidden
-{
-    self.navigationController.navigationBarHidden = isHidden;
-}
--(UIView*)NavigationBa
-{
-    CGFloat hei;
-    if ([[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone X"]||[[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone Simulator"]) {
-        hei = 68;
-    }else{
-        hei = 44;
-    }
-    view_bar =[[UIView alloc]init];
-    if ([[[UIDevice currentDevice]systemVersion]floatValue]>6.1)
-    {
-        view_bar .frame=CGRectMake(0, 0, SCREEN_WIDTH, hei+20);
-    }else{
-        view_bar .frame=CGRectMake(0, 0, SCREEN_WIDTH, hei);
-    }
-    view_bar.backgroundColor=[UIColor clearColor];
-    [self.view addSubview: view_bar];
-    
-    
-    UILabel *lab= [[UILabel alloc]initWithFrame:CGRectMake(60, 20+(hei-30)/2+2, SCREEN_WIDTH-120, 30)];
-    lab.text = @"宝贝";
-    lab.textAlignment = NSTextAlignmentCenter;
-    [view_bar addSubview:lab];
-    
-    
-    
-    
-    UIImage *theImage = [UIImage imageNamed:@"circlesmore2_icon"];
-    //    theImage = [theImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    UIButton* meBtn=[[UIButton alloc]initWithFrame:CGRectMake(15, 20+(hei-30)/2+2, 30, 30)];
-    [meBtn setBackgroundImage:theImage forState:UIControlStateNormal];
-    //    [meBtn setTintColor:[UIColor blackColor]];
-    [meBtn addTarget:self action:@selector(onLeftNavBtnClick) forControlEvents:UIControlEventTouchUpInside];
-    [view_bar addSubview:meBtn];
-    
-    UIImage *theImage1 = [UIImage imageNamed:@"3"];
-    //    theImage1 = [theImage1 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    UIButton * readerBtn=[[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-45, 20+(hei-30)/2+2, 30, 30)];
-    [readerBtn setBackgroundImage:theImage1 forState:UIControlStateNormal];
-    [readerBtn addTarget:self action:@selector(onRightNavBtnClick) forControlEvents:UIControlEventTouchUpInside];
-    //    [readerBtn setTintColor:[UIColor blackColor]];
-    [view_bar addSubview:readerBtn];
-    
-    return view_bar;
-}
--(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    CGFloat hei;
-    if ([[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone X"]||[[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone Simulator"]) {
-        hei = 44;
-    }else{
-        hei = 20;
-    }
-    if(self.tableview1.contentOffset.y<-hei) {
-        [view_bar setHidden:NO];
-    }else if(self.tableview1.contentOffset.y<350){
-        [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:255 green:255 blue:255 alpha:self.tableview1.contentOffset.y / 10000];
-    }else
-    {
-        [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:255 green:255 blue:255 alpha:1];
-    }
-}
-
-- (void)onLeftNavBtnClick {
-    [self.navigationController popViewControllerAnimated:YES];
-}
 - (void)onRightNavBtnClick {
     self.tabBarController.selectedIndex = 2;
 }
@@ -557,7 +490,7 @@
             [self presentViewController:alert animated:YES completion:nil];
         }
         if (stringID.length <=0) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"该商品已下架" message:@"温馨提示" preferredStyle:1];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"暂无该商品" message:@"温馨提示" preferredStyle:1];
             UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             }];
             [alert addAction:cancel];
@@ -631,7 +564,28 @@
         login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         [self presentViewController:login animated:YES completion:nil];
     }else{
-        NSLog(@"999999");
+//        CreateOrderViewController *createOrder = [[CreateOrderViewController alloc]init];
+//        createOrder.navigationItem.title = @"确认订单";
+//        createOrder.dataArray = selectGoods;
+//        [self.navigationController pushViewController:createOrder animated:YES];
+        if (productCanshu.length > 0 && stringID.length > 0) {
+            NSLog(@"%@---%@",productCanshu,stringID);
+        }else{
+            if (productCanshu.length <=0) {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请选择商品属性" message:@"温馨提示" preferredStyle:1];
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                }];
+                [alert addAction:cancel];
+                [self presentViewController:alert animated:YES completion:nil];
+            }
+            if (stringID.length <=0) {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"暂无该商品" message:@"温馨提示" preferredStyle:1];
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                }];
+                [alert addAction:cancel];
+                [self presentViewController:alert animated:YES completion:nil];
+            }
+        }
     }
 }
 
@@ -667,25 +621,17 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
     // 消除导航影响
-    [self.dropView viewControllerWillAppear];
-    
+    //[self.dropView viewControllerWillAppear];
     self.tabBarController.tabBar.hidden = YES;
-    [self SetNavBarHidden:YES];
-   
 }
 
 
-- (void)viewDidDisappear:(BOOL)animated{
-    self.tabBarController.tabBar.hidden = NO;
-    [self SetNavBarHidden:NO];
-}
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    self.tabBarController.tabBar.hidden = YES;
+//    self.tabBarController.tabBar.hidden = YES;
     // 消除导航影响
-    [self.dropView viewControllerWillDisappear];
+    //[self.dropView viewControllerWillDisappear];
 }
 
 
@@ -864,8 +810,6 @@
             [weakSelf.dataArray1 addObject:model];
         }
         
-        
-        
         [weakSelf.tableview2 reloadData];
     } enError:^(NSError *error) {
         NSLog(@"%@",error);
@@ -891,6 +835,9 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if ([tableView isEqual:self.tableview2]) {
+        if (imgheight == 0) {
+            imgheight = 250;
+        }
         return imgheight;
     }else
     if ([tableView isEqual:self.tableview3]) {
@@ -911,26 +858,44 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     if ([tableView isEqual:self.tableview1]) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell1" forIndexPath:indexPath];
+        static NSString *identifierCell = @"cell1";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifierCell];
+        }
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
     if ([tableView isEqual:self.tableview2]) {
-        BigImgTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell2" forIndexPath:indexPath];
+        static NSString *identifierCell = @"cell2";
+        BigImgTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil) {
+            cell = [[BigImgTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifierCell];
+        }
         Model *model = [self.dataArray1 objectAtIndex:indexPath.row];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
         
         [cell.img sd_setImageWithURL:[NSURL URLWithString:NSString(model.imgUrl)] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
             CGSize size = image.size;
             self->imgheight = SCREEN_WIDTH/size.width*size.height;
         }];
+        
 //        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:NSString(model.imgUrl)]];
 //        UIImage *image = [UIImage imageWithData:data];
 //        CGSize size = image.size;
 //        imgheight = SCREEN_WIDTH/size.width*size.height;
-//        [cell.img sd_setImageWithURL:[NSURL URLWithString:NSString(model.imgUrl)]];
+//        [cell.img sd_setImageWithURL:[NSURL URLWithString:NSString(model.imgUrl)] placeholderImage:[UIImage imageNamed:@""]];
         return cell;
     }
     if ([tableView isEqual:self.tableview3]) {
-        BiaogeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell3" forIndexPath:indexPath];
+        static NSString *identifierCell = @"cell3";
+        BiaogeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil) {
+            cell = [[BiaogeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifierCell];
+        }
+        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         Model *model = [self.dataArray2 objectAtIndex:indexPath.row];
         cell.lab1.text = model.attrCode;
         cell.lab2.text = model.attrValue;
@@ -938,7 +903,12 @@
         cell.lab2.numberOfLines = 0;
         return cell;
     }
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell4" forIndexPath:indexPath];
+    static NSString *identifierCell = @"cell4";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifierCell];
+    }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.textLabel.text = @"44444";
     return cell;
 }

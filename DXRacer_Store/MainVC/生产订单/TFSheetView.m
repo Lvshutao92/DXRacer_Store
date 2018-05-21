@@ -34,14 +34,14 @@
     
     //alpha 0.0  白色   alpha 1 ：黑色   alpha 0～1 ：遮罩颜色，逐渐
     self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4];
-    self.userInteractionEnabled = NO;
-    [self addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(disMissView)]];
+//    self.userInteractionEnabled = NO;
+//    [self addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(disMissView)]];
     
     
     
     if (_contentView == nil)
     {
-        _contentView = [[UIView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT - 216, SCREEN_WIDTH, 216)];
+        _contentView = [[UIView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT - 300, SCREEN_WIDTH, 300)];
         _contentView.backgroundColor = [UIColor whiteColor];
         UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(60, 0, SCREEN_WIDTH-120, 50)];
         lab.text = @"请选择支付方式";
@@ -52,6 +52,7 @@
         _btn.frame = CGRectMake(SCREEN_WIDTH-40, 10, 30, 30);
         [_btn setImage:[UIImage imageNamed:@"cancel"] forState:UIControlStateNormal];
         [_btn addTarget:self action:@selector(click:) forControlEvents:UIControlEventTouchUpInside];
+        LRViewBorderRadius(_btn, 15, 1, [UIColor grayColor]);
         [_contentView addSubview:_btn];
         
         
@@ -92,8 +93,6 @@
         _btn2.frame = CGRectMake(0, 115, SCREEN_WIDTH, 50);
         [_btn2 addTarget:self action:@selector(click2:) forControlEvents:UIControlEventTouchUpInside];
         [_contentView addSubview:_btn2];
-        
-        
         
         
         [self addSubview:_contentView];
@@ -137,13 +136,13 @@
     [view addSubview:self];
     [view addSubview:_contentView];
     
-    [_contentView setFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 216)];
+    [_contentView setFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 300)];
     
     [UIView animateWithDuration:0.3 animations:^{
         
         self.alpha = 1.0;
         
-        [self->_contentView setFrame:CGRectMake(0, SCREEN_HEIGHT - 216, SCREEN_WIDTH, 216)];
+        [self->_contentView setFrame:CGRectMake(0, SCREEN_HEIGHT - 300, SCREEN_WIDTH, 300)];
         
     } completion:nil];
 }
@@ -151,19 +150,19 @@
 //移除从上向底部弹下去的UIView（包含遮罩）
 - (void)disMissView
 {
-    [_contentView setFrame:CGRectMake(0, SCREEN_HEIGHT - 216, SCREEN_WIDTH, 216)];
+    [_contentView setFrame:CGRectMake(0, SCREEN_HEIGHT - 300, SCREEN_WIDTH, 300)];
     [UIView animateWithDuration:0.3f
                      animations:^{
-                         
+
                          self.alpha = 0.0;
-                         
-                         [self->_contentView setFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 216)];
+
+                         [self->_contentView setFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 300)];
                      }
                      completion:^(BOOL finished){
-                         
+
                          [self removeFromSuperview];
                          [self->_contentView removeFromSuperview];
-                         
+
                      }];
     
 }
