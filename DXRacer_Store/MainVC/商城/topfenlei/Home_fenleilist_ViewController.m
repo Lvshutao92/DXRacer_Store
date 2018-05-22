@@ -1,20 +1,18 @@
 //
-//  ClassifyViewController.m
+//  Home_fenleilist_ViewController.m
 //  DXRacer_Store
 //
-//  Created by ilovedxracer on 2018/4/28.
+//  Created by ilovedxracer on 2018/5/22.
 //  Copyright © 2018年 ilovedxracer. All rights reserved.
 //
 
-#import "ClassifyViewController.h"
+#import "Home_fenleilist_ViewController.h"
 #import "SearchController.h"
 #import "ProductDetailsViewController.h"
 
 
 #import "ProductXiangqingViewController.h"
-
-
-@interface ClassifyViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UISearchBarDelegate,PYSearchViewControllerDelegate>
+@interface Home_fenleilist_ViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UISearchBarDelegate>
 {
     NSInteger page;
     NSInteger number;
@@ -27,7 +25,6 @@
 }
 
 
-@property(nonatomic,strong)DXSearchBar *searchBar;
 
 
 @property(nonatomic,strong)UICollectionView *goosdCollectionView;
@@ -36,14 +33,17 @@
 @property (strong, nonatomic) UICollectionViewFlowLayout * flowLayout;
 //当前排列显示状态
 @property (nonatomic, assign) BOOL isPermutation;
+
 @end
 
-@implementation ClassifyViewController
+@implementation Home_fenleilist_ViewController
 
 - (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    self.tabBarController.tabBar.hidden = NO;
-    self.navigationController.navigationBarHidden = NO;
+    self.tabBarController.tabBar.hidden = YES;
+    self.navigationController.navigationBar.hidden = NO;
+}
+- (void)viewWillDisappear:(BOOL)animated{
+    self.tabBarController.tabBar.hidden = YES;
 }
 
 
@@ -79,39 +79,6 @@
     
 }
 
-- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
-    NSLog(@"搜索");
-    //1.创建热门搜索
-    NSArray *hotSeaches = @[@"电竞椅", @"电竞桌", @"鼠标垫", @"鼠标", @"显示屏", @"升降器", @"支架",@"键盘"];
-    PYSearchViewController *searchViewController = [PYSearchViewController searchViewControllerWithHotSearches:hotSeaches searchBarPlaceholder:@"商品名称" didSearchBlock:^(PYSearchViewController *searchViewController, UISearchBar *searchBar, NSString *searchText) {
-        SearchController *search = [[SearchController alloc] init];
-        search.str = searchText;
-        [searchViewController.navigationController pushViewController:search animated:YES];
-    }];
-    
-    searchViewController.hotSearchStyle = PYHotSearchStyleRankTag; // 热门搜索风格为默认
-    //    PYHotSearchStyleNormalTag,      // 普通标签(不带边框)
-    //    PYHotSearchStyleColorfulTag,    // 彩色标签（不带边框，背景色为随机彩色）
-    //    PYHotSearchStyleBorderTag,      // 带有边框的标签,此时标签背景色为clearColor
-    //    PYHotSearchStyleARCBorderTag,   // 带有圆弧边框的标签,此时标签背景色为clearColor
-    //    PYHotSearchStyleRankTag,        // 带有排名标签
-    //    PYHotSearchStyleRectangleTag,   // 矩形标签,此时标签背景色为clearColor
-    //    PYHotSearchStyleDefault = PYHotSearchStyleNormalTag // 默认为普通标签
-    searchViewController.searchHistoryStyle = 4; // 搜索历史风格根据选择
-    //    PYSearchHistoryStyleCell,           // UITableViewCell 风格
-    //    PYSearchHistoryStyleNormalTag,      // PYHotSearchStyleNormalTag 标签风格
-    //    PYSearchHistoryStyleColorfulTag,    // 彩色标签（不带边框，背景色为随机彩色）
-    //    PYSearchHistoryStyleBorderTag,      // 带有边框的标签,此时标签背景色为clearColor
-    //    PYSearchHistoryStyleARCBorderTag,   // 带有圆弧边框的标签,此时标签背景色为clearColor
-    //    PYSearchHistoryStyleDefault = PYSearchHistoryStyleCell // 默认为 PYSearchHistoryStyleCell
-    
-    searchViewController.delegate = self;
-    MainNavigationViewController *nav = [[MainNavigationViewController alloc] initWithRootViewController:searchViewController];
-    
-    [self presentViewController:nav  animated:NO completion:nil];
-    return NO;
-}
-
 
 
 - (void)viewDidLoad {
@@ -136,17 +103,6 @@
     }else{
         hei = 20;
     }
-    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(60, 0, SCREEN_WIDTH-120, 35)];//allocate titleView
-    [titleView setBackgroundColor:[UIColor whiteColor]];
-    self.searchBar = [[DXSearchBar alloc] init];
-    self.searchBar.delegate = self;
-    self.searchBar.placeholder = @"请输入商品名称";
-    self.searchBar.frame = CGRectMake(0, 0, SCREEN_WIDTH-120, 35);
-    self.searchBar.backgroundColor = [UIColor whiteColor];
-    [[[self.searchBar.subviews objectAtIndex:0].subviews objectAtIndex:1] setTintColor:[UIColor clearColor]];
-    LRViewBorderRadius(self.searchBar, 15, 1, [UIColor colorWithWhite:.8 alpha:.15]);
-    [titleView addSubview:self.searchBar];
-    self.navigationItem.titleView = titleView;
     
     UIView *vv = [[UIView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-60, hei, 50, 44)];
     picBtn = [[UIButton alloc] initWithFrame:CGRectMake(20, 8, 25, 25)];
@@ -181,7 +137,7 @@
     
     seacherStr = @"";
     [self setUpReflash];
- }
+}
 
 - (void)clickqiehuan{
     if (self.isPermutation == YES) {
@@ -230,9 +186,10 @@
 - (void)loddeList{
     [self.goosdCollectionView.mj_footer endRefreshing];
     __weak typeof(self) weakSelf = self;
-    NSString *str = [NSString stringWithFormat:@"product/search?keyword=%@&startRow=0&pageSize=10",seacherStr];
+    NSString *str = [NSString stringWithFormat:@"product/type?id=%@&startRow=0&pageSize=10",self.idstr];
+   
     NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    
+     NSLog(@"%@",KURLNSString(utf));
     [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
         NSLog(@"******%@",diction);
@@ -267,7 +224,7 @@
 - (void)loddeSLList{
     [self.goosdCollectionView.mj_header endRefreshing];
     __weak typeof(self) weakSelf = self;
-    NSString *str = [NSString stringWithFormat:@"product/search?keyword=%@&startRow=%ld&pageSize=10",seacherStr,page];
+    NSString *str = [NSString stringWithFormat:@"product/type?id=%@&startRow=%ld&pageSize=10",self.idstr,page];
     NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
@@ -360,7 +317,7 @@
 #pragma mark  点击CollectionView触发事件
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-//    NSLog(@"---------------------");
+    //    NSLog(@"---------------------");
     Model *model = [self.dataArray objectAtIndex:indexPath.row];
     ProductXiangqingViewController *details = [[ProductXiangqingViewController alloc]init];
     details.idStr = model.id;
@@ -376,4 +333,7 @@
     }
     return _dataArray;
 }
+
+
+
 @end

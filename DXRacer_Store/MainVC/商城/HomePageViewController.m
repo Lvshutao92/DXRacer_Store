@@ -11,6 +11,7 @@
 #import "XSTP_ViewController.h"
 #import "XPPD_ViewController.h"
 #import "ProductXiangqingViewController.h"
+#import "Home_fenleilist_ViewController.h"
 @interface HomePageViewController ()<UITableViewDelegate,UITableViewDataSource,SDCycleScrollViewDelegate,UISearchBarDelegate,UIScrollViewDelegate,PYSearchViewControllerDelegate,UICollectionViewDelegate,UICollectionViewDataSource>
 {
     UIView *view_bar;
@@ -81,23 +82,23 @@
         NSLog(@"------%@",error);
     }];
 }
+
+
+
+
 - (void)getGuanggao{
     __weak typeof(self) weakSelf = self;
     [Manager requestGETWithURLStr:KURLNSString(@"index/advert") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        //NSLog(@"******%@",diction);
+        NSLog(@"******%@",diction);
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
             if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"object"]] == YES) {
                 NSMutableArray *arr = [diction objectForKey:@"object"];
                 
-                CGFloat gao = SCREEN_WIDTH/2*18/32;
-                //NSLog(@"-------%lf",gao);
-                self->img1.frame = CGRectMake(0, 200+arr.count*185+10, SCREEN_WIDTH/2, gao);
-                self->img2.frame = CGRectMake(SCREEN_WIDTH/2, 200+arr.count*185+10, SCREEN_WIDTH/2, gao);
-                self->centerV.frame = CGRectMake(0, 220+arr.count*185+gao, SCREEN_WIDTH, 100);
-                self->headerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, 200+arr.count*185+130+gao);
-                
+                CGFloat he = 0.0;
+                CGFloat imgheight= 0.0;
+
                 for (int j = 0; j<arr.count; j++) {
                     self->index_j = j;
                     NSMutableArray *arr1 = [arr[j] objectForKey:@"list"];
@@ -107,53 +108,98 @@
                         [weakSelf.dataArray1 addObject:model];
                     }
                     CGFloat heit = 0.0;
+                    int b = 0;
                     for (int i = 0; i<weakSelf.dataArray1.count; i++) {
                         Model *model = [weakSelf.dataArray1 objectAtIndex:i];
-                        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+                        
+                        if (b == 0) {
+                            he =  he + imgheight;
+                        }
+                        
+                        
+                        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:NSString(model.imgUrl)]];
+                        UIImage *image = [UIImage imageWithData:data];
+                        CGSize size = image.size;
                         CGFloat wid = [model.proportion floatValue]/100*SCREEN_WIDTH;
-                        btn.frame = CGRectMake(heit, 200+j*185, wid, 185);
+                        imgheight = wid/size.width*size.height;
+                        
+                        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+                        btn.frame = CGRectMake(heit, 200+he, wid, imgheight);
+                        
+                        btn.adjustsImageWhenHighlighted=NO;
+                        
+                        [btn setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+                        
+                        
                         LRViewBorderRadius(btn, 0, .5, [UIColor colorWithWhite:.8 alpha:.3]);
-                        
                         [btn addTarget:self action:@selector(clickbt:) forControlEvents:UIControlEventTouchUpInside];
+                        [btn setTitle:model.linkUrl forState:UIControlStateNormal];
                         
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [btn setTitle:model.id forState:UIControlStateNormal];
-                            [btn setImage:[Manager imageFromURLString:NSString(model.imgUrl)] forState:UIControlStateNormal];
-                        });
+                        
+                        SDWebImageManager *manager = [SDWebImageManager sharedManager];
+                        NSString* key = [manager cacheKeyForURL:[NSURL URLWithString:NSString(model.imgUrl)]];
+                        SDImageCache* cache = [SDImageCache sharedImageCache];
+                        //此方法会先从memory中取。
+                        [btn setBackgroundImage:[cache imageFromDiskCacheForKey:key] forState:UIControlStateNormal];
+                        
+                        [btn setBackgroundImage:[Manager imageFromURLString:NSString(model.imgUrl)] forState:UIControlStateNormal];
                         
                         btn.tag = i;
                         [self->headerV addSubview:btn];
-                        
+                        b++;
                         heit = heit + wid;
                     }
-                   
                 }
-                
+                //NSLog(@"----%f",he+imgheight+200);
+                CGFloat gao = SCREEN_WIDTH/2*18/32;
+                //NSLog(@"-------%lf",gao);
+                self->img1.frame = CGRectMake(0, he+imgheight+200+10, SCREEN_WIDTH/2, gao);
+                self->img2.frame = CGRectMake(SCREEN_WIDTH/2, he+imgheight+200+10, SCREEN_WIDTH/2, gao);
+                self->centerV.frame = CGRectMake(0, he+imgheight+200+20+gao, SCREEN_WIDTH, 100);
+                self->headerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, he+imgheight+300+30+gao);
             }
         }
-
+        [weakSelf.tableview reloadData];
     } enError:^(NSError *error) {
-        NSLog(@"------%@",error);
+        //NSLog(@"------%@",error);
     }];
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 - (void)clickbt:(UIButton *)sender{
-    NSLog(@"---------%@",sender.titleLabel.text);
-    ProductXiangqingViewController *details = [[ProductXiangqingViewController alloc]init];
-    details.idStr = sender.titleLabel.text;
+//    NSLog(@"---------%@",sender.titleLabel.text);
+    Home_fenleilist_ViewController *details = [[Home_fenleilist_ViewController alloc]init];
+    details.idstr = sender.titleLabel.text;
+    details.navigationItem.title = @"分类";
     [self.navigationController pushViewController:details animated:YES];
 }
 
 - (void)clickbtn1:(UITapGestureRecognizer *)tap{
-    XSTP_ViewController *xstp = [[XSTP_ViewController alloc]init];
-    xstp.navigationItem.title = @"新手特权";
-    [self.navigationController pushViewController:xstp animated:YES];
+    XPPD_ViewController *xppd = [[XPPD_ViewController alloc]init];
+    xppd.navigationItem.title = @"新手特权";
+    [self.navigationController pushViewController:xppd animated:YES];
 }
 
 - (void)clickbtn2:(UITapGestureRecognizer *)tap{
-    XPPD_ViewController *xppd = [[XPPD_ViewController alloc]init];
-    xppd.navigationItem.title = @"新品频道";
-    [self.navigationController pushViewController:xppd animated:YES];
+    XSTP_ViewController *xstp = [[XSTP_ViewController alloc]init];
+    xstp.navigationItem.title = @"新品频道";
+    [self.navigationController pushViewController:xstp animated:YES];
 }
+
+
 
 
 
@@ -357,9 +403,9 @@
     // 由于其子控件是懒加载模式, 所以找之前先将其显示
     [_customSearchBar setShowsCancelButton:NO animated:YES];
     
-    UIImage *theImage = [UIImage imageNamed:@"dx.jpg"];
+    UIImage *theImage = [UIImage imageNamed:@"dx"];
     //    theImage = [theImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    UIButton* meBtn=[[UIButton alloc]initWithFrame:CGRectMake(15, 20+(hei-30)/2+2, 30, 30)];
+    UIButton* meBtn=[[UIButton alloc]initWithFrame:CGRectMake(15, 20+(hei-30)/2+5, 30, 25)];
     LRViewBorderRadius(meBtn, 15, 0, [UIColor clearColor]);
     [meBtn setBackgroundImage:theImage forState:UIControlStateNormal];
     //    [meBtn setTintColor:[UIColor blackColor]];

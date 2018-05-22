@@ -72,13 +72,13 @@
     //商品库存
     LB_stock = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(headImage.frame)+20, CGRectGetMaxY(LB_price.frame), 120, 20)];
 //    LB_stock.text = @"库存10000件";
-    LB_stock.textColor = [UIColor blackColor];
+    LB_stock.textColor = [UIColor grayColor];
     LB_stock.font = [UIFont systemFontOfSize:13];
     [whiteView addSubview:LB_stock];
     
     //已售件数
-    LB_showSales = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(LB_stock.frame), CGRectGetMaxY(LB_price.frame), 80, 20)];
-    LB_showSales.textColor = [UIColor blackColor];
+    LB_showSales = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(LB_stock.frame), CGRectGetMaxY(LB_stock.frame), 100, 20)];
+    LB_showSales.textColor = [UIColor redColor];
     
     NSString *sellStr = [NSString stringWithFormat:@"已售 %@ 件",self.showSales];
     
@@ -91,7 +91,7 @@
 //    LB_showSales.attributedText = attributedText;
     //LB_showSales.text=sellStr;
     
-    LB_showSales.font = [UIFont systemFontOfSize:13];
+    LB_showSales.font = [UIFont systemFontOfSize:16];
     [whiteView addSubview:LB_showSales];
     
     //用户所选择商品的尺码和颜色
@@ -99,7 +99,7 @@
     LB_detail.text = @"请选择 尺码 颜色分类";
     LB_detail.numberOfLines = 0;
     LB_detail.textColor = [UIColor blackColor];
-    LB_detail.font = [UIFont systemFontOfSize:13];
+    LB_detail.font = [UIFont systemFontOfSize:16];
     [whiteView addSubview:LB_detail];
     //分界线
     LB_line = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(headImage.frame)+10, screen_Width, 0.5)];

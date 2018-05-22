@@ -196,12 +196,13 @@
         NSDictionary *diction = [Manager returndictiondata:responseObject];
         NSMutableArray *array = (NSMutableArray *)diction;
         [weakSelf.arr removeAllObjects];
-        for (NSDictionary *dic in array) {
-            Model *model = [Model mj_objectWithKeyValues:dic];
-            [weakSelf.arr addObject:model];
+        if ([Manager judgeWhetherIsEmptyAnyObject:weakSelf.arr]==YES) {
+            for (NSDictionary *dic in array) {
+                Model *model = [Model mj_objectWithKeyValues:dic];
+                [weakSelf.arr addObject:model];
+            }
         }
         [weakSelf.tableview reloadData];
-        //NSLog(@"----%@",diction);
     } enError:^(NSError *error) {
         //NSLog(@"----%@",error);
     }];

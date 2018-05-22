@@ -13,6 +13,9 @@
 		080BC6B720A2A62200BFDEAF /* CZHDatePickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 080BC6B120A2A62200BFDEAF /* CZHDatePickerView.m */; };
 		080BC6B820A2A62200BFDEAF /* UIButton+CZHExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 080BC6B420A2A62200BFDEAF /* UIButton+CZHExtension.m */; };
 		080BC6B920A2A62200BFDEAF /* UIView+CZHExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 080BC6B620A2A62200BFDEAF /* UIView+CZHExtension.m */; };
+		082D0D9220B3B02C00886BDF /* Home_fenleilist_ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 082D0D9120B3B02C00886BDF /* Home_fenleilist_ViewController.m */; };
+		082D0D9520B3FEC400886BDF /* ColorButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 082D0D9420B3FEC400886BDF /* ColorButton.m */; };
+		082D0D9720B4037000886BDF /* dx.png in Resources */ = {isa = PBXBuildFile; fileRef = 082D0D9620B4036F00886BDF /* dx.png */; };
 		083197F120AA83990069176E /* HomePageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 083197F020AA83990069176E /* HomePageViewController.m */; };
 		083197F420AA92100069176E /* KGCustomButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 083197F320AA92100069176E /* KGCustomButton.m */; };
 		083197F820AAAB930069176E /* Collec_1_Cell.m in Sources */ = {isa = PBXBuildFile; fileRef = 083197F620AAAB930069176E /* Collec_1_Cell.m */; };
@@ -108,7 +111,6 @@
 		087B548F20B2ACE200C50DE6 /* XSTP_ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 087B548E20B2ACE200C50DE6 /* XSTP_ViewController.m */; };
 		087B549220B2ACED00C50DE6 /* XPPD_ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 087B549120B2ACED00C50DE6 /* XPPD_ViewController.m */; };
 		087B549520B2CC8D00C50DE6 /* new.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 087B549320B2CC8D00C50DE6 /* new.jpg */; };
-		087B549620B2CC8D00C50DE6 /* dx.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 087B549420B2CC8D00C50DE6 /* dx.jpg */; };
 		0887E86B20ABE4EB00174C84 /* DWQSelectAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 0887E86220ABE4EB00174C84 /* DWQSelectAttributes.m */; };
 		0887E86C20ABE4EB00174C84 /* DWQSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0887E86420ABE4EB00174C84 /* DWQSelectView.m */; };
 		0887E86F20ABE4EB00174C84 /* UIView+DWQExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 0887E86920ABE4EB00174C84 /* UIView+DWQExtension.m */; };
@@ -196,6 +198,11 @@
 		080BC6B420A2A62200BFDEAF /* UIButton+CZHExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+CZHExtension.m"; sourceTree = "<group>"; };
 		080BC6B520A2A62200BFDEAF /* UIView+CZHExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+CZHExtension.h"; sourceTree = "<group>"; };
 		080BC6B620A2A62200BFDEAF /* UIView+CZHExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+CZHExtension.m"; sourceTree = "<group>"; };
+		082D0D9020B3B02C00886BDF /* Home_fenleilist_ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Home_fenleilist_ViewController.h; sourceTree = "<group>"; };
+		082D0D9120B3B02C00886BDF /* Home_fenleilist_ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Home_fenleilist_ViewController.m; sourceTree = "<group>"; };
+		082D0D9320B3FEC300886BDF /* ColorButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorButton.h; sourceTree = "<group>"; };
+		082D0D9420B3FEC400886BDF /* ColorButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorButton.m; sourceTree = "<group>"; };
+		082D0D9620B4036F00886BDF /* dx.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dx.png; sourceTree = "<group>"; };
 		083197EF20AA83990069176E /* HomePageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomePageViewController.h; sourceTree = "<group>"; };
 		083197F020AA83990069176E /* HomePageViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HomePageViewController.m; sourceTree = "<group>"; };
 		083197F220AA92100069176E /* KGCustomButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KGCustomButton.h; sourceTree = "<group>"; };
@@ -423,7 +430,6 @@
 		087B549020B2ACED00C50DE6 /* XPPD_ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPPD_ViewController.h; sourceTree = "<group>"; };
 		087B549120B2ACED00C50DE6 /* XPPD_ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPPD_ViewController.m; sourceTree = "<group>"; };
 		087B549320B2CC8D00C50DE6 /* new.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = new.jpg; sourceTree = "<group>"; };
-		087B549420B2CC8D00C50DE6 /* dx.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = dx.jpg; sourceTree = "<group>"; };
 		0887E86120ABE4EB00174C84 /* DWQSelectAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DWQSelectAttributes.h; sourceTree = "<group>"; };
 		0887E86220ABE4EB00174C84 /* DWQSelectAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DWQSelectAttributes.m; sourceTree = "<group>"; };
 		0887E86320ABE4EB00174C84 /* DWQSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DWQSelectView.h; sourceTree = "<group>"; };
@@ -593,6 +599,15 @@
 				080BC6B620A2A62200BFDEAF /* UIView+CZHExtension.m */,
 			);
 			path = CZHDatePickerView;
+			sourceTree = "<group>";
+		};
+		082D0D8F20B3AFEB00886BDF /* topfenlei */ = {
+			isa = PBXGroup;
+			children = (
+				082D0D9020B3B02C00886BDF /* Home_fenleilist_ViewController.h */,
+				082D0D9120B3B02C00886BDF /* Home_fenleilist_ViewController.m */,
+			);
+			path = topfenlei;
 			sourceTree = "<group>";
 		};
 		084D232D209BEDE500776B84 /* 设置 */ = {
@@ -1088,6 +1103,8 @@
 				0858BC42209B0A6900C4489B /* IrregularLabel.m */,
 				086C11E620A9641100E654C4 /* DXSearchBar.h */,
 				086C11E720A9641100E654C4 /* DXSearchBar.m */,
+				082D0D9320B3FEC300886BDF /* ColorButton.h */,
+				082D0D9420B3FEC400886BDF /* ColorButton.m */,
 			);
 			path = thirdPath;
 			sourceTree = "<group>";
@@ -1122,10 +1139,11 @@
 		08F82AA120941F9100D36A68 /* 商城 */ = {
 			isa = PBXGroup;
 			children = (
-				087B549420B2CC8D00C50DE6 /* dx.jpg */,
+				082D0D9620B4036F00886BDF /* dx.png */,
 				087B549320B2CC8D00C50DE6 /* new.jpg */,
 				087B548920B2AA5C00C50DE6 /* xppd.jpg */,
 				087B548A20B2AA5C00C50DE6 /* xstq.jpg */,
+				082D0D8F20B3AFEB00886BDF /* topfenlei */,
 				0888FB9820999422003D2A9F /* 新品 */,
 				083197EF20AA83990069176E /* HomePageViewController.h */,
 				083197F020AA83990069176E /* HomePageViewController.m */,
@@ -1434,7 +1452,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				087B549620B2CC8D00C50DE6 /* dx.jpg in Resources */,
+				082D0D9720B4037000886BDF /* dx.png in Resources */,
 				08F82AF020945D9000D36A68 /* PersonCell.xib in Resources */,
 				086F057D20AD4AC200CD508C /* cart_addBtn_nomal@2x.png in Resources */,
 				75159BE020B0FC0D00F80AD3 /* stip.png in Resources */,
@@ -1611,8 +1629,10 @@
 				0887E86F20ABE4EB00174C84 /* UIView+DWQExtension.m in Sources */,
 				0871B9C620A03FE50035B3B7 /* EasyAlertTypes.m in Sources */,
 				08F82AD420944EE900D36A68 /* SDCollectionViewCell.m in Sources */,
+				082D0D9520B3FEC400886BDF /* ColorButton.m in Sources */,
 				0866F0C820AE76020035AD95 /* DZFOrderCell.m in Sources */,
 				083197F120AA83990069176E /* HomePageViewController.m in Sources */,
+				082D0D9220B3B02C00886BDF /* Home_fenleilist_ViewController.m in Sources */,
 				0866F19120AEC56C0035AD95 /* APRSASigner.m in Sources */,
 				088C642920AFCBF6003FE5D1 /* LLPhotoBrowser.m in Sources */,
 				084D2334209C07A300776B84 /* LoginViewController.m in Sources */,

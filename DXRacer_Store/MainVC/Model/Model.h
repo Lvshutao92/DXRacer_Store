@@ -95,7 +95,10 @@
 @property (nonatomic,strong)NSString *productTitle;
 
 
-
+@property (nonatomic,strong)NSString *activityName;
+@property (nonatomic,strong)NSString *onSalePrice;
+@property (nonatomic,strong)NSString *productItemId;
+@property (nonatomic,strong)NSString *orderFee;
 @end
 
 

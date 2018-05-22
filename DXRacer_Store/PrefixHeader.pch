@@ -37,6 +37,7 @@
 #import "HJCAjustNumButton.h"
 #import "KGCustomButton.h"
 #import "SQCustomButton.h"
+#import "ColorButton.h"
 #import "SDCycleScrollView.h"
 #import "PYSearch.h"
 #import "IrregularLabel.h"
@@ -118,16 +119,17 @@
 
 
 //显示头像的域名是
+//#define NSString(str) [NSString stringWithFormat:@"http://test-shop-img.dxracer.com.cn/%@",str]
 #define NSString(str) [NSString stringWithFormat:@"http://test-shop-img.dxracer.com.cn/%@",str]
+
+
+
 #define CHECKWORD @""
 //#define KURLNSString(str) [NSString stringWithFormat:@"http://10.0.0.30:8080/dxracer-mall-api/app/%@",str]
 
-//#define KURLNSString(str) [NSString stringWithFormat:@"http://10.0.0.2:8081/mall/app/%@",str]
+#define KURLNSString(str) [NSString stringWithFormat:@"http://10.0.0.2:8081/mall/app/%@",str]
 
-
-
-
-#define KURLNSString(str) [NSString stringWithFormat:@"http://test-shop.dxracer.com.cn:8084/mall/app/%@",str]
+//#define KURLNSString(str) [NSString stringWithFormat:@"http://test-shop.dxracer.com.cn:8084/mall/app/%@",str]
 
 
 

@@ -133,6 +133,9 @@
             
             self->dataArray = (NSMutableArray *)[[self->dataArray reverseObjectEnumerator] allObjects];
             [self->myTableView reloadData];
+            
+            
+            
         }
     } enError:^(NSError *error) {
          NSLog(@"%@",error);

@@ -134,10 +134,9 @@
     });
     cell.lab1.text = [dict objectForKey:@"productTitle"];
     cell.lab1.numberOfLines = 0;
-    cell.lab2.text = [Manager jinegeshi:[dict objectForKey:@"productFee"]];
-    cell.lab3.text = [dict objectForKey:@"productItemNo"];
-    
-    cell.lab4.text = [NSString stringWithFormat:@"X%@",[dict objectForKey:@"quantity"]];
+    cell.lab3.text = [Manager jinegeshi:[dict objectForKey:@"orderFee"]];
+    cell.lab4.text = [dict objectForKey:@"productItemNo"];
+    cell.lab2.text = [NSString stringWithFormat:@"X%@",[dict objectForKey:@"quantity"]];
     return cell;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{

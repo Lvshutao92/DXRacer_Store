@@ -50,7 +50,11 @@
     
     [self creatData];
     
-    [myTableView reloadData];
+    if (self->myTableView && self->dataArray.count > 0) {
+        [self->myTableView reloadData];
+    }else{
+        [self setupMainView];
+    }
 }
 
 /**
@@ -86,21 +90,21 @@
         if ([code isEqualToString:@"200"]){
             NSMutableArray *array = [diction objectForKey:@"object"];
             [self->dataArray removeAllObjects];
-            [self->dataArray removeAllObjects];
             for (NSDictionary *dic in array) {
                 CartModel *model = [CartModel mj_objectWithKeyValues:dic];
                 [self->dataArray addObject:model];
             }
-            
             self->dataArray = (NSMutableArray *)[[self->dataArray reverseObjectEnumerator] allObjects];
+        }else{
+            [self->dataArray removeAllObjects];
         }
         if (self->myTableView && self->dataArray.count > 0) {
-            [self->myTableView reloadData];
         }
         else
         {
             [weakSelf setupMainView];
         }
+        [self->myTableView reloadData];
     } enError:^(NSError *error) {
         NSLog(@"%@",error);
     }];
@@ -418,6 +422,9 @@
         weakCell.numberLabel.text = numStr;
         model.quantity = [NSString stringWithFormat:@"%ld",count];
         
+        [self lodChangeGoodsNumber:[NSString stringWithFormat:@"%ld",[model.quantity integerValue]] ids:model.id inesp:indexPath];
+        
+        
         [self->dataArray replaceObjectAtIndex:indexPath.row withObject:model];
         if ([self->selectGoods containsObject:model]) {
             [self->selectGoods removeObject:model];
@@ -440,6 +447,10 @@
         weakCell.numberLabel.text = numStr;
         
         model.quantity = [NSString stringWithFormat:@"%ld",count];
+        
+        [self lodChangeGoodsNumber:[NSString stringWithFormat:@"%ld",[model.quantity integerValue]] ids:model.id inesp:indexPath];
+        
+        
         [self->dataArray replaceObjectAtIndex:indexPath.row withObject:model];
         
         //判断已选择数组里有无该对象,有就删除  重新添加
@@ -453,6 +464,27 @@
     [cell reloadDataWith:[dataArray objectAtIndex:indexPath.row]];
     return cell;
 }
+
+
+//改变商品数量
+- (void)lodChangeGoodsNumber:(NSString *)amount ids:(NSString *)ids inesp:(NSIndexPath *)indexpath{
+    __weak typeof(self) weakSelf = self;
+    NSDictionary *dic = @{@"productItemId":ids,
+                          @"quantity":amount};
+    [Manager requestPOSTWithURLStr:KURLNSString(@"order/shopping/add") paramDic:dic token:nil finish:^(id responseObject) {
+        NSDictionary *diction = [Manager returndictiondata:responseObject];
+        //NSLog(@"******%@",diction);
+        NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
+        if ([code isEqualToString:@"200"]){
+            [weakSelf creatData];
+        }else{
+            
+        }
+    } enError:^(NSError *error) {
+        
+    }];
+}
+
 
 -(void)reloadTable
 {

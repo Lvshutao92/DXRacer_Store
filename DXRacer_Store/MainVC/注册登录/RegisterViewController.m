@@ -95,8 +95,8 @@
     if (textf.text != nil) {
         NSDictionary *dic = @{@"verificationCode":textf.text,@"mobile":text1.text};
         [Manager requestPOSTWithURLStr:KURLNSString(@"customer/register/shortmessage") paramDic:dic token:nil finish:^(id responseObject) {
-//            NSDictionary *diction = [Manager returndictiondata:responseObject];
-            //NSLog(@"----%@",diction);
+            NSDictionary *diction = [Manager returndictiondata:responseObject];
+            NSLog(@"----%@",diction);
         } enError:^(NSError *error) {
             NSLog(@"%@",error);
         }];

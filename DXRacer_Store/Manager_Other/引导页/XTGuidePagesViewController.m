@@ -46,7 +46,7 @@
             btn.center = CGPointMake(s_w / 2, s_h - 60);
             btn.layer.cornerRadius = 4;
             btn.clipsToBounds = YES;
-            btn.backgroundColor = [UIColor lightGrayColor];
+            btn.backgroundColor = [UIColor colorWithWhite:.8 alpha:.2];
             [btn addTarget:self action:@selector(clickEnter) forControlEvents:UIControlEventTouchUpInside];
             btn;
         })];

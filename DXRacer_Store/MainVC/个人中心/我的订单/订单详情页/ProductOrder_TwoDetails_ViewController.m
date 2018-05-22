@@ -117,7 +117,7 @@
         
         
         self->ProductTotalPriceLab.text = [Manager jinegeshi:[orderDic objectForKey:@"productFee"]];
-        self->freightLab.text = [Manager jinegeshi:[orderDic objectForKey:@"orderTotalFee"]];
+        self->freightLab.text = [Manager jinegeshi:[orderDic objectForKey:@"discountFee"]];
         
         NSMutableAttributedString *noteStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"需付款：%@",[Manager jinegeshi:[orderDic objectForKey:@"orderTotalFee"]]]];
         NSRange range1 = NSMakeRange(0, 4);
@@ -254,7 +254,7 @@
     label1.font = [UIFont systemFontOfSize:15];
     [footerBgv1 addSubview:label1];
     UILabel *label2 = [[UILabel alloc]initWithFrame:CGRectMake(10, 30, 80, 30)];
-    label2.text = @"运费";
+    label2.text = @"折扣";
     label2.font = [UIFont systemFontOfSize:15];
     [footerBgv1 addSubview:label2];
     UILabel *line3 = [[UILabel alloc]initWithFrame:CGRectMake(0, 60, SCREEN_WIDTH, 1)];
@@ -306,10 +306,10 @@
     [cell.img sd_setImageWithURL:[NSURL URLWithString:NSString(model.productItemImg)]];
     cell.lab1.text = model.productTitle;
     cell.lab1.numberOfLines = 0;
-    cell.lab2.text = [Manager jinegeshi:model.productFee];
-    cell.lab3.text = model.productItemNo;
+    cell.lab3.text = [Manager jinegeshi:model.orderFee];
+    cell.lab4.text = model.productItemNo;
     
-    cell.lab4.text = [NSString stringWithFormat:@"X%@",model.quantity];
+    cell.lab2.text = [NSString stringWithFormat:@"X%@",model.quantity];
     return cell;
 }
 
@@ -342,7 +342,7 @@
     //支付宝支付
     self.tfSheetView.zfbBlock = ^{
         NSLog(@"支付宝支付");
-        //        [weakSelf doAPPay:orderNo];
+        [weakSelf doAPPay:weakSelf.orderNo];
         [weakSelf.tfSheetView disMissView];
     };
     [self.tfSheetView showInView:self.view];

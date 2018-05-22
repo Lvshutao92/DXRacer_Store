@@ -106,11 +106,11 @@
 //                }
         
         
-//        if (btn.tag == 10000) {
-//            self.selectBtn = btn;
-//            self.selectBtn.backgroundColor = SelectColor;
-//            [self.selectBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//        }
+        if (btn.tag == 10000) {
+            self.selectBtn = btn;
+            self.selectBtn.backgroundColor = SelectColor;
+            [self.selectBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        }
         
         
     }

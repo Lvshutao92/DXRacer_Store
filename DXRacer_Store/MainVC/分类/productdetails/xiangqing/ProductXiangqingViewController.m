@@ -37,6 +37,8 @@
     
     UILabel *titleLab;
     UILabel *priceLab;
+    UILabel *activityNameLab;
+    UILabel *activityPriceLab;
     UILabel *line1;
     
     UILabel *guigeLab;
@@ -78,10 +80,18 @@
 @property(nonatomic,strong)NSMutableArray *dataArray2;
 @property(nonatomic,strong)NSMutableArray *dataArray3;
 
+
+
+@property(nonatomic,strong)NSMutableArray *cuxiaoArr;
 @end
 
 @implementation ProductXiangqingViewController
-
+- (NSMutableArray *)cuxiaoArr{
+    if (_cuxiaoArr == nil) {
+        self.cuxiaoArr = [NSMutableArray arrayWithCapacity:1];
+    }
+    return _cuxiaoArr;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"宝贝";
@@ -126,6 +136,17 @@
     priceLab = [[UILabel alloc]init];
     priceLab.textColor = [UIColor redColor];
     [headerV addSubview:priceLab];
+    
+    activityNameLab = [[UILabel alloc]init];
+    activityNameLab.textColor = [UIColor blackColor];
+    activityNameLab.textAlignment = NSTextAlignmentRight;
+    [headerV addSubview:activityNameLab];
+    
+    activityPriceLab = [[UILabel alloc]init];
+    activityPriceLab.textColor = [UIColor redColor];
+    activityPriceLab.textAlignment = NSTextAlignmentLeft;
+    [headerV addSubview:activityPriceLab];
+    
     line1 = [[UILabel alloc]init];
     line1.backgroundColor = RGBACOLOR(237, 236, 242, 1);
     [headerV addSubview:line1];
@@ -244,6 +265,8 @@
 
 -(void)selectBtnTitle:(NSString *)title andBtn:(UIButton *)btn{
     NSString *st;
+    activityPriceLab.text= @"";
+    activityNameLab.text= @"";
     [arr_sID removeAllObjects];
     [self.attributesArray removeAllObjects];
     stringID = @"";
@@ -251,6 +274,10 @@
     stringStatus = @"";
     stringImg = @"";
     itemNo = @"";
+    priceLab.text = @"";
+    self.selectView.LB_price.text = @"";
+    self.selectView.LB_detail.text = @"请选择规格属性";
+    self.selectView.LB_showSales.text = @"";
     for (int i=0; i < _standardList.count; i++)
     {
         
@@ -281,17 +308,17 @@
                                 
                                 if (stringID.length <=0){
                                     self.selectView.LB_price.text = [NSString stringWithFormat:@"¥ %@",stringPrice];
-                                    
+                                    priceLab.text = [NSString stringWithFormat:@"¥ %@",stringPrice];
                                     self.selectView.LB_stock.text = itemNo;
                                     //self.selectView.LB_showSales.text=stringStatus;
                                     
                                     [self.selectView.headImage sd_setImageWithURL:[NSURL URLWithString:NSString(stringImg)]];
                                 }else{
                                     self.selectView.LB_price.text = [NSString stringWithFormat:@"¥ %@",stringPrice];
+                                    priceLab.text = [NSString stringWithFormat:@"¥ %@",stringPrice];
                                     
                                     
                                     self.selectView.LB_stock.text = itemNo;
-                                    //self.selectView.LB_showSales.text=stringStatus;
                                     
                                     
                                     [self.selectView.headImage sd_setImageWithURL:[NSURL URLWithString:NSString(stringImg)]];
@@ -311,6 +338,30 @@
         guigeLab.text = [NSString stringWithFormat:@"已选规格：%@",productCanshu];
     }
     
+    
+    for (Model *model in self.cuxiaoArr) {
+        //NSLog(@"%@----%@",stringID,model.productItemId);
+        if ([model.productItemId isEqualToString:stringID]) {
+            
+            activityNameLab.text =model.activityName;
+            activityPriceLab.text = [Manager jinegeshi:model.onSalePrice];
+            
+            self.selectView.LB_detail.text = model.activityName;
+            self.selectView.LB_showSales.text= [Manager jinegeshi:model.onSalePrice];
+            
+            
+            NSDictionary *attribtDic2 = @{NSStrikethroughStyleAttributeName: [NSNumber numberWithInteger:NSUnderlineStyleSingle]};
+            NSMutableAttributedString *attribtStr2 = [[NSMutableAttributedString alloc]initWithString: self.selectView.LB_price.text attributes:attribtDic2];
+            self.selectView.LB_price.attributedText = attribtStr2;
+            
+            
+            NSDictionary *attribtDic1 = @{NSStrikethroughStyleAttributeName: [NSNumber numberWithInteger:NSUnderlineStyleSingle]};
+            NSMutableAttributedString *attribtStr1 = [[NSMutableAttributedString alloc]initWithString: priceLab.text attributes:attribtDic1];
+            priceLab.attributedText = attribtStr1;
+        }
+    }
+    
+    
 }
 
 - (void)getDetailsInfo{
@@ -323,34 +374,33 @@
         //NSLog(@"******%@",diction);
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
+            //
             if ([Manager judgeWhetherIsEmptyAnyObject:[[diction objectForKey:@"object"]objectForKey:@"productImageList"]] == YES) {
                 NSMutableArray *arr = [[diction objectForKey:@"object"]objectForKey:@"productImageList"];
+                [weakSelf.lunboArray removeAllObjects];
                 for (NSDictionary *dicc in arr) {
                     Model *model = [Model mj_objectWithKeyValues:dicc];
                     [weakSelf.lunboArray addObject:model];
                 }
             }
-            
-            
-            
+            //
+            if ([Manager judgeWhetherIsEmptyAnyObject:[[diction objectForKey:@"object"]objectForKey:@"promotions"]] == YES) {
+                NSMutableArray *arr = [[diction objectForKey:@"object"]objectForKey:@"promotions"];
+                [weakSelf.cuxiaoArr removeAllObjects];
+                for (NSDictionary *dicc in arr) {
+                    Model *model = [Model mj_objectWithKeyValues:dicc];
+                    [weakSelf.cuxiaoArr addObject:model];
+                }
+            }
+            //
             self->productItemList_Arr = [[diction objectForKey:@"object"]objectForKey:@"productItemList"];
-            
-            
-            
             NSMutableArray *attrList = [[diction objectForKey:@"object"]objectForKey:@"productAttrList"];
             NSMutableArray *attrList_a = [NSMutableArray arrayWithCapacity:1];
             NSMutableArray *attrList_b = [NSMutableArray arrayWithCapacity:1];
-            
-            
             self->arr_sID = [NSMutableArray arrayWithCapacity:1];
-            
             self->dic_sID = [NSMutableDictionary dictionaryWithCapacity:1];
-            
-            
             NSMutableArray *abc = [NSMutableArray arrayWithCapacity:1];
             NSString *string;
-            
-            
             for (NSDictionary *dic in attrList) {
                 [attrList_a addObject:[[dic objectForKey:@"attrKey"] objectForKey:@"catalogAttrValue"]];
                 
@@ -360,12 +410,8 @@
                 NSDictionary *dict1 = [aaa firstObject];
                 //NSLog(@"******%@",[dict1 objectForKey:@"modelAttrValue"]);
                 [abc addObject:[dict1 objectForKey:@"modelAttrValue"]];
-                
-                
-                
                 self->afe = [NSMutableArray arrayWithCapacity:1];
                 int i = 0;
-                
                 for (NSDictionary *dicts in aaa) {
                     [self->arr addObject:[dicts objectForKey:@"modelAttrValue"]];
                     [self->dic_sID setValue:[dicts objectForKey:@"id"] forKey:[dicts objectForKey:@"modelAttrValue"]];
@@ -374,37 +420,39 @@
                     }
                     i++;
                 }
-                
-                
-                
                 [attrList_b addObject:self->arr];
             }
-            
-          
-           
             string = [self->afe componentsJoinedByString:@","];
             
             
+            self->productCanshu = [abc componentsJoinedByString:@","];
+            self->guigeLab.text = [NSString stringWithFormat:@"已选规格：%@",self->productCanshu];
             
-//            self->productCanshu = [abc componentsJoinedByString:@","];
-//            self->guigeLab.text = [NSString stringWithFormat:@"已选规格：%@",self->productCanshu];
             
             weakSelf.standardList = attrList_a;
             weakSelf.standardValueList = (NSArray *)attrList_b;
-            
-            
-            
             
             if ([Manager judgeWhetherIsEmptyAnyObject:[[diction objectForKey:@"object"]objectForKey:@"product"]] == YES){
                 NSDictionary *dicti = [[diction objectForKey:@"object"]objectForKey:@"product"];
                 self->titleHeight = [Manager getLabelHeightWithContent:[dicti objectForKey:@"modelName"] andLabelWidth:SCREEN_WIDTH-30 andLabelFontSize:17];
                 
                 self->titleLab.text = [dicti objectForKey:@"modelName"];
+                
+                
+                
                 self->priceLab.text = [NSString stringWithFormat:@"¥ %@",[dicti objectForKey:@"salePrice"]];
                 
                 
+                
+                
                 self->titleLab.frame = CGRectMake(5, 10+SCREEN_WIDTH, SCREEN_WIDTH-10, self->titleHeight);
-                self->priceLab.frame = CGRectMake(5, 10+SCREEN_WIDTH+self->titleHeight+10, SCREEN_WIDTH-10, 20);
+                self->priceLab.frame = CGRectMake(5, 10+SCREEN_WIDTH+self->titleHeight+10, 80, 20);
+                
+                self->activityNameLab.frame = CGRectMake(85, 10+SCREEN_WIDTH+self->titleHeight+10, SCREEN_WIDTH-190, 20);
+                self->activityPriceLab.frame = CGRectMake(SCREEN_WIDTH-105, 10+SCREEN_WIDTH+self->titleHeight+10, 100, 20);
+                
+                
+                
                 self->line1.frame = CGRectMake(0, 10+SCREEN_WIDTH+self->titleHeight+40, SCREEN_WIDTH, 10);
                 
                 self->guigeLab.frame = CGRectMake(5, 10+SCREEN_WIDTH+self->titleHeight+60, SCREEN_WIDTH-10, 40);
@@ -412,31 +460,47 @@
                 self->guigeBtn.frame = CGRectMake(0, 10+SCREEN_WIDTH+self->titleHeight+50, SCREEN_WIDTH, 55);
                 self->line2.frame = CGRectMake(0, 10+SCREEN_WIDTH+self->titleHeight+105, SCREEN_WIDTH, 5);
                 
-                
                 [weakSelf initSelectView];
-                
 //                NSLog(@"##########%@",string);
 //                NSDictionary *dicc = [self->productItemList_Arr lastObject];
-//                for (NSDictionary *dicc in self->productItemList_Arr) {
-//                    if ([[dicc objectForKey:@"productModelAttrs"] isEqualToString:string]) {
-//                        [weakSelf.selectView.headImage sd_setImageWithURL:[NSURL URLWithString:NSString([dicc objectForKey:@"listImg"])]];
-//                        weakSelf.selectView.LB_price.text = [NSString stringWithFormat:@"¥ %@",[dicc objectForKey:@"salePrice"]];
-//                        weakSelf.selectView.LB_stock.text = [dicc objectForKey:@"status"];
-//                        weakSelf.selectView.LB_showSales.text=[dicc objectForKey:@"itemNo"];
-//                        self->stringID = [dicc objectForKey:@"id"];
-//                    }
-//                }
-                
-                
+                for (NSDictionary *dicc in self->productItemList_Arr) {
+                    if ([[dicc objectForKey:@"productModelAttrs"] isEqualToString:string]) {
+                        [weakSelf.selectView.headImage sd_setImageWithURL:[NSURL URLWithString:NSString([dicc objectForKey:@"listImg"])]];
+                        weakSelf.selectView.LB_price.text = [NSString stringWithFormat:@"¥ %@",[dicc objectForKey:@"salePrice"]];
+                        weakSelf.selectView.LB_stock.text = [dicc objectForKey:@"itemNo"];
+                        //weakSelf.selectView.LB_showSales.text=[dicc objectForKey:@"status"];
+                        self->stringID = [dicc objectForKey:@"id"];
+                    }
+                }
                 
                 
             }
-           
-            
         }
+    
         
         
-        
+        for (Model *model in self.cuxiaoArr) {
+            //NSLog(@"%@----%@",stringID,model.productItemId);
+            if ([model.productItemId isEqualToString:self->stringID]) {
+                self->activityNameLab.text =model.activityName;
+                self->activityPriceLab.text = [Manager jinegeshi:model.onSalePrice];
+                
+                weakSelf.selectView.LB_detail.text = model.activityName;
+                weakSelf.selectView.LB_showSales.text= [Manager jinegeshi:model.onSalePrice];
+                
+                
+                
+                NSDictionary *attribtDic2 = @{NSStrikethroughStyleAttributeName: [NSNumber numberWithInteger:NSUnderlineStyleSingle]};
+                NSMutableAttributedString *attribtStr2 = [[NSMutableAttributedString alloc]initWithString: weakSelf.selectView.LB_price.text attributes:attribtDic2];
+                weakSelf.selectView.LB_price.attributedText = attribtStr2;
+                
+                
+                NSDictionary *attribtDic1 = @{NSStrikethroughStyleAttributeName: [NSNumber numberWithInteger:NSUnderlineStyleSingle]};
+                NSMutableAttributedString *attribtStr1 = [[NSMutableAttributedString alloc]initWithString: self->priceLab.text attributes:attribtDic1];
+                self->priceLab.attributedText = attribtStr1;
+                
+            }
+        }
         
         
         NSMutableArray *array = [NSMutableArray arrayWithCapacity:1];
@@ -598,12 +662,7 @@
 
 
 
-- (NSMutableArray *)lunboArray{
-    if (_lunboArray == nil) {
-        self.lunboArray = [NSMutableArray arrayWithCapacity:1];
-    }
-    return _lunboArray;
-}
+
 
 
 
@@ -652,6 +711,14 @@
         [btn1 addTarget:self action:@selector(cilck1) forControlEvents:UIControlEventTouchUpInside];
         [_tabbarView addSubview:btn1];
         
+        
+        
+//        NSMutableArray *colorArray2 = [@[[UIColor colorWithRed:255 green:69 blue:0 alpha:0],[UIColor colorWithRed:255 green:140 blue:0 alpha:1]] mutableCopy];
+//        ColorButton *btn2 = [[ColorButton alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-240, 0, 120, 55) FromColorArray:colorArray2 ByGradientType:uprightTolowLeft];
+//        [btn2 setTitle:@"加入购物车" forState:UIControlStateNormal];
+//        [btn2 addTarget:self action:@selector(cllll) forControlEvents:UIControlEventTouchUpInside];
+//        [_tabbarView addSubview:btn2];
+        
         UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
         btn2.frame = CGRectMake(SCREEN_WIDTH-240, 0, 120, 55);
         btn2.backgroundColor = [UIColor orangeColor];
@@ -659,17 +726,19 @@
         [btn2 addTarget:self action:@selector(cllll) forControlEvents:UIControlEventTouchUpInside];
         [_tabbarView addSubview:btn2];
         
+        
+        
         UIButton *btn3 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn3.frame = CGRectMake((SCREEN_WIDTH-240)/2, 0, (SCREEN_WIDTH-240)/2, 55);
-        [btn3 setTitle:@"收藏" forState:UIControlStateNormal];
+        btn3.frame = CGRectMake((SCREEN_WIDTH-260)/2+10, 0, (SCREEN_WIDTH-260)/2, 55);
+        [btn3 setImage:[UIImage imageNamed:@"sc"] forState:UIControlStateNormal];
         btn3.backgroundColor = [UIColor whiteColor];
         [btn3 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [btn3 addTarget:self action:@selector(cilck3) forControlEvents:UIControlEventTouchUpInside];
         [_tabbarView addSubview:btn3];
         
         UIButton *btn4 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn4.frame = CGRectMake(0, 0, (SCREEN_WIDTH-240)/2, 55);
-        [btn4 setTitle:@"首页" forState:UIControlStateNormal];
+        btn4.frame = CGRectMake(10, 0, (SCREEN_WIDTH-260)/2, 55);
+        [btn4 setImage:[UIImage imageNamed:@"1"] forState:UIControlStateNormal];
         btn4.backgroundColor = [UIColor whiteColor];
         [btn4 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [btn4 addTarget:self action:@selector(cilck4) forControlEvents:UIControlEventTouchUpInside];
@@ -679,33 +748,26 @@
     return _tabbarView;
 }
 - (FrankDropBounsView *)dropView{
-    
     if (!_dropView) {
-        
         CGFloat height = CGRectGetHeight(self.view.frame) - CGRectGetHeight(self.tabbarView.frame) - [Manager returnDaohanglanHeight];
         _dropView = [FrankDropBounsView createFrankDropBounsViewWithFrame:CGRectMake(0, [Manager returnDaohanglanHeight], CGRectGetWidth(self.view.frame), height) withDelegate:self];
         _dropView.needShowAlertView = NO;// 设置是否显示提示文字
         _dropView.backgroundColor = [UIColor clearColor];
         _dropView.alertTitle = @"";
     }
-    
     return _dropView;
 }
 
 
 - (void)pullDownToReloadData:(MJRefreshNormalHeader *)table{
-    NSLog(@"--- 下拉");
-    
+    //NSLog(@"--- 下拉");
     [self.dropView showTopPageViewWithCompleteBlock:^{
-        
         [table endRefreshing];
     }];
 }
 - (void)pullUpToReloadMoreData:(MJRefreshBackNormalFooter *)table{
-    NSLog(@"--- 上拉");
-    
+    //NSLog(@"--- 上拉");
     [self.dropView showBottomPageViewWithCompleteBlock:^{
-        
         [table endRefreshing];
     }];
 }
@@ -725,7 +787,6 @@
     
     self.tableview1.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(pullUpToReloadMoreData:)];
     
-    
     return self.tableview1;
 }
 #pragma mark ---------  TripDetailDropDelegate  -------------
@@ -733,7 +794,7 @@
  自定义切换标题模块 代理方法
  */
 - (NSArray *) resetToolbarTitles{
-    return @[@"图片",@"参数",@"评价"];
+    return @[@"图文详情",@"规格参数",@"评价"];
 }
 /**
  自定义底部展示视图模块 代理方法
@@ -875,17 +936,23 @@
         Model *model = [self.dataArray1 objectAtIndex:indexPath.row];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
+//        imgheight = [cell returnCellHeight:NSString(model.imgUrl)];
+       
+        
+        SDWebImageManager *manager = [SDWebImageManager sharedManager];
+        NSString* key = [manager cacheKeyForURL:[NSURL URLWithString:NSString(model.imgUrl)]];
+        SDImageCache* cache = [SDImageCache sharedImageCache];
+        //此方法会先从memory中取。
+        cell.img.image = [cache imageFromDiskCacheForKey:key];
+        
+        
+        
         
         [cell.img sd_setImageWithURL:[NSURL URLWithString:NSString(model.imgUrl)] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
             CGSize size = image.size;
             self->imgheight = SCREEN_WIDTH/size.width*size.height;
         }];
         
-//        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:NSString(model.imgUrl)]];
-//        UIImage *image = [UIImage imageWithData:data];
-//        CGSize size = image.size;
-//        imgheight = SCREEN_WIDTH/size.width*size.height;
-//        [cell.img sd_setImageWithURL:[NSURL URLWithString:NSString(model.imgUrl)] placeholderImage:[UIImage imageNamed:@""]];
         return cell;
     }
     if ([tableView isEqual:self.tableview3]) {
@@ -909,7 +976,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifierCell];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.textLabel.text = @"44444";
+//    cell.textLabel.text = @"44444";
     return cell;
 }
 
@@ -923,7 +990,12 @@
 
 
 
-
+- (NSMutableArray *)lunboArray{
+    if (_lunboArray == nil) {
+        self.lunboArray = [NSMutableArray arrayWithCapacity:1];
+    }
+    return _lunboArray;
+}
 
 - (NSMutableArray *)dataArray1{
     if (_dataArray1 == nil) {

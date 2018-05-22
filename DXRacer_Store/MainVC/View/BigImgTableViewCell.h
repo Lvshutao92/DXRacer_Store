@@ -12,5 +12,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *img;
 
 
+- (CGFloat )returnCellHeight:(NSString *)str;
 
 @end
