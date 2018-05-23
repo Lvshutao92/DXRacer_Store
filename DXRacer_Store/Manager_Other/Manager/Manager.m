@@ -20,6 +20,29 @@ static Manager *manager = nil;
     return manager;
 }
 
+
+
+
+//获取字符串的宽度
++(float) widthForString:(NSString *)value fontSize:(float)fontSize andHeight:(float)height
+{
+    CGSize sizeToFit = [value sizeWithFont:[UIFont systemFontOfSize:fontSize] constrainedToSize:CGSizeMake(CGFLOAT_MAX, height) lineBreakMode:NSLineBreakByWordWrapping];//此处的换行类型（lineBreakMode）可根据自己的实际情况进行设置
+    return sizeToFit.width;
+    
+}
+
+//获得字符串的高度
++(float) heightForString:(NSString *)value fontSize:(float)fontSize andWidth:(float)width
+{
+    CGSize sizeToFit = [value sizeWithFont:[UIFont systemFontOfSize:fontSize] constrainedToSize:CGSizeMake(width, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];//此处的换行类型（lineBreakMode）可根据自己的实际情况进行设置
+    return sizeToFit.height;
+}
+
+
+
+
+
+
 + (void)changeLineSpaceForLabel:(UILabel *)label WithSpace:(float)space {
     
     NSString *labelText = label.text;
@@ -643,7 +666,39 @@ static Manager *manager = nil;
 
 
 
-
+//post arr
++ (void)requestPOSTWithURLStr:(NSString *)urlStr
+                     paramArr:(NSMutableArray *)paramArr
+                        token:(NSString *)token
+                       finish:(void(^)(id responseObject))finish
+                      enError:(void(^)(NSError *error))enError{
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    
+    [manager.requestSerializer setValue:@"application/json;charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+    
+    if ([Manager redingwenjianming:@"token.text"] != nil) {
+        [manager.requestSerializer setValue:[Manager redingwenjianming:@"token.text"] forHTTPHeaderField:@"token"];
+        [manager.requestSerializer setValue:[Manager redingwenjianming:@"userid.text"] forHTTPHeaderField:@"loginUserId"];
+    }
+    NSLog(@"%@\n%@",[Manager redingwenjianming:@"token.text"],[Manager redingwenjianming:@"userid.text"]);
+    
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html",@"image/jpeg",@"text/plain", nil];
+    [manager POST:urlStr parameters:paramArr progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        //        NSString *errcode = [NSString stringWithFormat:@"%@",[responseObject objectForKey:@"errcode"]];
+        //        if ([errcode isEqualToString:@"0"]) {
+        finish(responseObject);
+        //        }else{
+        //            NSString *errmsg = [responseObject objectForKey:@"errmsg"];
+        //        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        enError(error);
+    }];
+    
+}
 //post
 + (void)requestPOSTWithURLStr:(NSString *)urlStr
                      paramDic:(NSDictionary *)paramDic

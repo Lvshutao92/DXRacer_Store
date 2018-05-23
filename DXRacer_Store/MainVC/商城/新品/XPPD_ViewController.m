@@ -9,7 +9,7 @@
 #import "XPPD_ViewController.h"
 
 @interface XPPD_ViewController ()
-
+@property(nonatomic,strong)UIWebView *webview;
 @end
 
 @implementation XPPD_ViewController
@@ -32,13 +32,21 @@
 //    label1.attributedText = attribtStr;
 //    [self.view addSubview:label1];
     
-    UILabel *label2=[[UILabel alloc]initWithFrame:CGRectMake(0, 100, 100, 100)];
-    NSDictionary *attribtDic2 = @{NSStrikethroughStyleAttributeName: [NSNumber numberWithInteger:NSUnderlineStyleSingle]};
+//    UILabel *label2=[[UILabel alloc]initWithFrame:CGRectMake(0, 100, 100, 100)];
+//    NSDictionary *attribtDic2 = @{NSStrikethroughStyleAttributeName: [NSNumber numberWithInteger:NSUnderlineStyleSingle]};
+//
+//    NSMutableAttributedString *attribtStr2 = [[NSMutableAttributedString alloc]initWithString:@"中划线" attributes:attribtDic2];
+//    label2.attributedText = attribtStr2;
+//
+//    [self.view addSubview:label2];
     
-    NSMutableAttributedString *attribtStr2 = [[NSMutableAttributedString alloc]initWithString:@"中划线" attributes:attribtDic2];
-    label2.attributedText = attribtStr2;
     
-    [self.view addSubview:label2];
+    self.webview = [[UIWebView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 300)];
+    NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://player.youku.com/embed/XMzQ0MDE5OTEzMg=="]];
+    [self.webview loadRequest:request];
+    [self.view addSubview:self.webview];
+    
+    
 }
 
 
@@ -48,7 +56,7 @@
 
 
 
-
+//String(format: "<iframe height='180' width='320' src='http://player.youku.com/embed/XMzQ0MDE5OTEzMg==' frameborder=0 allowfullscreen></iframe>")
 
 
 

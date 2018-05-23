@@ -23,6 +23,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *lab3;
 
 @property (weak, nonatomic) IBOutlet UILabel *lab4;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *lab1width;
 
 
 @end

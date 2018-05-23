@@ -29,4 +29,10 @@
 @property (nonatomic,strong) NSString *quantity;
 @property (nonatomic,strong) NSString *salePrice;
 @property (nonatomic,strong) NSString *id;
+
+@property (nonatomic,strong) NSString *promotionTitle;
+
+
+
+
 @end

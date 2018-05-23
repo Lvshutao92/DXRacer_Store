@@ -16,17 +16,19 @@
 {
     UIView *view_bar;
     UIView *headerV;
-    UIView *centerV;
+//    UIView *centerV;
     UIView *footerV;
     
-    UILabel *cenLab1;
-    UILabel *cenLab2;
+//    UILabel *cenLab1;
+//    UILabel *cenLab2;
     
     
     UIImageView *img1;
     UIImageView *img2;
     
     NSInteger index_j;
+    
+    CGFloat collectionVHeight;
 }
 @property(nonatomic,strong)UISearchBar *customSearchBar;
 
@@ -75,8 +77,15 @@
             [array addObject:NSString(mo.phoneUrl)];
             [array1 addObject:mo.title1];
         }
+        
+        
+        
+        
         weakSelf.cycleScrollView.localizationImageNamesGroup = array;
-         weakSelf.cycleScrollView.titlesGroup = array1;
+        
+        
+        weakSelf.cycleScrollView.titlesGroup = array1;
+        
         [weakSelf.tableview reloadData];
     } enError:^(NSError *error) {
         NSLog(@"------%@",error);
@@ -155,8 +164,8 @@
                 //NSLog(@"-------%lf",gao);
                 self->img1.frame = CGRectMake(0, he+imgheight+200+10, SCREEN_WIDTH/2, gao);
                 self->img2.frame = CGRectMake(SCREEN_WIDTH/2, he+imgheight+200+10, SCREEN_WIDTH/2, gao);
-                self->centerV.frame = CGRectMake(0, he+imgheight+200+20+gao, SCREEN_WIDTH, 100);
-                self->headerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, he+imgheight+300+30+gao);
+//                self->centerV.frame = CGRectMake(0, he+imgheight+200+20+gao, SCREEN_WIDTH, 100);
+                self->headerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, he+imgheight+200+20+gao);
             }
         }
         [weakSelf.tableview reloadData];
@@ -166,6 +175,15 @@
 }
 
 
+
+
+- (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index{
+    NSLog(@"---------%ld",index);
+    
+    
+    
+    
+}
 
 
 
@@ -251,41 +269,41 @@
     
     
     
-    centerV = [[UIView alloc]init];
-    centerV.backgroundColor = [UIColor whiteColor];
-    [headerV addSubview:centerV];
-    cenLab1 = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, SCREEN_WIDTH, 40)];
-    cenLab1.textAlignment = NSTextAlignmentCenter;
-    cenLab1.text = @"8.15中秋佳节";
-    cenLab1.font = [UIFont systemFontOfSize:28];
-    [centerV addSubview:cenLab1];
-    cenLab2 = [[UILabel alloc] initWithFrame:CGRectMake(0, 65, SCREEN_WIDTH, 20)];
-    cenLab2.textAlignment = NSTextAlignmentCenter;
-    cenLab2.text = @"预定抢半价 椅子低价秒";
-    cenLab2.font = [UIFont systemFontOfSize:16];
-    cenLab2.textColor = [UIColor grayColor];
-    [centerV addSubview:cenLab2];
+//    centerV = [[UIView alloc]init];
+//    centerV.backgroundColor = [UIColor whiteColor];
+//    [headerV addSubview:centerV];
+//    cenLab1 = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, SCREEN_WIDTH, 40)];
+//    cenLab1.textAlignment = NSTextAlignmentCenter;
+//    cenLab1.text = @"8.15中秋佳节";
+//    cenLab1.font = [UIFont systemFontOfSize:28];
+//    [centerV addSubview:cenLab1];
+//    cenLab2 = [[UILabel alloc] initWithFrame:CGRectMake(0, 65, SCREEN_WIDTH, 20)];
+//    cenLab2.textAlignment = NSTextAlignmentCenter;
+//    cenLab2.text = @"预定抢半价 椅子低价秒";
+//    cenLab2.font = [UIFont systemFontOfSize:16];
+//    cenLab2.textColor = [UIColor grayColor];
+//    [centerV addSubview:cenLab2];
     
     
     
-    footerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 900)];
+    footerV = [[UIView alloc]init];
     self.tableview.tableFooterView = footerV;
     footerV.backgroundColor =RGBACOLOR(237, 236, 242, 1);
-    UIView *centerFooterV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 60)];
-    centerFooterV.backgroundColor = [UIColor whiteColor];
-    [footerV addSubview:centerFooterV];
     
+    UILabel *fhlab = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/2-75, 5, 150, 30)];
+    fhlab.text = @"特色推荐";
+    fhlab.font = [UIFont systemFontOfSize:20];
+    fhlab.textAlignment = NSTextAlignmentCenter;
+    fhlab.textColor = RGBACOLOR(211, 33, 34, 1);
+    [Manager changeWordSpaceForLabel:fhlab WithSpace:20];
+    [footerV addSubview:fhlab];
     
     
     [self NavigationBa];
     
-    
-    [self initCollectionView3];
-    
-    
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 2;
+    return 0;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 350;
@@ -311,11 +329,6 @@
     return cell;
 }
 
-
-
-- (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index{
-    NSLog(@"---------%ld",index);
-}
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
     NSLog(@"搜索");
@@ -469,8 +482,13 @@
 
 #pragma mark  设置CollectionView的的参数
 
-- (void) initCollectionView3
+- (void) initCollectionView3:(NSInteger )hangshu
 {
+    NSLog(@"--------%ld",hangshu);
+    
+    footerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, 40 + hangshu * 320);
+    
+    
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
     CGFloat itemWidth = self.view.frame.size.width / 2;
@@ -479,21 +497,19 @@
     flowLayout.minimumInteritemSpacing = 0;
     flowLayout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
     //设置CollectionView的属性
-    self.collectionView3 = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 60, SCREEN_WIDTH, 640) collectionViewLayout:flowLayout];
-    self.collectionView3.backgroundColor = [UIColor orangeColor];
+    self.collectionView3 = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 40, SCREEN_WIDTH, 320*hangshu) collectionViewLayout:flowLayout];
+    self.collectionView3.backgroundColor = [UIColor whiteColor];
     self.collectionView3.delegate = self;
     self.collectionView3.dataSource = self;
     self.collectionView3.scrollEnabled = NO;
     [footerV addSubview:self.collectionView3];
     //注册Cell
-    //[self.collectionView3 registerClass:[StoreOneCollectionViewCell class] forCellWithReuseIdentifier:@"cell3"];
     [self.collectionView3 registerNib:[UINib nibWithNibName:@"Collec_3_Cell" bundle:nil] forCellWithReuseIdentifier:@"cell3"];
 }
 
 #pragma mark  设置CollectionView每组所包含的个数
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    return 4;
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
+    return self.dataArray3.count;
 }
 #pragma mark  设置CollectionCell的内容
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -501,53 +517,76 @@
     static NSString *identify = @"cell3";
     Collec_3_Cell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identify forIndexPath:indexPath];
     LRViewBorderRadius(cell.bgv, 0, .5, [UIColor colorWithWhite:.8 alpha:.3]);
-    cell.img.image = [UIImage imageNamed:@"yizi.jpg"];
     cell.img.contentMode = UIViewContentModeScaleAspectFit;
+    Model *model = [self.dataArray3 objectAtIndex:indexPath.row];
+    
+    [cell.img sd_setImageWithURL:[NSURL URLWithString:NSString(model.model_img)]];
+    
+    if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
+        cell.lab1.hidden = NO;
+        if ([Manager widthForString:model.promotionTitle fontSize:15 andHeight:20] > (SCREEN_WIDTH/2)) {
+            cell.lab1width.constant = SCREEN_WIDTH/2;
+        }else{
+            cell.lab1width.constant = [Manager widthForString:model.promotionTitle fontSize:15 andHeight:20]+20;
+        }
+    }else{
+        cell.lab1.hidden = YES;
+        cell.lab1width.constant = 0;
+    }
+    
+    cell.lab1.text = model.promotionTitle;
+    
+    cell.lab2.text = model.model_name;
+    cell.lab3.text = model.model_no;
+    cell.lab4.text = [Manager jinegeshi:model.sale_price];
     return cell;
 }
 #pragma mark  点击CollectionView触发事件
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-   
+    Model *model = [self.dataArray3 objectAtIndex:indexPath.row];
+    ProductXiangqingViewController *details = [[ProductXiangqingViewController alloc]init];
+    details.idStr = model.id;
+    [self.navigationController pushViewController:details animated:YES];
 }
 
 
-//button2 = [[SQCustomButton alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/4, 10, SCREEN_WIDTH/4, 80)
-//                                          type:SQCustomButtonTopImageType
-//                                     imageSize:CGSizeMake(40, 40) midmargin:10];
-//button2.isShowSelectBackgroudColor = NO;
-//button2.imageView.image = [UIImage imageNamed:@"002"];
-//button2.titleLabel.text = @"电竞椅系列";
-//[scrollV addSubview:button2];
-//[button2 touchAction:^(SQCustomButton * _Nonnull button) {
-//    XiLieViewController *xilie = [[XiLieViewController alloc]init];
-//    xilie.navigationItem.title = @"电竞椅系列";
-//    [self.navigationController pushViewController:xilie animated:YES];
-//}];
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+- (void)getBottomInfo{
+    __weak typeof(self) weakSelf = self;
+    [Manager requestGETWithURLStr:KURLNSString(@"index/index/product") paramDic:nil token:nil finish:^(id responseObject) {
+        NSDictionary *diction = [Manager returndictiondata:responseObject];
+        //NSLog(@"******%@",diction);
+        NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
+        if ([code isEqualToString:@"200"]){
+            if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"object"]] == YES) {
+                NSMutableArray *arr = [diction objectForKey:@"object"];
+                [weakSelf.dataArray3 removeAllObjects];
+                for (NSDictionary *dicc in arr) {
+                    Model *model = [Model mj_objectWithKeyValues:dicc];
+                    [weakSelf.dataArray3 addObject:model];
+                }
+            }
+        }
+        
+        NSInteger hangshu;
+        if (weakSelf.dataArray3.count%2 == 1) {
+            hangshu = weakSelf.dataArray3.count/2 + 1;
+        }else{
+            hangshu = weakSelf.dataArray3.count/2;
+        }
+       
+        
+        [weakSelf initCollectionView3:hangshu];
+        
+        
+        
+        
+         [weakSelf.tableview reloadData];
+        [weakSelf.collectionView3 reloadData];
+    } enError:^(NSError *error) {
+        NSLog(@"------%@",error);
+    }];
+}
 
 
 
@@ -580,6 +619,7 @@
     
     [self getTopPic];
     [self getGuanggao];
+    [self getBottomInfo];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{

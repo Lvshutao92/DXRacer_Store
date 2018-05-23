@@ -13,6 +13,10 @@
 		080BC6B720A2A62200BFDEAF /* CZHDatePickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 080BC6B120A2A62200BFDEAF /* CZHDatePickerView.m */; };
 		080BC6B820A2A62200BFDEAF /* UIButton+CZHExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 080BC6B420A2A62200BFDEAF /* UIButton+CZHExtension.m */; };
 		080BC6B920A2A62200BFDEAF /* UIView+CZHExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 080BC6B620A2A62200BFDEAF /* UIView+CZHExtension.m */; };
+		082495AD20B507C1006FD6DB /* 推荐.png in Resources */ = {isa = PBXBuildFile; fileRef = 082495AC20B507C1006FD6DB /* 推荐.png */; };
+		082495B020B55E2A006FD6DB /* play@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 082495AE20B55E2A006FD6DB /* play@3x.png */; };
+		082495B120B55E2A006FD6DB /* play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 082495AF20B55E2A006FD6DB /* play@2x.png */; };
+		082495B420B55E3C006FD6DB /* LZProductDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 082495B220B55E3C006FD6DB /* LZProductDetails.m */; };
 		082D0D9220B3B02C00886BDF /* Home_fenleilist_ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 082D0D9120B3B02C00886BDF /* Home_fenleilist_ViewController.m */; };
 		082D0D9520B3FEC400886BDF /* ColorButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 082D0D9420B3FEC400886BDF /* ColorButton.m */; };
 		082D0D9720B4037000886BDF /* dx.png in Resources */ = {isa = PBXBuildFile; fileRef = 082D0D9620B4036F00886BDF /* dx.png */; };
@@ -198,6 +202,11 @@
 		080BC6B420A2A62200BFDEAF /* UIButton+CZHExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+CZHExtension.m"; sourceTree = "<group>"; };
 		080BC6B520A2A62200BFDEAF /* UIView+CZHExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+CZHExtension.h"; sourceTree = "<group>"; };
 		080BC6B620A2A62200BFDEAF /* UIView+CZHExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+CZHExtension.m"; sourceTree = "<group>"; };
+		082495AC20B507C1006FD6DB /* 推荐.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "推荐.png"; sourceTree = "<group>"; };
+		082495AE20B55E2A006FD6DB /* play@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play@3x.png"; sourceTree = "<group>"; };
+		082495AF20B55E2A006FD6DB /* play@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play@2x.png"; sourceTree = "<group>"; };
+		082495B220B55E3C006FD6DB /* LZProductDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LZProductDetails.m; sourceTree = "<group>"; };
+		082495B320B55E3C006FD6DB /* LZProductDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LZProductDetails.h; sourceTree = "<group>"; };
 		082D0D9020B3B02C00886BDF /* Home_fenleilist_ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Home_fenleilist_ViewController.h; sourceTree = "<group>"; };
 		082D0D9120B3B02C00886BDF /* Home_fenleilist_ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Home_fenleilist_ViewController.m; sourceTree = "<group>"; };
 		082D0D9320B3FEC300886BDF /* ColorButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorButton.h; sourceTree = "<group>"; };
@@ -882,6 +891,10 @@
 		0887E81E20ABB95100174C84 /* productdetails */ = {
 			isa = PBXGroup;
 			children = (
+				082495B320B55E3C006FD6DB /* LZProductDetails.h */,
+				082495B220B55E3C006FD6DB /* LZProductDetails.m */,
+				082495AF20B55E2A006FD6DB /* play@2x.png */,
+				082495AE20B55E2A006FD6DB /* play@3x.png */,
 				088C641C20AFC9A4003FE5D1 /* 图片浏览 */,
 				75A3D34B20ADBD9E00ABA831 /* xiangqing */,
 				0887E86720ABE4EB00174C84 /* DWQExtension */,
@@ -1139,6 +1152,7 @@
 		08F82AA120941F9100D36A68 /* 商城 */ = {
 			isa = PBXGroup;
 			children = (
+				082495AC20B507C1006FD6DB /* 推荐.png */,
 				082D0D9620B4036F00886BDF /* dx.png */,
 				087B549320B2CC8D00C50DE6 /* new.jpg */,
 				087B548920B2AA5C00C50DE6 /* xppd.jpg */,
@@ -1458,6 +1472,7 @@
 				75159BE020B0FC0D00F80AD3 /* stip.png in Resources */,
 				0831981520AAC4020069176E /* yizi.jpg in Resources */,
 				08A834812094156F000BCFBB /* LaunchScreen.storyboard in Resources */,
+				082495B020B55E2A006FD6DB /* play@3x.png in Resources */,
 				75159BDE20B0FB7000F80AD3 /* av3.jpg in Resources */,
 				083197FE20AAAF0D0069176E /* Collec_2_Cell.xib in Resources */,
 				0831981320AAC0E90069176E /* Table_4_Cell.xib in Resources */,
@@ -1465,6 +1480,7 @@
 				083197F920AAAB930069176E /* Collec_1_Cell.xib in Resources */,
 				0831980E20AAB8FF0069176E /* FL_2_Cell.xib in Resources */,
 				0866F13E20AEC52E0035AD95 /* AlipaySDK.bundle in Resources */,
+				082495AD20B507C1006FD6DB /* 推荐.png in Resources */,
 				087B549520B2CC8D00C50DE6 /* new.jpg in Resources */,
 				087B548420B28ED100C50DE6 /* av2.jpg in Resources */,
 				088C641B20AFBF49003FE5D1 /* BigImgTableViewCell.xib in Resources */,
@@ -1484,6 +1500,7 @@
 				0887E87720AC0E2E00174C84 /* HJCAdjustNumButton.bundle in Resources */,
 				086F058220AD4AC200CD508C /* cart_addBtn_highlight@2x.png in Resources */,
 				0866F0C920AE76020035AD95 /* DZFOrderCell.xib in Resources */,
+				082495B120B55E2A006FD6DB /* play@2x.png in Resources */,
 				08A8347C20941560000BCFBB /* Main.storyboard in Resources */,
 				086F058620AD4AC200CD508C /* cart_default_bg.png in Resources */,
 				0858BC20209AB2F800C4489B /* PYSearch.bundle in Resources */,
@@ -1632,6 +1649,7 @@
 				082D0D9520B3FEC400886BDF /* ColorButton.m in Sources */,
 				0866F0C820AE76020035AD95 /* DZFOrderCell.m in Sources */,
 				083197F120AA83990069176E /* HomePageViewController.m in Sources */,
+				082495B420B55E3C006FD6DB /* LZProductDetails.m in Sources */,
 				082D0D9220B3B02C00886BDF /* Home_fenleilist_ViewController.m in Sources */,
 				0866F19120AEC56C0035AD95 /* APRSASigner.m in Sources */,
 				088C642920AFCBF6003FE5D1 /* LLPhotoBrowser.m in Sources */,

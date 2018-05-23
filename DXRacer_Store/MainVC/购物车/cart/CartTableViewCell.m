@@ -80,15 +80,29 @@
     //NSLog(@"------%@",NSString(model.image));
     
     self.nameLabel.text = model.productName;
-//    self.priceLabel.text = [Manager jinegeshi:model.salePrice];
+    
+    
+    
+    if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
+        self.priceLabel.text = model.promotionTitle;
+        self.nameLabel.frame = CGRectMake(160, 5, SCREEN_WIDTH-170, 20);
+        self.sizeLabel.frame = CGRectMake(160, 35, SCREEN_WIDTH-170, 20);
+        self.priceLabel.frame = CGRectMake(160, 65, 100, 20);
+    }else{
+        self.priceLabel.text = @"";
+        self.nameLabel.frame = CGRectMake(160, 5, SCREEN_WIDTH-170, 50);
+        self.sizeLabel.frame = CGRectMake(160, 65, SCREEN_WIDTH-170, 20);
+        self.priceLabel.frame = CGRectMake(160, 65, 100, 0);
+    }
+    
+    
+    
     self.dateLabel.text = [Manager jinegeshi:model.salePrice];
     self.numberLabel.text = [NSString stringWithFormat:@"%@",model.quantity];
     self.sizeLabel.text = model.productAttr;
     
     
-    
     self.selectBtn.selected = self.isSelected;
-
 }
 -(void)setupMainView
 {
@@ -126,6 +140,7 @@
     self.nameLabel = [[UILabel alloc]init];
 //    self.nameLabel.text = @"海报";
     self.nameLabel.font = [UIFont systemFontOfSize:15];
+    self.nameLabel.numberOfLines = 0;
     [bgView addSubview:self.nameLabel];
     
     //尺寸
@@ -143,12 +158,13 @@
     [bgView addSubview:self.dateLabel];
     
 //    //价格
-//    self.priceLabel = [[UILabel alloc]init];
-////    self.priceLabel.text = @"￥100.11";
-//    self.priceLabel.font = [UIFont boldSystemFontOfSize:16];
-//    self.priceLabel.textColor = BASECOLOR_RED;
-//    self.priceLabel.textAlignment = NSTextAlignmentCenter;
-//    [bgView addSubview:self.priceLabel];
+    self.priceLabel = [[UILabel alloc]init];
+    self.priceLabel.font = [UIFont boldSystemFontOfSize:15];
+    self.priceLabel.textColor = [UIColor whiteColor];
+    self.priceLabel.backgroundColor = [UIColor redColor];
+    LRViewBorderRadius(self.priceLabel, 10, 0, [UIColor clearColor]);
+    self.priceLabel.textAlignment = NSTextAlignmentCenter;
+    [bgView addSubview:self.priceLabel];
     
     //数量加按钮
     UIButton *addBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -182,59 +198,65 @@
         
     }];
     
-    //选中按钮
-    [self.selectBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(bgView).offset(5);
-        make.centerY.equalTo(bgView);
-        make.width.equalTo(@30);
-        make.height.equalTo(@30);
-    }];
     
-    //图片背景
-    [imageBgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(bgView).offset(5);
-        make.left.equalTo(self.selectBtn.mas_right).offset(5);
-        make.bottom.equalTo(bgView).offset(-5);
-        make.width.equalTo(imageBgView.mas_height);
-    }];
-    
-    //显示图片
+    self.selectBtn.frame = CGRectMake(5, 50, 30, 30);
+    imageBgView.frame = CGRectMake(35, 5, 120, 120);
     [self.imageView_cell mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(imageBgView).insets(UIEdgeInsetsMake(5, 5, 5, 5));
     }];
+    self.nameLabel.frame = CGRectMake(160, 5, SCREEN_WIDTH-170, 20);
+    self.sizeLabel.frame = CGRectMake(160, 35, SCREEN_WIDTH-170, 20);
+    self.priceLabel.frame = CGRectMake(160, 65, 100, 20);
+    //选中按钮
+//    [self.selectBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.equalTo(bgView).offset(5);
+//        make.centerY.equalTo(bgView);
+//        make.width.equalTo(@30);
+//        make.height.equalTo(@30);
+//    }];
     
-    //商品名
-    [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(imageBgView.mas_right).offset(5);
-        make.top.equalTo(bgView).offset(10);
-        make.height.equalTo(@30);
-        make.right.equalTo(bgView).offset(10);
-    }];
+    //图片背景
+//    [imageBgView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(bgView).offset(5);
+//        make.left.equalTo(self.selectBtn.mas_right).offset(5);
+//        make.bottom.equalTo(bgView).offset(-5);
+//        make.width.equalTo(imageBgView.mas_height);
+//    }];
     
-    //商品尺寸
-    [self.sizeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(imageBgView.mas_right).offset(5);
-        make.top.equalTo(self.nameLabel.mas_bottom).offset(5);
-        make.height.equalTo(@20);
-        make.width.equalTo(self.nameLabel);
-    }];
+    //显示图片
+//    [self.imageView_cell mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.edges.equalTo(imageBgView).insets(UIEdgeInsetsMake(5, 5, 5, 5));
+//    }];
     
-    //时间
+    
+//    [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.equalTo(imageBgView.mas_right).offset(5);
+//        make.top.equalTo(bgView).offset(10);
+//        make.height.equalTo(@20);
+//        make.right.equalTo(bgView).offset(10);
+//    }];
+  
+//    [self.sizeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.equalTo(imageBgView.mas_right).offset(5);
+//        make.top.equalTo(self.nameLabel.mas_bottom).offset(10);
+//        make.height.equalTo(@20);
+//        make.right.equalTo(bgView).offset(10);
+//    }];
+    
+    
+//    [self.priceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.equalTo(imageBgView.mas_right).offset(5);
+//        make.top.equalTo(self.sizeLabel.mas_bottom).offset(10);
+//        make.height.equalTo(@20);
+//        make.width.equalTo(@80);
+//    }];
+    
     [self.dateLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(imageBgView.mas_right).offset(5);
-        make.bottom.equalTo(bgView).offset(-5);
+        make.bottom.equalTo(bgView).offset(-10);
         make.height.equalTo(@20);
         make.right.equalTo(cutBtn.mas_left);
     }];
-    
-    //商品价格
-    [self.priceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.nameLabel.mas_right).offset(5);
-        make.right.equalTo(bgView);
-        make.top.equalTo(bgView).offset(10);
-        make.width.equalTo(self.nameLabel);
-    }];
-    
     //数量加按钮
     [addBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(bgView).offset(-5);
@@ -242,7 +264,7 @@
         make.height.equalTo(@25);
         make.width.equalTo(@25);
     }];
-    
+
     //数量显示
     [self.numberLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(addBtn.mas_left);
@@ -250,7 +272,7 @@
         make.width.equalTo(@40);
         make.height.equalTo(addBtn);
     }];
-    
+
     //数量减按钮
     [cutBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.numberLabel.mas_left);

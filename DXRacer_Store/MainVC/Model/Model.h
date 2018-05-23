@@ -99,6 +99,8 @@
 @property (nonatomic,strong)NSString *onSalePrice;
 @property (nonatomic,strong)NSString *productItemId;
 @property (nonatomic,strong)NSString *orderFee;
+
+@property (nonatomic,strong)NSString *promotionTitle;
 @end
 
 

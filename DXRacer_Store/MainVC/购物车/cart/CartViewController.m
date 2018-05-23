@@ -43,20 +43,11 @@
     //每次进入购物车的时候把选择的置空
     [selectGoods removeAllObjects];
     isSelect = NO;
-//    [self networkRequest];
     selectAll.selected = NO;
-    
     priceLabel.text = [NSString stringWithFormat:@"￥0.00"];
-    
     [self creatData];
-    
-    if (self->myTableView && self->dataArray.count > 0) {
-        [self->myTableView reloadData];
-    }else{
-        [self setupMainView];
-    }
+    [self setupBottomView];
 }
-
 /**
  *  @author LQQ, 16-02-18 11:02:16
  *
@@ -65,27 +56,32 @@
 -(void)countPrice
 {
     double totlePrice = 0.0;
-    
     for (CartModel *model in selectGoods) {
-        
         double price = [model.salePrice doubleValue];
-        
         totlePrice += price*[model.quantity integerValue];
     }
     priceLabel.text = [NSString stringWithFormat:@"￥%.2f",totlePrice];
+    
+    if (self->selectGoods.count == self->dataArray.count) {
+        self->selectAll.selected = YES;
+    }else{
+        self->selectAll.selected = NO;
+    }
+    if (selectGoods.count == 0) {
+        self->selectAll.selected = NO;
+    }
+    
 }
-
 /**
- *  @author LQQ, 16-02-18 11:02:32
  *
- *  创建测试数据源
+ *  数据源
  */
 -(void)creatData
 {
     __weak typeof(self) weakSelf = self;
     [Manager requestPOSTWithURLStr:KURLNSString(@"order/shopping/list") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        //NSLog(@"******%@",diction);
+        NSLog(@"4512341234123412341234******%@",diction);
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
             NSMutableArray *array = [diction objectForKey:@"object"];
@@ -97,13 +93,10 @@
             self->dataArray = (NSMutableArray *)[[self->dataArray reverseObjectEnumerator] allObjects];
         }else{
             [self->dataArray removeAllObjects];
+            self->selectAll.selected = NO;
         }
-        if (self->myTableView && self->dataArray.count > 0) {
-        }
-        else
-        {
-            [weakSelf setupMainView];
-        }
+        //NSLog(@"%@",self->dataArray);
+        [weakSelf setupMainView];
         [self->myTableView reloadData];
     } enError:^(NSError *error) {
         NSLog(@"%@",error);
@@ -117,7 +110,6 @@
     
     self.view.backgroundColor = RGBCOLOR(245, 246, 248);
     
-    
     editbtn = [UIButton buttonWithType:UIButtonTypeCustom];
     editbtn.frame = CGRectMake(0, 0, 50, 30) ;
     [editbtn setTitle:@"编辑" forState:UIControlStateNormal];
@@ -126,56 +118,31 @@
     UIBarButtonItem *bar = [[UIBarButtonItem alloc]initWithCustomView:editbtn];
     self.navigationItem.rightBarButtonItem = bar;
     
-    
     dataArray = [[NSMutableArray alloc]init];
     selectGoods = [[NSMutableArray alloc]init];
     [self setupMainView];
-//    [self creatData];
     self.title = @"购物车";
 }
 - (void)clickEdit {
-    //每次进入购物车的时候把选择的置空
-    //[selectGoods removeAllObjects];
-    //isSelect = NO;
-    //    [self networkRequest];
-   // selectAll.selected = NO;
-    //priceLabel.text = [NSString stringWithFormat:@"￥0.00"];
-    //[myTableView reloadData];
-    
     if (isedit == NO) {
-        [selectGoods removeAllObjects];
         [editbtn setTitle:@"完成" forState:UIControlStateNormal];
     }else {
         [editbtn setTitle:@"编辑" forState:UIControlStateNormal];
     }
     isedit = !isedit;;
     [self setupBottomView];
-}
-
-
-
-
-
--(void)selectAllBtnClick:(UIButton*)button
-{
-    //点击全选时,把之前已选择的全部删除
-    [selectGoods removeAllObjects];
     
-    button.selected = !button.selected;
-    isSelect = button.selected;
-    if (isSelect) {
-        for (CartModel *model in dataArray) {
-            [selectGoods addObject:model];
-        }
-    }
-    else
-    {
-        [selectGoods removeAllObjects];
-    }
     
-    [myTableView reloadData];
     [self countPrice];
 }
+
+
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 130;
+}
+
+
 
 //提交订单
 -(void)goPayBtnClick
@@ -297,6 +264,51 @@
 
 - (void)clickgodeleate{
     
+    NSMutableArray *arr = [NSMutableArray arrayWithCapacity:1];
+    [arr removeAllObjects];
+    for (CartModel *model in selectGoods) {
+        [arr addObject:model.id];
+    }
+   //NSLog(@"arr******%@",arr);
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定要删除?" preferredStyle:1];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        __weak typeof(self) weakSelf = self;
+        [Manager requestPOSTWithURLStr:KURLNSString(@"order/shopping/deleByIds") paramArr:arr token:nil finish:^(id responseObject) {
+            NSDictionary *diction = [Manager returndictiondata:responseObject];
+            //NSLog(@"diction******%@",diction);
+            NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
+            if ([code isEqualToString:@"200"]){
+                
+               // NSLog(@"diction******%@",diction);
+                
+                [self->selectGoods removeAllObjects];
+                [weakSelf countPrice];
+                
+                
+                [self->editbtn setTitle:@"编辑" forState:UIControlStateNormal];
+                self->isedit = !self->isedit;;
+                
+                self->isSelect = NO;
+                self->selectAll.selected = NO;
+                
+                
+                [weakSelf setupBottomView];
+
+                [weakSelf creatData];
+                
+                [self->myTableView reloadData];
+                
+                
+            }
+        } enError:^(NSError *error) {
+            //NSLog(@"error******%@",error);
+        }];
+    }];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    [alert addAction:okAction];
+    [alert addAction:cancel];
+    [self presentViewController:alert animated:YES completion:nil];
+    
 }
 
 
@@ -317,7 +329,7 @@
         UIView *vi = [self.view viewWithTag:TAG_BACKGROUNDVIEW];
         [vi removeFromSuperview];
         
-        myTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 50) style:UITableViewStylePlain];
+        myTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 100) style:UITableViewStylePlain];
         myTableView.delegate = self;
         myTableView.dataSource = self;
         myTableView.rowHeight = 100;
@@ -325,20 +337,16 @@
         myTableView.backgroundColor = RGBCOLOR(245, 246, 248);
         
         [self.view addSubview:myTableView];
-        
         [self setupBottomView];
     }
-    
 }
 //购物车为空时的默认视图
 -(void)cartEmptyShow
 {
-    
     //默认视图背景
     UIView *backgroundView = [[UIView alloc]initWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, SCREEN_HEIGHT - 64)];
     backgroundView.tag = TAG_BACKGROUNDVIEW;
     [self.view addSubview:backgroundView];
-    
     //默认图片
     UIImageView *img = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cart_default_bg"]];
     img.center = CGPointMake(SCREEN_WIDTH/2.0, SCREEN_HEIGHT/2.0 - 120);
@@ -362,7 +370,6 @@
     [btn setTitle:@"去定制" forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(goToMainmenuView) forControlEvents:UIControlEventTouchUpInside];
     [backgroundView addSubview:btn];
-    
 }
 -(void)goToMainmenuView
 {
@@ -374,7 +381,23 @@
     return dataArray.count;
     
 }
-
+-(void)selectAllBtnClick:(UIButton*)button
+{
+    //点击全选时,把之前已选择的全部删除
+    [selectGoods removeAllObjects];
+    
+    button.selected = !button.selected;
+    isSelect = button.selected;
+    if (isSelect) {
+        for (CartModel *model in dataArray) {
+            [selectGoods addObject:model];
+        }
+    }else{
+        [selectGoods removeAllObjects];
+    }
+    [myTableView reloadData];
+    [self countPrice];
+}
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CartTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellID"];
@@ -384,32 +407,36 @@
     }
     cell.isSelected = isSelect;
     
+    
     //是否被选中
     if ([selectGoods containsObject:[dataArray objectAtIndex:indexPath.row]]) {
         cell.isSelected = YES;
     }
     
+    
     //选择回调
     cell.cartBlock = ^(BOOL isSelec){
-        
+        //NSLog(@"----------------%d",self->isSelect);
         if (isSelec) {
             [self->selectGoods addObject:[self->dataArray objectAtIndex:indexPath.row]];
-        }
-        else
-        {
+        }else{
             [self->selectGoods removeObject:[self->dataArray objectAtIndex:indexPath.row]];
         }
+        self->isSelect = !self->isSelect;
+        
         
         if (self->selectGoods.count == self->dataArray.count) {
             self->selectAll.selected = YES;
-        }
-        else
-        {
+        }else{
             self->selectAll.selected = NO;
         }
         
         [self countPrice];
     };
+    
+    
+    
+    
     __block CartTableViewCell *weakCell = cell;
     cell.numAddBlock =^(){
         
@@ -422,16 +449,21 @@
         weakCell.numberLabel.text = numStr;
         model.quantity = [NSString stringWithFormat:@"%ld",count];
         
+        [self->dataArray replaceObjectAtIndex:indexPath.row withObject:model];
+        
         [self lodChangeGoodsNumber:[NSString stringWithFormat:@"%ld",[model.quantity integerValue]] ids:model.id inesp:indexPath];
         
         
-        [self->dataArray replaceObjectAtIndex:indexPath.row withObject:model];
         if ([self->selectGoods containsObject:model]) {
             [self->selectGoods removeObject:model];
             [self->selectGoods addObject:model];
             [self countPrice];
         }
     };
+    
+    
+    
+    
     
     cell.numCutBlock =^(){
         
@@ -448,11 +480,10 @@
         
         model.quantity = [NSString stringWithFormat:@"%ld",count];
         
-        [self lodChangeGoodsNumber:[NSString stringWithFormat:@"%ld",[model.quantity integerValue]] ids:model.id inesp:indexPath];
         
         
         [self->dataArray replaceObjectAtIndex:indexPath.row withObject:model];
-        
+        [self lodChangeGoodsNumber:[NSString stringWithFormat:@"%ld",[model.quantity integerValue]] ids:model.id inesp:indexPath];
         //判断已选择数组里有无该对象,有就删除  重新添加
         if ([self->selectGoods containsObject:model]) {
             [self->selectGoods removeObject:model];
@@ -462,6 +493,7 @@
     };
     
     [cell reloadDataWith:[dataArray objectAtIndex:indexPath.row]];
+    
     return cell;
 }
 
@@ -476,7 +508,17 @@
         //NSLog(@"******%@",diction);
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
-            [weakSelf creatData];
+//            [weakSelf creatData];
+            
+            
+            if (self->selectGoods.count == self->dataArray.count) {
+                self->selectAll.selected = YES;
+            }else{
+                self->selectAll.selected = NO;
+            }
+            [weakSelf countPrice];
+            
+            
         }else{
             
         }
@@ -499,7 +541,7 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定要删除该商品?删除后无法恢复!" preferredStyle:1];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定要删除该商品?" preferredStyle:1];
         UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             
             

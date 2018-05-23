@@ -98,8 +98,8 @@
     LB_detail = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(headImage.frame)+20, CGRectGetMaxY(LB_stock.frame), 150, 20)];
     LB_detail.text = @"请选择 尺码 颜色分类";
     LB_detail.numberOfLines = 0;
-    LB_detail.textColor = [UIColor blackColor];
-    LB_detail.font = [UIFont systemFontOfSize:16];
+    LB_detail.textColor = [UIColor redColor];
+    LB_detail.font = [UIFont systemFontOfSize:15];
     [whiteView addSubview:LB_detail];
     //分界线
     LB_line = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(headImage.frame)+10, screen_Width, 0.5)];

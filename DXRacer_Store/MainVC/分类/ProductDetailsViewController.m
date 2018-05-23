@@ -501,8 +501,6 @@
                 }
             }
             
-            
-            
             self->productItemList_Arr = [[diction objectForKey:@"object"]objectForKey:@"productItemList"];
             
             

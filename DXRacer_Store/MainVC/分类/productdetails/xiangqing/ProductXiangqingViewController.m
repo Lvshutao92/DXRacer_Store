@@ -12,6 +12,10 @@
 #import <MJRefresh/MJRefresh.h>
 #import "BiaogeTableViewCell.h"
 #import "CreateOrderViewController.h"
+
+
+#import "LZProductDetails.h"
+
 @interface ProductXiangqingViewController ()<FrankDetailDropDelegate,UITableViewDataSource,UITableViewDelegate,SDCycleScrollViewDelegate, UIScrollViewDelegate , UIWebViewDelegate,SelectAttributesDelegate,LLPhotoBrowserDelegate>
 {
     
@@ -65,7 +69,7 @@
 @property(nonatomic,strong)SDCycleScrollView *cycleScrollView;
 @property(nonatomic,strong)NSMutableArray *lunboArray;
 
-
+@property(nonatomic,strong)LZProductDetails *detailsV;
 
 @property (nonatomic, strong) FrankDropBounsView * dropView;
 @property (nonatomic, strong) UILabel * tabbarView;
@@ -118,16 +122,36 @@
     
     
     
-    headerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 650)];
+    headerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 600)];
     self.tableview1.tableHeaderView = headerV;
     
     footerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 100)];
     self.tableview1.tableFooterView = footerV;
     
-    self.cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_WIDTH) delegate:self placeholderImage:[UIImage imageNamed:@"placeholder"]];
-    self.cycleScrollView.currentPageDotImage = [UIImage imageNamed:@"pageControlCurrentDot"];
-    self.cycleScrollView.pageDotImage = [UIImage imageNamed:@"pageControlDot"];
-    [headerV addSubview:self.cycleScrollView];
+    
+    
+    self.detailsV = [[LZProductDetails alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_WIDTH)];
+    [headerV addSubview:self.detailsV];
+
+
+     __weak typeof(self) weakSelf = self;
+    self.detailsV.scrollOptBlock = ^(NSInteger index) {
+        NSMutableArray *array = [NSMutableArray arrayWithCapacity:1];
+        [array removeAllObjects];
+        for (Model *mo in weakSelf.lunboArray) {
+            [array addObject:NSString(mo.listImg)];
+        }
+        LLPhotoBrowser *photoBrowser = [[LLPhotoBrowser alloc] initWithImages:(NSArray *)array currentIndex:index-1];
+        photoBrowser.delegate = weakSelf;
+        [weakSelf presentViewController:photoBrowser animated:YES completion:nil];
+    };
+    self.detailsV.PlayVideoOptBlock = ^(BOOL isOK) {
+        NSLog(@"22222222点击播放");
+    };
+//    self.cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_WIDTH) delegate:self placeholderImage:[UIImage imageNamed:@"placeholder"]];
+//    self.cycleScrollView.currentPageDotImage = [UIImage imageNamed:@"pageControlCurrentDot"];
+//    self.cycleScrollView.pageDotImage = [UIImage imageNamed:@"pageControlDot"];
+//    [headerV addSubview:self.cycleScrollView];
     
     
     titleLab = [[UILabel alloc]init];
@@ -181,9 +205,14 @@
     
     NSMutableArray *array = [NSMutableArray arrayWithCapacity:1];
     [array removeAllObjects];
+    
     for (Model *mo in self.lunboArray) {
         [array addObject:NSString(mo.listImg)];
     }
+    
+//    [arr addObject:@"http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"];
+    
+    
     LLPhotoBrowser *photoBrowser = [[LLPhotoBrowser alloc] initWithImages:(NSArray *)array currentIndex:index];
     photoBrowser.delegate = self;
     [self presentViewController:photoBrowser animated:YES completion:nil];
@@ -202,7 +231,7 @@
 -(void)initSelectView{
     
     self.selectView = [[DWQSelectView alloc] initWithFrame:CGRectMake(0, screen_Height, screen_Width, screen_Height)];
-    self.selectView.LB_detail.text = @"请选择规格属性";
+    self.selectView.LB_detail.text = @"";
     
     [self.view addSubview:self.selectView];
     
@@ -276,7 +305,7 @@
     itemNo = @"";
     priceLab.text = @"";
     self.selectView.LB_price.text = @"";
-    self.selectView.LB_detail.text = @"请选择规格属性";
+    self.selectView.LB_detail.text = @"";
     self.selectView.LB_showSales.text = @"";
     for (int i=0; i < _standardList.count; i++)
     {
@@ -335,7 +364,7 @@
     if (productCanshu == nil) {
         guigeLab.text = @"请选择规格属性";
     }else{
-        guigeLab.text = [NSString stringWithFormat:@"已选规格：%@",productCanshu];
+        guigeLab.text = [NSString stringWithFormat:@"已选：%@",productCanshu];
     }
     
     
@@ -346,8 +375,8 @@
             activityNameLab.text =model.activityName;
             activityPriceLab.text = [Manager jinegeshi:model.onSalePrice];
             
-            self.selectView.LB_detail.text = model.activityName;
-            self.selectView.LB_showSales.text= [Manager jinegeshi:model.onSalePrice];
+            self.selectView.LB_showSales.text = model.activityName;
+            self.selectView.LB_detail.text= [Manager jinegeshi:model.onSalePrice];
             
             
             NSDictionary *attribtDic2 = @{NSStrikethroughStyleAttributeName: [NSNumber numberWithInteger:NSUnderlineStyleSingle]};
@@ -365,6 +394,7 @@
 }
 
 - (void)getDetailsInfo{
+    
     __weak typeof(self) weakSelf = self;
     NSString *str = [NSString stringWithFormat:@"product/%@",self.idStr];
 //    NSString *str = @"product/294b040671dd4865915b77fc8fbbce99";
@@ -372,8 +402,12 @@
     [Manager requestPOSTWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
         //NSLog(@"******%@",diction);
+        
+        NSString *videoId;
+        
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
+            
             //
             if ([Manager judgeWhetherIsEmptyAnyObject:[[diction objectForKey:@"object"]objectForKey:@"productImageList"]] == YES) {
                 NSMutableArray *arr = [[diction objectForKey:@"object"]objectForKey:@"productImageList"];
@@ -383,6 +417,10 @@
                     [weakSelf.lunboArray addObject:model];
                 }
             }
+            
+            
+            
+            
             //
             if ([Manager judgeWhetherIsEmptyAnyObject:[[diction objectForKey:@"object"]objectForKey:@"promotions"]] == YES) {
                 NSMutableArray *arr = [[diction objectForKey:@"object"]objectForKey:@"promotions"];
@@ -426,7 +464,7 @@
             
             
             self->productCanshu = [abc componentsJoinedByString:@","];
-            self->guigeLab.text = [NSString stringWithFormat:@"已选规格：%@",self->productCanshu];
+            self->guigeLab.text = [NSString stringWithFormat:@"已选：%@",self->productCanshu];
             
             
             weakSelf.standardList = attrList_a;
@@ -438,7 +476,7 @@
                 
                 self->titleLab.text = [dicti objectForKey:@"modelName"];
                 
-                
+                videoId = [dicti objectForKey:@"video"];
                 
                 self->priceLab.text = [NSString stringWithFormat:@"¥ %@",[dicti objectForKey:@"salePrice"]];
                 
@@ -485,8 +523,8 @@
                 self->activityNameLab.text =model.activityName;
                 self->activityPriceLab.text = [Manager jinegeshi:model.onSalePrice];
                 
-                weakSelf.selectView.LB_detail.text = model.activityName;
-                weakSelf.selectView.LB_showSales.text= [Manager jinegeshi:model.onSalePrice];
+                weakSelf.selectView.LB_showSales.text = model.activityName;
+                weakSelf.selectView.LB_detail.text= [Manager jinegeshi:model.onSalePrice];
                 
                 
                 
@@ -508,7 +546,11 @@
         for (Model *mo in weakSelf.lunboArray) {
             [array addObject:NSString(mo.listImg)];
         }
-        weakSelf.cycleScrollView.localizationImageNamesGroup = array;
+        
+        [array insertObject:videoId atIndex:0];
+        [weakSelf.detailsV updateUIWithImageAndVideoArray:array];
+        
+//        weakSelf.cycleScrollView.localizationImageNamesGroup = array;
         
         [weakSelf.tableview1 reloadData];
     } enError:^(NSError *error) {

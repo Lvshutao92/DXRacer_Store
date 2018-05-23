@@ -191,13 +191,12 @@
             //NSLog(@"--%@",diction);
             NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
             if ([code isEqualToString:@"200"]){
-                [weakSelf.dataArray removeAllObjects];
-                [weakSelf.tableview reloadData];
-                
                 
                 weakSelf.tfSheetView = [[TFSheetView alloc]init];
                 //取消
                 weakSelf.tfSheetView.cancelBlock = ^{
+                    [weakSelf.dataArray removeAllObjects];
+                    [weakSelf.tableview reloadData];
                     ProductOrder_TwoDetails_ViewController *or = [[ProductOrder_TwoDetails_ViewController alloc]init];
                     or.orderNo = [diction objectForKey:@"msg"];
                     or.orderStatus = @"待付款";
@@ -207,11 +206,15 @@
                 //微信支付
                 weakSelf.tfSheetView.wxBlock = ^{
                     NSLog(@"微信支付");
+                    [weakSelf.dataArray removeAllObjects];
+                    [weakSelf.tableview reloadData];
                     [weakSelf.tfSheetView disMissView];
                 };
                 //支付宝支付
                 weakSelf.tfSheetView.zfbBlock = ^{
                     NSLog(@"支付宝支付");
+                    [weakSelf.dataArray removeAllObjects];
+                    [weakSelf.tableview reloadData];
                     [weakSelf doAPPay:[diction objectForKey:@"msg"]];
                     [weakSelf.tfSheetView disMissView];
                 };
@@ -307,6 +310,7 @@
     self.totalPrice = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-140, 55)];
     self.totalPrice.textColor = [UIColor redColor];
     self.totalPrice.text = [Manager jinegeshi:[NSString stringWithFormat:@"%.2f",zongjiage]];
+    self.totalPrice.font = [UIFont systemFontOfSize:20];
     [view addSubview:self.totalPrice];
     
     

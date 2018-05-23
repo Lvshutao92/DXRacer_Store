@@ -51,7 +51,7 @@
 -(UICollectionViewFlowLayout *)flowLayout{
     if (!_flowLayout) {
         _flowLayout =[[UICollectionViewFlowLayout alloc]init];
-        _flowLayout.itemSize = CGSizeMake(SCREEN_WIDTH/2, 260);
+        _flowLayout.itemSize = CGSizeMake(SCREEN_WIDTH/2, 280);
         //        _flowLayout.scrollDirection         = UICollectionViewScrollDirectionHorizontal;
         _flowLayout.minimumLineSpacing      = 0;
         _flowLayout.minimumInteritemSpacing = 0;
@@ -199,7 +199,7 @@
         self.flowLayout.minimumLineSpacing      = 0;
         //列与列之间的间距最小距离
         self.flowLayout.minimumInteritemSpacing = 0;
-        self.flowLayout.itemSize = CGSizeMake(SCREEN_WIDTH/2, 260);
+        self.flowLayout.itemSize = CGSizeMake(SCREEN_WIDTH/2, 280);
         self.flowLayout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
         self.goosdCollectionView.collectionViewLayout = self.flowLayout;
     }
@@ -334,25 +334,57 @@
         FL_1_Cell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FL_1_Cell" forIndexPath:indexPath];
         Model *model = [self.dataArray objectAtIndex:indexPath.row];
         LRViewBorderRadius(cell.bgv, 0, .5, [UIColor colorWithWhite:.8 alpha:.3]);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [cell.img sd_setImageWithURL:[NSURL URLWithString:NSString(model.model_img)]placeholderImage:[UIImage imageNamed:@""]];
-        });
+        [cell.img sd_setImageWithURL:[NSURL URLWithString:NSString(model.model_img)]placeholderImage:[UIImage imageNamed:@""]];
         cell.lab1.text       = model.model_name;
         cell.lab2.text     = model.sale_price;
         cell.lab3.text = model.series_name;
+        
+        if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
+            cell.lab4.hidden = NO;
+            if ([Manager widthForString:model.promotionTitle fontSize:15 andHeight:20] > (SCREEN_WIDTH/2)) {
+                cell.lab4width.constant = SCREEN_WIDTH/2;
+            }else{
+                cell.lab4width.constant = [Manager widthForString:model.promotionTitle fontSize:15 andHeight:20]+20;
+            }
+            
+        }else{
+            cell.lab4.hidden = YES;
+            cell.lab4width.constant = 0;
+        }
+        cell.lab4.text = model.promotionTitle;
         return cell;
         
     }else{
-        
         FL_2_Cell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FL_2_Cell" forIndexPath:indexPath];
         Model *model = [self.dataArray objectAtIndex:indexPath.row];
         LRViewBorderRadius(cell.bgv, 0, .5, [UIColor colorWithWhite:.8 alpha:.3]);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [cell.img sd_setImageWithURL:[NSURL URLWithString:NSString(model.model_img)]placeholderImage:[UIImage imageNamed:@""]];
-        });
+        [cell.img sd_setImageWithURL:[NSURL URLWithString:NSString(model.model_img)]placeholderImage:[UIImage imageNamed:@""]];
         cell.lab1.text       = model.model_name;
         cell.lab3.text     = model.sale_price;
         cell.lab2.text = model.series_name;
+        
+        
+        
+        
+        if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
+            cell.lab4.hidden = NO;
+            cell.lab2height.constant = 20;
+            cell.lab4height.constant = 20;
+            LRViewBorderRadius(cell.lab4, 10, 0, [UIColor clearColor]);
+            
+            //NSLog(@"-==-=-=-=-=-=-%f",[Manager widthForString:model.promotionTitle fontSize:15 andHeight:20]);
+            if ([Manager widthForString:model.promotionTitle fontSize:15 andHeight:20] > (SCREEN_WIDTH-150)) {
+                cell.lab4width.constant = SCREEN_WIDTH-150;
+            }else{
+                cell.lab4width.constant = [Manager widthForString:model.promotionTitle fontSize:15 andHeight:20]+20;
+            }
+        }else{
+            cell.lab4.hidden = YES;
+            cell.lab2height.constant = 40;
+            cell.lab4height.constant = 0;
+            cell.lab4width.constant = 0;
+        }
+        cell.lab4.text = model.promotionTitle;
         return cell;
         
     }

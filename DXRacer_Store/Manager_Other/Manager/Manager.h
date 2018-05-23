@@ -29,6 +29,10 @@
 @interface Manager : NSObject
 
 
+//获取字符串的宽度
++(float) widthForString:(NSString *)value fontSize:(float)fontSize andHeight:(float)height;
+//获得字符串的高度
++(float) heightForString:(NSString *)value fontSize:(float)fontSize andWidth:(float)width;
 
 
 
@@ -101,6 +105,13 @@
                        token:(NSString *)token
                       finish:(void(^)(id responseObject))finish
                      enError:(void(^)(NSError *error))enError;
+
+//post arr
++ (void)requestPOSTWithURLStr:(NSString *)urlStr
+                     paramArr:(NSMutableArray *)paramArr
+                        token:(NSString *)token
+                       finish:(void(^)(id responseObject))finish
+                      enError:(void(^)(NSError *error))enError;
 //16进制颜色(html颜色值)字符串转为UIColor
 +(UIColor *) hexStringToColor: (NSString *) stringToConvert;
 

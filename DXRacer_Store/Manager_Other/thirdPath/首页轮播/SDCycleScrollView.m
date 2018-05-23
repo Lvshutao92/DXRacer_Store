@@ -437,6 +437,7 @@ NSString * const ID = @"SDCycleScrollViewCell";
 
 - (void)scrollToIndex:(int)targetIndex
 {
+    
     if (targetIndex >= _totalItemsCount) {
         if (self.infiniteLoop) {
             targetIndex = _totalItemsCount * 0.5;
@@ -449,6 +450,11 @@ NSString * const ID = @"SDCycleScrollViewCell";
 
 - (int)currentIndex
 {
+    
+    
+    
+    
+    
     if (_mainView.sd_width == 0 || _mainView.sd_height == 0) {
         return 0;
     }
@@ -561,12 +567,15 @@ NSString * const ID = @"SDCycleScrollViewCell";
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return _totalItemsCount;
+    return _totalItemsCount+1;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     SDCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ID forIndexPath:indexPath];
+    
+   
+    
     
     long itemIndex = [self pageControlIndexWithCurrentCellIndex:indexPath.item];
     
@@ -594,13 +603,9 @@ NSString * const ID = @"SDCycleScrollViewCell";
     }
     
     
-    
-    
     if (_titlesGroup.count && itemIndex < _titlesGroup.count) {
         cell.title = _titlesGroup[itemIndex];
     }
-    
-    
     
     
     if (!cell.hasConfigured) {
