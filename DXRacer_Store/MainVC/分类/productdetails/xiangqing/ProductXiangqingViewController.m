@@ -87,6 +87,10 @@
 
 
 @property(nonatomic,strong)NSMutableArray *cuxiaoArr;
+
+
+
+
 @end
 
 @implementation ProductXiangqingViewController
@@ -100,9 +104,9 @@
     [super viewDidLoad];
     self.navigationItem.title = @"宝贝";
     
-    UIImage *theImage1 = [UIImage imageNamed:@"3"];
+    UIImage *theImage1 = [UIImage imageNamed:@"whirfenxiangt_icone"];
     UIView *ve = [[UIView alloc]initWithFrame:CGRectMake(0, [Manager returnDianchitiaoHeight], 44, 44)];
-    UIButton * readerBtn=[[UIButton alloc] initWithFrame:CGRectMake(10, 5, 25, 25)];
+    UIButton * readerBtn=[[UIButton alloc] initWithFrame:CGRectMake(10, 5, 30, 30)];
     [readerBtn setBackgroundImage:theImage1 forState:UIControlStateNormal];
     [readerBtn addTarget:self action:@selector(onRightNavBtnClick) forControlEvents:UIControlEventTouchUpInside];
     [ve addSubview:readerBtn];
@@ -130,28 +134,7 @@
     
     
     
-    self.detailsV = [[LZProductDetails alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_WIDTH)];
-    [headerV addSubview:self.detailsV];
-
-
-     __weak typeof(self) weakSelf = self;
-    self.detailsV.scrollOptBlock = ^(NSInteger index) {
-        NSMutableArray *array = [NSMutableArray arrayWithCapacity:1];
-        [array removeAllObjects];
-        for (Model *mo in weakSelf.lunboArray) {
-            [array addObject:NSString(mo.listImg)];
-        }
-        LLPhotoBrowser *photoBrowser = [[LLPhotoBrowser alloc] initWithImages:(NSArray *)array currentIndex:index-1];
-        photoBrowser.delegate = weakSelf;
-        [weakSelf presentViewController:photoBrowser animated:YES completion:nil];
-    };
-    self.detailsV.PlayVideoOptBlock = ^(BOOL isOK) {
-        NSLog(@"22222222点击播放");
-    };
-//    self.cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_WIDTH) delegate:self placeholderImage:[UIImage imageNamed:@"placeholder"]];
-//    self.cycleScrollView.currentPageDotImage = [UIImage imageNamed:@"pageControlCurrentDot"];
-//    self.cycleScrollView.pageDotImage = [UIImage imageNamed:@"pageControlDot"];
-//    [headerV addSubview:self.cycleScrollView];
+    
     
     
     titleLab = [[UILabel alloc]init];
@@ -210,9 +193,6 @@
         [array addObject:NSString(mo.listImg)];
     }
     
-//    [arr addObject:@"http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"];
-    
-    
     LLPhotoBrowser *photoBrowser = [[LLPhotoBrowser alloc] initWithImages:(NSArray *)array currentIndex:index];
     photoBrowser.delegate = self;
     [self presentViewController:photoBrowser animated:YES completion:nil];
@@ -220,7 +200,7 @@
 
 
 - (void)onRightNavBtnClick {
-    self.tabBarController.selectedIndex = 2;
+    //self.tabBarController.selectedIndex = 2;
 }
 
 
@@ -547,10 +527,30 @@
             [array addObject:NSString(mo.listImg)];
         }
         
-        [array insertObject:videoId atIndex:0];
-        [weakSelf.detailsV updateUIWithImageAndVideoArray:array];
+        if (videoId.length > 0) {
+            self.detailsV = [[LZProductDetails alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_WIDTH)];
+            [self->headerV addSubview:self.detailsV];
+            __weak typeof(self) weakSelf = self;
+            self.detailsV.scrollOptBlock = ^(NSInteger index) {
+                NSMutableArray *array = [NSMutableArray arrayWithCapacity:1];
+                [array removeAllObjects];
+                for (Model *mo in weakSelf.lunboArray) {
+                    [array addObject:NSString(mo.listImg)];
+                }
+                LLPhotoBrowser *photoBrowser = [[LLPhotoBrowser alloc] initWithImages:(NSArray *)array currentIndex:index-1];
+                photoBrowser.delegate = weakSelf;
+                [weakSelf presentViewController:photoBrowser animated:YES completion:nil];
+            };
+            [array insertObject:videoId atIndex:0];
+            [weakSelf.detailsV updateUIWithImageAndVideoArray:array];
+        }else{
+            self.cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_WIDTH) delegate:self placeholderImage:[UIImage imageNamed:@"placeholder"]];
+            self.cycleScrollView.currentPageDotImage = [UIImage imageNamed:@"pageControlCurrentDot"];
+            self.cycleScrollView.pageDotImage = [UIImage imageNamed:@"pageControlDot"];
+            [self->headerV addSubview:self.cycleScrollView];
+            weakSelf.cycleScrollView.localizationImageNamesGroup = array;
+        }
         
-//        weakSelf.cycleScrollView.localizationImageNamesGroup = array;
         
         [weakSelf.tableview1 reloadData];
     } enError:^(NSError *error) {
@@ -699,7 +699,7 @@
     
 }
 - (void)cilck4{
-    self.tabBarController.selectedIndex = 0;
+    self.tabBarController.selectedIndex = 2;
 }
 
 
@@ -780,7 +780,7 @@
         
         UIButton *btn4 = [UIButton buttonWithType:UIButtonTypeCustom];
         btn4.frame = CGRectMake(10, 0, (SCREEN_WIDTH-260)/2, 55);
-        [btn4 setImage:[UIImage imageNamed:@"1"] forState:UIControlStateNormal];
+        [btn4 setImage:[UIImage imageNamed:@"3"] forState:UIControlStateNormal];
         btn4.backgroundColor = [UIColor whiteColor];
         [btn4 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [btn4 addTarget:self action:@selector(cilck4) forControlEvents:UIControlEventTouchUpInside];

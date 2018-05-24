@@ -11,6 +11,8 @@
 #import "ProductOrderDetailsViewController.h"
 #import "ProductOrder_TwoDetails_ViewController.h"
 
+#import "CancelOrder_ViewController.h"
+
 #import <AlipaySDK/AlipaySDK.h>
 
 #import "APAuthInfo.h"
@@ -110,6 +112,13 @@
                 }
         }
         [weakSelf.tableview reloadData];
+        
+        
+        if (weakSelf.sectionArray.count == 0) {
+            UIImageView *view = [[UIImageView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/2-75, SCREEN_HEIGHT/2-75, 150, 150)];
+            view.image = [UIImage imageNamed:@"no"];
+            [weakSelf.view addSubview:view];
+        }
     } enError:^(NSError *error) {
         //NSLog(@"%@",error);
     }];
@@ -155,6 +164,17 @@
     return 50;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    NSString *str;
+    for (Model *model in self.statusArray) {
+        if ([model.key isEqualToString:[self.sectionArrayStatus objectAtIndex:section]]) {
+            str = model.key;
+        }
+    }
+    if ([str isEqualToString:@"01"]){
+        return 60;
+    }else if ([str isEqualToString:@"02"]){
+        return 60;
+    }
     return 60;
 }
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
@@ -231,10 +251,10 @@
 
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 60)];
+    UIView *view = [[UIView alloc]init];
     view.backgroundColor = RGBACOLOR(237, 236, 242, 1);
     
-    UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(0, 1, SCREEN_WIDTH, 49)];
+    UILabel *lab = [[UILabel alloc]init];
     lab.backgroundColor = [UIColor whiteColor];
     lab.userInteractionEnabled = YES;
     [view addSubview:lab];
@@ -257,6 +277,9 @@
         btn.tag = 100 + section;
         [lab addSubview:btn];
         
+        view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 60);
+        lab.frame  = CGRectMake(0, 1, SCREEN_WIDTH, 49);
+        
     }else if ([str isEqualToString:@"02"]) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.frame = CGRectMake(SCREEN_WIDTH-100, 10, 90, 30);
@@ -273,18 +296,21 @@
         LRViewBorderRadius(btn1, 15, 1, [UIColor blackColor]);
         btn1.titleLabel.font = [UIFont systemFontOfSize:14];
         [lab addSubview:btn1];
+        
+        view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 60);
+        lab.frame  = CGRectMake(0, 1, SCREEN_WIDTH, 49);
     }else{
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.frame = CGRectMake(SCREEN_WIDTH-100, 10, 90, 30);
-        [btn setTitle:@"阿西吧啊" forState:UIControlStateNormal];
+        [btn setTitle:@"删除订单" forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         LRViewBorderRadius(btn, 15, 1, [UIColor blackColor]);
         btn.titleLabel.font = [UIFont systemFontOfSize:14];
         [lab addSubview:btn];
+        
+        view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 60);
+        lab.frame  = CGRectMake(0, 1, SCREEN_WIDTH, 49);
     }
-    
-    
-    
     
     return view;
 }
@@ -306,8 +332,11 @@
         or.orderNo = [self.sectionArray objectAtIndex:indexPath.section];
         or.orderStatus = str;
         [self.navigationController pushViewController:or animated:YES];
-    }else{
-        
+    }else if ([str isEqualToString:@"已取消"]){
+        CancelOrder_ViewController *or = [[CancelOrder_ViewController alloc]init];
+        or.orderNo = [self.sectionArray objectAtIndex:indexPath.section];
+        or.orderStatus = str;
+        [self.navigationController pushViewController:or animated:YES];
     }
 }
 

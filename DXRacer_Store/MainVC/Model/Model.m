@@ -9,5 +9,10 @@
 #import "Model.h"
 
 @implementation Model
-
++ (id)mj_replacedKeyFromPropertyName121:(NSString *)propertyName {
+    
+    if ([propertyName isEqualToString:@"switchs"]) propertyName = @"switch";
+    
+    return propertyName;
+}
 @end

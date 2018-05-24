@@ -45,7 +45,7 @@
 -(UICollectionViewFlowLayout *)flowLayout{
     if (!_flowLayout) {
         _flowLayout =[[UICollectionViewFlowLayout alloc]init];
-        _flowLayout.itemSize = CGSizeMake(SCREEN_WIDTH/2, 260);
+        _flowLayout.itemSize = CGSizeMake(SCREEN_WIDTH/2, 280);
         //        _flowLayout.scrollDirection         = UICollectionViewScrollDirectionHorizontal;
         _flowLayout.minimumLineSpacing      = 0;
         _flowLayout.minimumInteritemSpacing = 0;
@@ -61,7 +61,7 @@
     }else{
         hei = 64;
     }
-    self.goosdCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, hei, SCREEN_WIDTH, SCREEN_HEIGHT-30) collectionViewLayout:self.flowLayout];
+    self.goosdCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, hei, SCREEN_WIDTH, SCREEN_HEIGHT-hei) collectionViewLayout:self.flowLayout];
     self.goosdCollectionView.backgroundColor = [UIColor whiteColor];
     self.goosdCollectionView.delegate = self;
     self.goosdCollectionView.dataSource = self;
@@ -108,28 +108,28 @@
     
     
     
-    UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-80, SCREEN_HEIGHT-170, 60, 60)];
-    LRViewBorderRadius(lab, 30, 0, [UIColor clearColor]);
-    lab.backgroundColor = RGBACOLOR(237, 236, 242, 1);
-    [self.view addSubview:lab];
-    [self.view bringSubviewToFront:lab];
+//    UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-80, SCREEN_HEIGHT-170, 60, 60)];
+//    LRViewBorderRadius(lab, 30, 0, [UIColor clearColor]);
+//    lab.backgroundColor = RGBACOLOR(237, 236, 242, 1);
+//    [self.view addSubview:lab];
+//    [self.view bringSubviewToFront:lab];
+//
+//    lab1 = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 60, 29.5)];
+//    lab1.text = @"1";
+//    lab1.textAlignment = NSTextAlignmentCenter;
+//    [lab addSubview:lab1];
+//
+//    UILabel *line = [[UILabel alloc]initWithFrame:CGRectMake(0, 29.5, 60, 1)];
+//    line.backgroundColor = [UIColor colorWithWhite:.8 alpha:.5];
+//    [lab addSubview:line];
+//
+//
+//    lab2 = [[UILabel alloc]initWithFrame:CGRectMake(0, 30.5, 60, 30)];
+//    lab2.textAlignment = NSTextAlignmentCenter;
+//    [lab addSubview:lab2];
     
-    lab1 = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 60, 29.5)];
-    lab1.text = @"1";
-    lab1.textAlignment = NSTextAlignmentCenter;
-    [lab addSubview:lab1];
     
-    UILabel *line = [[UILabel alloc]initWithFrame:CGRectMake(0, 29.5, 60, 1)];
-    line.backgroundColor = [UIColor colorWithWhite:.8 alpha:.5];
-    [lab addSubview:line];
-    
-    
-    lab2 = [[UILabel alloc]initWithFrame:CGRectMake(0, 30.5, 60, 30)];
-    lab2.textAlignment = NSTextAlignmentCenter;
-    [lab addSubview:lab2];
-    
-    
-    [self setUpReflash];
+    [self loddeList];
 }
 
 - (void)clickqiehuan{
@@ -148,7 +148,7 @@
         self.flowLayout.minimumLineSpacing      = 0;
         //列与列之间的间距最小距离
         self.flowLayout.minimumInteritemSpacing = 0;
-        self.flowLayout.itemSize = CGSizeMake(SCREEN_WIDTH/2, 260);
+        self.flowLayout.itemSize = CGSizeMake(SCREEN_WIDTH/2, 280);
         self.flowLayout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
         self.goosdCollectionView.collectionViewLayout = self.flowLayout;
     }
@@ -176,39 +176,54 @@
         }
     }];
 }
+
+
+
 - (void)loddeList{
-    [self.goosdCollectionView.mj_footer endRefreshing];
+//    [self.goosdCollectionView.mj_footer endRefreshing];
     __weak typeof(self) weakSelf = self;
-    NSString *str = [NSString stringWithFormat:@"product/search?keyword=%@&startRow=1&pageSize=10",self.str];
+    NSString *str = [NSString stringWithFormat:@"product/search?keyword=%@&startRow=0&pageSize=10",self.str];
     NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
     [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
         //        NSLog(@"******%@",diction);
-        [weakSelf.dataArray removeAllObjects];
-        self->number = [[diction objectForKey:@"total"] integerValue];
         
-        NSInteger yeshu;
-        if (self->number % 10 != 0) {
-            yeshu = self->number/10+1;
-        }else{
-            yeshu = self->number/10;
-        }
-        if (yeshu == 0) {
-            yeshu = 1;
-        }
-        self->lab2.text = [NSString stringWithFormat:@"%ld",yeshu];
+//        self->number = [[diction objectForKey:@"total"] integerValue];
+//
+//        NSInteger yeshu;
+//        if (self->number % 10 != 0) {
+//            yeshu = self->number/10+1;
+//        }else{
+//            yeshu = self->number/10;
+//        }
+//        if (yeshu == 0) {
+//            yeshu = 1;
+//        }
+//        self->lab2.text = [NSString stringWithFormat:@"%ld",yeshu];
         
         if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"itemsList"]] == YES) {
             NSMutableArray *arr = [diction objectForKey:@"itemsList"];
+            [weakSelf.dataArray removeAllObjects];
             for (NSDictionary *dicc in arr) {
                 Model *model = [Model mj_objectWithKeyValues:dicc];
                 [weakSelf.dataArray addObject:model];
             }
         }
-        self->page = 2;
+//        self->page = 0;
         [weakSelf.goosdCollectionView reloadData];
-        [weakSelf.goosdCollectionView.mj_header endRefreshing];
+        
+        
+        if (weakSelf.dataArray.count == 0) {
+            UIImageView *view = [[UIImageView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/2-75, SCREEN_HEIGHT/2-75, 150, 150)];
+            view.image = [UIImage imageNamed:@"no"];
+            [weakSelf.view addSubview:view];
+        }
+        
+        
+        
+        
+//        [weakSelf.goosdCollectionView.mj_header endRefreshing];
     } enError:^(NSError *error) {
         NSLog(@"------%@",error);
     }];
@@ -227,13 +242,20 @@
                 [weakSelf.dataArray addObject:model];
             }
         }
-        self->page++;
+        //self->page++;
         [weakSelf.goosdCollectionView reloadData];
         [weakSelf.goosdCollectionView.mj_footer endRefreshing];
     } enError:^(NSError *error) {
         NSLog(@"------%@",error);
     }];
 }
+
+
+
+
+
+
+
 
 
 
@@ -289,6 +311,22 @@
         cell.lab1.text       = model.model_name;
         cell.lab2.text     = model.sale_price;
         cell.lab3.text = model.series_name;
+        
+        
+        if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
+            cell.lab4.hidden = NO;
+            if ([Manager widthForString:model.promotionTitle fontSize:15 andHeight:20] > (SCREEN_WIDTH/2)) {
+                cell.lab4width.constant = SCREEN_WIDTH/2;
+            }else{
+                cell.lab4width.constant = [Manager widthForString:model.promotionTitle fontSize:15 andHeight:20]+20;
+            }
+            
+        }else{
+            cell.lab4.hidden = YES;
+            cell.lab4width.constant = 0;
+        }
+        cell.lab4.text = model.promotionTitle;
+        
         return cell;
         
     }else{
@@ -305,6 +343,29 @@
         cell.lab1.text       = model.model_name;
         cell.lab3.text     = model.sale_price;
         cell.lab2.text = model.series_name;
+        
+        
+        if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
+            cell.lab4.hidden = NO;
+            cell.lab2height.constant = 20;
+            cell.lab4height.constant = 20;
+            LRViewBorderRadius(cell.lab4, 10, 0, [UIColor clearColor]);
+            
+            //NSLog(@"-==-=-=-=-=-=-%f",[Manager widthForString:model.promotionTitle fontSize:15 andHeight:20]);
+            if ([Manager widthForString:model.promotionTitle fontSize:15 andHeight:20] > (SCREEN_WIDTH-150)) {
+                cell.lab4width.constant = SCREEN_WIDTH-150;
+            }else{
+                cell.lab4width.constant = [Manager widthForString:model.promotionTitle fontSize:15 andHeight:20]+20;
+            }
+        }else{
+            cell.lab4.hidden = YES;
+            cell.lab2height.constant = 40;
+            cell.lab4height.constant = 0;
+            cell.lab4width.constant = 0;
+        }
+        cell.lab4.text = model.promotionTitle;
+        
+        
         return cell;
         
     }

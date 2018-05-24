@@ -21,7 +21,7 @@
     
 //    UILabel *cenLab1;
 //    UILabel *cenLab2;
-    
+    UILabel *fhlab;
     
     UIImageView *img1;
     UIImageView *img2;
@@ -83,8 +83,7 @@
         
         weakSelf.cycleScrollView.localizationImageNamesGroup = array;
         
-        
-        weakSelf.cycleScrollView.titlesGroup = array1;
+//        weakSelf.cycleScrollView.titlesGroup = array1;
         
         [weakSelf.tableview reloadData];
     } enError:^(NSError *error) {
@@ -99,7 +98,7 @@
     __weak typeof(self) weakSelf = self;
     [Manager requestGETWithURLStr:KURLNSString(@"index/advert") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSLog(@"******%@",diction);
+//        NSLog(@"******%@",diction);
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
             if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"object"]] == YES) {
@@ -207,7 +206,7 @@
 
 - (void)clickbtn1:(UITapGestureRecognizer *)tap{
     XPPD_ViewController *xppd = [[XPPD_ViewController alloc]init];
-    xppd.navigationItem.title = @"新手特权";
+    xppd.navigationItem.title = @"秒杀专场";
     [self.navigationController pushViewController:xppd animated:YES];
 }
 
@@ -240,6 +239,9 @@
     [self.tableview registerNib:[UINib nibWithNibName:@"Table_4_Cell" bundle:nil] forCellReuseIdentifier:@"Table_4_Cell"];
     [self.view addSubview:self.tableview];
     
+    
+    
+    
     headerV = [[UIView alloc]init];
     headerV.backgroundColor =RGBACOLOR(237, 236, 242, 1);
     self.tableview.tableHeaderView = headerV;
@@ -247,12 +249,13 @@
     self.cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 200) delegate:self placeholderImage:[UIImage imageNamed:@"placeholder"]];
     self.cycleScrollView.currentPageDotImage = [UIImage imageNamed:@"pageControlCurrentDot"];
     self.cycleScrollView.pageDotImage = [UIImage imageNamed:@"pageControlDot"];
+    self.cycleScrollView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight;
     [headerV addSubview:self.cycleScrollView];
     
     
     img1 = [[UIImageView alloc]init];
     LRViewBorderRadius(img1, 0, .5, [UIColor colorWithWhite:.8 alpha:.3]);
-    img1.image = [UIImage imageNamed:@"xstq.jpg"];
+    img1.image = [UIImage imageNamed:@"miao.jpg"];
     img1.userInteractionEnabled = YES;
     img1.contentMode = UIViewContentModeScaleAspectFit;
     UITapGestureRecognizer *tap1 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickbtn1:)];
@@ -290,7 +293,7 @@
     self.tableview.tableFooterView = footerV;
     footerV.backgroundColor =RGBACOLOR(237, 236, 242, 1);
     
-    UILabel *fhlab = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/2-75, 5, 150, 30)];
+    fhlab = [[UILabel alloc]init];
     fhlab.text = @"特色推荐";
     fhlab.font = [UIFont systemFontOfSize:20];
     fhlab.textAlignment = NSTextAlignmentCenter;
@@ -331,7 +334,7 @@
 
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
-    NSLog(@"搜索");
+//    NSLog(@"搜索");
     //1.创建热门搜索
     NSArray *hotSeaches = @[@"电竞椅", @"电竞桌", @"鼠标垫", @"鼠标", @"显示屏", @"升降器", @"支架",@"键盘"];
     PYSearchViewController *searchViewController = [PYSearchViewController searchViewControllerWithHotSearches:hotSeaches searchBarPlaceholder:@"商品名称" didSearchBlock:^(PYSearchViewController *searchViewController, UISearchBar *searchBar, NSString *searchText) {
@@ -484,9 +487,14 @@
 
 - (void) initCollectionView3:(NSInteger )hangshu
 {
-    NSLog(@"--------%ld",hangshu);
     
-    footerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, 40 + hangshu * 320);
+    if (hangshu == 0) {
+        footerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, 0);
+        fhlab.frame= CGRectMake(SCREEN_WIDTH/2-75, 5, 150, 0);
+    }else{
+        footerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, 40 + hangshu * 320);
+        fhlab.frame= CGRectMake(SCREEN_WIDTH/2-75, 5, 150, 30);
+    }
     
     
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
@@ -555,7 +563,7 @@
     __weak typeof(self) weakSelf = self;
     [Manager requestGETWithURLStr:KURLNSString(@"index/index/product") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        //NSLog(@"******%@",diction);
+//        NSLog(@"******%@",diction);
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
             if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"object"]] == YES) {
@@ -576,15 +584,19 @@
         }
        
         
-        [weakSelf initCollectionView3:hangshu];
+        if (weakSelf.dataArray3.count == 0) {
+            hangshu = 0;
+        }
         
+        
+        [weakSelf initCollectionView3:hangshu];
         
         
         
          [weakSelf.tableview reloadData];
         [weakSelf.collectionView3 reloadData];
     } enError:^(NSError *error) {
-        NSLog(@"------%@",error);
+//        NSLog(@"------%@",error);
     }];
 }
 

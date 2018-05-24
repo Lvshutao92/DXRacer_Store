@@ -80,7 +80,7 @@
             }else{
                 [self cilckimg];
             }
-            NSLog(@"----%@",diction);
+           // NSLog(@"----%@",diction);
         } enError:^(NSError *error) {
             NSLog(@"%@",error);
         }];
@@ -96,7 +96,7 @@
         NSDictionary *dic = @{@"verificationCode":textf.text,@"mobile":text1.text};
         [Manager requestPOSTWithURLStr:KURLNSString(@"customer/register/shortmessage") paramDic:dic token:nil finish:^(id responseObject) {
             NSDictionary *diction = [Manager returndictiondata:responseObject];
-            NSLog(@"----%@",diction);
+            //NSLog(@"----%@",diction);
         } enError:^(NSError *error) {
             NSLog(@"%@",error);
         }];
@@ -213,7 +213,7 @@
     }
     
     bgimg = [[UIImageView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/2-45, SCREEN_HEIGHT/2-270, 90, 90)];
-    bgimg.image = [UIImage imageNamed:@"头像"];
+    bgimg.image = [UIImage imageNamed:@"tx.jpg"];
     LRViewBorderRadius(bgimg, 45, 0, [UIColor whiteColor]);
     bgimg.userInteractionEnabled = YES;
     [self.view addSubview:bgimg];

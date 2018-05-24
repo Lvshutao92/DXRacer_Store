@@ -47,7 +47,7 @@
     self.view.backgroundColor = RGBACOLOR(237, 236, 242, 1);
     
     
-    self.arr = [@[@"地址管理",@"实名认证",@"账户安全",@"清除缓存"]mutableCopy];
+    self.arr = [@[@"地址管理",@"实名认证",@"修改密码",@"清除缓存"]mutableCopy];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"PersonCell" bundle:nil] forCellReuseIdentifier:@"cell"];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;

@@ -67,7 +67,7 @@
     }else{
         hei = 64;
     }
-    self.goosdCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, hei, SCREEN_WIDTH, SCREEN_HEIGHT-30) collectionViewLayout:self.flowLayout];
+    self.goosdCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, hei, SCREEN_WIDTH, SCREEN_HEIGHT-hei) collectionViewLayout:self.flowLayout];
     self.goosdCollectionView.backgroundColor = [UIColor whiteColor];
     self.goosdCollectionView.delegate = self;
     self.goosdCollectionView.dataSource = self;

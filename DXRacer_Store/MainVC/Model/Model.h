@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "Model_A.h"
 @interface Model : NSObject
 @property (nonatomic,assign) BOOL isSelect;
 @property (nonatomic,assign) NSInteger number;
@@ -101,6 +101,22 @@
 @property (nonatomic,strong)NSString *orderFee;
 
 @property (nonatomic,strong)NSString *promotionTitle;
+
+
+@property (nonatomic,strong)NSDictionary *productItem;
+@property (nonatomic,strong)Model_A *productItem_model;
+
+@property (nonatomic,strong)NSDictionary *product;
+@property (nonatomic,strong)Model_A *product_model;
+
+@property (nonatomic,strong)NSDictionary *crush;
+@property (nonatomic,strong)Model_A *crush_model;
+
+@property (nonatomic,strong)NSString *skuId;
+@property (nonatomic,strong)NSString *switchs;
+
+
+
 @end
 
 

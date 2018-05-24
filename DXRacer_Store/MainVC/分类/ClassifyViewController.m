@@ -67,7 +67,7 @@
     }else{
         hei = 64;
     }
-    self.goosdCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, hei, SCREEN_WIDTH, SCREEN_HEIGHT-30) collectionViewLayout:self.flowLayout];
+    self.goosdCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, hei, SCREEN_WIDTH, SCREEN_HEIGHT-hei) collectionViewLayout:self.flowLayout];
     self.goosdCollectionView.backgroundColor = [UIColor whiteColor];
     self.goosdCollectionView.delegate = self;
     self.goosdCollectionView.dataSource = self;
@@ -80,7 +80,7 @@
 }
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
-    NSLog(@"搜索");
+//    NSLog(@"搜索");
     //1.创建热门搜索
     NSArray *hotSeaches = @[@"电竞椅", @"电竞桌", @"鼠标垫", @"鼠标", @"显示屏", @"升降器", @"支架",@"键盘"];
     PYSearchViewController *searchViewController = [PYSearchViewController searchViewControllerWithHotSearches:hotSeaches searchBarPlaceholder:@"商品名称" didSearchBlock:^(PYSearchViewController *searchViewController, UISearchBar *searchBar, NSString *searchText) {
@@ -235,7 +235,7 @@
     
     [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSLog(@"******%@",diction);
+//        NSLog(@"******%@",diction);
         [weakSelf.dataArray removeAllObjects];
         self->number = [[diction objectForKey:@"total"] integerValue];
         
@@ -261,7 +261,7 @@
         [weakSelf.goosdCollectionView reloadData];
         [weakSelf.goosdCollectionView.mj_header endRefreshing];
     } enError:^(NSError *error) {
-        NSLog(@"------%@",error);
+//        NSLog(@"------%@",error);
     }];
 }
 - (void)loddeSLList{
@@ -282,7 +282,7 @@
         [weakSelf.goosdCollectionView reloadData];
         [weakSelf.goosdCollectionView.mj_footer endRefreshing];
     } enError:^(NSError *error) {
-        NSLog(@"------%@",error);
+//        NSLog(@"------%@",error);
     }];
 }
 

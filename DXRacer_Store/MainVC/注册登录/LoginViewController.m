@@ -77,7 +77,7 @@
                 [weakSelf presentViewController:alert animated:YES completion:nil];
             }
             [hud hideAnimated:YES];
-            NSLog(@"----%@",diction);
+            //NSLog(@"----%@",diction);
         } enError:^(NSError *error) {
             NSLog(@"%@",error);
             [hud hideAnimated:YES];
@@ -104,7 +104,7 @@
             }else{
                 [weakSelf getInfomation];
             }
-            NSLog(@"----%@",diction);
+            //NSLog(@"----%@",diction);
         } enError:^(NSError *error) {
             NSLog(@"%@",error);
         }];
@@ -114,7 +114,7 @@
 - (void)getInfomation{
     [Manager requestPOSTWithURLStr:KURLNSString(@"account") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        [self->bgimg sd_setImageWithURL:[NSURL URLWithString:[diction objectForKey:@"iconUrl"]]placeholderImage:[UIImage imageNamed:@"头像"]];
+        [self->bgimg sd_setImageWithURL:[NSURL URLWithString:[diction objectForKey:@"iconUrl"]]placeholderImage:[UIImage imageNamed:@"tx.jpg"]];
     } enError:^(NSError *error) {
     }];
 }
@@ -125,7 +125,7 @@
 
 - (void)setupview{
     bgimg = [[UIImageView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/2-45, SCREEN_HEIGHT/2-250, 90, 90)];
-    bgimg.image = [UIImage imageNamed:@"头像"];
+    bgimg.image = [UIImage imageNamed:@"tx.jpg"];
     LRViewBorderRadius(bgimg, 45, 0, [UIColor whiteColor]);
     bgimg.userInteractionEnabled = YES;
     [self.view addSubview:bgimg];

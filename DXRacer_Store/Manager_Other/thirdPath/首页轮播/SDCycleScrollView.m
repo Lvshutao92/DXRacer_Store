@@ -471,6 +471,9 @@ NSString * const ID = @"SDCycleScrollViewCell";
 
 - (int)pageControlIndexWithCurrentCellIndex:(NSInteger)index
 {
+    if (self.imagePathsGroup.count == 0) {
+        return 1;
+    }
     return (int)index % self.imagePathsGroup.count;
 }
 

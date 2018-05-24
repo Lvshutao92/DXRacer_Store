@@ -81,7 +81,7 @@
     __weak typeof(self) weakSelf = self;
     [Manager requestPOSTWithURLStr:KURLNSString(@"order/shopping/list") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSLog(@"4512341234123412341234******%@",diction);
+//        NSLog(@"4512341234123412341234******%@",diction);
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
             NSMutableArray *array = [diction objectForKey:@"object"];
