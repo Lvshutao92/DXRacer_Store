@@ -43,7 +43,7 @@
     __weak typeof(self) weakSelf = self;
     [Manager requestGETWithURLStr:KURLNSString(@"promotion/crush") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSLog(@"******%@",diction);
+        //NSLog(@"******%@",diction);
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
             if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"object"]] == YES) {
@@ -66,6 +66,12 @@
             }
         }
         [weakSelf.tableview reloadData];
+        
+        if (weakSelf.dataArray.count == 0) {
+            UIImageView *view = [[UIImageView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/2-75, SCREEN_HEIGHT/2-75, 150, 150)];
+            view.image = [UIImage imageNamed:@"placeholder_dropbox"];
+            [weakSelf.view addSubview:view];
+        }
     } enError:^(NSError *error) {
         NSLog(@"%@",error);
     }];
@@ -127,11 +133,10 @@
     cell.myProgressView.progress = yimai/tottal;
     
     
-    
     if(yimai/tottal == 1){
         cell.lab2.text =@"已售完";
     }else{
-        cell.lab2.text = @"";
+        cell.lab2.text = [NSString stringWithFormat:@"已售%.2f%%",yimai/tottal*100];
     }
     
 

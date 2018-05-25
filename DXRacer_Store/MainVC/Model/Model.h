@@ -116,7 +116,7 @@
 @property (nonatomic,strong)NSString *switchs;
 
 
-
+@property (nonatomic,strong)NSString *productAttrs;
 @end
 
 

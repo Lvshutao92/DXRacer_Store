@@ -8,7 +8,7 @@
 
 #import "AboutUsViewController.h"
 
-@interface AboutUsViewController ()
+@interface AboutUsViewController ()<UIWebViewDelegate>
 
 @end
 
@@ -38,6 +38,9 @@
     }
     titLab.frame = CGRectMake(10, hei+10, SCREEN_WIDTH-20, height);
     [self.view addSubview:titLab];
+    
+    
+    
 }
 
 

@@ -267,18 +267,21 @@
 //    __weak typeof (self) weakSelf = self;
     [Manager requestPOSTWithURLStr:KURLNSString(@"address") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSMutableArray *array = (NSMutableArray *)diction;
-        NSDictionary *dic = [array firstObject];
         
-        self->addressID = [dic objectForKey:@"id"];
-        self->namelab.text    = [NSString stringWithFormat:@"收货人：%@",[dic objectForKey:@"person"]];
-        self->phonelab.text   = [dic objectForKey:@"phone"];
-        self->addresslab.text = [NSString stringWithFormat:@"收货地址：%@",[NSString stringWithFormat:@"%@%@%@%@",[dic objectForKey:@"receiveProvince"],[dic objectForKey:@"receiveCity"],[dic objectForKey:@"receiveDistrict"],[dic objectForKey:@"address"]]];
-        if (self->namelab.text.length <= 0) {
-            [self->btn setTitle:@"请选择收货地址" forState:UIControlStateNormal];
-        }else{
-            [self->btn setTitle:@"" forState:UIControlStateNormal];
-        }
+            NSMutableArray *array = (NSMutableArray *)diction;
+            if ([Manager judgeWhetherIsEmptyAnyObject:array]==YES) {
+                NSDictionary *dic = [array firstObject];
+                self->addressID = [dic objectForKey:@"id"];
+                self->namelab.text    = [NSString stringWithFormat:@"收货人：%@",[dic objectForKey:@"person"]];
+                self->phonelab.text   = [dic objectForKey:@"phone"];
+                self->addresslab.text = [NSString stringWithFormat:@"收货地址：%@",[NSString stringWithFormat:@"%@%@%@%@",[dic objectForKey:@"receiveProvince"],[dic objectForKey:@"receiveCity"],[dic objectForKey:@"receiveDistrict"],[dic objectForKey:@"address"]]];
+                if (self->namelab.text.length <= 0) {
+                    [self->btn setTitle:@"请选择收货地址" forState:UIControlStateNormal];
+                }else{
+                    [self->btn setTitle:@"" forState:UIControlStateNormal];
+                }
+            }
+        
         //NSLog(@"----%@",diction);
     } enError:^(NSError *error) {
         //NSLog(@"----%@",error);

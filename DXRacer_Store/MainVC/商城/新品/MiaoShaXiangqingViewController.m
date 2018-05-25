@@ -21,7 +21,7 @@
 #import "APAuthInfo.h"
 #import "APOrderInfo.h"
 #import "APRSASigner.h"
-
+#import "ProductOrder_TwoDetails_ViewController.h"
 
 #define AP_SUBVIEW_XGAP   (20.0f)
 #define AP_SUBVIEW_YGAP   (30.0f)
@@ -91,6 +91,8 @@
     UITextField *tf;
     NSString *stt;
     NSString *isorno_star;
+    
+    NSString *zuidagoumainum;
 }
 @property(nonatomic,strong)MBProgressHUD *HUD;
 
@@ -122,7 +124,7 @@
 @property (strong, nonatomic)UILabel *minuteLabel;
 @property (strong, nonatomic)UILabel *secondLabel;
 
-
+@property(nonatomic,strong)TFSheetView *tfSheetView;
 @end
 
 @implementation MiaoShaXiangqingViewController
@@ -131,18 +133,20 @@
     //    __weak typeof (self) weakSelf = self;
     [Manager requestPOSTWithURLStr:KURLNSString(@"address") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSMutableArray *array = (NSMutableArray *)diction;
-        NSDictionary *dic = [array firstObject];
-        
-        self->addressID = [dic objectForKey:@"id"];
-        self->namelab.text    = [NSString stringWithFormat:@"收货人：%@",[dic objectForKey:@"person"]];
-        self->phonelab.text   = [dic objectForKey:@"phone"];
-        self->addresslab.text = [NSString stringWithFormat:@"收货地址：%@",[NSString stringWithFormat:@"%@%@%@%@",[dic objectForKey:@"receiveProvince"],[dic objectForKey:@"receiveCity"],[dic objectForKey:@"receiveDistrict"],[dic objectForKey:@"address"]]];
-        if (self->namelab.text.length <= 0) {
-            [self->btn setTitle:@"请选择收货地址" forState:UIControlStateNormal];
-        }else{
-            [self->btn setTitle:@"" forState:UIControlStateNormal];
-        }
+        //NSLog(@"----%@",diction);
+            NSMutableArray *array = (NSMutableArray *)diction;
+            if ([Manager judgeWhetherIsEmptyAnyObject:array]==YES) {
+                NSDictionary *dic = [array firstObject];
+                self->addressID = [dic objectForKey:@"id"];
+                self->namelab.text    = [NSString stringWithFormat:@"收货人：%@",[dic objectForKey:@"person"]];
+                self->phonelab.text   = [dic objectForKey:@"phone"];
+                self->addresslab.text = [NSString stringWithFormat:@"收货地址：%@",[NSString stringWithFormat:@"%@%@%@%@",[dic objectForKey:@"receiveProvince"],[dic objectForKey:@"receiveCity"],[dic objectForKey:@"receiveDistrict"],[dic objectForKey:@"address"]]];
+                if (self->namelab.text.length <= 0) {
+                    [self->btn setTitle:@"请选择收货地址" forState:UIControlStateNormal];
+                }else{
+                    [self->btn setTitle:@"" forState:UIControlStateNormal];
+                }
+            }
         //NSLog(@"----%@",diction);
     } enError:^(NSError *error) {
         //NSLog(@"----%@",error);
@@ -155,9 +159,9 @@
     [super viewDidLoad];
     self.navigationItem.title = @"宝贝";
     
-    UIImage *theImage1 = [UIImage imageNamed:@"whirfenxiangt_icone"];
+    UIImage *theImage1 = [UIImage imageNamed:@"3"];
     UIView *ve = [[UIView alloc]initWithFrame:CGRectMake(0, [Manager returnDianchitiaoHeight], 44, 44)];
-    UIButton * readerBtn=[[UIButton alloc] initWithFrame:CGRectMake(10, 5, 30, 30)];
+    UIButton * readerBtn=[[UIButton alloc] initWithFrame:CGRectMake(10, 8, 25, 25)];
     [readerBtn setBackgroundImage:theImage1 forState:UIControlStateNormal];
     [readerBtn addTarget:self action:@selector(onRightNavBtnClick) forControlEvents:UIControlEventTouchUpInside];
     [ve addSubview:readerBtn];
@@ -173,7 +177,7 @@
     
     
     
-    headerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 700)];
+    headerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 750)];
     headerV.userInteractionEnabled = YES;
     self.tableview1.tableHeaderView = headerV;
     
@@ -306,11 +310,12 @@
     tf.text = @"1";
     tf.borderStyle = UITextBorderStyleRoundedRect;
     tf.textAlignment = NSTextAlignmentCenter;
+    tf.keyboardType = UIKeyboardTypePhonePad;
     [headerV addSubview:tf];
    
     
     
-    [self lodinfo];
+    
     
     [self getDetailsInfo];
     
@@ -321,32 +326,40 @@
 
 
 - (void)getaddress{
-    AddrViewController *addr = [[AddrViewController alloc]init];
-    addr.navigationItem.title = @"收货地址";
-    addr.order = @"order";
-    [self.navigationController pushViewController:addr animated:YES];
+    if ([Manager redingwenjianming:@"token.text"]==nil) {
+        LoginViewController *login = [[LoginViewController alloc]init];
+        login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        [self presentViewController:login animated:YES completion:nil];
+    }else{
+        AddrViewController *addr = [[AddrViewController alloc]init];
+        addr.navigationItem.title = @"收货地址";
+        addr.order = @"order";
+        [self.navigationController pushViewController:addr animated:YES];
+    }
 }
 
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
-    
-    if ([stt isEqualToString:@"no"]) {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"已经是最大购买数量" message:@"温馨提示" preferredStyle:1];
+    return YES;
+}
+- (void)textFieldDidEndEditing:(UITextField *)textField{
+    NSInteger inde0 = [zuidagoumainum integerValue];
+    NSInteger inde1 = [textField.text integerValue];
+    //NSLog(@"%ld------%ld",inde0,inde1);
+    if (inde0 < inde1) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"超过最大购买数量" message:[NSString stringWithFormat:@"最大购买数量%ld",inde0] preferredStyle:1];
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            [self->tf becomeFirstResponder];
         }];
         [alert addAction:cancel];
         [self presentViewController:alert animated:YES completion:nil];
-        return NO;
     }
-    return YES;
 }
 
 
 
-
-
 - (void)onRightNavBtnClick {
-    //self.tabBarController.selectedIndex = 2;
+    self.tabBarController.selectedIndex = 2;
 }
 
 
@@ -360,7 +373,7 @@
     NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSLog(@"******%@",diction);
+        //NSLog(@"******%@",diction);
         
         NSString *videoId;
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
@@ -424,11 +437,8 @@
                     self->isorno_star = @"yes";
                 }
                 
-                if ([[dicti objectForKey:@"unitQuantity"]isEqualToString:@"1"]) {
-                    self->stt = @"no";
-                }else{
-                    self->stt = @"yes";
-                }
+                
+                self->zuidagoumainum = [dicti objectForKey:@"unitQuantity"];
             }
         }
         [weakSelf.tableview1 reloadData];
@@ -453,54 +463,57 @@
 
 
 - (void)cilck1{
-    if ([isorno_star isEqualToString:@"no"]) {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"活动暂未开始" message:@"温馨提示" preferredStyle:1];
-        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        }];
-        [alert addAction:cancel];
-        [self presentViewController:alert animated:YES completion:nil];
+    if ([Manager redingwenjianming:@"token.text"]==nil) {
+        LoginViewController *login = [[LoginViewController alloc]init];
+        login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        [self presentViewController:login animated:YES completion:nil];
     }else{
-        [self commitOrder];
+        if ([isorno_star isEqualToString:@"no"])
+        {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"活动暂未开始" message:@"温馨提示" preferredStyle:1];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            }];
+            [alert addAction:cancel];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+        else
+        {
+            [self commitOrder];
+        }
     }
 }
 - (void)commitOrder{
     __weak typeof(self) weakSelf = self;
-    if (self.idString.length > 0 && addressID.length > 0) {
+    if (self.idString.length > 0 && addressID.length > 0 && tf.text.length > 0) {
         NSDictionary *dic = @{@"skuId":self.idStr,
                               @"quantity":tf.text,
                               @"addressId":addressID};
         [Manager requestPOSTWithURLStr:KURLNSString(@"promotion/crush/confirm") paramDic:dic token:nil finish:^(id responseObject) {
             NSDictionary *diction = [Manager returndictiondata:responseObject];
-            NSLog(@"--%@",diction);
+            //NSLog(@"--%@",diction);
             NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
             if ([code isEqualToString:@"200"]){
-//                weakSelf.tfSheetView = [[TFSheetView alloc]init];
-//                //取消
-//                weakSelf.tfSheetView.cancelBlock = ^{
-//                    [weakSelf.dataArray removeAllObjects];
-//                    [weakSelf.tableview reloadData];
-//                    ProductOrder_TwoDetails_ViewController *or = [[ProductOrder_TwoDetails_ViewController alloc]init];
-//                    or.orderNo = [diction objectForKey:@"msg"];
-//                    or.orderStatus = @"待付款";
-//                    [self.navigationController pushViewController:or animated:YES];
-//                    [weakSelf.tfSheetView disMissView];
-//                };
-//                //微信支付
-//                weakSelf.tfSheetView.wxBlock = ^{
-//                    NSLog(@"微信支付");
-//                    [weakSelf.dataArray removeAllObjects];
-//                    [weakSelf.tableview reloadData];
-//                    [weakSelf.tfSheetView disMissView];
-//                };
-//                //支付宝支付
-//                weakSelf.tfSheetView.zfbBlock = ^{
-//                    NSLog(@"支付宝支付");
-//                    [weakSelf.dataArray removeAllObjects];
-//                    [weakSelf.tableview reloadData];
-//                    [weakSelf doAPPay:[diction objectForKey:@"msg"]];
-//                    [weakSelf.tfSheetView disMissView];
-//                };
-//                [weakSelf.tfSheetView showInView:self.view];
+                weakSelf.tfSheetView = [[TFSheetView alloc]init];
+                //取消
+                weakSelf.tfSheetView.cancelBlock = ^{
+                    ProductOrder_TwoDetails_ViewController *or = [[ProductOrder_TwoDetails_ViewController alloc]init];
+                    or.orderNo = [diction objectForKey:@"object"];
+                    or.orderStatus = @"待付款";
+                    [self.navigationController pushViewController:or animated:YES];
+                    [weakSelf.tfSheetView disMissView];
+                };
+                //微信支付
+                weakSelf.tfSheetView.wxBlock = ^{
+                    //NSLog(@"微信支付");
+                    [weakSelf.tfSheetView disMissView];
+                };
+                //支付宝支付
+                weakSelf.tfSheetView.zfbBlock = ^{
+                    //NSLog(@"支付宝支付");
+                    [weakSelf doAPPay:[diction objectForKey:@"object"]];
+                    [weakSelf.tfSheetView disMissView];
+                };
+                [weakSelf.tfSheetView showInView:self.view];
             }else{
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:[diction objectForKey:@"object"] message:@"温馨提示" preferredStyle:1];
                 UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
@@ -569,6 +582,12 @@
     //[self.dropView viewControllerWillAppear];
     self.tabBarController.tabBar.hidden = YES;
     
+    if ([Manager redingwenjianming:@"token.text"]!=nil){
+        [self lodinfo];
+    }
+    
+    
+    
     if (namelab.text.length <= 0) {
         [btn setTitle:@"请选择收货地址" forState:UIControlStateNormal];
     }
@@ -610,28 +629,28 @@
         
         
         UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn1.frame = CGRectMake(SCREEN_WIDTH-240, 0, 240, 55);
+        btn1.frame = CGRectMake(0, 0, SCREEN_WIDTH, 55);
         btn1.backgroundColor = [UIColor redColor];
         [btn1 setTitle:@"马上抢" forState:UIControlStateNormal];
         [btn1 addTarget:self action:@selector(cilck1) forControlEvents:UIControlEventTouchUpInside];
         [_tabbarView addSubview:btn1];
         
         
-        UIButton *btn3 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn3.frame = CGRectMake((SCREEN_WIDTH-260)/2+10, 0, (SCREEN_WIDTH-260)/2, 55);
-        [btn3 setImage:[UIImage imageNamed:@"sc"] forState:UIControlStateNormal];
-        btn3.backgroundColor = [UIColor whiteColor];
-        [btn3 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [btn3 addTarget:self action:@selector(cilck3) forControlEvents:UIControlEventTouchUpInside];
-        [_tabbarView addSubview:btn3];
-        
-        UIButton *btn4 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn4.frame = CGRectMake(10, 0, (SCREEN_WIDTH-260)/2, 55);
-        [btn4 setImage:[UIImage imageNamed:@"3"] forState:UIControlStateNormal];
-        btn4.backgroundColor = [UIColor whiteColor];
-        [btn4 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [btn4 addTarget:self action:@selector(cilck4) forControlEvents:UIControlEventTouchUpInside];
-        [_tabbarView addSubview:btn4];
+//        UIButton *btn3 = [UIButton buttonWithType:UIButtonTypeCustom];
+//        btn3.frame = CGRectMake((SCREEN_WIDTH-260)/2+10, 0, (SCREEN_WIDTH-260)/2, 55);
+//        [btn3 setImage:[UIImage imageNamed:@"sc"] forState:UIControlStateNormal];
+//        btn3.backgroundColor = [UIColor whiteColor];
+//        [btn3 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//        [btn3 addTarget:self action:@selector(cilck3) forControlEvents:UIControlEventTouchUpInside];
+//        [_tabbarView addSubview:btn3];
+//
+//        UIButton *btn4 = [UIButton buttonWithType:UIButtonTypeCustom];
+//        btn4.frame = CGRectMake(10, 0, (SCREEN_WIDTH-260)/2, 55);
+//        [btn4 setImage:[UIImage imageNamed:@"3"] forState:UIControlStateNormal];
+//        btn4.backgroundColor = [UIColor whiteColor];
+//        [btn4 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//        [btn4 addTarget:self action:@selector(cilck4) forControlEvents:UIControlEventTouchUpInside];
+//        [_tabbarView addSubview:btn4];
         
     }
     return _tabbarView;

@@ -164,7 +164,7 @@
                 self->img1.frame = CGRectMake(0, he+imgheight+200+10, SCREEN_WIDTH/2, gao);
                 self->img2.frame = CGRectMake(SCREEN_WIDTH/2, he+imgheight+200+10, SCREEN_WIDTH/2, gao);
 //                self->centerV.frame = CGRectMake(0, he+imgheight+200+20+gao, SCREEN_WIDTH, 100);
-                self->headerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, he+imgheight+200+20+gao);
+                self->headerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, he+imgheight+200+10+gao);
             }
         }
         [weakSelf.tableview reloadData];
@@ -240,10 +240,8 @@
     [self.view addSubview:self.tableview];
     
     
-    
-    
     headerV = [[UIView alloc]init];
-    headerV.backgroundColor =RGBACOLOR(237, 236, 242, 1);
+    headerV.backgroundColor = [UIColor colorWithWhite:.95 alpha:.5];
     self.tableview.tableHeaderView = headerV;
     
     self.cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 200) delegate:self placeholderImage:[UIImage imageNamed:@"placeholder"]];
@@ -255,7 +253,7 @@
     
     img1 = [[UIImageView alloc]init];
     LRViewBorderRadius(img1, 0, .5, [UIColor colorWithWhite:.8 alpha:.3]);
-    img1.image = [UIImage imageNamed:@"miao.jpg"];
+    img1.image = [UIImage imageNamed:@"4a.jpg"];
     img1.userInteractionEnabled = YES;
     img1.contentMode = UIViewContentModeScaleAspectFit;
     UITapGestureRecognizer *tap1 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickbtn1:)];
@@ -264,7 +262,7 @@
     
     img2 = [[UIImageView alloc]init];
     LRViewBorderRadius(img2, 0, .5, [UIColor colorWithWhite:.8 alpha:.3]);
-    img2.image = [UIImage imageNamed:@"xppd.jpg"];
+    img2.image = [UIImage imageNamed:@"timg.jpeg"];
     img2.userInteractionEnabled = YES;
     UITapGestureRecognizer *tap2 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickbtn2:)];
     [img2 addGestureRecognizer:tap2];
@@ -291,7 +289,7 @@
     
     footerV = [[UIView alloc]init];
     self.tableview.tableFooterView = footerV;
-    footerV.backgroundColor =RGBACOLOR(237, 236, 242, 1);
+    footerV.backgroundColor = [UIColor colorWithWhite:.95 alpha:.5];
     
     fhlab = [[UILabel alloc]init];
     fhlab.text = @"特色推荐";
@@ -375,62 +373,62 @@
 }
 -(UIView*)NavigationBa
 {
-    CGFloat hei;
-    if ([[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone X"]||[[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone Simulator"]) {
-        hei = 68;
-    }else{
-        hei = 44;
-    }
     view_bar =[[UIView alloc]init];
-    if ([[[UIDevice currentDevice]systemVersion]floatValue]>6.1)
-    {
-        view_bar .frame=CGRectMake(0, 0, SCREEN_WIDTH, hei+20);
+    
+    CGFloat hei;
+    
+    CGFloat hh;
+    
+    
+    if ([[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone X"]||[[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone Simulator"]) {
+        hei = 88;
+        hh = 44;
     }else{
-        view_bar .frame=CGRectMake(0, 0, SCREEN_WIDTH, hei);
+        hei = 64;
+        hh = 20;
     }
+   
+    view_bar .frame=CGRectMake(0, 0, SCREEN_WIDTH, hei);
+    
+    
     view_bar.backgroundColor=[UIColor clearColor];
     [self.view addSubview: view_bar];
     
-    _customSearchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(60, 20, SCREEN_WIDTH-120, hei)];
+    _customSearchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(60, hh, SCREEN_WIDTH-120, 44)];
     _customSearchBar.delegate = self;
     for (UIView *subview in _customSearchBar.subviews) {
         for(UIView* grandSonView in subview.subviews){
             if ([grandSonView isKindOfClass:NSClassFromString(@"UISearchBarBackground")]) {
                 grandSonView.alpha = 0.0f;
             }else if([grandSonView isKindOfClass:NSClassFromString(@"UISearchBarTextField")] ){
-                NSLog(@"Keep textfiedld bkg color");
+                //NSLog(@"Keep textfiedld bkg color");
             }else{
                 grandSonView.alpha = 0.0f;
             }
         }
     }
     
+    UITextField *searchField = [_customSearchBar valueForKey:@"searchField"];
+    if (searchField) {
+        LRViewBorderRadius(searchField, 18, 0, [UIColor clearColor]);
+    }
     
     _customSearchBar.placeholder = @"请输入商品名称";
     [view_bar addSubview:self.customSearchBar];
-    UILabel *label = [[UILabel alloc]init];
-    label.text = @"请输入想要搜索的商品";
-    label.textAlignment = NSTextAlignmentCenter;
-    label.textColor = [UIColor colorWithWhite:.8 alpha:.5];
-    label.frame = CGRectMake(0, 0, 0, 45);
-    label.backgroundColor = [UIColor whiteColor];
-    _customSearchBar.inputAccessoryView = label;
-    [self.tableview bringSubviewToFront:label];
-    // 由于其子控件是懒加载模式, 所以找之前先将其显示
-    [_customSearchBar setShowsCancelButton:NO animated:YES];
+
     
     UIImage *theImage = [UIImage imageNamed:@"dx"];
-    //    theImage = [theImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    UIButton* meBtn=[[UIButton alloc]initWithFrame:CGRectMake(15, 20+(hei-30)/2+5, 30, 25)];
+    //theImage = [theImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    UIButton* meBtn=[[UIButton alloc]initWithFrame:CGRectMake(15, hh+5, 30, 30)];
     LRViewBorderRadius(meBtn, 15, 0, [UIColor clearColor]);
     [meBtn setBackgroundImage:theImage forState:UIControlStateNormal];
-    //    [meBtn setTintColor:[UIColor blackColor]];
+    //[meBtn setTintColor:[UIColor blackColor]];
     [meBtn addTarget:self action:@selector(onLeftNavBtnClick) forControlEvents:UIControlEventTouchUpInside];
     [view_bar addSubview:meBtn];
     
-    UIImage *theImage1 = [UIImage imageNamed:@"btn_nav_message"];
+    UIImage *theImage1 = [UIImage imageNamed:@"客服"];
     //    theImage1 = [theImage1 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    UIButton * readerBtn=[[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-45, 20+(hei-30)/2+2, 25, 30)];
+    UIButton * readerBtn=[[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-45, hh+5, 30, 30)];
     [readerBtn setBackgroundImage:theImage1 forState:UIControlStateNormal];
     [readerBtn addTarget:self action:@selector(onRightNavBtnClick) forControlEvents:UIControlEventTouchUpInside];
     //    [readerBtn setTintColor:[UIColor blackColor]];
@@ -447,22 +445,57 @@
     }
     if(self.tableview.contentOffset.y<-hei) {
         [view_bar setHidden:YES];
-    }else if(self.tableview.contentOffset.y<250){
+    }else if(self.tableview.contentOffset.y<=0){
         [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:self.tableview.contentOffset.y / 1000];
-    }else
-    {
+        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.01];
+    }else if(self.tableview.contentOffset.y<10){
+        [view_bar setHidden:NO];
+        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.1];
+    }else if(self.tableview.contentOffset.y<20){
+        [view_bar setHidden:NO];
+        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.2];
+    }else if(self.tableview.contentOffset.y<30){
+        [view_bar setHidden:NO];
+        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.3];
+    }else if(self.tableview.contentOffset.y<40){
+        [view_bar setHidden:NO];
+        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.4];
+    }else if(self.tableview.contentOffset.y<50){
+        [view_bar setHidden:NO];
+        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.5];
+    }else if(self.tableview.contentOffset.y<60){
+        [view_bar setHidden:NO];
+        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.6];
+    }else if(self.tableview.contentOffset.y<70){
+        [view_bar setHidden:NO];
+        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.7];
+    }else if(self.tableview.contentOffset.y<80){
+        [view_bar setHidden:NO];
+        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.8];
+    }else if(self.tableview.contentOffset.y<90){
         [view_bar setHidden:NO];
         view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.9];
+    }else{
+        [view_bar setHidden:NO];
+        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:1];
     }
 }
 
 
 - (void)onLeftNavBtnClick {
-    NSLog(@"扫一扫");
+    //NSLog(@"扫一扫");
 }
 - (void)onRightNavBtnClick {
-    NSLog(@"消息");
+    
+    
+    UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectZero];
+    NSString *qqstr = [NSString stringWithFormat:@"mqq://im/chat?chat_type=wpa&uin=%@&version=1&src_type=web",@"945529211"];
+    NSURL *url = [NSURL URLWithString:qqstr];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    [webView loadRequest:request];
+    [self.view addSubview:webView];
+    
+    
 }
 
 
@@ -490,10 +523,10 @@
     
     if (hangshu == 0) {
         footerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, 0);
-        fhlab.frame= CGRectMake(SCREEN_WIDTH/2-75, 5, 150, 0);
+        fhlab.frame= CGRectMake(SCREEN_WIDTH/2-75, 0, 150, 0);
     }else{
-        footerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, 40 + hangshu * 320);
-        fhlab.frame= CGRectMake(SCREEN_WIDTH/2-75, 5, 150, 30);
+        footerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, 50 + hangshu * 320);
+        fhlab.frame= CGRectMake(SCREEN_WIDTH/2-75, 0, 150, 50);
     }
     
     
@@ -505,7 +538,7 @@
     flowLayout.minimumInteritemSpacing = 0;
     flowLayout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
     //设置CollectionView的属性
-    self.collectionView3 = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 40, SCREEN_WIDTH, 320*hangshu) collectionViewLayout:flowLayout];
+    self.collectionView3 = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 50, SCREEN_WIDTH, 320*hangshu) collectionViewLayout:flowLayout];
     self.collectionView3.backgroundColor = [UIColor whiteColor];
     self.collectionView3.delegate = self;
     self.collectionView3.dataSource = self;

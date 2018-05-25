@@ -54,7 +54,7 @@
     [self SetNavBarHidden:YES];
     
     if ([Manager redingwenjianming:@"phone.text"] == nil) {
-        user1.text = @"登录";
+        user1.text = @"登录/注册";
         userImg.image = [UIImage imageNamed:@"头像"];
     }
 }
@@ -75,7 +75,7 @@
                 self->user1.text = [Manager redingwenjianming:@"phone.text"];
             }
         }else{
-            self->user1.text = @"登录";
+            self->user1.text = @"登录/注册";
         }
         
     } enError:^(NSError *error) {
@@ -96,26 +96,23 @@
 }
 -(UIView*)NavigationBa
 {
-    CGFloat hei;
-    if ([[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone X"]||[[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone Simulator"]) {
-        hei = 68;
-    }else{
-        hei = 44;
-    }
     view_bar =[[UIView alloc]init];
-    if ([[[UIDevice currentDevice]systemVersion]floatValue]>6.1)
-    {
-        view_bar .frame=CGRectMake(0, 0, SCREEN_WIDTH, hei+20);
+    CGFloat hei;
+    CGFloat hh;
+    if ([[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone X"]||[[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone Simulator"]) {
+        hei = 88;
+        hh = 44;
     }else{
-        view_bar .frame=CGRectMake(0, 0, SCREEN_WIDTH, hei);
+        hei = 64;
+        hh = 20;
     }
+    view_bar .frame=CGRectMake(0, 0, SCREEN_WIDTH, hei);
     view_bar.backgroundColor=[UIColor clearColor];
     [self.view addSubview: view_bar];
     
-    UIButton * readerBtn=[[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-65, 20+(hei-30)/2+2, 50, 30)];
+    UIButton * readerBtn=[[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-65, hh+5, 50, 30)];
     [readerBtn setTitle:@"设置" forState:UIControlStateNormal];
     [readerBtn addTarget:self action:@selector(clickedit) forControlEvents:UIControlEventTouchUpInside];
-    //    [readerBtn setTintColor:[UIColor blackColor]];
     [view_bar addSubview:readerBtn];
     
     return view_bar;
@@ -441,7 +438,12 @@
     }else if (indexPath.row == 3){
         
     }else if (indexPath.row == 4){
-        
+        UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectZero];
+        NSString *qqstr = [NSString stringWithFormat:@"mqq://im/chat?chat_type=wpa&uin=%@&version=1&src_type=web",@"945529210"];
+        NSURL *url = [NSURL URLWithString:qqstr];
+        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+        [webView loadRequest:request];
+        [self.view addSubview:webView];
     }else if (indexPath.row == 5) {
         NSMutableString *str=[[NSMutableString alloc]initWithFormat:@"tel:%@",@"18551049547"];
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
@@ -455,6 +457,8 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 55;
 }
+
+
 
 
 

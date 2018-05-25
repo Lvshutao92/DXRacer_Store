@@ -108,7 +108,7 @@
     
     //加入购物车按钮
     addBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    addBtn.frame = CGRectMake(0, whiteView.dwq_height-40, whiteView.frame.size.width/2, 40);
+    addBtn.frame = CGRectMake(0, whiteView.dwq_height-50, whiteView.frame.size.width/2, 50);
     
     [addBtn setBackgroundColor:[UIColor orangeColor]];
     [addBtn setTitleColor:[UIColor whiteColor] forState:0];
@@ -118,7 +118,7 @@
     
     //立即购买按钮
     buyBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    buyBtn.frame = CGRectMake(whiteView.frame.size.width/2,  whiteView.dwq_height-40, whiteView.frame.size.width/2, 40);
+    buyBtn.frame = CGRectMake(whiteView.frame.size.width/2,  whiteView.dwq_height-50, whiteView.frame.size.width/2, 50);
     [buyBtn setBackgroundColor:[UIColor redColor]];
     [buyBtn setTitleColor:[UIColor whiteColor] forState:0];
     buyBtn.titleLabel.font = [UIFont systemFontOfSize:15];

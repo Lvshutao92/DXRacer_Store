@@ -51,7 +51,7 @@
     btn1Title = @"删除订单";
     
     
-    self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-61) style:UITableViewStylePlain];
+    self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) style:UITableViewStylePlain];
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
     [self.tableview registerNib:[UINib nibWithNibName:@"DZFOrderCell" bundle:nil] forCellReuseIdentifier:@"DZFOrderCell"];
@@ -295,6 +295,7 @@
     cell.lab4.text = model.productItemNo;
     
     cell.lab2.text = [NSString stringWithFormat:@"X%@",model.quantity];
+    cell.lab5.text = model.productAttrs;
     return cell;
 }
 
@@ -327,7 +328,7 @@
 - (void)setupDibuView{
     UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT-60, SCREEN_WIDTH, 60)];
     v.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:v];
+    //[self.view addSubview:v];
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.backgroundColor = [UIColor redColor];

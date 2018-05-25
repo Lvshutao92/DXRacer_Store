@@ -43,7 +43,7 @@
 -(UICollectionViewFlowLayout *)flowLayout{
     if (!_flowLayout) {
         _flowLayout =[[UICollectionViewFlowLayout alloc]init];
-        _flowLayout.itemSize = CGSizeMake(SCREEN_WIDTH/2, 280);
+        _flowLayout.itemSize = CGSizeMake(SCREEN_WIDTH, 130);
         //        _flowLayout.scrollDirection         = UICollectionViewScrollDirectionHorizontal;
         _flowLayout.minimumLineSpacing      = 0;
         _flowLayout.minimumInteritemSpacing = 0;
@@ -96,7 +96,7 @@
     
     UIView *vv = [[UIView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-60, hei, 50, 44)];
     picBtn = [[UIButton alloc] initWithFrame:CGRectMake(20, 8, 25, 25)];
-    [picBtn setImage:[UIImage imageNamed:@"分类1"] forState:UIControlStateNormal];
+    [picBtn setImage:[UIImage imageNamed:@"分类2"] forState:UIControlStateNormal];
     [picBtn addTarget:self action:@selector(clickqiehuan) forControlEvents:UIControlEventTouchUpInside];
     [vv addSubview:picBtn];
     UIBarButtonItem *bar = [[UIBarButtonItem alloc]initWithCustomView:vv];
@@ -107,21 +107,21 @@
 
 - (void)clickqiehuan{
     if (self.isPermutation == YES) {
-        [picBtn setImage:[UIImage imageNamed:@"分类2"] forState:UIControlStateNormal];
+        [picBtn setImage:[UIImage imageNamed:@"分类1"] forState:UIControlStateNormal];
         self.isPermutation = NO;
-        self.flowLayout.itemSize = CGSizeMake(SCREEN_WIDTH, 130);
+        self.flowLayout.itemSize = CGSizeMake(SCREEN_WIDTH/2, 280);
         self.flowLayout.minimumLineSpacing      = 0;
         self.flowLayout.minimumInteritemSpacing = 0;
         self.flowLayout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
         self.goosdCollectionView.collectionViewLayout = self.flowLayout;
     }else{
-        [picBtn setImage:[UIImage imageNamed:@"分类1"] forState:UIControlStateNormal];
+        [picBtn setImage:[UIImage imageNamed:@"分类2"] forState:UIControlStateNormal];
         self.isPermutation = YES;
         //行与行之间的间距最小距离
         self.flowLayout.minimumLineSpacing      = 0;
         //列与列之间的间距最小距离
         self.flowLayout.minimumInteritemSpacing = 0;
-        self.flowLayout.itemSize = CGSizeMake(SCREEN_WIDTH/2, 280);
+        self.flowLayout.itemSize = CGSizeMake(SCREEN_WIDTH, 130);
         self.flowLayout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
         self.goosdCollectionView.collectionViewLayout = self.flowLayout;
     }
@@ -147,6 +147,12 @@
             }
         }
         [weakSelf.goosdCollectionView reloadData];
+        
+        if (weakSelf.dataArray.count == 0) {
+            UIImageView *view = [[UIImageView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/2-75, SCREEN_HEIGHT/2-75, 150, 150)];
+            view.image = [UIImage imageNamed:@"placeholder_dropbox"];
+            [weakSelf.view addSubview:view];
+        }
     } enError:^(NSError *error) {
         NSLog(@"------%@",error);
     }];
@@ -170,7 +176,7 @@
 #pragma mark  设置CollectionCell的内容
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.isPermutation){
+    if (!self.isPermutation){
         FL_1_Cell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FL_1_Cell" forIndexPath:indexPath];
         Model *model = [self.dataArray objectAtIndex:indexPath.row];
         LRViewBorderRadius(cell.bgv, 0, .5, [UIColor colorWithWhite:.8 alpha:.3]);

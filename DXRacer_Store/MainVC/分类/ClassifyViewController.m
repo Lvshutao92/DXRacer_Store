@@ -51,7 +51,7 @@
 -(UICollectionViewFlowLayout *)flowLayout{
     if (!_flowLayout) {
         _flowLayout =[[UICollectionViewFlowLayout alloc]init];
-        _flowLayout.itemSize = CGSizeMake(SCREEN_WIDTH/2, 280);
+        _flowLayout.itemSize = CGSizeMake(SCREEN_WIDTH, 130);
         //        _flowLayout.scrollDirection         = UICollectionViewScrollDirectionHorizontal;
         _flowLayout.minimumLineSpacing      = 0;
         _flowLayout.minimumInteritemSpacing = 0;
@@ -150,7 +150,7 @@
     
     UIView *vv = [[UIView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-60, hei, 50, 44)];
     picBtn = [[UIButton alloc] initWithFrame:CGRectMake(20, 8, 25, 25)];
-    [picBtn setImage:[UIImage imageNamed:@"分类1"] forState:UIControlStateNormal];
+    [picBtn setImage:[UIImage imageNamed:@"分类2"] forState:UIControlStateNormal];
     [picBtn addTarget:self action:@selector(clickqiehuan) forControlEvents:UIControlEventTouchUpInside];
     [vv addSubview:picBtn];
     UIBarButtonItem *bar = [[UIBarButtonItem alloc]initWithCustomView:vv];
@@ -160,7 +160,7 @@
     
     UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-80, SCREEN_HEIGHT-170, 60, 60)];
     LRViewBorderRadius(lab, 30, 0, [UIColor clearColor]);
-    lab.backgroundColor = RGBACOLOR(237, 236, 242, 1);
+    lab.backgroundColor = [UIColor colorWithWhite:.97 alpha:.3];
     [self.view addSubview:lab];
     [self.view bringSubviewToFront:lab];
     
@@ -185,21 +185,21 @@
 
 - (void)clickqiehuan{
     if (self.isPermutation == YES) {
-        [picBtn setImage:[UIImage imageNamed:@"分类2"] forState:UIControlStateNormal];
+        [picBtn setImage:[UIImage imageNamed:@"分类1"] forState:UIControlStateNormal];
         self.isPermutation = NO;
-        self.flowLayout.itemSize = CGSizeMake(SCREEN_WIDTH, 130);
+        self.flowLayout.itemSize = CGSizeMake(SCREEN_WIDTH/2, 280);
         self.flowLayout.minimumLineSpacing      = 0;
         self.flowLayout.minimumInteritemSpacing = 0;
         self.flowLayout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
         self.goosdCollectionView.collectionViewLayout = self.flowLayout;
     }else{
-        [picBtn setImage:[UIImage imageNamed:@"分类1"] forState:UIControlStateNormal];
+        [picBtn setImage:[UIImage imageNamed:@"分类2"] forState:UIControlStateNormal];
         self.isPermutation = YES;
         //行与行之间的间距最小距离
         self.flowLayout.minimumLineSpacing      = 0;
         //列与列之间的间距最小距离
         self.flowLayout.minimumInteritemSpacing = 0;
-        self.flowLayout.itemSize = CGSizeMake(SCREEN_WIDTH/2, 280);
+        self.flowLayout.itemSize = CGSizeMake(SCREEN_WIDTH, 130);
         self.flowLayout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
         self.goosdCollectionView.collectionViewLayout = self.flowLayout;
     }
@@ -330,7 +330,7 @@
 #pragma mark  设置CollectionCell的内容
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.isPermutation){
+    if (!self.isPermutation){
         FL_1_Cell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FL_1_Cell" forIndexPath:indexPath];
         Model *model = [self.dataArray objectAtIndex:indexPath.row];
         LRViewBorderRadius(cell.bgv, 0, .5, [UIColor colorWithWhite:.8 alpha:.3]);

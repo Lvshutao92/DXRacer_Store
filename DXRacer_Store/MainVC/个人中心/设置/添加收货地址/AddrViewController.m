@@ -194,6 +194,7 @@
     __weak typeof (self) weakSelf = self;
     [Manager requestPOSTWithURLStr:KURLNSString(@"address") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
+        //NSLog(@"%@",diction);
         NSMutableArray *array = (NSMutableArray *)diction;
         [weakSelf.arr removeAllObjects];
         if ([Manager judgeWhetherIsEmptyAnyObject:weakSelf.arr]==YES) {

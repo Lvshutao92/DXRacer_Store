@@ -314,6 +314,9 @@
     cell.lab4.text = model.productItemNo;
     
     cell.lab2.text = [NSString stringWithFormat:@"X%@",model.quantity];
+    
+    cell.lab5.text = model.productAttrs;
+    
     return cell;
 }
 

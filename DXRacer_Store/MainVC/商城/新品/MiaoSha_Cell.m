@@ -45,10 +45,10 @@
 - (UIProgressView *)myProgressView {
     if (!_myProgressView) {
         _myProgressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
-        _myProgressView.frame = CGRectMake(140, 70, 150, 20);
+        _myProgressView.frame = CGRectMake(140, 70, 120, 10);
         _myProgressView.backgroundColor = [UIColor grayColor];
-        _myProgressView.transform = CGAffineTransformMakeScale(1.0f, 10.0f);    // 设置高度
-        _myProgressView.progressTintColor = [UIColor orangeColor];  // 已走过的颜色
+        _myProgressView.transform = CGAffineTransformMakeScale(1.0f, 5.0f);    // 设置高度
+        _myProgressView.progressTintColor = [UIColor blackColor];  // 已走过的颜色
         _myProgressView.trackTintColor = [UIColor redColor];  // 为走过的颜色
         //_myProgressView.progress = 0.4; // 进度 默认为0.0∈[0.0,1.0]
     }
@@ -58,7 +58,7 @@
 
 - (UILabel *)lab2{
     if (_lab2 == nil) {
-        self.lab2 = [[UILabel alloc]initWithFrame:CGRectMake(295, 60, 50, 20)];
+        self.lab2 = [[UILabel alloc]initWithFrame:CGRectMake(265, 60, 80, 20)];
         self.lab2.font = [UIFont systemFontOfSize:14];
         self.lab2.textAlignment = NSTextAlignmentCenter;
     }

@@ -310,6 +310,7 @@
     cell.lab4.text = model.productItemNo;
     
     cell.lab2.text = [NSString stringWithFormat:@"X%@",model.quantity];
+    cell.lab5.text = model.productAttrs;
     return cell;
 }
 
@@ -370,7 +371,39 @@
 
 
 
-
+- (void)clickCancelOrder{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"确认取消？" message:@"温馨提示" preferredStyle:1];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    }];
+    [alert addAction:cancel];
+    
+    UIAlertAction *sure = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        //NSLog(@"-------%@",[self.sectionArray objectAtIndex:sender.tag]);
+        __weak typeof(self) weakSelf = self;
+        NSString *str = [NSString stringWithFormat:@"order/cancel/%@",self.orderNo];
+        //NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        [Manager requestPOSTWithURLStr:KURLNSString(str) paramArr:nil token:nil finish:^(id responseObject) {
+            NSDictionary *diction = [Manager returndictiondata:responseObject];
+            NSLog(@"%@",diction);
+            NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
+            if ([code isEqualToString:@"200"]){
+                [weakSelf.navigationController popViewControllerAnimated:YES];
+            }else{
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:[diction objectForKey:@"msg"] message:@"温馨提示" preferredStyle:1];
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                }];
+                [alert addAction:cancel];
+                [weakSelf presentViewController:alert animated:YES completion:nil];
+            }
+        } enError:^(NSError *error) {
+            NSLog(@"%@",error);
+        }];
+        
+    }];
+    [alert addAction:sure];
+    [self presentViewController:alert animated:YES completion:nil];
+}
 
 
 - (void)setupDibuView{
@@ -395,6 +428,7 @@
     btn1.titleLabel.font = [UIFont systemFontOfSize:14];
     [btn1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     LRViewBorderRadius(btn1, 13, 1, [UIColor blackColor]);
+    [btn1 addTarget:self action:@selector(clickCancelOrder) forControlEvents:UIControlEventTouchUpInside];
     [v addSubview:btn1];
 }
 

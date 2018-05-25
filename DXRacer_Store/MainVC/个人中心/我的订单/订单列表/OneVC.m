@@ -116,7 +116,7 @@
         
         if (weakSelf.sectionArray.count == 0) {
             UIImageView *view = [[UIImageView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/2-75, SCREEN_HEIGHT/2-75, 150, 150)];
-            view.image = [UIImage imageNamed:@"no"];
+            view.image = [UIImage imageNamed:@"placeholder_dropbox"];
             [weakSelf.view addSubview:view];
         }
     } enError:^(NSError *error) {
@@ -146,6 +146,9 @@
     cell.lab3.text = [Manager jinegeshi:[dict objectForKey:@"orderFee"]];
     cell.lab4.text = [dict objectForKey:@"productItemNo"];
     cell.lab2.text = [NSString stringWithFormat:@"X%@",[dict objectForKey:@"quantity"]];
+    
+    cell.lab5.text = [dict objectForKey:@"productAttrs"];
+    
     return cell;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -175,7 +178,7 @@
     }else if ([str isEqualToString:@"02"]){
         return 60;
     }
-    return 60;
+    return 10;
 }
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 50)];
@@ -210,7 +213,6 @@
     __weak typeof(self) weakSelf = self;
     NSString *orderNo = [self.sectionArray objectAtIndex:sender.tag-100];
     NSLog(@"---%@",orderNo);
-    
     self.tfSheetView = [[TFSheetView alloc]init];
     //取消
     self.tfSheetView.cancelBlock = ^{
@@ -230,7 +232,7 @@
     };
     [self.tfSheetView showInView:self.view];
 }
-#pragma mark   ==============点击订单模拟支付行为==============
+#pragma mark   ==============点击订单支付==============
 - (void)doAPPay:(NSString *)orderNo
 {
     NSString *str = [NSString stringWithFormat:@"order/alipay/%@",orderNo];
@@ -277,6 +279,17 @@
         btn.tag = 100 + section;
         [lab addSubview:btn];
         
+        UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
+        btn1.frame = CGRectMake(SCREEN_WIDTH-200, 10, 90, 30);
+        [btn1 setTitle:@"取消订单" forState:UIControlStateNormal];
+        [btn1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        LRViewBorderRadius(btn1, 15, 1, [UIColor blackColor]);
+        btn1.titleLabel.font = [UIFont systemFontOfSize:14];
+        btn1.tag = section;
+        [btn1 addTarget:self action:@selector(clickCancelOrder:) forControlEvents:UIControlEventTouchUpInside];
+        [lab addSubview:btn1];
+        
+        
         view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 60);
         lab.frame  = CGRectMake(0, 1, SCREEN_WIDTH, 49);
         
@@ -297,23 +310,70 @@
         btn1.titleLabel.font = [UIFont systemFontOfSize:14];
         [lab addSubview:btn1];
         
-        view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 60);
-        lab.frame  = CGRectMake(0, 1, SCREEN_WIDTH, 49);
-    }else{
-        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn.frame = CGRectMake(SCREEN_WIDTH-100, 10, 90, 30);
-        [btn setTitle:@"删除订单" forState:UIControlStateNormal];
-        [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        LRViewBorderRadius(btn, 15, 1, [UIColor blackColor]);
-        btn.titleLabel.font = [UIFont systemFontOfSize:14];
-        [lab addSubview:btn];
+        
+        UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
+        btn2.frame = CGRectMake(SCREEN_WIDTH-300, 10, 90, 30);
+        [btn2 setTitle:@"取消订单" forState:UIControlStateNormal];
+        [btn2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        LRViewBorderRadius(btn2, 15, 1, [UIColor blackColor]);
+        btn2.titleLabel.font = [UIFont systemFontOfSize:14];
+        btn2.tag = section;
+        [btn2 addTarget:self action:@selector(clickCancelOrder:) forControlEvents:UIControlEventTouchUpInside];
+        [lab addSubview:btn2];
         
         view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 60);
         lab.frame  = CGRectMake(0, 1, SCREEN_WIDTH, 49);
+    }else{
+       
+        view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 10);
+        lab.frame  = CGRectMake(0, 1, SCREEN_WIDTH, 0);
     }
     
     return view;
 }
+
+
+
+- (void)clickCancelOrder:(UIButton *)sender{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"确认取消？" message:@"温馨提示" preferredStyle:1];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    }];
+    [alert addAction:cancel];
+    
+    UIAlertAction *sure = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        //NSLog(@"-------%@",[self.sectionArray objectAtIndex:sender.tag]);
+        __weak typeof(self) weakSelf = self;
+        NSString *str = [NSString stringWithFormat:@"order/cancel/%@",[self.sectionArray objectAtIndex:sender.tag]];
+        //NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        [Manager requestPOSTWithURLStr:KURLNSString(str) paramArr:nil token:nil finish:^(id responseObject) {
+            NSDictionary *diction = [Manager returndictiondata:responseObject];
+            NSLog(@"%@",diction);
+            NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
+            if ([code isEqualToString:@"200"]){
+                [weakSelf getOrderList];
+            }else{
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:[diction objectForKey:@"msg"] message:@"温馨提示" preferredStyle:1];
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                }];
+                [alert addAction:cancel];
+                [weakSelf presentViewController:alert animated:YES completion:nil];
+            }
+        } enError:^(NSError *error) {
+            NSLog(@"%@",error);
+        }];
+        
+    }];
+    [alert addAction:sure];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+
+
+
+
+
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *str;

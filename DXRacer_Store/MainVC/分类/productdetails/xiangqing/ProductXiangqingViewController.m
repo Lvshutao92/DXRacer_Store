@@ -104,9 +104,9 @@
     [super viewDidLoad];
     self.navigationItem.title = @"宝贝";
     
-    UIImage *theImage1 = [UIImage imageNamed:@"whirfenxiangt_icone"];
+    UIImage *theImage1 = [UIImage imageNamed:@"3"];
     UIView *ve = [[UIView alloc]initWithFrame:CGRectMake(0, [Manager returnDianchitiaoHeight], 44, 44)];
-    UIButton * readerBtn=[[UIButton alloc] initWithFrame:CGRectMake(10, 5, 30, 30)];
+    UIButton * readerBtn=[[UIButton alloc] initWithFrame:CGRectMake(10, 8, 25, 25)];
     [readerBtn setBackgroundImage:theImage1 forState:UIControlStateNormal];
     [readerBtn addTarget:self action:@selector(onRightNavBtnClick) forControlEvents:UIControlEventTouchUpInside];
     [ve addSubview:readerBtn];
@@ -200,7 +200,7 @@
 
 
 - (void)onRightNavBtnClick {
-    //self.tabBarController.selectedIndex = 2;
+    self.tabBarController.selectedIndex = 2;
 }
 
 
@@ -237,12 +237,20 @@
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
     [self.selectView.alphaView addGestureRecognizer:tap];
     
+    
+    UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(10, SCREEN_HEIGHT-100, 90, 50)];
+    lab.text = @"购买数量：";
+    [self.selectView addSubview:lab];
+    
     HJCAjustNumButton *btn = [[HJCAjustNumButton alloc] init];
-    btn.frame = CGRectMake(SCREEN_WIDTH-165, SCREEN_HEIGHT-90, 150, 35);
+    btn.frame = CGRectMake(100, SCREEN_HEIGHT-95, 150, 40);
     btn.callBack = ^(NSString *currentNum){
         self->productnumber = currentNum;
     };
     [self.selectView addSubview:btn];
+    
+    
+    
 }
 
 
@@ -723,7 +731,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     // 消除导航影响
-    //[self.dropView viewControllerWillAppear];
+    [self.dropView viewControllerWillAppear];
     self.tabBarController.tabBar.hidden = YES;
 }
 
@@ -732,7 +740,7 @@
     [super viewWillDisappear:animated];
 //    self.tabBarController.tabBar.hidden = YES;
     // 消除导航影响
-    //[self.dropView viewControllerWillDisappear];
+    [self.dropView viewControllerWillDisappear];
 }
 
 
@@ -747,7 +755,7 @@
         
         
         UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn1.frame = CGRectMake(SCREEN_WIDTH-120, 0, 120, 55);
+        btn1.frame = CGRectMake(SCREEN_WIDTH/2, 0, SCREEN_WIDTH/2, 55);
         btn1.backgroundColor = [UIColor redColor];
         [btn1 setTitle:@"立即购买" forState:UIControlStateNormal];
         [btn1 addTarget:self action:@selector(cilck1) forControlEvents:UIControlEventTouchUpInside];
@@ -762,7 +770,7 @@
 //        [_tabbarView addSubview:btn2];
         
         UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn2.frame = CGRectMake(SCREEN_WIDTH-240, 0, 120, 55);
+        btn2.frame = CGRectMake(0, 0, SCREEN_WIDTH/2, 55);
         btn2.backgroundColor = [UIColor orangeColor];
         [btn2 setTitle:@"加入购物车" forState:UIControlStateNormal];
         [btn2 addTarget:self action:@selector(cllll) forControlEvents:UIControlEventTouchUpInside];
@@ -770,21 +778,21 @@
         
         
         
-        UIButton *btn3 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn3.frame = CGRectMake((SCREEN_WIDTH-260)/2+10, 0, (SCREEN_WIDTH-260)/2, 55);
-        [btn3 setImage:[UIImage imageNamed:@"sc"] forState:UIControlStateNormal];
-        btn3.backgroundColor = [UIColor whiteColor];
-        [btn3 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [btn3 addTarget:self action:@selector(cilck3) forControlEvents:UIControlEventTouchUpInside];
-        [_tabbarView addSubview:btn3];
-        
-        UIButton *btn4 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn4.frame = CGRectMake(10, 0, (SCREEN_WIDTH-260)/2, 55);
-        [btn4 setImage:[UIImage imageNamed:@"3"] forState:UIControlStateNormal];
-        btn4.backgroundColor = [UIColor whiteColor];
-        [btn4 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [btn4 addTarget:self action:@selector(cilck4) forControlEvents:UIControlEventTouchUpInside];
-        [_tabbarView addSubview:btn4];
+//        UIButton *btn3 = [UIButton buttonWithType:UIButtonTypeCustom];
+//        btn3.frame = CGRectMake((SCREEN_WIDTH-260)/2+10, 0, (SCREEN_WIDTH-260)/2, 55);
+//        [btn3 setImage:[UIImage imageNamed:@"sc"] forState:UIControlStateNormal];
+//        btn3.backgroundColor = [UIColor whiteColor];
+//        [btn3 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//        [btn3 addTarget:self action:@selector(cilck3) forControlEvents:UIControlEventTouchUpInside];
+//        [_tabbarView addSubview:btn3];
+//
+//        UIButton *btn4 = [UIButton buttonWithType:UIButtonTypeCustom];
+//        btn4.frame = CGRectMake(10, 0, (SCREEN_WIDTH-260)/2, 55);
+//        [btn4 setImage:[UIImage imageNamed:@"3"] forState:UIControlStateNormal];
+//        btn4.backgroundColor = [UIColor whiteColor];
+//        [btn4 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//        [btn4 addTarget:self action:@selector(cilck4) forControlEvents:UIControlEventTouchUpInside];
+//        [_tabbarView addSubview:btn4];
         
     }
     return _tabbarView;
