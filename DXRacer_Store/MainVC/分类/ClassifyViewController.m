@@ -235,7 +235,7 @@
     
     [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-//        NSLog(@"******%@",diction);
+        //NSLog(@"******%@",diction);
         [weakSelf.dataArray removeAllObjects];
         self->number = [[diction objectForKey:@"total"] integerValue];
         
@@ -260,6 +260,15 @@
         self->page = 1;
         [weakSelf.goosdCollectionView reloadData];
         [weakSelf.goosdCollectionView.mj_header endRefreshing];
+        
+        
+        if (weakSelf.dataArray.count == 0) {
+            UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+            lab.text = @"暂无产品";
+            lab.textAlignment = NSTextAlignmentCenter;
+            lab.textColor = [UIColor lightGrayColor];
+            [weakSelf.view addSubview:lab];
+        }
     } enError:^(NSError *error) {
 //        NSLog(@"------%@",error);
     }];
@@ -339,12 +348,15 @@
         cell.lab2.text     = model.sale_price;
         cell.lab3.text = model.series_name;
         
+        
+        cell.lab4.backgroundColor = RGBACOLOR(211, 33, 34, 1);
+        
         if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
             cell.lab4.hidden = NO;
-            if ([Manager widthForString:model.promotionTitle fontSize:15 andHeight:20] > (SCREEN_WIDTH/2)) {
+            if ([Manager widthForString:model.promotionTitle fontSize:14 andHeight:20] > (SCREEN_WIDTH/2)) {
                 cell.lab4width.constant = SCREEN_WIDTH/2;
             }else{
-                cell.lab4width.constant = [Manager widthForString:model.promotionTitle fontSize:15 andHeight:20]+20;
+                cell.lab4width.constant = [Manager widthForString:model.promotionTitle fontSize:14 andHeight:20]+20;
             }
             
         }else{
@@ -364,7 +376,7 @@
         cell.lab2.text = model.series_name;
         
         
-        
+        cell.lab4.backgroundColor = RGBACOLOR(211, 33, 34, 1);
         
         if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
             cell.lab4.hidden = NO;
@@ -373,10 +385,10 @@
             LRViewBorderRadius(cell.lab4, 10, 0, [UIColor clearColor]);
             
             //NSLog(@"-==-=-=-=-=-=-%f",[Manager widthForString:model.promotionTitle fontSize:15 andHeight:20]);
-            if ([Manager widthForString:model.promotionTitle fontSize:15 andHeight:20] > (SCREEN_WIDTH-150)) {
+            if ([Manager widthForString:model.promotionTitle fontSize:14 andHeight:20] > (SCREEN_WIDTH-150)) {
                 cell.lab4width.constant = SCREEN_WIDTH-150;
             }else{
-                cell.lab4width.constant = [Manager widthForString:model.promotionTitle fontSize:15 andHeight:20]+20;
+                cell.lab4width.constant = [Manager widthForString:model.promotionTitle fontSize:14 andHeight:20]+20;
             }
         }else{
             cell.lab4.hidden = YES;
@@ -396,6 +408,10 @@
     Model *model = [self.dataArray objectAtIndex:indexPath.row];
     ProductXiangqingViewController *details = [[ProductXiangqingViewController alloc]init];
     details.idStr = model.id;
+    
+//    [self presentViewController:details animated:YES completion:nil];
+    
+
     [self.navigationController pushViewController:details animated:YES];
 }
 

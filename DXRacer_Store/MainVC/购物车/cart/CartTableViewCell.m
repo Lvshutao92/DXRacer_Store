@@ -83,15 +83,26 @@
     
     
     
+    
+    
+    
+    
     if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
         self.priceLabel.text = model.promotionTitle;
         self.nameLabel.frame = CGRectMake(160, 5, SCREEN_WIDTH-170, 20);
         self.sizeLabel.frame = CGRectMake(160, 35, SCREEN_WIDTH-170, 20);
-        self.priceLabel.frame = CGRectMake(160, 65, 100, 20);
+        
+        if ([Manager widthForString:model.promotionTitle fontSize:14 andHeight:20] > (SCREEN_WIDTH-180)) {
+             self.priceLabel.frame = CGRectMake(160, 65, SCREEN_WIDTH-180, 20);
+        }else{
+             self.priceLabel.frame = CGRectMake(160, 65, [Manager widthForString:model.promotionTitle fontSize:14 andHeight:20]+10, 20);
+        }
+        
     }else{
         self.priceLabel.text = @"";
         self.nameLabel.frame = CGRectMake(160, 5, SCREEN_WIDTH-170, 50);
         self.sizeLabel.frame = CGRectMake(160, 65, SCREEN_WIDTH-170, 20);
+        
         self.priceLabel.frame = CGRectMake(160, 65, 100, 0);
     }
     
@@ -159,9 +170,9 @@
     
 //    //价格
     self.priceLabel = [[UILabel alloc]init];
-    self.priceLabel.font = [UIFont boldSystemFontOfSize:15];
+    self.priceLabel.font = [UIFont boldSystemFontOfSize:12];
     self.priceLabel.textColor = [UIColor whiteColor];
-    self.priceLabel.backgroundColor = [UIColor redColor];
+    self.priceLabel.backgroundColor = RGBACOLOR(211, 33, 34, 1);
     LRViewBorderRadius(self.priceLabel, 10, 0, [UIColor clearColor]);
     self.priceLabel.textAlignment = NSTextAlignmentCenter;
     [bgView addSubview:self.priceLabel];

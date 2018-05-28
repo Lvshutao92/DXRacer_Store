@@ -247,9 +247,11 @@
         [weakSelf.goosdCollectionView.mj_footer endRefreshing];
         
         if (weakSelf.dataArray.count == 0) {
-            UIImageView *view = [[UIImageView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/2-75, SCREEN_HEIGHT/2-75, 150, 150)];
-            view.image = [UIImage imageNamed:@"no"];
-            [weakSelf.view addSubview:view];
+            UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+            lab.text = @"暂无产品";
+            lab.textAlignment = NSTextAlignmentCenter;
+            lab.textColor = [UIColor lightGrayColor];
+            [weakSelf.view addSubview:lab];
         }
     } enError:^(NSError *error) {
         NSLog(@"------%@",error);
@@ -310,13 +312,13 @@
         cell.lab1.text       = model.model_name;
         cell.lab2.text     = model.sale_price;
         cell.lab3.text = model.series_name;
-        
+        cell.lab4.backgroundColor = RGBACOLOR(211, 33, 34, 1);
         if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
             cell.lab4.hidden = NO;
-            if ([Manager widthForString:model.promotionTitle fontSize:15 andHeight:20] > (SCREEN_WIDTH/2)) {
+            if ([Manager widthForString:model.promotionTitle fontSize:14 andHeight:20] > (SCREEN_WIDTH/2)) {
                 cell.lab4width.constant = SCREEN_WIDTH/2;
             }else{
-                cell.lab4width.constant = [Manager widthForString:model.promotionTitle fontSize:15 andHeight:20]+20;
+                cell.lab4width.constant = [Manager widthForString:model.promotionTitle fontSize:14 andHeight:20]+20;
             }
         }else{
             cell.lab4.hidden = YES;
@@ -336,7 +338,7 @@
         cell.lab1.text       = model.model_name;
         cell.lab3.text     = model.sale_price;
         cell.lab2.text = model.series_name;
-        
+        cell.lab4.backgroundColor = RGBACOLOR(211, 33, 34, 1);
         if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
             cell.lab4.hidden = NO;
             cell.lab2height.constant = 20;
@@ -344,10 +346,10 @@
             LRViewBorderRadius(cell.lab4, 10, 0, [UIColor clearColor]);
             
             //NSLog(@"-==-=-=-=-=-=-%f",[Manager widthForString:model.promotionTitle fontSize:15 andHeight:20]);
-            if ([Manager widthForString:model.promotionTitle fontSize:15 andHeight:20] > (SCREEN_WIDTH-150)) {
+            if ([Manager widthForString:model.promotionTitle fontSize:14 andHeight:20] > (SCREEN_WIDTH-150)) {
                 cell.lab4width.constant = SCREEN_WIDTH-150;
             }else{
-                cell.lab4width.constant = [Manager widthForString:model.promotionTitle fontSize:15 andHeight:20]+20;
+                cell.lab4width.constant = [Manager widthForString:model.promotionTitle fontSize:14 andHeight:20]+20;
             }
         }else{
             cell.lab4.hidden = YES;

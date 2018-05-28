@@ -27,6 +27,8 @@
 
 @implementation RegisterViewController
 - (void)clickRegister{
+   
+    
     __weak typeof (self) weakSelf = self;
     if (text1.text != nil && text2.text != nil && text3.text != nil && textf.text != nil) {
         
@@ -73,7 +75,7 @@
             if ([code isEqualToString:@"500"]) {
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"用户名已存在" message:@"温馨提示" preferredStyle:1];
                 UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                    [self->text1 becomeFirstResponder];
+//                    [self->text1 becomeFirstResponder];
                 }];
                 [alert addAction:cancel];
                 [weakSelf presentViewController:alert animated:YES completion:nil];
@@ -131,7 +133,7 @@
     }else{
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请输入正确的手机号" message:@"温馨提示" preferredStyle:1];
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            [self->text1 becomeFirstResponder];
+//            [self->text1 becomeFirstResponder];
         }];
         [alert addAction:cancel];
         [self presentViewController:alert animated:YES completion:nil];
@@ -179,7 +181,7 @@
     }else{
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请输入正确的手机号" message:@"温馨提示" preferredStyle:1];
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            [self->text1 becomeFirstResponder];
+//            [self->text1 becomeFirstResponder];
         }];
         [alert addAction:cancel];
         [self presentViewController:alert animated:YES completion:nil];

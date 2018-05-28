@@ -68,9 +68,13 @@
         [weakSelf.tableview reloadData];
         
         if (weakSelf.dataArray.count == 0) {
-            UIImageView *view = [[UIImageView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/2-75, SCREEN_HEIGHT/2-75, 150, 150)];
-            view.image = [UIImage imageNamed:@"placeholder_dropbox"];
-            [weakSelf.view addSubview:view];
+            
+            UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+            lab.text = @"暂无秒杀活动";
+            lab.textAlignment = NSTextAlignmentCenter;
+            lab.textColor = [UIColor lightGrayColor];
+            [weakSelf.view addSubview:lab];
+            
         }
     } enError:^(NSError *error) {
         NSLog(@"%@",error);

@@ -153,7 +153,7 @@
         return urlData;
     }
     else {
-        NSLog(@"图片下载失败");
+        //NSLog(@"图片下载失败");
         return nil;
     }
 }

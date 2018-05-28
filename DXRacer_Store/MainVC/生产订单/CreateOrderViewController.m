@@ -29,7 +29,7 @@
 
 
 
-@interface CreateOrderViewController ()<UITableViewDataSource,UITableViewDelegate>
+@interface CreateOrderViewController ()<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 {
     UILabel *namelab;
     UILabel *phonelab;
@@ -41,6 +41,7 @@
     CGFloat zongjiage;
     
     NSString *addressID;
+    UITextField *youhuimaText;
 }
 @property(nonatomic,strong)UITableView *tableview;
 @property(nonatomic,strong)UILabel *totalPrice;
@@ -54,12 +55,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor =RGBACOLOR(237, 236, 242, 1);
+    self.view.backgroundColor = [UIColor whiteColor];
     
     
-    
-    
-    
+    UIScrollView *scro = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+    [self.view addSubview:scro];
     
     
     for (CartModel *model in self.dataArray) {
@@ -70,20 +70,34 @@
         [self.idsArray addObject:model.id];
     }
     
-    self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+    self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-55)];
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
     [self.tableview registerNib:[UINib nibWithNibName:@"CreateOrderCell" bundle:nil] forCellReuseIdentifier:@"CreateOrderCell"];
-    [self.view addSubview:self.tableview];
+    [scro addSubview:self.tableview];
     
     UIView *headerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 120)];
     headerV.backgroundColor =RGBACOLOR(237, 236, 242, 1);
     self.tableview.tableHeaderView = headerV;
     
-    UIView *footerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 60)];
+    UIView *footerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 150)];
     footerV.backgroundColor =[UIColor whiteColor];
     self.tableview.tableFooterView = footerV;
+    
+    UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(10, 15, 65, 30)];
+    lab.text = @"优惠码：";
+    lab.font = [UIFont systemFontOfSize:15];
+    [footerV addSubview:lab];
+    youhuimaText = [[UITextField alloc]initWithFrame:CGRectMake(75, 10, SCREEN_WIDTH-85, 40)];
+    youhuimaText.delegate = self;
+    youhuimaText.placeholder = @"请输入优惠码";
+    youhuimaText.borderStyle = UITextBorderStyleNone;
+    [footerV addSubview:youhuimaText];
+    UILabel *footline = [[UILabel alloc]initWithFrame:CGRectMake(75, 50, SCREEN_WIDTH-85, 1)];
+    footline.backgroundColor =RGBACOLOR(237, 236, 242, 1);
+    [footerV addSubview:footline];
+    
     
     
     UIView *bgv = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 100)];
@@ -269,7 +283,7 @@
         NSDictionary *diction = [Manager returndictiondata:responseObject];
         
             NSMutableArray *array = (NSMutableArray *)diction;
-            if ([Manager judgeWhetherIsEmptyAnyObject:array]==YES) {
+            if ([Manager judgeWhetherIsEmptyAnyObject:array]==YES && array.count > 0) {
                 NSDictionary *dic = [array firstObject];
                 self->addressID = [dic objectForKey:@"id"];
                 self->namelab.text    = [NSString stringWithFormat:@"收货人：%@",[dic objectForKey:@"person"]];
@@ -281,7 +295,6 @@
                     [self->btn setTitle:@"" forState:UIControlStateNormal];
                 }
             }
-        
         //NSLog(@"----%@",diction);
     } enError:^(NSError *error) {
         //NSLog(@"----%@",error);

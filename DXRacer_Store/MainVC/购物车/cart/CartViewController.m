@@ -42,6 +42,8 @@
     self.tabBarController.tabBar.hidden = NO;
     //每次进入购物车的时候把选择的置空
     [selectGoods removeAllObjects];
+    
+    
     isSelect = NO;
     selectAll.selected = NO;
     priceLabel.text = [NSString stringWithFormat:@"￥0.00"];
@@ -81,7 +83,7 @@
     __weak typeof(self) weakSelf = self;
     [Manager requestPOSTWithURLStr:KURLNSString(@"order/shopping/list") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-//        NSLog(@"4512341234123412341234******%@",diction);
+        //NSLog(@"4512341234123412341234******%@",diction);
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
             NSMutableArray *array = [diction objectForKey:@"object"];
@@ -90,7 +92,7 @@
                 CartModel *model = [CartModel mj_objectWithKeyValues:dic];
                 [self->dataArray addObject:model];
             }
-            self->dataArray = (NSMutableArray *)[[self->dataArray reverseObjectEnumerator] allObjects];
+//            self->dataArray = (NSMutableArray *)[[self->dataArray reverseObjectEnumerator] allObjects];
         }else{
             [self->dataArray removeAllObjects];
             self->selectAll.selected = NO;
@@ -161,7 +163,7 @@
 -(void)setupBottomView
 {
     //底部视图的 背景
-    UIView *bgView = [[UIView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT - 100, SCREEN_WIDTH, 50)];
+    UIView *bgView = [[UIView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT - kTabBarHeight - 50, SCREEN_WIDTH, 50)];
     bgView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:bgView];
     
@@ -231,7 +233,7 @@
         [label mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(bgView).offset(10);
             make.bottom.equalTo(bgView).offset(-10);
-            make.right.equalTo(priceLabel.mas_left);
+            make.right.equalTo(self->priceLabel.mas_left);
             make.width.equalTo(@60);
         }];
         
@@ -328,14 +330,12 @@
     {
         UIView *vi = [self.view viewWithTag:TAG_BACKGROUNDVIEW];
         [vi removeFromSuperview];
-        
-        myTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 100) style:UITableViewStylePlain];
+        myTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - kTabBarHeight -50) style:UITableViewStylePlain];
         myTableView.delegate = self;
         myTableView.dataSource = self;
         myTableView.rowHeight = 100;
         myTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         myTableView.backgroundColor = RGBCOLOR(245, 246, 248);
-        
         [self.view addSubview:myTableView];
         [self setupBottomView];
     }
@@ -369,11 +369,12 @@
     [btn setBackgroundImage:[UIImage imageNamed:@"btn_background_red"] forState:UIControlStateNormal];
     [btn setTitle:@"去定制" forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(goToMainmenuView) forControlEvents:UIControlEventTouchUpInside];
-    [backgroundView addSubview:btn];
+    //[backgroundView addSubview:btn];
 }
 -(void)goToMainmenuView
 {
     NSLog(@"去首页");
+    
 }
 #pragma mark - tableView 数据源方法
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

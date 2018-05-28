@@ -72,9 +72,27 @@ CG_INLINE CGRect CGRectMakes(CGFloat x, CGFloat y, CGFloat width, CGFloat height
         str3 = @"";
     }
     if ([self.navigationItem.title isEqualToString:@"编辑"]){
-        [self lodedit];
+        if ([XYQRegexPatternHelper validateMobile:text2.text]!=YES) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请输入正确的手机号" message:@"温馨提示" preferredStyle:1];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                [self->text2 becomeFirstResponder];
+            }];
+            [alert addAction:cancel];
+            [self presentViewController:alert animated:YES completion:nil];
+        }else{
+            [self lodedit];
+        }
     }else{
-        [self lodadd];
+        if ([XYQRegexPatternHelper validateMobile:text2.text]!=YES) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请输入正确的手机号" message:@"温馨提示" preferredStyle:1];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                [self->text2 becomeFirstResponder];
+            }];
+            [alert addAction:cancel];
+            [self presentViewController:alert animated:YES completion:nil];
+        }else{
+            [self lodadd];
+        }
     }
 }
 - (void)lodadd{
@@ -137,11 +155,8 @@ CG_INLINE CGRect CGRectMakes(CGFloat x, CGFloat y, CGFloat width, CGFloat height
 
 
 
-
-
-
-
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
+    
     if ([textField isEqual:text3]) {
         [text1 resignFirstResponder];
         [text2 resignFirstResponder];
@@ -187,52 +202,6 @@ CG_INLINE CGRect CGRectMakes(CGFloat x, CGFloat y, CGFloat width, CGFloat height
         } enError:^(NSError *error) {
             
         }];
-        
-        
-        
-        
-        
-        
-        
-//        NSString *mainBundleDirectory=[[NSBundle mainBundle] bundlePath];
-//        NSString *path = [mainBundleDirectory stringByAppendingPathComponent:@"ChinaArea.json"];
-//        NSData *data = [[NSData alloc]initWithContentsOfFile:path];
-//        NSError *err;
-//        NSArray *jsonArray = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&err];
-//        //NSLog(@"--%@",jsonArray);
-        
-//        XFTreePopupView *treeView = [[XFTreePopupView alloc]initWithDataSource:jsonArray Commit:^(NSArray *ret)
-//                                     {
-//
-//                                         for (int i = 0; i<ret.count; i++) {
-//                                             NSDictionary *dict = ret[i];
-//                                             if (i == 0) {
-//                                                 self->str1 = [dict objectForKey:@"n"];
-//                                             }
-//                                             if (i == 1) {
-//                                                 self->str2 = [dict objectForKey:@"n"];
-//                                             }
-//                                             if (i == 2) {
-//                                                 self->str3 = [dict objectForKey:@"n"];
-//                                             }
-//                                         }
-//                                         //NSLog(@"%@---%@---%@",self->str1,self->str2,self->str3);
-//                                         if (self->str3 != nil) {
-//                                             self->text3.text = [NSString stringWithFormat:@"%@-%@-%@",self->str1,self->str2,self->str3];
-//                                         }else{
-//                                             self->text3.text = [NSString stringWithFormat:@"%@-%@",self->str1,self->str2];
-//                                         }
-////                                         NSString *selectedStr = @"";
-////                                         for (NSDictionary *dict in ret)
-////                                         {
-////                                             selectedStr = [selectedStr stringByAppendingString:[dict objectForKey:@"n"]];
-////                                             NSLog(@"---%@",[dict objectForKey:@"n"]);
-////                                         }
-////                                         //NSLog(@"-------%@",selectedStr);
-////                                         self->text3.text = selectedStr;
-//                                     }];
-//
-//        treeView.isHidden = NO;
         return NO;
     }
     return YES;

@@ -215,9 +215,13 @@
         
         
         if (weakSelf.dataArray.count == 0) {
-            UIImageView *view = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
-            view.image = [UIImage imageNamed:@"placeholder_dropbox"];
-            [weakSelf.view addSubview:view];
+            
+            UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+            lab.text = @"抱歉！没有找到该商品";
+            lab.textAlignment = NSTextAlignmentCenter;
+            lab.textColor = [UIColor lightGrayColor];
+            [weakSelf.view addSubview:lab];
+            
         }
         
         

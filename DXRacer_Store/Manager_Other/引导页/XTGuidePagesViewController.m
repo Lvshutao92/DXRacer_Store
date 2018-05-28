@@ -72,6 +72,7 @@
     NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
     NSString *localVersion = [user objectForKey:VERSION_INFO_CURRENT];
     NSString *currentVersion =[[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    //NSLog(@"%@--------%@",currentVersion,localVersion);
     if (localVersion == nil || ![currentVersion isEqualToString:localVersion]) {
         [XTGuidePagesViewController saveCurrentVersion];
         return YES;

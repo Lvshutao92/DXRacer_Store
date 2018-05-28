@@ -56,6 +56,7 @@
     CGFloat titleHeight;
     
     UISegmentedControl *segment;
+    
 }
 @property(nonatomic,strong)MBProgressHUD *HUD;
 
@@ -100,9 +101,19 @@
     }
     return _cuxiaoArr;
 }
+
+
+
+
+
+
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor whiteColor];
     self.navigationItem.title = @"宝贝";
+    
     
     UIImage *theImage1 = [UIImage imageNamed:@"3"];
     UIView *ve = [[UIView alloc]initWithFrame:CGRectMake(0, [Manager returnDianchitiaoHeight], 44, 44)];
@@ -181,9 +192,15 @@
     [self getIndexOneInfomation];
     [self getIndexTwoInfomation];
     
-   
     
 }
+
+
+
+
+
+
+
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index{
     
     NSMutableArray *array = [NSMutableArray arrayWithCapacity:1];
@@ -324,15 +341,15 @@
                                 }
                                 
                                 if (stringID.length <=0){
-                                    self.selectView.LB_price.text = [NSString stringWithFormat:@"¥ %@",stringPrice];
-                                    priceLab.text = [NSString stringWithFormat:@"¥ %@",stringPrice];
+                                    self.selectView.LB_price.text = [Manager jinegeshi:stringPrice];
+                                    priceLab.text = [Manager jinegeshi:stringPrice];
                                     self.selectView.LB_stock.text = itemNo;
                                     //self.selectView.LB_showSales.text=stringStatus;
                                     
                                     [self.selectView.headImage sd_setImageWithURL:[NSURL URLWithString:NSString(stringImg)]];
                                 }else{
-                                    self.selectView.LB_price.text = [NSString stringWithFormat:@"¥ %@",stringPrice];
-                                    priceLab.text = [NSString stringWithFormat:@"¥ %@",stringPrice];
+                                    self.selectView.LB_price.text = [Manager jinegeshi:stringPrice];
+                                    priceLab.text = [Manager jinegeshi:stringPrice];
                                     
                                     
                                     self.selectView.LB_stock.text = itemNo;
@@ -466,13 +483,13 @@
                 
                 videoId = [dicti objectForKey:@"video"];
                 
-                self->priceLab.text = [NSString stringWithFormat:@"¥ %@",[dicti objectForKey:@"salePrice"]];
+                self->priceLab.text = [Manager jinegeshi:[dicti objectForKey:@"salePrice"]];
                 
                 
                 
                 
                 self->titleLab.frame = CGRectMake(5, 10+SCREEN_WIDTH, SCREEN_WIDTH-10, self->titleHeight);
-                self->priceLab.frame = CGRectMake(5, 10+SCREEN_WIDTH+self->titleHeight+10, 80, 20);
+                self->priceLab.frame = CGRectMake(5, 10+SCREEN_WIDTH+self->titleHeight+10, 100, 20);
                 
                 self->activityNameLab.frame = CGRectMake(85, 10+SCREEN_WIDTH+self->titleHeight+10, SCREEN_WIDTH-190, 20);
                 self->activityPriceLab.frame = CGRectMake(SCREEN_WIDTH-105, 10+SCREEN_WIDTH+self->titleHeight+10, 100, 20);
@@ -492,7 +509,7 @@
                 for (NSDictionary *dicc in self->productItemList_Arr) {
                     if ([[dicc objectForKey:@"productModelAttrs"] isEqualToString:string]) {
                         [weakSelf.selectView.headImage sd_setImageWithURL:[NSURL URLWithString:NSString([dicc objectForKey:@"listImg"])]];
-                        weakSelf.selectView.LB_price.text = [NSString stringWithFormat:@"¥ %@",[dicc objectForKey:@"salePrice"]];
+                        weakSelf.selectView.LB_price.text = [Manager jinegeshi:[dicc objectForKey:@"salePrice"]];
                         weakSelf.selectView.LB_stock.text = [dicc objectForKey:@"itemNo"];
                         //weakSelf.selectView.LB_showSales.text=[dicc objectForKey:@"status"];
                         self->stringID = [dicc objectForKey:@"id"];
@@ -733,6 +750,8 @@
     // 消除导航影响
     [self.dropView viewControllerWillAppear];
     self.tabBarController.tabBar.hidden = YES;
+    
+    
 }
 
 
@@ -946,12 +965,11 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if ([tableView isEqual:self.tableview2]) {
-        if (imgheight == 0) {
-            imgheight = 250;
-        }
+//        if (imgheight == 0) {
+//            imgheight = 300;
+//        }
         return imgheight;
-    }else
-    if ([tableView isEqual:self.tableview3]) {
+    }else if ([tableView isEqual:self.tableview3]) {
         return 60;
     }
     return 55;
@@ -986,17 +1004,12 @@
         Model *model = [self.dataArray1 objectAtIndex:indexPath.row];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
-//        imgheight = [cell returnCellHeight:NSString(model.imgUrl)];
-       
         
         SDWebImageManager *manager = [SDWebImageManager sharedManager];
         NSString* key = [manager cacheKeyForURL:[NSURL URLWithString:NSString(model.imgUrl)]];
         SDImageCache* cache = [SDImageCache sharedImageCache];
         //此方法会先从memory中取。
         cell.img.image = [cache imageFromDiskCacheForKey:key];
-        
-        
-        
         
         [cell.img sd_setImageWithURL:[NSURL URLWithString:NSString(model.imgUrl)] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
             CGSize size = image.size;

@@ -27,6 +27,8 @@ UIBackgroundTaskIdentifier taskId;
     [IQKeyboardManager sharedManager].enable = YES;
     [IQKeyboardManager sharedManager].shouldResignOnTouchOutside = YES;
 
+    
+    
     if ([Manager redingwenjianming:@"token.text"] != nil){
         NSDictionary *dic = @{@"passWord":[Manager redingwenjianming:@"password.text"],
                               @"loginName":[Manager redingwenjianming:@"phone.text"]};
@@ -44,8 +46,8 @@ UIBackgroundTaskIdentifier taskId;
     }
     
     
-    // 测试的时候改变info 里的版本号就可以了
-    NSArray *images = @[@"av1.jpg", @"av2.jpg", @"av3.jpg"];
+    //测试的时候改变info 里的版本号就可以了
+    NSArray *images = @[@"gud1.jpg",@"gud2.jpg",@"gud3.jpg", @"av3.jpg"];
     BOOL y = [XTGuidePagesViewController isShow];
     if (y) {
         XTGuidePagesViewController *xt = [[XTGuidePagesViewController alloc] init];
@@ -56,12 +58,6 @@ UIBackgroundTaskIdentifier taskId;
         [self clickEnter];
     }
     
-    
-    
-    
-    
-
-    
     [self requestAuthorizationAddressBook];
 
 
@@ -69,10 +65,6 @@ UIBackgroundTaskIdentifier taskId;
     [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
     NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:3600 target:self selector:@selector(timeFireMethod)userInfo:nil repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
-    
-    
-    
-    
     
     return YES;
 }

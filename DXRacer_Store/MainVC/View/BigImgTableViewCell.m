@@ -25,6 +25,7 @@
     UIImage *image = [UIImage imageWithData:data];
     CGSize size = image.size;
     CGFloat height = SCREEN_WIDTH/size.width*size.height;
+    
     return height;
 }
 

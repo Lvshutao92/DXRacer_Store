@@ -164,7 +164,7 @@
     if ([self.delegate respondsToSelector:@selector(photoBrowser:didSelectImage:)]) {
         [self.delegate photoBrowser:self didSelectImage:_images[_currentIndex]];
     }
-    NSLog(@"--------%@",_images[_currentIndex]);
+    //NSLog(@"--------%@",_images[_currentIndex]);
     UIAlertController *con = [UIAlertController alertControllerWithTitle:@"提示" message:@"保存图片" preferredStyle:1];
     UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:1 handler:^(UIAlertAction * _Nonnull action) {
         

@@ -77,10 +77,10 @@
     LRViewBorderRadius(userImg, 35, 0, [UIColor clearColor]);
     [header addSubview:userImg];
     
-    username = [[UILabel alloc]initWithFrame:CGRectMake(85, 20, 100, 20)];
+    username = [[UILabel alloc]initWithFrame:CGRectMake(85, 20, SCREEN_WIDTH-120, 20)];
     username.font = [UIFont systemFontOfSize:20];
     [header addSubview:username];
-    phone = [[UILabel alloc]initWithFrame:CGRectMake(85, 45, 100, 20)];
+    phone = [[UILabel alloc]initWithFrame:CGRectMake(85, 45, SCREEN_WIDTH-120, 20)];
     phone.font = [UIFont systemFontOfSize:16];
     [header addSubview:phone];
     

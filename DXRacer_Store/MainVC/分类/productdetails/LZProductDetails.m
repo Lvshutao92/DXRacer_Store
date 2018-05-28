@@ -196,7 +196,7 @@
         self.ToPictureBtn.selected = NO;
         self.ToVideoBtn.backgroundColor = [UIColor orangeColor];
         self.ToPictureBtn.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.5];
-        NSLog(@"点击视频");
+        //NSLog(@"点击视频");
        
          if ([self.scrolV.delegate respondsToSelector:@selector(scrollViewDidEndDecelerating:)]) {
              
@@ -212,7 +212,7 @@
         
         self.ToVideoBtn.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.5];
         self.ToPictureBtn.backgroundColor = [UIColor orangeColor];
-         NSLog(@"点击图片");
+         //NSLog(@"点击图片");
         if (self.scrolV.contentOffset.x < self.frame.size.width) {
             if ([self.scrolV.delegate respondsToSelector:@selector(scrollViewDidEndDecelerating:)]) {
                 [self.scrolV setContentOffset:CGPointMake(self.frame.size.width, 0) animated:NO];

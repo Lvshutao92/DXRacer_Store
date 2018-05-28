@@ -253,7 +253,7 @@
     
     img1 = [[UIImageView alloc]init];
     LRViewBorderRadius(img1, 0, .5, [UIColor colorWithWhite:.8 alpha:.3]);
-    img1.image = [UIImage imageNamed:@"4a.jpg"];
+    img1.image = [UIImage imageNamed:@"miao.jpg"];
     img1.userInteractionEnabled = YES;
     img1.contentMode = UIViewContentModeScaleAspectFit;
     UITapGestureRecognizer *tap1 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickbtn1:)];
@@ -262,7 +262,7 @@
     
     img2 = [[UIImageView alloc]init];
     LRViewBorderRadius(img2, 0, .5, [UIColor colorWithWhite:.8 alpha:.3]);
-    img2.image = [UIImage imageNamed:@"timg.jpeg"];
+    img2.image = [UIImage imageNamed:@"2a.jpg"];
     img2.userInteractionEnabled = YES;
     UITapGestureRecognizer *tap2 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickbtn2:)];
     [img2 addGestureRecognizer:tap2];
@@ -332,7 +332,11 @@
 
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
-//    NSLog(@"搜索");
+    [self getHotSearch];
+    return NO;
+}
+
+- (void)getHotSearch{
     //1.创建热门搜索
     NSArray *hotSeaches = @[@"电竞椅", @"电竞桌", @"鼠标垫", @"鼠标", @"显示屏", @"升降器", @"支架",@"键盘"];
     PYSearchViewController *searchViewController = [PYSearchViewController searchViewControllerWithHotSearches:hotSeaches searchBarPlaceholder:@"商品名称" didSearchBlock:^(PYSearchViewController *searchViewController, UISearchBar *searchBar, NSString *searchText) {
@@ -340,29 +344,17 @@
         search.str = searchText;
         [searchViewController.navigationController pushViewController:search animated:YES];
     }];
-    
-    searchViewController.hotSearchStyle = PYHotSearchStyleRankTag; // 热门搜索风格为默认
-    //    PYHotSearchStyleNormalTag,      // 普通标签(不带边框)
-    //    PYHotSearchStyleColorfulTag,    // 彩色标签（不带边框，背景色为随机彩色）
-    //    PYHotSearchStyleBorderTag,      // 带有边框的标签,此时标签背景色为clearColor
-    //    PYHotSearchStyleARCBorderTag,   // 带有圆弧边框的标签,此时标签背景色为clearColor
-    //    PYHotSearchStyleRankTag,        // 带有排名标签
-    //    PYHotSearchStyleRectangleTag,   // 矩形标签,此时标签背景色为clearColor
-    //    PYHotSearchStyleDefault = PYHotSearchStyleNormalTag // 默认为普通标签
-    searchViewController.searchHistoryStyle = 4; // 搜索历史风格根据选择
-    //    PYSearchHistoryStyleCell,           // UITableViewCell 风格
-    //    PYSearchHistoryStyleNormalTag,      // PYHotSearchStyleNormalTag 标签风格
-    //    PYSearchHistoryStyleColorfulTag,    // 彩色标签（不带边框，背景色为随机彩色）
-    //    PYSearchHistoryStyleBorderTag,      // 带有边框的标签,此时标签背景色为clearColor
-    //    PYSearchHistoryStyleARCBorderTag,   // 带有圆弧边框的标签,此时标签背景色为clearColor
-    //    PYSearchHistoryStyleDefault = PYSearchHistoryStyleCell // 默认为 PYSearchHistoryStyleCell
-    
+    searchViewController.hotSearchStyle = 4; // 热门搜索风格为默认【1，7】
+    searchViewController.searchHistoryStyle = 2; // 搜索历史风格根据选择【1，6】
     searchViewController.delegate = self;
     MainNavigationViewController *nav = [[MainNavigationViewController alloc] initWithRootViewController:searchViewController];
-    
     [self presentViewController:nav  animated:NO completion:nil];
-    return NO;
 }
+
+
+
+
+
 
 
 
@@ -489,7 +481,7 @@
     
     
     UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectZero];
-    NSString *qqstr = [NSString stringWithFormat:@"mqq://im/chat?chat_type=wpa&uin=%@&version=1&src_type=web",@"945529211"];
+    NSString *qqstr = [NSString stringWithFormat:@"mqq://im/chat?chat_type=wpa&uin=%@&version=1&src_type=web",@"157787284"];
     NSURL *url = [NSURL URLWithString:qqstr];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     [webView loadRequest:request];
@@ -565,10 +557,10 @@
     
     if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
         cell.lab1.hidden = NO;
-        if ([Manager widthForString:model.promotionTitle fontSize:15 andHeight:20] > (SCREEN_WIDTH/2)) {
+        if ([Manager widthForString:model.promotionTitle fontSize:14 andHeight:20] > (SCREEN_WIDTH/2)) {
             cell.lab1width.constant = SCREEN_WIDTH/2;
         }else{
-            cell.lab1width.constant = [Manager widthForString:model.promotionTitle fontSize:15 andHeight:20]+20;
+            cell.lab1width.constant = [Manager widthForString:model.promotionTitle fontSize:14 andHeight:20]+20;
         }
     }else{
         cell.lab1.hidden = YES;
@@ -580,6 +572,10 @@
     cell.lab2.text = model.model_name;
     cell.lab3.text = model.model_no;
     cell.lab4.text = [Manager jinegeshi:model.sale_price];
+    
+    
+    cell.lab1.backgroundColor = RGBACOLOR(211, 33, 34, 1);
+    
     return cell;
 }
 #pragma mark  点击CollectionView触发事件

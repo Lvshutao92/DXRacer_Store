@@ -390,7 +390,7 @@
                 videoId = [dicti objectForKey:@"video"];
                 self->priceLab.text = [Manager jinegeshi:[dicti objectForKey:@"salePrice"]];
                 self->titleLab.frame = CGRectMake(5, 10+SCREEN_WIDTH, SCREEN_WIDTH-10, self->titleHeight);
-                self->priceLab.frame = CGRectMake(5, 10+SCREEN_WIDTH+self->titleHeight+10, 90, 20);
+                self->priceLab.frame = CGRectMake(5, 10+SCREEN_WIDTH+self->titleHeight+10, 100, 20);
                 self->activityNameLab.frame = CGRectMake(95, 10+SCREEN_WIDTH+self->titleHeight+10, SCREEN_WIDTH-190, 20);
                 self->activityPriceLab.frame = CGRectMake(SCREEN_WIDTH-105, 10+SCREEN_WIDTH+self->titleHeight+10, 100, 20);
                 self->line1.frame = CGRectMake(0, 10+SCREEN_WIDTH+self->titleHeight+40, SCREEN_WIDTH, 10);

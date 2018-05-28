@@ -55,7 +55,7 @@
     
     if ([Manager redingwenjianming:@"phone.text"] == nil) {
         user1.text = @"登录/注册";
-        userImg.image = [UIImage imageNamed:@"头像"];
+        userImg.image = [UIImage imageNamed:@"tx.jpg"];
     }
 }
 
@@ -66,7 +66,7 @@
         [Manager writewenjianming:@"img.text" content:[diction objectForKey:@"iconUrl"]];
         [Manager writewenjianming:@"nikname.text" content:[diction objectForKey:@"nickName"]];
         
-        [self->userImg sd_setImageWithURL:[NSURL URLWithString:[diction objectForKey:@"iconUrl"]]placeholderImage:[UIImage imageNamed:@"头像"]];
+        [self->userImg sd_setImageWithURL:[NSURL URLWithString:[diction objectForKey:@"iconUrl"]]placeholderImage:[UIImage imageNamed:@""]];
         
         if ([Manager redingwenjianming:@"phone.text"] != nil) {
             if ([diction objectForKey:@"nickName"] != nil) {
@@ -76,6 +76,7 @@
             }
         }else{
             self->user1.text = @"登录/注册";
+            self->userImg.image = [UIImage imageNamed:@"tx.jpg"];
         }
         
     } enError:^(NSError *error) {
@@ -360,18 +361,20 @@
     [imgV addSubview:userImg];
     
     
-    user1 = [[UILabel alloc]initWithFrame:CGRectMake(90, 45, 90, 25)];
+    user1 = [[UILabel alloc]initWithFrame:CGRectMake(90, 35, 90, 70)];
     user1.textColor = [UIColor whiteColor];
-    user1.textAlignment = NSTextAlignmentCenter;
+    //user1.textAlignment = NSTextAlignmentCenter;
+    user1.numberOfLines = 0;
     [imgV addSubview:user1];
-    UILabel *user2 = [[UILabel alloc]initWithFrame:CGRectMake(90, 70, 90, 25)];
-    user2.backgroundColor = [UIColor colorWithWhite:.7 alpha:.8];
-    LRViewBorderRadius(user2, 12.5, 0, [UIColor clearColor]);
-    user2.textColor = [UIColor whiteColor];
-    user2.text = @"VIP用户";
-    user2.textAlignment = NSTextAlignmentCenter;
-    user2.font = [UIFont systemFontOfSize:14];
-    [imgV addSubview:user2];
+    
+//    UILabel *user2 = [[UILabel alloc]initWithFrame:CGRectMake(90, 70, 90, 25)];
+//    user2.backgroundColor = [UIColor colorWithWhite:.7 alpha:.8];
+//    LRViewBorderRadius(user2, 12.5, 0, [UIColor clearColor]);
+//    user2.textColor = [UIColor whiteColor];
+//    user2.text = @"VIP用户";
+//    user2.textAlignment = NSTextAlignmentCenter;
+//    user2.font = [UIFont systemFontOfSize:14];
+//    [imgV addSubview:user2];
     
     UIButton *btns = [UIButton buttonWithType:UIButtonTypeCustom];
     btns.frame = CGRectMake(10, 30, 150, 90);

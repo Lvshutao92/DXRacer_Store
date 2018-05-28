@@ -21,7 +21,7 @@ typedef enum{
     if ([LL_FILE_MANAGER fileExistsAtPath:filePath]) {
         return YES;
     }
-    NSLog(@"fileExistsAtPath:文件未找到");
+    //NSLog(@"fileExistsAtPath:文件未找到");
     return NO;
 }
 
@@ -39,7 +39,7 @@ typedef enum{
                                                       attributes:nil
                                                            error:&error];
             if (error) {
-                NSLog(@"创建文件夹失败:%@",error);
+                //NSLog(@"创建文件夹失败:%@",error);
             }
             return result;
         }
@@ -51,7 +51,7 @@ typedef enum{
                                                   attributes:nil
                                                        error:&error];
         if (error) {
-            NSLog(@"创建文件夹失败:%@",error);
+            //NSLog(@"创建文件夹失败:%@",error);
         }
         return result;
     }
@@ -59,7 +59,7 @@ typedef enum{
 
 + (BOOL)writeFile:(id)file toPath:(NSString *)path{
     BOOL isOK = [file writeToFile:path atomically:YES];
-    NSLog(@"文件存储路径为:%@",path);
+    //NSLog(@"文件存储路径为:%@",path);
     return isOK;
 }
 
@@ -67,7 +67,7 @@ typedef enum{
     if ([LL_FILE_MANAGER fileExistsAtPath:filePath]){
         return [LL_FILE_MANAGER removeItemAtPath:filePath error:error];
     }
-    NSLog(@"deleteFileAtPath:error:路径未找到");
+    //NSLog(@"deleteFileAtPath:error:路径未找到");
     return YES;
 }
 
