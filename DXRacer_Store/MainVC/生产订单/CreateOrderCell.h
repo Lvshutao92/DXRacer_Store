@@ -28,4 +28,13 @@
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *lab1height;
 
+
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *lab6width;
+
+@property (weak, nonatomic) IBOutlet UILabel *lab6;
+
+
+
+
 @end

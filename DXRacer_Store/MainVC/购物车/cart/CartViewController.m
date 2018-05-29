@@ -83,7 +83,7 @@
     __weak typeof(self) weakSelf = self;
     [Manager requestPOSTWithURLStr:KURLNSString(@"order/shopping/list") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        //NSLog(@"4512341234123412341234******%@",diction);
+        NSLog(@"4512341234123412341234******%@",diction);
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
             NSMutableArray *array = [diction objectForKey:@"object"];
@@ -334,6 +334,7 @@
         myTableView.delegate = self;
         myTableView.dataSource = self;
         myTableView.rowHeight = 100;
+        [myTableView registerClass:[CartTableViewCell class] forCellReuseIdentifier:@"cellID"];
         myTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         myTableView.backgroundColor = RGBCOLOR(245, 246, 248);
         [self.view addSubview:myTableView];
@@ -404,10 +405,9 @@
     CartTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellID"];
     if (!cell) {
         cell = [[CartTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cellID"];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    cell.isSelected = isSelect;
-    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//    cell.isSelected = isSelect;
     
     //是否被选中
     if ([selectGoods containsObject:[dataArray objectAtIndex:indexPath.row]]) {
@@ -494,7 +494,6 @@
     };
     
     [cell reloadDataWith:[dataArray objectAtIndex:indexPath.row]];
-    
     return cell;
 }
 

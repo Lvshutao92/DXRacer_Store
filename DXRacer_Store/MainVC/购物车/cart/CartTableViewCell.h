@@ -44,9 +44,10 @@ typedef void(^LQQNumChange)();
 
 @interface CartTableViewCell : UITableViewCell
 
-//数量
 @property (nonatomic,retain)UILabel *numberLabel;
 @property (nonatomic,assign)BOOL isSelected;
+
+
 @property (nonatomic,copy)LQQCartBlock cartBlock;
 @property (nonatomic,copy)LQQNumChange numAddBlock;
 @property (nonatomic,copy)LQQNumChange numCutBlock;

@@ -65,7 +65,7 @@
 @property(nonatomic,strong)NSArray *standardList;
 @property(nonatomic,strong)NSArray *standardValueList;
 
-
+@property(nonatomic,strong)NSMutableArray *kucunArray;;
 
 @property(nonatomic,strong)SDCycleScrollView *cycleScrollView;
 @property(nonatomic,strong)NSMutableArray *lunboArray;
@@ -255,16 +255,16 @@
     [self.selectView.alphaView addGestureRecognizer:tap];
     
     
-    UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(10, SCREEN_HEIGHT-100, 90, 50)];
+    UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(10, [Manager sharedManager].gouwuNumHeight+10, 90, 40)];
     lab.text = @"购买数量：";
-    [self.selectView addSubview:lab];
+    [self.selectView.mainscrollview addSubview:lab];
     
     HJCAjustNumButton *btn = [[HJCAjustNumButton alloc] init];
-    btn.frame = CGRectMake(100, SCREEN_HEIGHT-95, 150, 40);
+    btn.frame = CGRectMake(100, [Manager sharedManager].gouwuNumHeight+10, 150, 40);
     btn.callBack = ^(NSString *currentNum){
         self->productnumber = currentNum;
     };
-    [self.selectView addSubview:btn];
+    [self.selectView.mainscrollview addSubview:btn];
     
     
     
@@ -337,6 +337,17 @@
                                         stringStatus = [dict objectForKey:@"status"];
                                         stringImg = [dict objectForKey:@"listImg"];
                                         itemNo = [dict objectForKey:@"itemNo"];
+                                        
+                                        
+                                        self.selectView.LB_kucun.text= @"无库存";
+                                        for (Model *model in self.kucunArray) {
+                                            if ([model.productItemId isEqualToString:self->stringID]) {
+                                                self.selectView.LB_kucun.text= [NSString stringWithFormat:@"库存:%ld",[model.quantity integerValue]-[model.lockQuantity integerValue]];
+                                            }
+                                        }
+                                        
+                                        
+                                        
                                     }
                                 }
                                 
@@ -402,18 +413,23 @@
     
     __weak typeof(self) weakSelf = self;
     NSString *str = [NSString stringWithFormat:@"product/%@",self.idStr];
-//    NSString *str = @"product/294b040671dd4865915b77fc8fbbce99";
     NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [Manager requestPOSTWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        //NSLog(@"******%@",diction);
-        
+        NSLog(@"******%@",diction);
         NSString *videoId;
-        
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
-            
-            //
+            //库存
+            if ([Manager judgeWhetherIsEmptyAnyObject:[[diction objectForKey:@"object"]objectForKey:@"inventory"]] == YES) {
+                NSMutableArray *arrs = [[diction objectForKey:@"object"]objectForKey:@"inventory"];
+                [weakSelf.kucunArray removeAllObjects];
+                for (NSDictionary *diccc in arrs) {
+                    Model *model = [Model mj_objectWithKeyValues:diccc];
+                    [weakSelf.kucunArray addObject:model];
+                }
+            }
+            //轮播图
             if ([Manager judgeWhetherIsEmptyAnyObject:[[diction objectForKey:@"object"]objectForKey:@"productImageList"]] == YES) {
                 NSMutableArray *arr = [[diction objectForKey:@"object"]objectForKey:@"productImageList"];
                 [weakSelf.lunboArray removeAllObjects];
@@ -422,10 +438,6 @@
                     [weakSelf.lunboArray addObject:model];
                 }
             }
-            
-            
-            
-            
             //
             if ([Manager judgeWhetherIsEmptyAnyObject:[[diction objectForKey:@"object"]objectForKey:@"promotions"]] == YES) {
                 NSMutableArray *arr = [[diction objectForKey:@"object"]objectForKey:@"promotions"];
@@ -520,7 +532,11 @@
             }
         }
     
-        
+        for (Model *model in self.kucunArray) {
+            if ([model.productItemId isEqualToString:self->stringID]) {
+                weakSelf.selectView.LB_kucun.text= [NSString stringWithFormat:@"库存:%ld",[model.quantity integerValue]-[model.lockQuantity integerValue]];
+            }
+        }
         
         for (Model *model in self.cuxiaoArr) {
             //NSLog(@"%@----%@",stringID,model.productItemId);
@@ -531,17 +547,13 @@
                 weakSelf.selectView.LB_showSales.text = model.activityName;
                 weakSelf.selectView.LB_detail.text= [Manager jinegeshi:model.onSalePrice];
                 
-                
-                
                 NSDictionary *attribtDic2 = @{NSStrikethroughStyleAttributeName: [NSNumber numberWithInteger:NSUnderlineStyleSingle]};
                 NSMutableAttributedString *attribtStr2 = [[NSMutableAttributedString alloc]initWithString: weakSelf.selectView.LB_price.text attributes:attribtDic2];
                 weakSelf.selectView.LB_price.attributedText = attribtStr2;
                 
-                
                 NSDictionary *attribtDic1 = @{NSStrikethroughStyleAttributeName: [NSNumber numberWithInteger:NSUnderlineStyleSingle]};
                 NSMutableAttributedString *attribtStr1 = [[NSMutableAttributedString alloc]initWithString: self->priceLab.text attributes:attribtDic1];
                 self->priceLab.attributedText = attribtStr1;
-                
             }
         }
         
@@ -773,12 +785,12 @@
         _tabbarView.userInteractionEnabled = YES;
         
         
-        UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn1.frame = CGRectMake(SCREEN_WIDTH/2, 0, SCREEN_WIDTH/2, 55);
-        btn1.backgroundColor = [UIColor redColor];
-        [btn1 setTitle:@"立即购买" forState:UIControlStateNormal];
-        [btn1 addTarget:self action:@selector(cilck1) forControlEvents:UIControlEventTouchUpInside];
-        [_tabbarView addSubview:btn1];
+//        UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
+//        btn1.frame = CGRectMake(0, 0, SCREEN_WIDTH, 55);
+//        btn1.backgroundColor = [UIColor redColor];
+//        [btn1 setTitle:@"立即购买" forState:UIControlStateNormal];
+//        [btn1 addTarget:self action:@selector(cilck1) forControlEvents:UIControlEventTouchUpInside];
+//        [_tabbarView addSubview:btn1];
         
         
         
@@ -789,8 +801,8 @@
 //        [_tabbarView addSubview:btn2];
         
         UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn2.frame = CGRectMake(0, 0, SCREEN_WIDTH/2, 55);
-        btn2.backgroundColor = [UIColor orangeColor];
+        btn2.frame = CGRectMake(0, 0, SCREEN_WIDTH, 55);
+        btn2.backgroundColor = [UIColor redColor];
         [btn2 setTitle:@"加入购物车" forState:UIControlStateNormal];
         [btn2 addTarget:self action:@selector(cllll) forControlEvents:UIControlEventTouchUpInside];
         [_tabbarView addSubview:btn2];
@@ -1080,6 +1092,11 @@
     }
     return _dataArray3;
 }
-
+- (NSMutableArray *)kucunArray{
+    if (_kucunArray == nil) {
+        self.kucunArray = [NSMutableArray arrayWithCapacity:1];
+    }
+    return _kucunArray;
+}
 
 @end

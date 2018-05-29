@@ -172,7 +172,7 @@
     self.priceLabel = [[UILabel alloc]init];
     self.priceLabel.font = [UIFont boldSystemFontOfSize:12];
     self.priceLabel.textColor = [UIColor whiteColor];
-    self.priceLabel.backgroundColor = RGBACOLOR(211, 33, 34, 1);
+    self.priceLabel.backgroundColor = [UIColor redColor];
     LRViewBorderRadius(self.priceLabel, 10, 0, [UIColor clearColor]);
     self.priceLabel.textAlignment = NSTextAlignmentCenter;
     [bgView addSubview:self.priceLabel];

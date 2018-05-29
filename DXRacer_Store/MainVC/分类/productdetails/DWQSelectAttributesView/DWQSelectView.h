@@ -20,6 +20,7 @@
 @property(nonatomic,strong)UILabel *LB_line;
 @property(nonatomic,strong)UILabel *LB_showSales;
 
+@property(nonatomic,strong)UILabel *LB_kucun;
 
 @property(nonatomic,copy)NSString *price;
 @property(nonatomic,copy)NSString *stock;

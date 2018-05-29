@@ -146,7 +146,7 @@
 +(CGSize)getImageSizeWithURL:(id)imageURL;
 
 
-
+@property(nonatomic,assign)CGFloat gouwuNumHeight;
 
 
 @property(nonatomic,strong)NSString *mobile;

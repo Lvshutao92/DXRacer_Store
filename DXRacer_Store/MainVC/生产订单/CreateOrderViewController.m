@@ -42,6 +42,14 @@
     
     NSString *addressID;
     UITextField *youhuimaText;
+    BOOL isno;
+    
+    NSString *availableSku;
+    NSString *availableCatalog;
+    NSString *couponMode;//rate price
+    NSString *modeValue;
+    
+    CGFloat totheight;
 }
 @property(nonatomic,strong)UITableView *tableview;
 @property(nonatomic,strong)UILabel *totalPrice;
@@ -49,6 +57,9 @@
 @property(nonatomic,strong)NSMutableArray *idsArray;
 
 @property(nonatomic,strong)TFSheetView *tfSheetView;
+
+
+
 @end
 
 @implementation CreateOrderViewController
@@ -56,20 +67,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    
-    
     UIScrollView *scro = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
     [self.view addSubview:scro];
     
     
     for (CartModel *model in self.dataArray) {
-        CGFloat price = [model.salePrice doubleValue];
-        NSInteger num = [model.quantity integerValue];
-        zongjiage = zongjiage + num * price;
-        
+//        CGFloat price = [model.salePrice doubleValue];
+//        NSInteger num = [model.quantity integerValue];
+//        zongjiage = zongjiage + num * price;
         [self.idsArray addObject:model.id];
+        if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle] != YES) {
+            isno = YES;
+        }
     }
-    
     self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-55)];
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableview.delegate = self;
@@ -77,11 +87,11 @@
     [self.tableview registerNib:[UINib nibWithNibName:@"CreateOrderCell" bundle:nil] forCellReuseIdentifier:@"CreateOrderCell"];
     [scro addSubview:self.tableview];
     
-    UIView *headerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 120)];
+    UIView *headerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 110)];
     headerV.backgroundColor =RGBACOLOR(237, 236, 242, 1);
     self.tableview.tableHeaderView = headerV;
     
-    UIView *footerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 150)];
+    UIView *footerV = [[UIView alloc]init];
     footerV.backgroundColor =[UIColor whiteColor];
     self.tableview.tableFooterView = footerV;
     
@@ -98,6 +108,17 @@
     footline.backgroundColor =RGBACOLOR(237, 236, 242, 1);
     [footerV addSubview:footline];
     
+    if (isno == YES) {
+        footerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, 150);
+        lab.hidden = NO;
+        youhuimaText.hidden = NO;
+        footline.hidden = NO;
+    }else{
+        footerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, 0);
+        lab.hidden = YES;
+        youhuimaText.hidden = YES;
+        footline.hidden = YES;
+    }
     
     
     UIView *bgv = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 100)];
@@ -142,6 +163,48 @@
     
     [self lodinfo];
 }
+- (void)textFieldDidEndEditing:(UITextField *)textField{
+    if (addressID.length > 0 && textField.text.length > 0 && _idsArray.count>0) {
+        __weak typeof(self) weakSelf = self;
+        NSDictionary *dic = @{@"addressId":addressID,@"couponCode":youhuimaText.text,@"productItemIds":_idsArray,};
+        [Manager requestPOSTWithURLStr:KURLNSString(@"promotion/coupon") paramDic:dic token:nil finish:^(id responseObject) {
+            NSDictionary *diction = [Manager returndictiondata:responseObject];
+            NSLog(@"--%@",diction);
+            NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
+            if ([code isEqualToString:@"200"]){
+                self->zongjiage = 0.0;
+                NSDictionary *dic = [diction objectForKey:@"object"];
+                self->availableSku = [dic objectForKey:@"availableSku"];
+                self->availableCatalog = [dic objectForKey:@"availableCatalog"];
+                self->couponMode = [dic objectForKey:@"couponMode"];
+                self->modeValue = [dic objectForKey:@"modeValue"];
+                [weakSelf.tableview reloadData];
+            }else{
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:[diction objectForKey:@"object"] message:@"温馨提示" preferredStyle:1];
+                UIAlertAction *sure = [UIAlertAction actionWithTitle:@"关闭" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    self->zongjiage = 0.0;
+                    self->couponMode = @"";
+                    [weakSelf.tableview reloadData];
+                }];
+                [alert addAction:sure];
+                [weakSelf presentViewController:alert animated:YES completion:nil];
+            }
+        } enError:^(NSError *error) {
+            NSLog(@"%@",error);
+            self->zongjiage = 0.0;
+            self->couponMode = @"";
+            [weakSelf.tableview reloadData];
+        }];
+    }else{
+        zongjiage = 0.0;
+        couponMode = @"";
+        [self.tableview reloadData];
+    }
+}
+
+
+
+
 
 - (void)getaddress{
     AddrViewController *addr = [[AddrViewController alloc]init];
@@ -162,22 +225,155 @@
     CartModel *model = [self.dataArray objectAtIndex:indexPath.row];
     
     [cell.img sd_setImageWithURL:[NSURL URLWithString:NSString(model.image)]];
+    
     cell.lab1.text = model.productName;
     cell.lab1.numberOfLines = 0;
     cell.lab1.lineBreakMode = NSLineBreakByWordWrapping;
     CGSize size = [cell.lab1 sizeThatFits:CGSizeMake(SCREEN_WIDTH-145, MAXFLOAT)];
     cell.lab1height.constant = size.height;
-    if (size.height >= 70) {
-        cell.lab1height.constant = 70;
+    
+    cell.lab2.text = model.productAttr;
+    cell.lab4.text = [NSString stringWithFormat:@"X%@",model.quantity];
+    
+    if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
+        cell.lab6.hidden = NO;
+        if ([Manager widthForString:model.promotionTitle fontSize:14 andHeight:20] > (SCREEN_WIDTH/2)) {
+            cell.lab6width.constant = SCREEN_WIDTH-145;
+        }else{
+            cell.lab6width.constant = [Manager widthForString:model.promotionTitle fontSize:14 andHeight:20]+20;
+        }
+         totheight = size.height + 30;
+    }else{
+        cell.lab6.hidden = YES;
+        cell.lab6width.constant = 0;
+        totheight = size.height;
+    }
+    cell.lab6.text = model.promotionTitle;
+
+    
+    if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle] != YES) {
+        
+        if ([Manager judgeWhetherIsEmptyAnyObject:availableSku] != YES && [Manager judgeWhetherIsEmptyAnyObject:availableCatalog] != YES)
+        {
+            
+            if ([couponMode isEqualToString:@"rate"]) {
+                double bi = 1-[modeValue doubleValue];
+                
+                NSString *danjia = [NSString stringWithFormat:@"%.2f",[model.salePrice doubleValue]*bi];
+                cell.lab3.text = [Manager jinegeshi:danjia];
+                
+                NSString *totalStr = [NSString stringWithFormat:@"%f",[model.salePrice doubleValue] * [model.quantity integerValue]*bi];
+                cell.lab5.text = [Manager jinegeshi:totalStr];
+                
+                zongjiage = zongjiage + [totalStr doubleValue];//所有总价
+            }else if ([couponMode isEqualToString:@"price"]){
+                NSString *danjia = [NSString stringWithFormat:@"%.2f",[model.salePrice doubleValue] - [modeValue doubleValue]];
+                cell.lab3.text = [Manager jinegeshi:danjia];
+                
+                NSString *totalStr = [NSString stringWithFormat:@"%f",[danjia doubleValue] * [model.quantity integerValue]];
+                cell.lab5.text = [Manager jinegeshi:totalStr];
+                
+                zongjiage = zongjiage + [totalStr doubleValue];//所有总价
+            }else{
+                cell.lab3.text = [Manager jinegeshi:model.salePrice];
+                NSString *totalStr = [NSString stringWithFormat:@"%f",[model.salePrice doubleValue] * [model.quantity integerValue]];
+                cell.lab5.text = [Manager jinegeshi:totalStr];
+                
+                zongjiage = zongjiage + [totalStr doubleValue];//所有总价
+            }
+            
+        }
+        else if([Manager judgeWhetherIsEmptyAnyObject:availableSku] == YES)
+        {
+            
+            if ([model.productType isEqualToString:availableSku]) {
+                if ([couponMode isEqualToString:@"rate"]) {
+                    double bi = 1-[modeValue doubleValue];
+                    
+                    NSString *danjia = [NSString stringWithFormat:@"%.2f",[model.salePrice doubleValue]*bi];
+                    cell.lab3.text = [Manager jinegeshi:danjia];
+                    
+                    NSString *totalStr = [NSString stringWithFormat:@"%f",[model.salePrice doubleValue] * [model.quantity integerValue]*bi];
+                    cell.lab5.text = [Manager jinegeshi:totalStr];
+                    
+                    zongjiage = zongjiage + [totalStr doubleValue];//所有总价
+                }else if ([couponMode isEqualToString:@"price"]){
+                    NSString *danjia = [NSString stringWithFormat:@"%.2f",[model.salePrice doubleValue] - [modeValue doubleValue]];
+                    cell.lab3.text = [Manager jinegeshi:danjia];
+                    
+                    NSString *totalStr = [NSString stringWithFormat:@"%f",[danjia doubleValue] * [model.quantity integerValue]];
+                    cell.lab5.text = [Manager jinegeshi:totalStr];
+                    
+                    zongjiage = zongjiage + [totalStr doubleValue];//所有总价
+                }else{
+                    cell.lab3.text = [Manager jinegeshi:model.salePrice];
+                    NSString *totalStr = [NSString stringWithFormat:@"%f",[model.salePrice doubleValue] * [model.quantity integerValue]];
+                    cell.lab5.text = [Manager jinegeshi:totalStr];
+                    
+                    zongjiage = zongjiage + [totalStr doubleValue];//所有总价
+                }
+            }else{
+                cell.lab3.text = [Manager jinegeshi:model.salePrice];
+                NSString *totalStr = [NSString stringWithFormat:@"%f",[model.salePrice doubleValue] * [model.quantity integerValue]];
+                cell.lab5.text = [Manager jinegeshi:totalStr];
+                
+                zongjiage = zongjiage + [totalStr doubleValue];//所有总价
+            }
+            
+        }
+        else if([Manager judgeWhetherIsEmptyAnyObject:availableSku] != YES && [Manager judgeWhetherIsEmptyAnyObject:availableCatalog] == YES)
+        {
+            
+            if ([model.productType isEqualToString:availableCatalog]) {
+                if ([couponMode isEqualToString:@"rate"]) {
+                    double bi = 1-[modeValue doubleValue];
+                    
+                    NSString *danjia = [NSString stringWithFormat:@"%.2f",[model.salePrice doubleValue]*bi];
+                    cell.lab3.text = [Manager jinegeshi:danjia];
+                    
+                    NSString *totalStr = [NSString stringWithFormat:@"%f",[model.salePrice doubleValue] * [model.quantity integerValue]*bi];
+                    cell.lab5.text = [Manager jinegeshi:totalStr];
+                    zongjiage = zongjiage + [totalStr doubleValue];//所有总价
+                }else if ([couponMode isEqualToString:@"price"]){
+                    NSString *danjia = [NSString stringWithFormat:@"%.2f",[model.salePrice doubleValue] - [modeValue doubleValue]];
+                    cell.lab3.text = [Manager jinegeshi:danjia];
+                    
+                    NSString *totalStr = [NSString stringWithFormat:@"%f",[danjia doubleValue] * [model.quantity integerValue]];
+                    cell.lab5.text = [Manager jinegeshi:totalStr];
+                    zongjiage = zongjiage + [totalStr doubleValue];//所有总价
+                }else{
+                    cell.lab3.text = [Manager jinegeshi:model.salePrice];
+                    NSString *totalStr = [NSString stringWithFormat:@"%f",[model.salePrice doubleValue] * [model.quantity integerValue]];
+                    cell.lab5.text = [Manager jinegeshi:totalStr];
+                    zongjiage = zongjiage + [totalStr doubleValue];//所有总价
+                }
+            }else{
+                cell.lab3.text = [Manager jinegeshi:model.salePrice];
+                NSString *totalStr = [NSString stringWithFormat:@"%f",[model.salePrice doubleValue] * [model.quantity integerValue]];
+                cell.lab5.text = [Manager jinegeshi:totalStr];
+                zongjiage = zongjiage + [totalStr doubleValue];//所有总价
+            }
+            
+        }
+        
+    }else{
+        
+        cell.lab3.text = [Manager jinegeshi:model.salePrice];
+        NSString *totalStr = [NSString stringWithFormat:@"%f",[model.salePrice doubleValue] * [model.quantity integerValue]];
+        cell.lab5.text = [Manager jinegeshi:totalStr];
+        
+        zongjiage = zongjiage + [totalStr doubleValue];//所有总价
     }
     
     
-    cell.lab2.text = model.productAttr;
-    cell.lab3.text = [Manager jinegeshi:model.salePrice];
-    cell.lab4.text = [NSString stringWithFormat:@"X%@",model.quantity];
     
-    NSString *totalStr = [NSString stringWithFormat:@"%f",[model.salePrice doubleValue] * [model.quantity integerValue]];
-    cell.lab5.text = [Manager jinegeshi:totalStr];
+    
+    
+    
+    
+    
+    self.totalPrice.text = [Manager jinegeshi:[NSString stringWithFormat:@"%.2f",zongjiage]];
+    
     
     cell.line1.backgroundColor =RGBACOLOR(237, 236, 242, 1);
     cell.line2.backgroundColor =RGBACOLOR(237, 236, 242, 1);
@@ -187,7 +383,7 @@
     return self.dataArray.count;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 175;
+    return 120 + totheight;
 }
 
 
@@ -195,49 +391,65 @@
 
 
 - (void)commitOrder{
-    __weak typeof(self) weakSelf = self;
-    if (_idsArray.count > 0 && addressID.length > 0) {
-        NSDictionary *dic = @{@"productItemIds":_idsArray,
-                              @"addressId":addressID};
-        //NSLog(@"=======%@",dic);
-        [Manager requestPOSTWithURLStr:KURLNSString(@"order/shopping/confirm") paramDic:dic token:nil finish:^(id responseObject) {
-            NSDictionary *diction = [Manager returndictiondata:responseObject];
-            //NSLog(@"--%@",diction);
-            NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
-            if ([code isEqualToString:@"200"]){
-                
-                weakSelf.tfSheetView = [[TFSheetView alloc]init];
-                //取消
-                weakSelf.tfSheetView.cancelBlock = ^{
-                    [weakSelf.dataArray removeAllObjects];
-                    [weakSelf.tableview reloadData];
-                    ProductOrder_TwoDetails_ViewController *or = [[ProductOrder_TwoDetails_ViewController alloc]init];
-                    or.orderNo = [diction objectForKey:@"msg"];
-                    or.orderStatus = @"待付款";
-                    [self.navigationController pushViewController:or animated:YES];
-                    [weakSelf.tfSheetView disMissView];
-                };
-                //微信支付
-                weakSelf.tfSheetView.wxBlock = ^{
-                    NSLog(@"微信支付");
-                    [weakSelf.dataArray removeAllObjects];
-                    [weakSelf.tableview reloadData];
-                    [weakSelf.tfSheetView disMissView];
-                };
-                //支付宝支付
-                weakSelf.tfSheetView.zfbBlock = ^{
-                    NSLog(@"支付宝支付");
-                    [weakSelf.dataArray removeAllObjects];
-                    [weakSelf.tableview reloadData];
-                    [weakSelf doAPPay:[diction objectForKey:@"msg"]];
-                    [weakSelf.tfSheetView disMissView];
-                };
-                [weakSelf.tfSheetView showInView:self.view];
-            }
-        } enError:^(NSError *error) {
-            NSLog(@"%@",error);
-        }];
+    if ([Manager judgeWhetherIsEmptyAnyObject:youhuimaText.text] != YES) {
+        youhuimaText.text = @"";
     }
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"确认提交？" message:@"温馨提示" preferredStyle:1];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    }];
+    [alert addAction:cancel];
+    UIAlertAction *sure = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        __weak typeof(self) weakSelf = self;
+        if (self->_idsArray.count > 0 && self->addressID.length > 0) {
+            NSDictionary *dic = @{@"productItemIds":self->_idsArray,
+                                  @"addressId":self->addressID,
+                                  @"couponCode":self->youhuimaText.text
+                                  };
+            NSLog(@"=======%@",dic);
+            [Manager requestPOSTWithURLStr:KURLNSString(@"order/shopping/confirm") paramDic:dic token:nil finish:^(id responseObject) {
+                NSDictionary *diction = [Manager returndictiondata:responseObject];
+                //NSLog(@"--%@",diction);
+                NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
+                if ([code isEqualToString:@"200"]){
+                    
+                    weakSelf.tfSheetView = [[TFSheetView alloc]init];
+                    //取消
+                    weakSelf.tfSheetView.cancelBlock = ^{
+                        [weakSelf.dataArray removeAllObjects];
+                        [weakSelf.tableview reloadData];
+                        ProductOrder_TwoDetails_ViewController *or = [[ProductOrder_TwoDetails_ViewController alloc]init];
+                        or.orderNo = [diction objectForKey:@"msg"];
+                        or.orderStatus = @"待付款";
+                        [self.navigationController pushViewController:or animated:YES];
+                        [weakSelf.tfSheetView disMissView];
+                    };
+                    //微信支付
+                    weakSelf.tfSheetView.wxBlock = ^{
+                        NSLog(@"微信支付");
+                        [weakSelf.dataArray removeAllObjects];
+                        [weakSelf.tableview reloadData];
+                        [weakSelf.tfSheetView disMissView];
+                    };
+                    //支付宝支付
+                    weakSelf.tfSheetView.zfbBlock = ^{
+                        NSLog(@"支付宝支付");
+                        [weakSelf.dataArray removeAllObjects];
+                        [weakSelf.tableview reloadData];
+                        [weakSelf doAPPay:[diction objectForKey:@"msg"]];
+                        [weakSelf.tfSheetView disMissView];
+                    };
+                    [weakSelf.tfSheetView showInView:self.view];
+                }
+            } enError:^(NSError *error) {
+                NSLog(@"%@",error);
+            }];
+        }
+        
+    }];
+    [alert addAction:sure];
+    [self presentViewController:alert animated:YES completion:nil];
+    
 }
 
 #pragma mark   ==============点击订单模拟支付行为==============
@@ -325,7 +537,9 @@
     
     self.totalPrice = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-140, 55)];
     self.totalPrice.textColor = [UIColor redColor];
+    
     self.totalPrice.text = [Manager jinegeshi:[NSString stringWithFormat:@"%.2f",zongjiage]];
+    
     self.totalPrice.font = [UIFont systemFontOfSize:20];
     [view addSubview:self.totalPrice];
     
@@ -356,7 +570,6 @@
 - (void)viewWillDisappear:(BOOL)animated{
     self.tabBarController.tabBar.hidden = YES;
 }
-
 
 - (NSMutableArray *)dataArray{
     if (_dataArray == nil) {

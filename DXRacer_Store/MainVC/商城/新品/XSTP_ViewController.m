@@ -187,7 +187,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             [cell.img sd_setImageWithURL:[NSURL URLWithString:NSString(model.model_img)]placeholderImage:[UIImage imageNamed:@""]];
         });
-cell.lab4.backgroundColor = RGBACOLOR(211, 33, 34, 1);
+cell.lab4.backgroundColor = [UIColor redColor];
         cell.lab1.text       = model.model_name;
         cell.lab2.text     = [Manager jinegeshi:model.sale_price];
         cell.lab3.text = model.series_name;
@@ -218,7 +218,7 @@ cell.lab4.backgroundColor = RGBACOLOR(211, 33, 34, 1);
         cell.lab1.text       = model.model_name;
         cell.lab3.text     = [Manager jinegeshi:model.sale_price];
         cell.lab2.text = model.series_name;
-        cell.lab4.backgroundColor = RGBACOLOR(211, 33, 34, 1);
+        cell.lab4.backgroundColor = [UIColor redColor];
         if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
             cell.lab4.hidden = NO;
             cell.lab2height.constant = 20;

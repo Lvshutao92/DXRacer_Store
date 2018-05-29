@@ -317,7 +317,7 @@
         cell.lab1.text       = model.model_name;
         cell.lab2.text     = model.sale_price;
         cell.lab3.text = model.series_name;
-        
+        cell.lab4.backgroundColor = [UIColor redColor];
         
         if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
             cell.lab4.hidden = NO;
@@ -349,7 +349,7 @@
         cell.lab1.text       = model.model_name;
         cell.lab3.text     = model.sale_price;
         cell.lab2.text = model.series_name;
-        
+        cell.lab4.backgroundColor = [UIColor redColor];
         
         if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
             cell.lab4.hidden = NO;

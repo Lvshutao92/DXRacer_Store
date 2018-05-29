@@ -117,6 +117,9 @@
 
 
 @property (nonatomic,strong)NSString *productAttrs;
+@property (nonatomic,strong)NSString *productType;
+
+@property (nonatomic,strong)NSString *lockQuantity;
 @end
 
 

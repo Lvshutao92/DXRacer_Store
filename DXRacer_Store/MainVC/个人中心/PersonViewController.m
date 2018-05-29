@@ -127,16 +127,39 @@
     }
     if(self.tableview.contentOffset.y<-hei) {
         [view_bar setHidden:YES];
-    }else if(self.tableview.contentOffset.y<150){
+    }else if(self.tableview.contentOffset.y<=0){
         [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:self.tableview.contentOffset.y / 1000];
-    }else if(self.tableview.contentOffset.y<250 && self.tableview.contentOffset.y>150){
+        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.0001];
+    }else if(self.tableview.contentOffset.y<10){
         [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.7];
-    }else
-    {
+        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.1];
+    }else if(self.tableview.contentOffset.y<20){
         [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.9];
+        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.2];
+    }else if(self.tableview.contentOffset.y<30){
+        [view_bar setHidden:NO];
+        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.3];
+    }else if(self.tableview.contentOffset.y<40){
+        [view_bar setHidden:NO];
+        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.4];
+    }else if(self.tableview.contentOffset.y<50){
+        [view_bar setHidden:NO];
+        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.5];
+    }else if(self.tableview.contentOffset.y<60){
+        [view_bar setHidden:NO];
+        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.6];
+    }else if(self.tableview.contentOffset.y<70){
+        [view_bar setHidden:NO];
+        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.7];
+    }else if(self.tableview.contentOffset.y<80){
+        [view_bar setHidden:NO];
+        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.8];
+    }else if(self.tableview.contentOffset.y<90){
+        [view_bar setHidden:NO];
+        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.9];
+    }else{
+        [view_bar setHidden:NO];
+        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:1];
     }
 }
 
@@ -442,7 +465,7 @@
         
     }else if (indexPath.row == 4){
         UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectZero];
-        NSString *qqstr = [NSString stringWithFormat:@"mqq://im/chat?chat_type=wpa&uin=%@&version=1&src_type=web",@"945529210"];
+        NSString *qqstr = [NSString stringWithFormat:@"mqq://im/chat?chat_type=wpa&uin=%@&version=1&src_type=web",@"309718069"];
         NSURL *url = [NSURL URLWithString:qqstr];
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
         [webView loadRequest:request];

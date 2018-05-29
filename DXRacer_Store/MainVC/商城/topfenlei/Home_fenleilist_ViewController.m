@@ -312,7 +312,7 @@
         cell.lab1.text       = model.model_name;
         cell.lab2.text     = model.sale_price;
         cell.lab3.text = model.series_name;
-        cell.lab4.backgroundColor = RGBACOLOR(211, 33, 34, 1);
+        cell.lab4.backgroundColor = [UIColor redColor];
         if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
             cell.lab4.hidden = NO;
             if ([Manager widthForString:model.promotionTitle fontSize:14 andHeight:20] > (SCREEN_WIDTH/2)) {
@@ -338,7 +338,7 @@
         cell.lab1.text       = model.model_name;
         cell.lab3.text     = model.sale_price;
         cell.lab2.text = model.series_name;
-        cell.lab4.backgroundColor = RGBACOLOR(211, 33, 34, 1);
+        cell.lab4.backgroundColor =  [UIColor redColor];
         if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
             cell.lab4.hidden = NO;
             cell.lab2height.constant = 20;

@@ -15,7 +15,7 @@
 @end
 @implementation DWQSelectView
 
-@synthesize alphaView,whiteView,headImage,LB_detail,LB_line,LB_price,LB_stock,LB_showSales,mainscrollview,cancelBtn,addBtn,buyBtn,stockBtn,numberButton;
+@synthesize alphaView,whiteView,headImage,LB_detail,LB_line,LB_price,LB_stock,LB_showSales,mainscrollview,cancelBtn,addBtn,buyBtn,stockBtn,numberButton,LB_kucun;
 
 -(instancetype)initWithFrame:(CGRect)frame{
     
@@ -69,12 +69,25 @@
     LB_price.textColor = [UIColor redColor];
     LB_price.font = [UIFont systemFontOfSize:16];
     [whiteView addSubview:LB_price];
-    //商品库存
-    LB_stock = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(headImage.frame)+20, CGRectGetMaxY(LB_price.frame), 120, 20)];
-//    LB_stock.text = @"库存10000件";
+    
+    
+    
+    
+    
+    
+    LB_stock = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(headImage.frame)+20, CGRectGetMaxY(LB_price.frame), 100, 20)];
     LB_stock.textColor = [UIColor grayColor];
-    LB_stock.font = [UIFont systemFontOfSize:13];
+    LB_stock.font = [UIFont systemFontOfSize:10];
     [whiteView addSubview:LB_stock];
+    
+    
+    
+    LB_kucun = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(headImage.frame)+120, CGRectGetMaxY(LB_price.frame), SCREEN_WIDTH-CGRectGetMaxX(headImage.frame)-120, 20)];
+    LB_kucun.textColor = [UIColor grayColor];
+    LB_kucun.font = [UIFont systemFontOfSize:10];
+    LB_kucun.text = @"无库存";
+    [whiteView addSubview:LB_kucun];
+    
     
     //已售件数
     LB_showSales = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(LB_stock.frame), CGRectGetMaxY(LB_stock.frame), 100, 20)];
@@ -108,9 +121,9 @@
     
     //加入购物车按钮
     addBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    addBtn.frame = CGRectMake(0, whiteView.dwq_height-50, whiteView.frame.size.width/2, 50);
+    addBtn.frame = CGRectMake(0, whiteView.dwq_height-50, whiteView.frame.size.width, 50);
     
-    [addBtn setBackgroundColor:[UIColor orangeColor]];
+    [addBtn setBackgroundColor:[UIColor redColor]];
     [addBtn setTitleColor:[UIColor whiteColor] forState:0];
     addBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     [addBtn setTitle:@"加入购物车" forState:0];
@@ -123,7 +136,7 @@
     [buyBtn setTitleColor:[UIColor whiteColor] forState:0];
     buyBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     [buyBtn setTitle:@"立即购买" forState:0];
-    [whiteView addSubview:buyBtn];
+//    [whiteView addSubview:buyBtn];
     
     //库存不足按钮
     stockBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -148,6 +161,7 @@
     numberButton = [UIButton buttonWithType:UIButtonTypeCustom];
     numberButton.frame = CGRectMake(whiteView.frame.size.width/2,  whiteView.dwq_height-90, whiteView.frame.size.width/2, 40);
     [whiteView addSubview:numberButton];
+    
 }
 
 

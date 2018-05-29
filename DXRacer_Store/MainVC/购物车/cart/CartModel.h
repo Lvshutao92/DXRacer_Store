@@ -34,5 +34,5 @@
 
 
 
-
+@property (nonatomic,strong)NSString *productType;
 @end

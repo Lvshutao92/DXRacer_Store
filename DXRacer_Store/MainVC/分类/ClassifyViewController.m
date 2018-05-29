@@ -349,7 +349,7 @@
         cell.lab3.text = model.series_name;
         
         
-        cell.lab4.backgroundColor = RGBACOLOR(211, 33, 34, 1);
+        cell.lab4.backgroundColor = [UIColor redColor];
         
         if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
             cell.lab4.hidden = NO;
@@ -376,7 +376,7 @@
         cell.lab2.text = model.series_name;
         
         
-        cell.lab4.backgroundColor = RGBACOLOR(211, 33, 34, 1);
+        cell.lab4.backgroundColor = [UIColor redColor];
         
         if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
             cell.lab4.hidden = NO;
@@ -398,7 +398,6 @@
         }
         cell.lab4.text = model.promotionTitle;
         return cell;
-        
     }
 }
 #pragma mark  点击CollectionView触发事件
