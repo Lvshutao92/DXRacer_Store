@@ -222,7 +222,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor =RGBACOLOR(237, 236, 242, 1);
+    self.view.backgroundColor =[UIColor whiteColor];
     
     CGFloat hei;
     if ([[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone X"]||[[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone Simulator"]) {
@@ -232,7 +232,7 @@
     }
     
     
-    self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, hei, SCREEN_WIDTH, SCREEN_HEIGHT+hei) style:UITableViewStylePlain];
+    self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, hei, SCREEN_WIDTH, SCREEN_HEIGHT+hei+10) style:UITableViewStylePlain];
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
@@ -386,7 +386,7 @@
     view_bar.backgroundColor=[UIColor clearColor];
     [self.view addSubview: view_bar];
     
-    _customSearchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(60, hh, SCREEN_WIDTH-120, 44)];
+    _customSearchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(40, hh+7, SCREEN_WIDTH-80, 30)];
     _customSearchBar.delegate = self;
     for (UIView *subview in _customSearchBar.subviews) {
         for(UIView* grandSonView in subview.subviews){
@@ -402,16 +402,16 @@
     
     UITextField *searchField = [_customSearchBar valueForKey:@"searchField"];
     if (searchField) {
-        LRViewBorderRadius(searchField, 18, 0, [UIColor clearColor]);
+        LRViewBorderRadius(searchField, 19, 0, [UIColor clearColor]);
     }
-    
+    LRViewBorderRadius(_customSearchBar, 22, 0, [UIColor clearColor]);
     _customSearchBar.placeholder = @"请输入商品名称";
     [view_bar addSubview:self.customSearchBar];
 
     
     UIImage *theImage = [UIImage imageNamed:@"dx"];
     //theImage = [theImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    UIButton* meBtn=[[UIButton alloc]initWithFrame:CGRectMake(15, hh+5, 30, 30)];
+    UIButton* meBtn=[[UIButton alloc]initWithFrame:CGRectMake(10, hh+7, 30, 30)];
     LRViewBorderRadius(meBtn, 15, 0, [UIColor clearColor]);
     [meBtn setBackgroundImage:theImage forState:UIControlStateNormal];
     //[meBtn setTintColor:[UIColor blackColor]];
@@ -420,7 +420,7 @@
     
     UIImage *theImage1 = [UIImage imageNamed:@"客服"];
     //    theImage1 = [theImage1 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    UIButton * readerBtn=[[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-45, hh+5, 30, 30)];
+    UIButton * readerBtn=[[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-40, hh+7, 30, 30)];
     [readerBtn setBackgroundImage:theImage1 forState:UIControlStateNormal];
     [readerBtn addTarget:self action:@selector(onRightNavBtnClick) forControlEvents:UIControlEventTouchUpInside];
     //    [readerBtn setTintColor:[UIColor blackColor]];
@@ -439,37 +439,37 @@
         [view_bar setHidden:YES];
     }else if(self.tableview.contentOffset.y<=0){
         [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.0001];
+        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.0001];
     }else if(self.tableview.contentOffset.y<10){
         [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.1];
+        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.1];
     }else if(self.tableview.contentOffset.y<20){
         [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.2];
+        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.2];
     }else if(self.tableview.contentOffset.y<30){
         [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.3];
+        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.3];
     }else if(self.tableview.contentOffset.y<40){
         [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.4];
+        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.4];
     }else if(self.tableview.contentOffset.y<50){
         [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.5];
+        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.5];
     }else if(self.tableview.contentOffset.y<60){
         [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.6];
+        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.6];
     }else if(self.tableview.contentOffset.y<70){
         [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.7];
+        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.7];
     }else if(self.tableview.contentOffset.y<80){
         [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.8];
+        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.8];
     }else if(self.tableview.contentOffset.y<90){
         [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.9];
+        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.9];
     }else{
         [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:1];
+        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:1];
     }
 }
 

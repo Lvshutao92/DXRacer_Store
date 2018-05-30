@@ -255,7 +255,6 @@
         
         if ([Manager judgeWhetherIsEmptyAnyObject:availableSku] != YES && [Manager judgeWhetherIsEmptyAnyObject:availableCatalog] != YES)
         {
-            
             if ([couponMode isEqualToString:@"rate"]) {
                 double bi = 1-[modeValue doubleValue];
                 
@@ -264,12 +263,10 @@
                 
                 NSString *totalStr = [NSString stringWithFormat:@"%f",[model.salePrice doubleValue] * [model.quantity integerValue]*bi];
                 cell.lab5.text = [Manager jinegeshi:totalStr];
-                
                 zongjiage = zongjiage + [totalStr doubleValue];//所有总价
             }else if ([couponMode isEqualToString:@"price"]){
                 NSString *danjia = [NSString stringWithFormat:@"%.2f",[model.salePrice doubleValue] - [modeValue doubleValue]];
                 cell.lab3.text = [Manager jinegeshi:danjia];
-                
                 NSString *totalStr = [NSString stringWithFormat:@"%f",[danjia doubleValue] * [model.quantity integerValue]];
                 cell.lab5.text = [Manager jinegeshi:totalStr];
                 
@@ -278,15 +275,12 @@
                 cell.lab3.text = [Manager jinegeshi:model.salePrice];
                 NSString *totalStr = [NSString stringWithFormat:@"%f",[model.salePrice doubleValue] * [model.quantity integerValue]];
                 cell.lab5.text = [Manager jinegeshi:totalStr];
-                
                 zongjiage = zongjiage + [totalStr doubleValue];//所有总价
             }
-            
         }
         else if([Manager judgeWhetherIsEmptyAnyObject:availableSku] == YES)
         {
-            
-            if ([model.productType isEqualToString:availableSku]) {
+            if ([model.id isEqualToString:availableSku]) {
                 if ([couponMode isEqualToString:@"rate"]) {
                     double bi = 1-[modeValue doubleValue];
                     
@@ -323,7 +317,6 @@
         }
         else if([Manager judgeWhetherIsEmptyAnyObject:availableSku] != YES && [Manager judgeWhetherIsEmptyAnyObject:availableCatalog] == YES)
         {
-            
             if ([model.productType isEqualToString:availableCatalog]) {
                 if ([couponMode isEqualToString:@"rate"]) {
                     double bi = 1-[modeValue doubleValue];
@@ -406,7 +399,7 @@
                                   @"addressId":self->addressID,
                                   @"couponCode":self->youhuimaText.text
                                   };
-            NSLog(@"=======%@",dic);
+            //NSLog(@"=======%@",dic);
             [Manager requestPOSTWithURLStr:KURLNSString(@"order/shopping/confirm") paramDic:dic token:nil finish:^(id responseObject) {
                 NSDictionary *diction = [Manager returndictiondata:responseObject];
                 //NSLog(@"--%@",diction);
@@ -440,6 +433,12 @@
                         [weakSelf.tfSheetView disMissView];
                     };
                     [weakSelf.tfSheetView showInView:self.view];
+                }else{
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[diction objectForKey:@"msg"] message:@"温馨提示" preferredStyle:1];
+                    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"关闭" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    }];
+                    [alert addAction:cancel];
+                    [weakSelf presentViewController:alert animated:YES completion:nil];
                 }
             } enError:^(NSError *error) {
                 NSLog(@"%@",error);

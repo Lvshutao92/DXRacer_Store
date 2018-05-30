@@ -373,15 +373,18 @@
     NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        //NSLog(@"******%@",diction);
+        NSLog(@"******%@",diction);
         
         NSString *videoId;
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
+            
+            
             if ([Manager judgeWhetherIsEmptyAnyObject:[[diction objectForKey:@"object"]objectForKey:@"productItem"]] == YES){
                 NSDictionary *dicti = [[diction objectForKey:@"object"]objectForKey:@"productItem"];
                 [weakSelf.headerImg sd_setImageWithURL:[NSURL URLWithString:NSString([dicti objectForKey:@"listImg"])]];
             }
+            
             
             if ([Manager judgeWhetherIsEmptyAnyObject:[[diction objectForKey:@"object"]objectForKey:@"product"]] == YES){
                 NSDictionary *dicti = [[diction objectForKey:@"object"]objectForKey:@"product"];

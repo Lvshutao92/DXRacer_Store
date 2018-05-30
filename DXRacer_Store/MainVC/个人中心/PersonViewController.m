@@ -40,6 +40,7 @@
     UIImageView *userImg;
     
     UIView *view_bar;
+    UILabel *lab;
 }
 @property(nonatomic,strong)UITableView *tableview;
 @property(nonatomic,strong)NSMutableArray *dataArray;
@@ -51,7 +52,6 @@
     
     [self getInfomation];
     
-    [self SetNavBarHidden:YES];
     
     if ([Manager redingwenjianming:@"phone.text"] == nil) {
         user1.text = @"登录/注册";
@@ -86,83 +86,7 @@
 
 
 - (void)viewWillDisappear:(BOOL)animated{
-    [self SetNavBarHidden:NO];
 }
-
-
-#pragma mark - NavItem
--(void) SetNavBarHidden:(BOOL) isHidden
-{
-    self.navigationController.navigationBarHidden = isHidden;
-}
--(UIView*)NavigationBa
-{
-    view_bar =[[UIView alloc]init];
-    CGFloat hei;
-    CGFloat hh;
-    if ([[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone X"]||[[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone Simulator"]) {
-        hei = 88;
-        hh = 44;
-    }else{
-        hei = 64;
-        hh = 20;
-    }
-    view_bar .frame=CGRectMake(0, 0, SCREEN_WIDTH, hei);
-    view_bar.backgroundColor=[UIColor clearColor];
-    [self.view addSubview: view_bar];
-    
-    UIButton * readerBtn=[[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-65, hh+5, 50, 30)];
-    [readerBtn setTitle:@"设置" forState:UIControlStateNormal];
-    [readerBtn addTarget:self action:@selector(clickedit) forControlEvents:UIControlEventTouchUpInside];
-    [view_bar addSubview:readerBtn];
-    
-    return view_bar;
-}
--(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    CGFloat hei;
-    if ([[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone X"]||[[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone Simulator"]) {
-        hei = 44;
-    }else{
-        hei = 20;
-    }
-    if(self.tableview.contentOffset.y<-hei) {
-        [view_bar setHidden:YES];
-    }else if(self.tableview.contentOffset.y<=0){
-        [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.0001];
-    }else if(self.tableview.contentOffset.y<10){
-        [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.1];
-    }else if(self.tableview.contentOffset.y<20){
-        [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.2];
-    }else if(self.tableview.contentOffset.y<30){
-        [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.3];
-    }else if(self.tableview.contentOffset.y<40){
-        [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.4];
-    }else if(self.tableview.contentOffset.y<50){
-        [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.5];
-    }else if(self.tableview.contentOffset.y<60){
-        [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.6];
-    }else if(self.tableview.contentOffset.y<70){
-        [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.7];
-    }else if(self.tableview.contentOffset.y<80){
-        [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.8];
-    }else if(self.tableview.contentOffset.y<90){
-        [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:.9];
-    }else{
-        [view_bar setHidden:NO];
-        view_bar.backgroundColor=[UIColor colorWithRed:255 green:0 blue:0 alpha:1];
-    }
-}
-
 
 
 - (void)clickedit {
@@ -190,23 +114,28 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor orangeColor];
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    
     
     self.dataArray = [@[@"我的订单",@"我的优惠券",@"领券中心",@"我的收藏",@"在线客服",@"联系我们",@"关于我们"]mutableCopy];
     
-    CGFloat hei;
-    if ([[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone X"]||[[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone Simulator"]) {
-        hei = 44;
-    }else{
-        hei = 20;
-    }
-    self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, -hei, SCREEN_WIDTH, SCREEN_HEIGHT) style:UITableViewStylePlain];
+    
+    UIBarButtonItem *bar = [[UIBarButtonItem alloc]initWithTitle:@"设置" style:UIBarButtonItemStylePlain target:self action:@selector(clickedit)];
+    self.navigationItem.rightBarButtonItem = bar;
+    
+    
+    
+   
+    self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) style:UITableViewStylePlain];
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
     [self.tableview registerNib:[UINib nibWithNibName:@"PersonCell" bundle:nil] forCellReuseIdentifier:@"cell"];
     [self.view addSubview:self.tableview];
-    [self NavigationBa];
+    
+    
+    
     
     v = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 200)];
     v.backgroundColor = [UIColor colorWithWhite:.8 alpha:.3];
@@ -221,16 +150,7 @@
     imgV.clipsToBounds=YES;
     [v addSubview:imgV];
     
-//    UIButton *editBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    editBtn.frame = CGRectMake(SCREEN_WIDTH-55, hei+10, 40, 25);
-//    [editBtn setTitle:@"设置" forState:UIControlStateNormal];
-//    [editBtn addTarget:self action:@selector(clickedit) forControlEvents:UIControlEventTouchUpInside];
-//    [imgV addSubview:editBtn];
-    
-    
-    
-    
-    
+
     
     
      /*
@@ -378,29 +298,22 @@
     [botomV addSubview:btn1];
     
     
-    userImg = [[UIImageView alloc]initWithFrame:CGRectMake(15, 35, 70, 70)];
-    LRViewBorderRadius(userImg, 35, 0, [UIColor clearColor]);
+    
+    userImg = [[UIImageView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/2-45, 20, 90, 90)];
+    LRViewBorderRadius(userImg, 45, 0, [UIColor clearColor]);
     userImg.userInteractionEnabled = YES;
     [imgV addSubview:userImg];
     
     
-    user1 = [[UILabel alloc]initWithFrame:CGRectMake(90, 35, 90, 70)];
+    user1 = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/2-75, 110, 150, 30)];
     user1.textColor = [UIColor whiteColor];
-    //user1.textAlignment = NSTextAlignmentCenter;
+    user1.textAlignment = NSTextAlignmentCenter;
     user1.numberOfLines = 0;
     [imgV addSubview:user1];
     
-//    UILabel *user2 = [[UILabel alloc]initWithFrame:CGRectMake(90, 70, 90, 25)];
-//    user2.backgroundColor = [UIColor colorWithWhite:.7 alpha:.8];
-//    LRViewBorderRadius(user2, 12.5, 0, [UIColor clearColor]);
-//    user2.textColor = [UIColor whiteColor];
-//    user2.text = @"VIP用户";
-//    user2.textAlignment = NSTextAlignmentCenter;
-//    user2.font = [UIFont systemFontOfSize:14];
-//    [imgV addSubview:user2];
     
     UIButton *btns = [UIButton buttonWithType:UIButtonTypeCustom];
-    btns.frame = CGRectMake(10, 30, 150, 90);
+    btns.frame = CGRectMake(0, 0, SCREEN_WIDTH, 140);
     [btns addTarget:self action:@selector(clicktap:) forControlEvents:UIControlEventTouchUpInside];
     [imgV addSubview:btns];
 }
@@ -462,7 +375,13 @@
             [self presentViewController:login animated:YES completion:nil];
         }
     }else if (indexPath.row == 3){
-        
+        if ([Manager redingwenjianming:@"phone.text"]!= nil){
+            
+        }else{
+            LoginViewController *login = [[LoginViewController alloc]init];
+            login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+            [self presentViewController:login animated:YES completion:nil];
+        }
     }else if (indexPath.row == 4){
         UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectZero];
         NSString *qqstr = [NSString stringWithFormat:@"mqq://im/chat?chat_type=wpa&uin=%@&version=1&src_type=web",@"309718069"];
@@ -471,7 +390,7 @@
         [webView loadRequest:request];
         [self.view addSubview:webView];
     }else if (indexPath.row == 5) {
-        NSMutableString *str=[[NSMutableString alloc]initWithFormat:@"tel:%@",@"18551049547"];
+        NSMutableString *str=[[NSMutableString alloc]initWithFormat:@"tel:%@",@"4009005033"];
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
     }else{
         AboutUsViewController *about = [[AboutUsViewController alloc]init];

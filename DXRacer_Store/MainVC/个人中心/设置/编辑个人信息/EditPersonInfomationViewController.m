@@ -16,6 +16,7 @@
     NSString *str2;
     NSString *str3;
     NSString *str4;
+    NSString *xingbie;
 }
 @property(nonatomic,strong)UITableView *tableview;
 @property(nonatomic,strong)NSMutableArray *arr;
@@ -48,7 +49,7 @@
         self->str3   = [diction objectForKey:@"sex"];
         self->str4   = [diction objectForKey:@"birthday"];
         
-        [self->userImg sd_setImageWithURL:[NSURL URLWithString:[diction objectForKey:@"iconUrl"]]placeholderImage:[UIImage imageNamed:@"头像"]];
+        [self->userImg sd_setImageWithURL:[NSURL URLWithString:[diction objectForKey:@"iconUrl"]]placeholderImage:[UIImage imageNamed:@"tx.jpg"]];
        
         [weakSelf.tableview reloadData];
     } enError:^(NSError *error) {
@@ -109,10 +110,16 @@
             return [EasyAlertPart shared].setTitle(@"性别").setSubtitle(@"").setAlertType(AlertViewTypeActionSheet) ;
         } config:nil buttonArray:nil callback:^(EasyAlertView *showview, long index) {
             if (index == 0) {
-                self->str3 = @"男";
+                self->str3 = @"M";
+                self->xingbie = @"男";
             }
             if (index == 1) {
-                self->str3 = @"女";
+                self->str3 = @"F";
+                self->xingbie = @"女";
+            }
+            if (index == 2) {
+                self->str3 = @"S";
+                self->xingbie = @"保密";
             }
             NSDictionary *dic = @{@"sex":self->str3,
                                   };
@@ -120,13 +127,13 @@
                 NSDictionary *diction = [Manager returndictiondata:responseObject];
                 //NSLog(@"----%@",diction);
                 if ([[NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]] isEqualToString:@"200"]){
-                     cell.lab.text = self->str3;
+                     cell.lab.text = self->xingbie;
                 }
             } enError:^(NSError *error) {
                 NSLog(@"%@",error);
             }];
         }];
-        [alertV addAlertItemWithTitleArray:@[@"男",@"女"] callback:nil];
+        [alertV addAlertItemWithTitleArray:@[@"男",@"女",@"保密"] callback:nil];
         [alertV addAlertItem:^EasyAlertItem *{
             return [EasyAlertItem itemWithTitle:@"取消" type:AlertItemTypeBlodRed callback:^(EasyAlertView *showview, long index) {
             }];
@@ -239,7 +246,13 @@
     }else if (indexPath.row == 1) {
         cell.lab.text = str2;
     }else if (indexPath.row == 2) {
-        cell.lab.text = str3;
+        if ([str3 isEqualToString:@"M"]) {
+            cell.lab.text = @"男";
+        }else if ([str3 isEqualToString:@"F"]) {
+            cell.lab.text = @"女";
+        }else{
+            cell.lab.text = @"保密";
+        }
     }else if (indexPath.row == 3) {
         cell.lab.text = str4;
     }

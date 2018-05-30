@@ -57,6 +57,8 @@
     
     UISegmentedControl *segment;
     
+    UIButton *btn2;
+    
 }
 @property(nonatomic,strong)MBProgressHUD *HUD;
 
@@ -109,11 +111,12 @@
 
 
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    self.navigationItem.title = @"宝贝";
     
+    self.navigationItem.title = @"宝贝";
     
     UIImage *theImage1 = [UIImage imageNamed:@"3"];
     UIView *ve = [[UIView alloc]initWithFrame:CGRectMake(0, [Manager returnDianchitiaoHeight], 44, 44)];
@@ -137,7 +140,7 @@
     
     
     
-    headerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 600)];
+    headerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 580)];
     self.tableview1.tableHeaderView = headerV;
     
     footerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 100)];
@@ -187,11 +190,10 @@
     [headerV addSubview:line2];
     
     
-    [self getDetailsInfo];
     
+    [self getDetailsInfo];
     [self getIndexOneInfomation];
     [self getIndexTwoInfomation];
-    
     
 }
 
@@ -271,6 +273,66 @@
 }
 
 
+-(void)cllll:(UIButton *)sender{
+    if ([sender.titleLabel.text isEqualToString:@"加入购物车"]){
+        if ([Manager redingwenjianming:@"token.text"]==nil) {
+            LoginViewController *login = [[LoginViewController alloc]init];
+            login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+            [self presentViewController:login animated:YES completion:nil];
+        }else{
+            if (stringID.length <=0) {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请选择商品属性" message:@"温馨提示" preferredStyle:1];
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                }];
+                [alert addAction:cancel];
+                [self presentViewController:alert animated:YES completion:nil];
+            }else{
+                [self addCurt];
+            }
+        }
+    }
+}
+-(void)addGoodsCartBtnClick{
+    if ([self.selectView.addBtn.titleLabel.text isEqualToString:@"加入购物车"]) {
+        if (productCanshu.length > 0 && stringID.length > 0) {
+            [self addCurt];
+        }else{
+            if (productCanshu.length <=0) {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请选择商品属性" message:@"温馨提示" preferredStyle:1];
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                }];
+                [alert addAction:cancel];
+                [self presentViewController:alert animated:YES completion:nil];
+            }
+            if (stringID.length <=0) {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"暂无该商品" message:@"温馨提示" preferredStyle:1];
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                }];
+                [alert addAction:cancel];
+                [self presentViewController:alert animated:YES completion:nil];
+            }
+        }
+    }
+}
+- (void)addCurt{
+    __weak typeof(self) weakSelf = self;
+    NSDictionary *dic = @{@"productItemId":stringID,
+                          @"quantity":productnumber};
+    [Manager requestPOSTWithURLStr:KURLNSString(@"order/shopping/add") paramDic:dic token:nil finish:^(id responseObject) {
+        NSDictionary *diction = [Manager returndictiondata:responseObject];
+        //NSLog(@"******%@",diction);
+        NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
+        if ([code isEqualToString:@"200"]){
+            [weakSelf dismiss];
+            [weakSelf TextButtonAction];
+        }else{
+        }
+    } enError:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+    
+}
+
 
 
 
@@ -338,11 +400,17 @@
                                         stringImg = [dict objectForKey:@"listImg"];
                                         itemNo = [dict objectForKey:@"itemNo"];
                                         
-                                        
-                                        self.selectView.LB_kucun.text= @"无库存";
+                                        self.selectView.LB_kucun.text= @"暂缺货";
                                         for (Model *model in self.kucunArray) {
                                             if ([model.productItemId isEqualToString:self->stringID]) {
                                                 self.selectView.LB_kucun.text= [NSString stringWithFormat:@"库存:%ld",[model.quantity integerValue]-[model.lockQuantity integerValue]];
+                                                if ([model.quantity integerValue]-[model.lockQuantity integerValue] == 0) {
+                                                    [self.selectView.addBtn setTitle:@"暂缺货，请耐心等待😳" forState:UIControlStateNormal];
+                                                    [btn2 setTitle:@"暂缺货，请选择其他规格😯" forState:UIControlStateNormal];
+                                                }else{
+                                                    [self.selectView.addBtn setTitle:@"加入购物车" forState:UIControlStateNormal];
+                                                    [btn2 setTitle:@"加入购物车" forState:UIControlStateNormal];
+                                                }
                                             }
                                         }
                                         
@@ -535,8 +603,19 @@
         for (Model *model in self.kucunArray) {
             if ([model.productItemId isEqualToString:self->stringID]) {
                 weakSelf.selectView.LB_kucun.text= [NSString stringWithFormat:@"库存:%ld",[model.quantity integerValue]-[model.lockQuantity integerValue]];
+                if ([model.quantity integerValue]-[model.lockQuantity integerValue] == 0) {
+                    [weakSelf.selectView.addBtn setTitle:@"暂缺货，请耐心等待😭" forState:UIControlStateNormal];
+                    [self->btn2 setTitle:@"暂缺货，请选择其他规格☺️" forState:UIControlStateNormal];
+                }else{
+                    [weakSelf.selectView.addBtn setTitle:@"加入购物车" forState:UIControlStateNormal];
+                    [self->btn2 setTitle:@"加入购物车" forState:UIControlStateNormal];
+                }
             }
         }
+        
+        
+        
+        
         
         for (Model *model in self.cuxiaoArr) {
             //NSLog(@"%@----%@",stringID,model.productItemId);
@@ -601,65 +680,6 @@
 
 
 
-
--(void)cllll{
-    
-    if ([Manager redingwenjianming:@"token.text"]==nil) {
-        LoginViewController *login = [[LoginViewController alloc]init];
-        login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-        [self presentViewController:login animated:YES completion:nil];
-    }else{
-        if (stringID.length <=0) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请选择商品属性" message:@"温馨提示" preferredStyle:1];
-            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            }];
-            [alert addAction:cancel];
-            [self presentViewController:alert animated:YES completion:nil];
-        }else{
-            [self addCurt];
-        }
-    }
-    
-}
--(void)addGoodsCartBtnClick{
-    if (productCanshu.length > 0 && stringID.length > 0) {
-        [self addCurt];
-    }else{
-        if (productCanshu.length <=0) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请选择商品属性" message:@"温馨提示" preferredStyle:1];
-            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            }];
-            [alert addAction:cancel];
-            [self presentViewController:alert animated:YES completion:nil];
-        }
-        if (stringID.length <=0) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"暂无该商品" message:@"温馨提示" preferredStyle:1];
-            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            }];
-            [alert addAction:cancel];
-            [self presentViewController:alert animated:YES completion:nil];
-        }
-    }
-    
-}
-- (void)addCurt{
-    __weak typeof(self) weakSelf = self;
-    NSDictionary *dic = @{@"productItemId":stringID,
-                          @"quantity":productnumber};
-    [Manager requestPOSTWithURLStr:KURLNSString(@"order/shopping/add") paramDic:dic token:nil finish:^(id responseObject) {
-        NSDictionary *diction = [Manager returndictiondata:responseObject];
-        //NSLog(@"******%@",diction);
-        NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
-        if ([code isEqualToString:@"200"]){
-            [weakSelf dismiss];
-            [weakSelf TextButtonAction];
-        }else{
-        }
-    } enError:^(NSError *error) {
-        NSLog(@"%@",error);
-    }];
-    
-}
 
 
 
@@ -763,7 +783,7 @@
     [self.dropView viewControllerWillAppear];
     self.tabBarController.tabBar.hidden = YES;
     
-    
+   
 }
 
 
@@ -772,6 +792,10 @@
 //    self.tabBarController.tabBar.hidden = YES;
     // 消除导航影响
     [self.dropView viewControllerWillDisappear];
+    
+   
+
+//    [self.detailsV.webview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
 }
 
 
@@ -800,11 +824,11 @@
 //        [btn2 addTarget:self action:@selector(cllll) forControlEvents:UIControlEventTouchUpInside];
 //        [_tabbarView addSubview:btn2];
         
-        UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
+        btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
         btn2.frame = CGRectMake(0, 0, SCREEN_WIDTH, 55);
         btn2.backgroundColor = [UIColor redColor];
         [btn2 setTitle:@"加入购物车" forState:UIControlStateNormal];
-        [btn2 addTarget:self action:@selector(cllll) forControlEvents:UIControlEventTouchUpInside];
+        [btn2 addTarget:self action:@selector(cllll:) forControlEvents:UIControlEventTouchUpInside];
         [_tabbarView addSubview:btn2];
         
         
@@ -848,6 +872,8 @@
 }
 - (void)pullUpToReloadMoreData:(MJRefreshBackNormalFooter *)table{
     //NSLog(@"--- 上拉");
+    [self.tableview2 reloadData];
+    
     [self.dropView showBottomPageViewWithCompleteBlock:^{
         [table endRefreshing];
     }];

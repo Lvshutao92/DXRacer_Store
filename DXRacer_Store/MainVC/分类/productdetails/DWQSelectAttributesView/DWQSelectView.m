@@ -85,7 +85,7 @@
     LB_kucun = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(headImage.frame)+120, CGRectGetMaxY(LB_price.frame), SCREEN_WIDTH-CGRectGetMaxX(headImage.frame)-120, 20)];
     LB_kucun.textColor = [UIColor grayColor];
     LB_kucun.font = [UIFont systemFontOfSize:10];
-    LB_kucun.text = @"无库存";
+    LB_kucun.text = @"暂缺货";
     [whiteView addSubview:LB_kucun];
     
     

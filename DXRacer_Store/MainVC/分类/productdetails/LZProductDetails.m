@@ -80,6 +80,10 @@
 
 - (WKWebView *)webview{
     if (_webview == nil) {
+//        //配置信息
+//        WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
+//        //设置为YES即可
+//        config.allowsInlineMediaPlayback = YES;
         self.webview = [[WKWebView alloc]init];
     }
     return _webview;
@@ -117,19 +121,21 @@
 //            [self.scrolV addSubview:self.videoCoverImgV];
             
 //            self.webview.frame = CGRectMake(i*self.frame.size.width, 0, SCREEN_WIDTH, SCREEN_WIDTH);
-            NSString *str = [NSString stringWithFormat:@"http://player.youku.com/embed/%@",detailsArr[i]];
+            NSString *content = [NSString stringWithFormat:@"http://player.youku.com/embed/%@",detailsArr[i]];
 //            NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:str]];
 //            [self.webview loadRequest:request];
 //            [self.webview setMediaPlaybackRequiresUserAction:NO];
 //            [self.scrolV addSubview:self.webview];
             
             
+           
+            
             self.webview.frame = CGRectMake(i*self.frame.size.width, 0, SCREEN_WIDTH, SCREEN_WIDTH);
             
             
-            [self.webview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:str]]];
+            [self.webview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:content]]];
             
-            
+            self.webview.scrollView.scrollEnabled = NO;
             //开了支持滑动返回
             self.webview.allowsBackForwardNavigationGestures = YES;
             
@@ -147,7 +153,6 @@
             
             self.imgV.tag = i;
             
-            NSLog(@"%ld",self.imgV.tag);
             
             UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(click:)];
             [self.imgV addGestureRecognizer:tap];
