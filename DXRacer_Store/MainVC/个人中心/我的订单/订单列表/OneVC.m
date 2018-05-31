@@ -110,7 +110,12 @@
                     [dictt setObject:[dic1 objectForKey:@"orderItems"] forKey:[[dic1 objectForKey:@"order"]objectForKey:@"orderNo"]];
                     [weakSelf.dataArray addObject:dictt];
                 }
+        }else  if ([code isEqualToString:@"401"]){
+            [Manager logout];
+            [weakSelf.navigationController popViewControllerAnimated:YES];
         }
+        
+        
         [weakSelf.tableview reloadData];
         
         
@@ -118,6 +123,7 @@
             UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
             lab.text = @"暂无任何订单";
             lab.textAlignment = NSTextAlignmentCenter;
+            lab.textColor = [UIColor lightGrayColor];
             [weakSelf.view addSubview:lab];
         }
     } enError:^(NSError *error) {

@@ -986,6 +986,30 @@ static Manager *manager = nil;
     }
 }
 
++ (void)logout{
+    [Manager remove:@"phone.text"];
+    [Manager remove:@"password.text"];
+    [Manager remove:@"token.text"];
+    [Manager remove:@"userid.text"];
+    [Manager remove:@"img.text"];
+    [Manager remove:@"nikname.text"];
+//    __weak typeof (self) weakSelf = self;
+    [Manager requestPOSTWithURLStr:KURLNSString(@"customer/logout") paramDic:nil token:nil finish:^(id responseObject) {
+        NSDictionary *diction = [Manager returndictiondata:responseObject];
+        NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
+        if ([code isEqualToString:@"200"]) {
+            [Manager remove:@"phone.text"];
+            [Manager remove:@"password.text"];
+            [Manager remove:@"token.text"];
+            [Manager remove:@"userid.text"];
+            [Manager remove:@"img.text"];
+            [Manager remove:@"nikname.text"];
+        }
+//        NSLog(@"logout----%@",diction);
+    } enError:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
 
 @end
 

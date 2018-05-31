@@ -20,7 +20,6 @@
 		080BC6B720A2A62200BFDEAF /* CZHDatePickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 080BC6B120A2A62200BFDEAF /* CZHDatePickerView.m */; };
 		080BC6B820A2A62200BFDEAF /* UIButton+CZHExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 080BC6B420A2A62200BFDEAF /* UIButton+CZHExtension.m */; };
 		080BC6B920A2A62200BFDEAF /* UIView+CZHExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 080BC6B620A2A62200BFDEAF /* UIView+CZHExtension.m */; };
-		082495AD20B507C1006FD6DB /* 推荐.png in Resources */ = {isa = PBXBuildFile; fileRef = 082495AC20B507C1006FD6DB /* 推荐.png */; };
 		082495B020B55E2A006FD6DB /* play@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 082495AE20B55E2A006FD6DB /* play@3x.png */; };
 		082495B120B55E2A006FD6DB /* play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 082495AF20B55E2A006FD6DB /* play@2x.png */; };
 		082495B420B55E3C006FD6DB /* LZProductDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 082495B220B55E3C006FD6DB /* LZProductDetails.m */; };
@@ -223,7 +222,6 @@
 		080BC6B420A2A62200BFDEAF /* UIButton+CZHExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+CZHExtension.m"; sourceTree = "<group>"; };
 		080BC6B520A2A62200BFDEAF /* UIView+CZHExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+CZHExtension.h"; sourceTree = "<group>"; };
 		080BC6B620A2A62200BFDEAF /* UIView+CZHExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+CZHExtension.m"; sourceTree = "<group>"; };
-		082495AC20B507C1006FD6DB /* 推荐.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "推荐.png"; sourceTree = "<group>"; };
 		082495AE20B55E2A006FD6DB /* play@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play@3x.png"; sourceTree = "<group>"; };
 		082495AF20B55E2A006FD6DB /* play@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play@2x.png"; sourceTree = "<group>"; };
 		082495B220B55E3C006FD6DB /* LZProductDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LZProductDetails.m; sourceTree = "<group>"; };
@@ -1185,11 +1183,10 @@
 			isa = PBXGroup;
 			children = (
 				080228CC20B6634600EB9243 /* miao.jpg */,
-				082495AC20B507C1006FD6DB /* 推荐.png */,
+				0856BCD520BB960600FB7CBB /* 2a.jpg */,
 				082D0D9620B4036F00886BDF /* dx.png */,
 				087B548920B2AA5C00C50DE6 /* xppd.jpg */,
 				087B548A20B2AA5C00C50DE6 /* xstq.jpg */,
-				0856BCD520BB960600FB7CBB /* 2a.jpg */,
 				082D0D8F20B3AFEB00886BDF /* topfenlei */,
 				0888FB9820999422003D2A9F /* 新品 */,
 				083197EF20AA83990069176E /* HomePageViewController.h */,
@@ -1519,7 +1516,6 @@
 				0831980E20AAB8FF0069176E /* FL_2_Cell.xib in Resources */,
 				082DAF1020B81B0800834A42 /* 客服.png in Resources */,
 				0866F13E20AEC52E0035AD95 /* AlipaySDK.bundle in Resources */,
-				082495AD20B507C1006FD6DB /* 推荐.png in Resources */,
 				088C641B20AFBF49003FE5D1 /* BigImgTableViewCell.xib in Resources */,
 				0856BCDA20BBA4BE00FB7CBB /* gud2.jpg in Resources */,
 				0871B9B420A0298B0035B3B7 /* PInfoCell.xib in Resources */,

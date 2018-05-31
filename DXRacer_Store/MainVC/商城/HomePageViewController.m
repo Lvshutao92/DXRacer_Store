@@ -139,7 +139,7 @@
                         [btn setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
                         
                         
-                        LRViewBorderRadius(btn, 0, .5, [UIColor colorWithWhite:.8 alpha:.3]);
+                        LRViewBorderRadius(btn, 0, .5, [UIColor colorWithWhite:.9 alpha:.3]);
                         [btn addTarget:self action:@selector(clickbt:) forControlEvents:UIControlEventTouchUpInside];
                         [btn setTitle:model.linkUrl forState:UIControlStateNormal];
                         
@@ -178,9 +178,6 @@
 
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index{
     NSLog(@"---------%ld",index);
-    
-    
-    
     
 }
 
@@ -236,12 +233,13 @@
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    self.tableview.showsVerticalScrollIndicator = NO;
     [self.tableview registerNib:[UINib nibWithNibName:@"Table_4_Cell" bundle:nil] forCellReuseIdentifier:@"Table_4_Cell"];
     [self.view addSubview:self.tableview];
     
     
     headerV = [[UIView alloc]init];
-    headerV.backgroundColor = [UIColor colorWithWhite:.95 alpha:.5];
+    headerV.backgroundColor = [UIColor colorWithWhite:.9 alpha:.3];
     self.tableview.tableHeaderView = headerV;
     
     self.cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 200) delegate:self placeholderImage:[UIImage imageNamed:@"placeholder"]];
@@ -252,8 +250,8 @@
     
     
     img1 = [[UIImageView alloc]init];
-    LRViewBorderRadius(img1, 0, .5, [UIColor colorWithWhite:.8 alpha:.3]);
-    img1.image = [UIImage imageNamed:@"miao.jpg"];
+    LRViewBorderRadius(img1, 0, .5, [UIColor colorWithWhite:.9 alpha:.3]);
+    img1.image = [UIImage imageNamed:@"xstq.jpg"];
     img1.userInteractionEnabled = YES;
     img1.contentMode = UIViewContentModeScaleAspectFit;
     UITapGestureRecognizer *tap1 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickbtn1:)];
@@ -261,8 +259,8 @@
     [self->headerV addSubview:img1];
     
     img2 = [[UIImageView alloc]init];
-    LRViewBorderRadius(img2, 0, .5, [UIColor colorWithWhite:.8 alpha:.3]);
-    img2.image = [UIImage imageNamed:@"2a.jpg"];
+    LRViewBorderRadius(img2, 0, .5, [UIColor colorWithWhite:.9 alpha:.3]);
+    img2.image = [UIImage imageNamed:@"xppd.jpg"];
     img2.userInteractionEnabled = YES;
     UITapGestureRecognizer *tap2 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickbtn2:)];
     [img2 addGestureRecognizer:tap2];
@@ -289,7 +287,7 @@
     
     footerV = [[UIView alloc]init];
     self.tableview.tableFooterView = footerV;
-    footerV.backgroundColor = [UIColor colorWithWhite:.95 alpha:.5];
+    footerV.backgroundColor = [UIColor colorWithWhite:.9 alpha:.3];
     
     fhlab = [[UILabel alloc]init];
     fhlab.text = @"特色推荐";
@@ -517,7 +515,7 @@
         footerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, 0);
         fhlab.frame= CGRectMake(SCREEN_WIDTH/2-75, 0, 150, 0);
     }else{
-        footerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, 50 + hangshu * 320);
+        footerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, 50 + hangshu * 255);
         fhlab.frame= CGRectMake(SCREEN_WIDTH/2-75, 0, 150, 50);
     }
     
@@ -525,12 +523,12 @@
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
     CGFloat itemWidth = self.view.frame.size.width / 2;
-    flowLayout.itemSize = CGSizeMake(itemWidth , 320);
+    flowLayout.itemSize = CGSizeMake(itemWidth , 255);
     flowLayout.minimumLineSpacing      = 0;
     flowLayout.minimumInteritemSpacing = 0;
     flowLayout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
     //设置CollectionView的属性
-    self.collectionView3 = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 50, SCREEN_WIDTH, 320*hangshu) collectionViewLayout:flowLayout];
+    self.collectionView3 = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 50, SCREEN_WIDTH, 255*hangshu) collectionViewLayout:flowLayout];
     self.collectionView3.backgroundColor = [UIColor whiteColor];
     self.collectionView3.delegate = self;
     self.collectionView3.dataSource = self;
@@ -549,7 +547,7 @@
 {
     static NSString *identify = @"cell3";
     Collec_3_Cell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identify forIndexPath:indexPath];
-    LRViewBorderRadius(cell.bgv, 0, .5, [UIColor colorWithWhite:.8 alpha:.3]);
+    LRViewBorderRadius(cell.bgv, 0, .5, [UIColor colorWithWhite:.9 alpha:.3]);
     cell.img.contentMode = UIViewContentModeScaleAspectFit;
     Model *model = [self.dataArray3 objectAtIndex:indexPath.row];
     

@@ -112,12 +112,37 @@ CG_INLINE CGRect CGRectMakes(CGFloat x, CGFloat y, CGFloat width, CGFloat height
             NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
             if ([code isEqualToString:@"200"]) {
                 [weakSelf.navigationController popViewControllerAnimated:YES];
+            }else  if ([code isEqualToString:@"401"]){
+                [Manager logout];
+                UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+                v.backgroundColor = [UIColor whiteColor];
+                UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+                btn.frame = CGRectMake(SCREEN_WIDTH/2-60, SCREEN_HEIGHT/2-22.5, 120, 45);
+                [btn setTitle:@"去登录" forState:UIControlStateNormal];
+                [btn addTarget:self action:@selector(ciclk) forControlEvents:UIControlEventTouchUpInside];
+                LRViewBorderRadius(btn, 8, 1, [UIColor colorWithWhite:.7 alpha:.5]);
+                [btn setTitleColor:[UIColor colorWithWhite:.7 alpha:.5] forState:UIControlStateNormal];
+                [v addSubview:btn];
+                [weakSelf.view addSubview:v];
+                [weakSelf.view bringSubviewToFront:v];
             }
         } enError:^(NSError *error) {
             NSLog(@"%@",error);
         }];
     }
 }
+- (void)ciclk{
+    LoginViewController *login = [[LoginViewController alloc]init];
+    login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [self presentViewController:login animated:YES completion:nil];
+}
+
+
+
+
+
+
+
 - (void)lodedit{
     if (text1.text.length > 0 && text2.text.length > 0 && text4.text.length > 0 && str1.length > 0  && str2.length > 0) {
         __weak typeof (self) weakSelf = self;
@@ -136,6 +161,11 @@ CG_INLINE CGRect CGRectMakes(CGFloat x, CGFloat y, CGFloat width, CGFloat height
             NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
             if ([code isEqualToString:@"200"]) {
                 [weakSelf.navigationController popViewControllerAnimated:YES];
+            }else  if ([code isEqualToString:@"401"]){
+                [Manager logout];
+                LoginViewController *login = [[LoginViewController alloc]init];
+                login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+                [weakSelf presentViewController:login animated:YES completion:nil];
             }
         } enError:^(NSError *error) {
             NSLog(@"%@",error);

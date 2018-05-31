@@ -83,7 +83,7 @@
     __weak typeof(self) weakSelf = self;
     [Manager requestPOSTWithURLStr:KURLNSString(@"order/shopping/list") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSLog(@"4512341234123412341234******%@",diction);
+        //NSLog(@"4512341234123412341234******%@",diction);
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
             NSMutableArray *array = [diction objectForKey:@"object"];
@@ -92,20 +92,45 @@
                 CartModel *model = [CartModel mj_objectWithKeyValues:dic];
                 [self->dataArray addObject:model];
             }
-//            self->dataArray = (NSMutableArray *)[[self->dataArray reverseObjectEnumerator] allObjects];
         }else{
             [self->dataArray removeAllObjects];
             self->selectAll.selected = NO;
         }
-        //NSLog(@"%@",self->dataArray);
         [weakSelf setupMainView];
         [self->myTableView reloadData];
+        
+        
+        
+        if ([code isEqualToString:@"401"] ){
+            [Manager logout];
+            
+            UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+            v.backgroundColor = [UIColor whiteColor];
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+            btn.frame = CGRectMake(SCREEN_WIDTH/2-60, SCREEN_HEIGHT/2-22.5, 120, 45);
+            [btn setTitle:@"去登录" forState:UIControlStateNormal];
+            [btn addTarget:self action:@selector(ciclk) forControlEvents:UIControlEventTouchUpInside];
+            LRViewBorderRadius(btn, 8, 1, [UIColor colorWithWhite:.7 alpha:.5]);
+            [btn setTitleColor:[UIColor colorWithWhite:.7 alpha:.5] forState:UIControlStateNormal];
+            [v addSubview:btn];
+            [weakSelf.view addSubview:v];
+            //[weakSelf.view bringSubviewToFront:v];
+        }
+        
     } enError:^(NSError *error) {
-        NSLog(@"%@",error);
+        NSLog(@"-------%@",error);
     }];
     
  
 }
+
+- (void)ciclk{
+    LoginViewController *login = [[LoginViewController alloc]init];
+    login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [self presentViewController:login animated:YES completion:nil];
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -346,6 +371,7 @@
 {
     //默认视图背景
     UIView *backgroundView = [[UIView alloc]initWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, SCREEN_HEIGHT - 64)];
+    backgroundView.backgroundColor = [UIColor whiteColor];
     backgroundView.tag = TAG_BACKGROUNDVIEW;
     [self.view addSubview:backgroundView];
     //默认图片

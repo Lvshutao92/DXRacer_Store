@@ -24,13 +24,13 @@
 - (void)viewWillAppear:(BOOL)animated{
     self.tabBarController.tabBar.hidden = YES;
     
-    if ([Manager redingwenjianming:@"nikname.text"] == nil) {
+    if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"nikname.text"]]!=YES) {
         username.text = @"*****";
     }else{
         username.text = [Manager redingwenjianming:@"nikname.text"];
     }
     phone.text = [Manager redingwenjianming:@"phone.text"];
-    [userImg sd_setImageWithURL:[NSURL URLWithString:[Manager redingwenjianming:@"img.text"]]placeholderImage:[UIImage imageNamed:@"头像"]];
+    [userImg sd_setImageWithURL:[NSURL URLWithString:[Manager redingwenjianming:@"img.text"]]placeholderImage:[UIImage imageNamed:@"tx.jpg"]];
 }
 - (void)viewWillDisappear:(BOOL)animated{
     self.tabBarController.tabBar.hidden = YES;
@@ -96,7 +96,8 @@
     [self.navigationController pushViewController:addr animated:YES];
 }
 - (void)cilckFooterImg{
-    [self logout];
+    [Manager logout];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 
@@ -192,37 +193,6 @@
 
 
 
-
-
-
-
-
-
-- (void)logout{
-//    [Manager remove:@"phone.text"];
-//    [Manager remove:@"password.text"];
-//    [Manager remove:@"token.text"];
-//    [Manager remove:@"userid.text"];
-//    [Manager remove:@"img.text"];
-//    [Manager remove:@"nikname.text"];
-    __weak typeof (self) weakSelf = self;
-    [Manager requestPOSTWithURLStr:KURLNSString(@"customer/logout") paramDic:nil token:nil finish:^(id responseObject) {
-        NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
-        if ([code isEqualToString:@"200"]) {
-            [Manager remove:@"phone.text"];
-            [Manager remove:@"password.text"];
-            [Manager remove:@"token.text"];
-            [Manager remove:@"userid.text"];
-            [Manager remove:@"img.text"];
-            [Manager remove:@"nikname.text"];
-            [weakSelf.navigationController popViewControllerAnimated:YES];
-        }
-        //NSLog(@"----%@",diction);
-    } enError:^(NSError *error) {
-        NSLog(@"%@",error);
-    }];
-}
 
 
 

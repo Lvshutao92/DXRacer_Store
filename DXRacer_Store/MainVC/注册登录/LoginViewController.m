@@ -34,7 +34,18 @@
     [self setupview];
 }
 - (void)clickcancel{
-    [self dismissViewControllerAnimated:YES completion:nil];
+[self dismissViewControllerAnimated:YES completion:nil];
+    
+
+//    MainTabbarViewController *mainVC = [[MainTabbarViewController alloc]init];
+//    mainVC.selectedIndex = 0;
+//    for (UIBarItem *item in mainVC.tabBar.items) {
+//        [item setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+//                                      [UIFont fontWithName:@"Helvetica" size:13.0], NSFontAttributeName, nil]
+//                            forState:UIControlStateNormal];
+//    }
+//    [UIApplication sharedApplication].keyWindow.rootViewController = mainVC;
+//    [[UIApplication sharedApplication].keyWindow makeKeyWindow];
 }
 - (void)clickRegister{
     RegisterViewController *regis = [[RegisterViewController alloc]init];
@@ -42,6 +53,7 @@
     [self presentViewController:regis animated:YES completion:nil];
 }
 - (void)clickWjmm{
+    
 }
 
 
@@ -88,36 +100,38 @@
 
 
 
-- (BOOL)textFieldShouldEndEditing:(UITextField *)textField{
-    if ([textField isEqual:text1]) {
-        __weak typeof (self) weakSelf = self;
-        NSString *url = [NSString stringWithFormat:@"customer/validate?userName=%@",text1.text];
-        [Manager requestPOSTWithURLStr:KURLNSString(url) paramDic:nil token:nil finish:^(id responseObject) {
-            NSDictionary *diction = [Manager returndictiondata:responseObject];
-            NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
-            if (![code isEqualToString:@"500"]) {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"用户名不存在" message:@"温馨提示" preferredStyle:1];
-                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                }];
-                [alert addAction:cancel];
-                [weakSelf presentViewController:alert animated:YES completion:nil];
-            }else{
-                [weakSelf getInfomation];
-            }
-            //NSLog(@"----%@",diction);
-        } enError:^(NSError *error) {
-            NSLog(@"%@",error);
-        }];
-    }
-    return YES;
-}
-- (void)getInfomation{
-    [Manager requestPOSTWithURLStr:KURLNSString(@"account") paramDic:nil token:nil finish:^(id responseObject) {
-        NSDictionary *diction = [Manager returndictiondata:responseObject];
-        [self->bgimg sd_setImageWithURL:[NSURL URLWithString:[diction objectForKey:@"iconUrl"]]placeholderImage:[UIImage imageNamed:@"tx.jpg"]];
-    } enError:^(NSError *error) {
-    }];
-}
+//- (BOOL)textFieldShouldEndEditing:(UITextField *)textField{
+//    if ([textField isEqual:text1]) {
+//        __weak typeof (self) weakSelf = self;
+//        NSString *url = [NSString stringWithFormat:@"customer/validate?userName=%@",text1.text];
+//        [Manager requestPOSTWithURLStr:KURLNSString(url) paramDic:nil token:nil finish:^(id responseObject) {
+//            NSDictionary *diction = [Manager returndictiondata:responseObject];
+//            NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
+//            if (![code isEqualToString:@"500"]) {
+//                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"用户名不存在" message:@"温馨提示" preferredStyle:1];
+//                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//                }];
+//                [alert addAction:cancel];
+//                [weakSelf presentViewController:alert animated:YES completion:nil];
+//            }else{
+//                [weakSelf getInfomation];
+//            }
+//            //NSLog(@"----%@",diction);
+//        } enError:^(NSError *error) {
+//            NSLog(@"%@",error);
+//        }];
+//    }
+//    return YES;
+//}
+//
+//
+//- (void)getInfomation{
+//    [Manager requestPOSTWithURLStr:KURLNSString(@"account") paramDic:nil token:nil finish:^(id responseObject) {
+//        NSDictionary *diction = [Manager returndictiondata:responseObject];
+//        [self->bgimg sd_setImageWithURL:[NSURL URLWithString:[diction objectForKey:@"iconUrl"]]placeholderImage:[UIImage imageNamed:@"tx.jpg"]];
+//    } enError:^(NSError *error) {
+//    }];
+//}
 
 
 

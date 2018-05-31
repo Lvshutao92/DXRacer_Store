@@ -433,6 +433,9 @@
                         [weakSelf.tfSheetView disMissView];
                     };
                     [weakSelf.tfSheetView showInView:self.view];
+                }else  if ([code isEqualToString:@"401"]){
+                    [Manager logout];
+                    [weakSelf.navigationController popViewControllerAnimated:YES];
                 }else{
                     UIAlertController *alert = [UIAlertController alertControllerWithTitle:[diction objectForKey:@"msg"] message:@"温馨提示" preferredStyle:1];
                     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"关闭" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {

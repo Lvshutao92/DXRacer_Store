@@ -83,8 +83,8 @@
     
     
     LB_kucun = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(headImage.frame)+120, CGRectGetMaxY(LB_price.frame), SCREEN_WIDTH-CGRectGetMaxX(headImage.frame)-120, 20)];
-    LB_kucun.textColor = [UIColor grayColor];
-    LB_kucun.font = [UIFont systemFontOfSize:10];
+    LB_kucun.textColor = [UIColor blueColor];
+    LB_kucun.font = [UIFont systemFontOfSize:14];
     LB_kucun.text = @"暂缺货";
     [whiteView addSubview:LB_kucun];
     
@@ -93,7 +93,7 @@
     LB_showSales = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(LB_stock.frame), CGRectGetMaxY(LB_stock.frame), 100, 20)];
     LB_showSales.textColor = [UIColor redColor];
     
-    NSString *sellStr = [NSString stringWithFormat:@"已售 %@ 件",self.showSales];
+//    NSString *sellStr = [NSString stringWithFormat:@"已售 %@ 件",self.showSales];
     
 //    NSDictionary*subStrAttribute = @{
 //                                     NSForegroundColorAttributeName: [UIColor redColor],

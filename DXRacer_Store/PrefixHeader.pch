@@ -147,7 +147,7 @@
 #define YYIS_IPHONE (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
 //状态栏高度
 #define kStatusBarHeight (CGFloat)(YYISiPhoneX?(44):(20))
-// 导航栏高度
+//导航栏高度
 #define kNavBarHBelow7 (44)
 // 状态栏和导航栏总高度
 #define kNavBarHAbove7 (CGFloat)(YYISiPhoneX?(88):(64))

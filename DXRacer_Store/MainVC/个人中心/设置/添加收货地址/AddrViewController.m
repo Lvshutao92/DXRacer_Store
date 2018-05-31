@@ -209,6 +209,7 @@
         if (weakSelf.arr.count == 0) {
             UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
             lab.text = @"无收货地址，前往添加";
+            lab.textColor = [UIColor lightGrayColor];
             lab.textAlignment = NSTextAlignmentCenter;
             [weakSelf.view addSubview:lab];
         }

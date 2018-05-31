@@ -88,10 +88,24 @@
                                   };
             [Manager requestPOSTWithURLStr:KURLNSString(@"account/update") paramDic:dic token:nil finish:^(id responseObject) {
                 NSDictionary *diction = [Manager returndictiondata:responseObject];
-                //NSLog(@"----%@",diction);
+                NSLog(@"----%@",diction);
                 if ([[NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]] isEqualToString:@"200"]){
                     cell.lab.text = TextField.text;
                     self->str2 = TextField.text;
+                }
+                else  if ([[NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]] isEqualToString:@"401"]){
+                    [Manager logout];
+                    UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+                    v.backgroundColor = [UIColor whiteColor];
+                    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+                    btn.frame = CGRectMake(SCREEN_WIDTH/2-60, SCREEN_HEIGHT/2-22.5, 120, 45);
+                    [btn setTitle:@"去登录" forState:UIControlStateNormal];
+                    [btn addTarget:self action:@selector(ciclk) forControlEvents:UIControlEventTouchUpInside];
+                    LRViewBorderRadius(btn, 8, 1, [UIColor colorWithWhite:.7 alpha:.5]);
+                    [btn setTitleColor:[UIColor colorWithWhite:.7 alpha:.5] forState:UIControlStateNormal];
+                    [v addSubview:btn];
+                    [self.view addSubview:v];
+                    [self.view bringSubviewToFront:v];
                 }
             } enError:^(NSError *error) {
                 NSLog(@"%@",error);
@@ -129,6 +143,20 @@
                 if ([[NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]] isEqualToString:@"200"]){
                      cell.lab.text = self->xingbie;
                 }
+                else  if ([[NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]] isEqualToString:@"401"]){
+                    [Manager logout];
+                    UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+                    v.backgroundColor = [UIColor whiteColor];
+                    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+                    btn.frame = CGRectMake(SCREEN_WIDTH/2-60, SCREEN_HEIGHT/2-22.5, 120, 45);
+                    [btn setTitle:@"去登录" forState:UIControlStateNormal];
+                    [btn addTarget:self action:@selector(ciclk) forControlEvents:UIControlEventTouchUpInside];
+                    LRViewBorderRadius(btn, 8, 1, [UIColor colorWithWhite:.7 alpha:.5]);
+                    [btn setTitleColor:[UIColor colorWithWhite:.7 alpha:.5] forState:UIControlStateNormal];
+                    [v addSubview:btn];
+                    [self.view addSubview:v];
+                    [self.view bringSubviewToFront:v];
+                }
             } enError:^(NSError *error) {
                 NSLog(@"%@",error);
             }];
@@ -155,6 +183,20 @@
                 //NSLog(@"----%@",diction);
                 if ([[NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]] isEqualToString:@"200"]){
                     cell.lab.text = self->str4;
+                }
+                else  if ([[NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]] isEqualToString:@"401"]){
+                    [Manager logout];
+                    UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+                    v.backgroundColor = [UIColor whiteColor];
+                    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+                    btn.frame = CGRectMake(SCREEN_WIDTH/2-60, SCREEN_HEIGHT/2-22.5, 120, 45);
+                    [btn setTitle:@"去登录" forState:UIControlStateNormal];
+                    [btn addTarget:self action:@selector(ciclk) forControlEvents:UIControlEventTouchUpInside];
+                    LRViewBorderRadius(btn, 8, 1, [UIColor colorWithWhite:.7 alpha:.5]);
+                    [btn setTitleColor:[UIColor colorWithWhite:.7 alpha:.5] forState:UIControlStateNormal];
+                    [v addSubview:btn];
+                    [self.view addSubview:v];
+                    [self.view bringSubviewToFront:v];
                 }
             } enError:^(NSError *error) {
                 NSLog(@"%@",error);
@@ -340,7 +382,7 @@
     [self imgurl:imagesave];
 }
 - (void)imgurl:(UIImage *)img{
-    //__weak typeof(self) weakSelf = self;
+    __weak typeof(self) weakSelf = self;
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
@@ -377,16 +419,29 @@
                 NSDictionary *dictions = [Manager returndictiondata:responseObject];
                 if ([[NSString stringWithFormat:@"%@",[dictions objectForKey:@"code"]] isEqualToString:@"200"]){
                      [self->userImg sd_setImageWithURL:[NSURL URLWithString:self->imgUrl]placeholderImage:[UIImage imageNamed:@"头像"]];
+                }else if ([[NSString stringWithFormat:@"%@",[dictions objectForKey:@"code"]] isEqualToString:@"401"]){
+                    [Manager logout];
+                    UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+                    v.backgroundColor = [UIColor whiteColor];
+                    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+                    btn.frame = CGRectMake(SCREEN_WIDTH/2-60, SCREEN_HEIGHT/2-22.5, 120, 45);
+                    [btn setTitle:@"去登录" forState:UIControlStateNormal];
+                    [btn addTarget:self action:@selector(ciclk) forControlEvents:UIControlEventTouchUpInside];
+                    LRViewBorderRadius(btn, 8, 1, [UIColor colorWithWhite:.7 alpha:.5]);
+                    [btn setTitleColor:[UIColor colorWithWhite:.7 alpha:.5] forState:UIControlStateNormal];
+                    [v addSubview:btn];
+                    [weakSelf.view addSubview:v];
+                    [weakSelf.view bringSubviewToFront:v];
                 }
+             
                 //NSLog(@"----%@",diction);
             } enError:^(NSError *error) {
                 NSLog(@"%@",error);
             }];
-            
-            
-        }else{
-            
         }
+            
+        
+        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"-----%@",error);
     }];
@@ -394,6 +449,11 @@
 
 
 
+- (void)ciclk{
+    LoginViewController *login = [[LoginViewController alloc]init];
+    login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [self presentViewController:login animated:YES completion:nil];
+}
 
 
 

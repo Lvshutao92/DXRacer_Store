@@ -45,6 +45,12 @@
             if ([code isEqualToString:@"200"]) {
                 [Manager sharedManager].mobile = self->text1.text;
                 [weakSelf dismissViewControllerAnimated:YES completion:nil];
+            }else{
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:[diction objectForKey:@"object"] message:@"温馨提示" preferredStyle:1];
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                }];
+                [alert addAction:cancel];
+                [weakSelf presentViewController:alert animated:YES completion:nil];
             }
             [hud hideAnimated:YES];
             //NSLog(@"----%@",diction);
@@ -98,7 +104,7 @@
         NSDictionary *dic = @{@"verificationCode":textf.text,@"mobile":text1.text};
         [Manager requestPOSTWithURLStr:KURLNSString(@"customer/register/shortmessage") paramDic:dic token:nil finish:^(id responseObject) {
             NSDictionary *diction = [Manager returndictiondata:responseObject];
-            //NSLog(@"----%@",diction);
+            NSLog(@"----%@",diction);
         } enError:^(NSError *error) {
             NSLog(@"%@",error);
         }];

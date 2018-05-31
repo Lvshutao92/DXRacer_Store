@@ -136,7 +136,7 @@
 +(CGFloat)getLabelHeightWithContent:(NSString *)content andLabelWidth:(CGFloat)width andLabelFontSize:(int)font;
 
 
-
++ (void)logout;
 
 
 

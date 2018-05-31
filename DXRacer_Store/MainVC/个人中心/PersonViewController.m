@@ -60,25 +60,44 @@
 }
 
 - (void)getInfomation{
+    __weak typeof (self) weakSelf = self;
     [Manager requestPOSTWithURLStr:KURLNSString(@"account") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        //NSLog(@"%@",diction);
+        NSLog(@"%@",diction);
+        
         [Manager writewenjianming:@"img.text" content:[diction objectForKey:@"iconUrl"]];
         [Manager writewenjianming:@"nikname.text" content:[diction objectForKey:@"nickName"]];
         
-        [self->userImg sd_setImageWithURL:[NSURL URLWithString:[diction objectForKey:@"iconUrl"]]placeholderImage:[UIImage imageNamed:@""]];
+        [self->userImg sd_setImageWithURL:[NSURL URLWithString:[diction objectForKey:@"iconUrl"]]placeholderImage:[UIImage imageNamed:@"tx.jpg"]];
         
-        if ([Manager redingwenjianming:@"phone.text"] != nil) {
-            if ([diction objectForKey:@"nickName"] != nil) {
+        if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"phone.text"]]==YES) {
+            if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"nickName"]]==YES) {
                 self->user1.text = [diction objectForKey:@"nickName"];
             }else{
                 self->user1.text = [Manager redingwenjianming:@"phone.text"];
+                self->userImg.image = [UIImage imageNamed:@"tx.jpg"];
             }
         }else{
             self->user1.text = @"登录/注册";
             self->userImg.image = [UIImage imageNamed:@"tx.jpg"];
         }
         
+        
+        NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
+        if ([code isEqualToString:@"401"]){
+            [Manager logout];
+//            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"您的账号已在其他设备登录，请重新登录" message:@"温馨提示" preferredStyle:1];
+//            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//            }];
+//            [alert addAction:cancel];
+//            UIAlertAction *sure = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//                LoginViewController *login = [[LoginViewController alloc]init];
+//                login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+//                [weakSelf presentViewController:login animated:YES completion:nil];
+//            }];
+//            [alert addAction:sure];
+//            [weakSelf presentViewController:alert animated:YES completion:nil];
+        }
     } enError:^(NSError *error) {
     }];
 }
@@ -131,6 +150,7 @@
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
+    self.tableview.showsVerticalScrollIndicator = NO;
     [self.tableview registerNib:[UINib nibWithNibName:@"PersonCell" bundle:nil] forCellReuseIdentifier:@"cell"];
     [self.view addSubview:self.tableview];
     

@@ -517,6 +517,11 @@
                     [weakSelf.tfSheetView disMissView];
                 };
                 [weakSelf.tfSheetView showInView:self.view];
+            }else  if ([code isEqualToString:@"401"]){
+                [Manager logout];
+                LoginViewController *login = [[LoginViewController alloc]init];
+                login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+                [weakSelf presentViewController:login animated:YES completion:nil];
             }else{
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:[diction objectForKey:@"object"] message:@"温馨提示" preferredStyle:1];
                 UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {

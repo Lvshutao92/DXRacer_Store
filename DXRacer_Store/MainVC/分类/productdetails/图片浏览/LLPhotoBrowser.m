@@ -141,16 +141,16 @@
 #pragma mark - LLPhotoDelegate 图片单击事件，显示/隐藏标题栏
 - (void)singleClickWithPhoto:(LLPhoto *)photo {
     [UIView animateWithDuration:.1 animations:^{
-        if (_navIsHidden) {
-            _navigationBar.transform = CGAffineTransformIdentity;
-            _tabBar.transform = CGAffineTransformIdentity;
+        if (self->_navIsHidden) {
+            self->_navigationBar.transform = CGAffineTransformIdentity;
+            self->_tabBar.transform = CGAffineTransformIdentity;
         }
         else {
-            _navigationBar.transform = CGAffineTransformMakeTranslation(0, -[Manager returnDaohanglanHeight]);
-            _tabBar.transform = CGAffineTransformMakeTranslation(0, 44);
+            self->_navigationBar.transform = CGAffineTransformMakeTranslation(0, -[Manager returnDaohanglanHeight]);
+            self->_tabBar.transform = CGAffineTransformMakeTranslation(0, 44);
         }
     } completion:^(BOOL finished) {
-        _navIsHidden = !_navIsHidden;
+        self->_navIsHidden = !_navIsHidden;
     }];
 }
 
@@ -166,12 +166,12 @@
     }
     //NSLog(@"--------%@",_images[_currentIndex]);
     UIAlertController *con = [UIAlertController alertControllerWithTitle:@"提示" message:@"保存图片" preferredStyle:1];
-    UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:1 handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:0 handler:^(UIAlertAction * _Nonnull action) {
         
         UIImageWriteToSavedPhotosAlbum([Manager imageFromURLString:_images[_currentIndex]],self,@selector(imageSavedToPhotosAlbum:didFinishSavingWithError:contextInfo:),NULL); // 写入相册
     }];
     //  此处的image1为对应image的imageView 请自行修改
-    UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"取消" style:0 handler:nil];
+    UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"取消" style:1 handler:nil];
     [con addAction:action1];
     [con addAction:action];
     [self presentViewController:con animated:YES completion:nil];

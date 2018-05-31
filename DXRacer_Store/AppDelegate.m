@@ -39,9 +39,9 @@ UIBackgroundTaskIdentifier taskId;
                 [Manager writewenjianming:@"token.text" content:[[diction objectForKey:@"object"]objectForKey:@"token"]];
                 [Manager writewenjianming:@"userid.text" content:[[diction objectForKey:@"object"]objectForKey:@"userId"]];
             }
-            //NSLog(@"----%@",diction);
+            NSLog(@"----%@",diction);
         } enError:^(NSError *error) {
-            //NSLog(@"%@",error);
+            NSLog(@"---%@",error);
         }];
     }
     
@@ -314,6 +314,10 @@ UIBackgroundTaskIdentifier taskId;
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     //NSLog(@"\n ===> 程序进入前台 !");
+    
+    
+    
+    
 }
 - (void)applicationWillResignActive:(UIApplication *)application {
     //NSLog(@"\n ===> 程序暂行 !");

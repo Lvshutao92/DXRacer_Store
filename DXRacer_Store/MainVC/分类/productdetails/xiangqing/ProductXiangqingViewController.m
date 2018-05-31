@@ -120,6 +120,7 @@
     
     UIImage *theImage1 = [UIImage imageNamed:@"3"];
     UIView *ve = [[UIView alloc]initWithFrame:CGRectMake(0, [Manager returnDianchitiaoHeight], 44, 44)];
+    ve.userInteractionEnabled = YES;
     UIButton * readerBtn=[[UIButton alloc] initWithFrame:CGRectMake(10, 8, 25, 25)];
     [readerBtn setBackgroundImage:theImage1 forState:UIControlStateNormal];
     [readerBtn addTarget:self action:@selector(onRightNavBtnClick) forControlEvents:UIControlEventTouchUpInside];
@@ -275,7 +276,7 @@
 
 -(void)cllll:(UIButton *)sender{
     if ([sender.titleLabel.text isEqualToString:@"加入购物车"]){
-        if ([Manager redingwenjianming:@"token.text"]==nil) {
+        if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"token.text"]] != YES) {
             LoginViewController *login = [[LoginViewController alloc]init];
             login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
             [self presentViewController:login animated:YES completion:nil];
@@ -325,10 +326,14 @@
         if ([code isEqualToString:@"200"]){
             [weakSelf dismiss];
             [weakSelf TextButtonAction];
-        }else{
+        }else  if ([code isEqualToString:@"401"]){
+            [Manager logout];
+            LoginViewController *login = [[LoginViewController alloc]init];
+            login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+            [weakSelf presentViewController:login animated:YES completion:nil];
         }
     } enError:^(NSError *error) {
-        NSLog(@"%@",error);
+        NSLog(@"=-=-====%@",error);
     }];
     
 }
@@ -402,7 +407,7 @@
                                         
                                         self.selectView.LB_kucun.text= @"暂缺货";
                                         for (Model *model in self.kucunArray) {
-                                            if ([model.productItemId isEqualToString:self->stringID]) {
+                                            if ([model.skuId isEqualToString:self->stringID]) {
                                                 self.selectView.LB_kucun.text= [NSString stringWithFormat:@"库存:%ld",[model.quantity integerValue]-[model.lockQuantity integerValue]];
                                                 if ([model.quantity integerValue]-[model.lockQuantity integerValue] == 0) {
                                                     [self.selectView.addBtn setTitle:@"暂缺货，请耐心等待😳" forState:UIControlStateNormal];
@@ -484,7 +489,7 @@
     NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [Manager requestPOSTWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSLog(@"******%@",diction);
+        //NSLog(@"******%@",diction);
         NSString *videoId;
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
@@ -601,7 +606,7 @@
         }
     
         for (Model *model in self.kucunArray) {
-            if ([model.productItemId isEqualToString:self->stringID]) {
+            if ([model.skuId isEqualToString:self->stringID]) {
                 weakSelf.selectView.LB_kucun.text= [NSString stringWithFormat:@"库存:%ld",[model.quantity integerValue]-[model.lockQuantity integerValue]];
                 if ([model.quantity integerValue]-[model.lockQuantity integerValue] == 0) {
                     [weakSelf.selectView.addBtn setTitle:@"暂缺货，请耐心等待😭" forState:UIControlStateNormal];
@@ -663,6 +668,7 @@
             self.cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_WIDTH) delegate:self placeholderImage:[UIImage imageNamed:@"placeholder"]];
             self.cycleScrollView.currentPageDotImage = [UIImage imageNamed:@"pageControlCurrentDot"];
             self.cycleScrollView.pageDotImage = [UIImage imageNamed:@"pageControlDot"];
+//            self.cycleScrollView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight;
             [self->headerV addSubview:self.cycleScrollView];
             weakSelf.cycleScrollView.localizationImageNamesGroup = array;
         }
