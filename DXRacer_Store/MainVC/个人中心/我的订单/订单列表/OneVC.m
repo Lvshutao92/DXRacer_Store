@@ -8,10 +8,13 @@
 
 #import "OneVC.h"
 #import "DZFOrderCell.h"
+
+
 #import "ProductOrderDetailsViewController.h"
 #import "ProductOrder_TwoDetails_ViewController.h"
-
 #import "CancelOrder_ViewController.h"
+#import "YiFaHuo_ViewController.h"
+
 
 #import <AlipaySDK/AlipaySDK.h>
 
@@ -301,25 +304,25 @@
         lab.frame  = CGRectMake(0, 1, SCREEN_WIDTH, 49);
         
     }else if ([str isEqualToString:@"02"]) {
-        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn.frame = CGRectMake(SCREEN_WIDTH-100, 10, 90, 30);
-        [btn setTitle:@"确认收货" forState:UIControlStateNormal];
-        [btn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-        LRViewBorderRadius(btn, 15, 1, [UIColor redColor]);
-        btn.titleLabel.font = [UIFont systemFontOfSize:14];
-        [lab addSubview:btn];
-        
-        UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn1.frame = CGRectMake(SCREEN_WIDTH-200, 10, 90, 30);
-        [btn1 setTitle:@"查看物流" forState:UIControlStateNormal];
-        [btn1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        LRViewBorderRadius(btn1, 15, 1, [UIColor blackColor]);
-        btn1.titleLabel.font = [UIFont systemFontOfSize:14];
-        [lab addSubview:btn1];
+//        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+//        btn.frame = CGRectMake(SCREEN_WIDTH-100, 10, 90, 30);
+//        [btn setTitle:@"确认收货" forState:UIControlStateNormal];
+//        [btn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+//        LRViewBorderRadius(btn, 15, 1, [UIColor redColor]);
+//        btn.titleLabel.font = [UIFont systemFontOfSize:14];
+//        [lab addSubview:btn];
+//
+//        UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
+//        btn1.frame = CGRectMake(SCREEN_WIDTH-200, 10, 90, 30);
+//        [btn1 setTitle:@"查看物流" forState:UIControlStateNormal];
+//        [btn1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//        LRViewBorderRadius(btn1, 15, 1, [UIColor blackColor]);
+//        btn1.titleLabel.font = [UIFont systemFontOfSize:14];
+//        [lab addSubview:btn1];
         
         
         UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn2.frame = CGRectMake(SCREEN_WIDTH-300, 10, 90, 30);
+        btn2.frame = CGRectMake(SCREEN_WIDTH-100, 10, 90, 30);
         [btn2 setTitle:@"取消订单" forState:UIControlStateNormal];
         [btn2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         LRViewBorderRadius(btn2, 15, 1, [UIColor blackColor]);
@@ -389,17 +392,25 @@
             str = model.value;
         }
     }
-    if ([str isEqualToString:@"已付款"]) {
-        ProductOrderDetailsViewController *or = [[ProductOrderDetailsViewController alloc]init];
-        or.orderNo = [self.sectionArray objectAtIndex:indexPath.section];
-        or.orderStatus = str;
-        [self.navigationController pushViewController:or animated:YES];
-    }else if ([str isEqualToString:@"待付款"]){
+    if ([str isEqualToString:@"待付款"]){
         ProductOrder_TwoDetails_ViewController *or = [[ProductOrder_TwoDetails_ViewController alloc]init];
         or.orderNo = [self.sectionArray objectAtIndex:indexPath.section];
         or.orderStatus = str;
         [self.navigationController pushViewController:or animated:YES];
-    }else {
+    }
+    else if ([str isEqualToString:@"已付款"]||[str isEqualToString:@"待发货"]) {
+        ProductOrderDetailsViewController *or = [[ProductOrderDetailsViewController alloc]init];
+        or.orderNo = [self.sectionArray objectAtIndex:indexPath.section];
+        or.orderStatus = str;
+        [self.navigationController pushViewController:or animated:YES];
+    }
+    else if ([str isEqualToString:@"已发货"]||[str isEqualToString:@"待收货"]){
+        YiFaHuo_ViewController *or = [[YiFaHuo_ViewController alloc]init];
+        or.orderNo = [self.sectionArray objectAtIndex:indexPath.section];
+        or.orderStatus = str;
+        [self.navigationController pushViewController:or animated:YES];
+    }
+    else {
         CancelOrder_ViewController *or = [[CancelOrder_ViewController alloc]init];
         or.orderNo = [self.sectionArray objectAtIndex:indexPath.section];
         or.orderStatus = str;

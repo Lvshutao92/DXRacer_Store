@@ -17,7 +17,6 @@
 }
 @property(nonatomic,strong)NSMutableArray *arr;
 
-@property(nonatomic,strong)MBProgressHUD *HUD;
 @end
 
 @implementation AccountEditTableViewController
@@ -143,17 +142,15 @@
 
 // 只显示文字
 - (void)TextButtonAction{
-    self.HUD = [[MBProgressHUD alloc] initWithView:self.view];
-    [self.view addSubview:_HUD];
-    _HUD.labelText = @"清除成功";
-    _HUD.mode = MBProgressHUDModeText;
-    [_HUD showAnimated:YES whileExecutingBlock:^{
-        sleep(1);
-    }
-       completionBlock:^{
-           [_HUD removeFromSuperview];
-           _HUD = nil;
-       }];
+    MBProgressHUD *hud= [[MBProgressHUD alloc] initWithView:self.view];
+    [hud setRemoveFromSuperViewOnHide:YES];
+    hud.label.text =@"清除成功";
+    UIImageView *imageview=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"dui"]];
+    [hud setCustomView:imageview];
+    [hud setMode:MBProgressHUDModeCustomView];
+    [self.view addSubview:hud];
+    [hud showAnimated:YES];
+    [hud hideAnimated:YES afterDelay:1.0];
 }
 
 

@@ -60,7 +60,6 @@
     UIButton *btn2;
     
 }
-@property(nonatomic,strong)MBProgressHUD *HUD;
 
 
 @property(nonatomic,strong)UIView *backgroundView;
@@ -692,17 +691,15 @@
 
 // 只显示文字
 - (void)TextButtonAction{
-    self.HUD = [[MBProgressHUD alloc] initWithView:self.view];
-    [self.view addSubview:_HUD];
-    _HUD.labelText = @"已加入购物车";
-    _HUD.mode = MBProgressHUDModeText;
-    [_HUD showAnimated:YES whileExecutingBlock:^{
-        sleep(1);
-    }
-       completionBlock:^{
-           [_HUD removeFromSuperview];
-           _HUD = nil;
-       }];
+    MBProgressHUD *hud= [[MBProgressHUD alloc] initWithView:self.view];
+    [hud setRemoveFromSuperViewOnHide:YES];
+    hud.label.text =@"已加入购物车";
+    UIImageView *imageview=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"dui"]];
+    [hud setCustomView:imageview];
+    [hud setMode:MBProgressHUDModeCustomView];
+    [self.view addSubview:hud];
+    [hud showAnimated:YES];
+    [hud hideAnimated:YES afterDelay:1.0];
 }
 
 

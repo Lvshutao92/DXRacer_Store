@@ -313,8 +313,9 @@
     tf.keyboardType = UIKeyboardTypePhonePad;
     [headerV addSubview:tf];
    
-    
-    
+    if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"token.text"]]==YES){
+        [self lodinfo];
+    }
     
     
     [self getDetailsInfo];
@@ -590,9 +591,7 @@
     //[self.dropView viewControllerWillAppear];
     self.tabBarController.tabBar.hidden = YES;
     
-    if ([Manager redingwenjianming:@"token.text"]!=nil){
-        [self lodinfo];
-    }
+   
     
     
     

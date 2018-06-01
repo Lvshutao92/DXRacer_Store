@@ -68,6 +68,7 @@
 		085B81A020A14DCC005BA24C /* XFTreePopupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 085B819F20A14DCC005BA24C /* XFTreePopupView.m */; };
 		085B81A420A177ED005BA24C /* AddressCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 085B81A220A177ED005BA24C /* AddressCell.m */; };
 		085B81A520A177ED005BA24C /* AddressCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 085B81A320A177ED005BA24C /* AddressCell.xib */; };
+		085F82E020C0D84100B112B0 /* YiFaHuo_ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 085F82DF20C0D84100B112B0 /* YiFaHuo_ViewController.m */; };
 		0866F0C820AE76020035AD95 /* DZFOrderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0866F0C620AE76020035AD95 /* DZFOrderCell.m */; };
 		0866F0C920AE76020035AD95 /* DZFOrderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0866F0C720AE76020035AD95 /* DZFOrderCell.xib */; };
 		0866F13E20AEC52E0035AD95 /* AlipaySDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0866F13C20AEC52D0035AD95 /* AlipaySDK.bundle */; };
@@ -302,6 +303,8 @@
 		085B81A120A177ED005BA24C /* AddressCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddressCell.h; sourceTree = "<group>"; };
 		085B81A220A177ED005BA24C /* AddressCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddressCell.m; sourceTree = "<group>"; };
 		085B81A320A177ED005BA24C /* AddressCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddressCell.xib; sourceTree = "<group>"; };
+		085F82DE20C0D84100B112B0 /* YiFaHuo_ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YiFaHuo_ViewController.h; sourceTree = "<group>"; };
+		085F82DF20C0D84100B112B0 /* YiFaHuo_ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YiFaHuo_ViewController.m; sourceTree = "<group>"; };
 		0866F0C520AE76020035AD95 /* DZFOrderCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DZFOrderCell.h; sourceTree = "<group>"; };
 		0866F0C620AE76020035AD95 /* DZFOrderCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DZFOrderCell.m; sourceTree = "<group>"; };
 		0866F0C720AE76020035AD95 /* DZFOrderCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DZFOrderCell.xib; sourceTree = "<group>"; };
@@ -1090,6 +1093,8 @@
 				087B548120B27F3900C50DE6 /* ProductOrder_TwoDetails_ViewController.m */,
 				080228C520B64D8A00EB9243 /* CancelOrder_ViewController.h */,
 				080228C620B64D8A00EB9243 /* CancelOrder_ViewController.m */,
+				085F82DE20C0D84100B112B0 /* YiFaHuo_ViewController.h */,
+				085F82DF20C0D84100B112B0 /* YiFaHuo_ViewController.m */,
 			);
 			path = "订单详情页";
 			sourceTree = "<group>";
@@ -1639,6 +1644,7 @@
 				087B548F20B2ACE200C50DE6 /* XSTP_ViewController.m in Sources */,
 				08A8347620941560000BCFBB /* AppDelegate.m in Sources */,
 				0866F1A420AECBB90035AD95 /* APOrderInfo.m in Sources */,
+				085F82E020C0D84100B112B0 /* YiFaHuo_ViewController.m in Sources */,
 				0831980D20AAB8FF0069176E /* FL_2_Cell.m in Sources */,
 				088C642C20AFCBF6003FE5D1 /* LLPhoto.m in Sources */,
 				088C642820AFCBF6003FE5D1 /* LLCollectionViewCell.m in Sources */,

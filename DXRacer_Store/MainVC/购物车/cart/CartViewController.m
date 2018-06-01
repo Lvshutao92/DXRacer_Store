@@ -96,14 +96,17 @@
             [self->dataArray removeAllObjects];
             self->selectAll.selected = NO;
         }
-        [weakSelf setupMainView];
+        
+     
         [self->myTableView reloadData];
+        [weakSelf setupMainView];
+        [weakSelf setupBottomView];
         
         
         
         if ([code isEqualToString:@"401"] ){
             [Manager logout];
-            
+
             UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
             v.backgroundColor = [UIColor whiteColor];
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -370,7 +373,7 @@
 -(void)cartEmptyShow
 {
     //默认视图背景
-    UIView *backgroundView = [[UIView alloc]initWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, SCREEN_HEIGHT - 64)];
+    UIView *backgroundView = [[UIView alloc]initWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, SCREEN_HEIGHT - kTabBarHeight- 50)];
     backgroundView.backgroundColor = [UIColor whiteColor];
     backgroundView.tag = TAG_BACKGROUNDVIEW;
     [self.view addSubview:backgroundView];

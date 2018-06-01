@@ -1,14 +1,16 @@
 //
-//  ProductOrderDetailsViewController.m
+//  YiFaHuo_ViewController.m
 //  DXRacer_Store
 //
-//  Created by ilovedxracer on 2018/5/18.
+//  Created by ilovedxracer on 2018/6/1.
 //  Copyright © 2018年 ilovedxracer. All rights reserved.
 //
 
-#import "ProductOrderDetailsViewController.h"
+#import "YiFaHuo_ViewController.h"
 #import "DZFOrderCell.h"
-@interface ProductOrderDetailsViewController ()<UITableViewDelegate,UITableViewDataSource>
+
+#import "DaojishiLab.h"
+@interface YiFaHuo_ViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
     //bottom
     NSString *btn1Title;
@@ -35,36 +37,55 @@
     UILabel *ProductTotalPriceLab;
     UILabel *freightLab;
     UILabel *shifukuanLab;
+    UIButton *rightBtn;
+    
+    UILabel *wuliudanhao;
+    UILabel *fahuoshijian;
+    
+    
+    UIView *bgView;
+    UIView *Popview;
 }
 
 @property(nonatomic,strong)UITableView *tableview;
 @property(nonatomic,strong)NSMutableArray *dataArray;//数据源
 
+@property UIPasteboard *pBoard;
+
 @end
 
-@implementation ProductOrderDetailsViewController
+@implementation YiFaHuo_ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = RGBACOLOR(237, 236, 242, 1);
     self.navigationItem.title = @"订单详情";
     
-    btn1Title = @"取消订单";
+    btn1Title = @"确认收货";
+    btn2Title = @"再次购买";
+    btn3Title = @"我要催单";
     
     
-    
-    self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) style:UITableViewStylePlain];
-//    self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-61) style:UITableViewStylePlain];
+    //    self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
     [self.tableview registerNib:[UINib nibWithNibName:@"DZFOrderCell" bundle:nil] forCellReuseIdentifier:@"DZFOrderCell"];
     [self.view addSubview:self.tableview];
     
+    
     [self setUpHeaderView];
     [self setUpFooterView];
     
     
-//    [self setupDibuView];
+    
+    
+    
+    
+    
+    
+    
+    [self setupDibuView];
     
     [self getOrderDetailsInfomation];
 }
@@ -81,12 +102,11 @@
         NSDictionary *diction = [Manager returndictiondata:responseObject];
         NSLog(@"==////======%@",diction);
         
-        //物流
         //地址
         NSDictionary *addressDic = [diction objectForKey:@"shippingAddress"];
         self->namelab.text = [NSString stringWithFormat:@"收货人：%@   %@",[addressDic objectForKey:@"receiverName"],[addressDic objectForKey:@"receiverMobile"]];
         CGFloat titleHeight = [Manager getLabelHeightWithContent:[NSString stringWithFormat:@"收货地址：%@%@%@%@",[addressDic objectForKey:@"receiverState"],[addressDic objectForKey:@"receiverCity"],[addressDic objectForKey:@"receiverDistrict"],[addressDic objectForKey:@"receiverAddress"]] andLabelWidth:SCREEN_WIDTH-65 andLabelFontSize:14];
-        self->addresslab.frame = CGRectMake(35, 45, SCREEN_WIDTH-65, titleHeight);
+        self->addresslab.frame = CGRectMake(35, 95, SCREEN_WIDTH-65, titleHeight);
         self->addresslab.text = [NSString stringWithFormat:@"收货地址：%@%@%@%@",[addressDic objectForKey:@"receiverState"],[addressDic objectForKey:@"receiverCity"],[addressDic objectForKey:@"receiverDistrict"],[addressDic objectForKey:@"receiverAddress"]];
         
         //产品信息
@@ -95,14 +115,22 @@
             Model *model = [Model mj_objectWithKeyValues:dic];
             [weakSelf.dataArray addObject:model];
         }
+        
+        
+        
         //订单
         NSDictionary *orderDic = [diction objectForKey:@"shippingOrder"];
-        self->orderNumLab.text = [orderDic objectForKey:@"orderNo"];
         
-        if ([Manager judgeWhetherIsEmptyAnyObject:[orderDic objectForKey:@"paiedTime"]]==YES) {
-            self->payCreatetimeLab.text = [Manager TimeCuoToTimes:[orderDic objectForKey:@"paiedTime"]];
-        }
+        
+        [self->rightBtn setTitle:[orderDic objectForKey:@"logistics"] forState:UIControlStateNormal];
+        self->fahuoshijian.text = [NSString stringWithFormat:@"发货时间：%@",[Manager TimeCuoToTimes:[orderDic objectForKey:@"deliverTime"]]];
+        self->wuliudanhao.text = [NSString stringWithFormat:@"物流单号：%@",[orderDic objectForKey:@"expressNo"]];
+        
+        
+        self->orderNumLab.text = [orderDic objectForKey:@"orderNo"];
         self->orderCreatetimeLab.text = [Manager TimeCuoToTimes:[orderDic objectForKey:@"createTime"]];
+        
+        self->payCreatetimeLab.text = [Manager TimeCuoToTimes:[orderDic objectForKey:@"paiedTime"]];
         
         self->ProductTotalPriceLab.text = [Manager jinegeshi:[orderDic objectForKey:@"productFee"]];
         self->freightLab.text = [Manager jinegeshi:[orderDic objectForKey:@"discountFee"]];
@@ -121,53 +149,98 @@
 
 
 - (void)setUpHeaderView{
-    UIView *headerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 170)];
+    UIView *headerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 230)];
     headerV.backgroundColor = RGBACOLOR(237, 236, 242, 1);
+    headerV.userInteractionEnabled = YES;
     self.tableview.tableHeaderView = headerV;
     
-    imgV = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 100)];
+    imgV = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 140)];
     imgV.image = [UIImage imageNamed:@"topUser"];
     imgV.contentMode = UIViewContentModeScaleAspectFill;
     imgV.clipsToBounds=YES;
+    imgV.userInteractionEnabled = YES;
     [headerV addSubview:imgV];
-    UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(0, 100, SCREEN_WIDTH, 60)];
+    UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(0, 140, SCREEN_WIDTH, 80)];
     lab.backgroundColor = [UIColor whiteColor];
+    lab.userInteractionEnabled = YES;
     [headerV addSubview:lab];
     
     UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    leftBtn.frame = CGRectMake(10, 15, 100, 30);
+    leftBtn.frame = CGRectMake(10, 10, 100, 30);
     [leftBtn setTitle:self.orderStatus forState:UIControlStateNormal];
     [imgV addSubview:leftBtn];
-    UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    rightBtn.frame = CGRectMake(SCREEN_WIDTH-90, 15, 80, 30);
-//    [rightBtn setTitle:@"申通快递" forState:UIControlStateNormal];
+    rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    rightBtn.frame = CGRectMake(SCREEN_WIDTH-90, 10, 80, 30);
     [imgV addSubview:rightBtn];
     
     
-    UILabel *bglab = [[UILabel alloc]initWithFrame:CGRectMake(10, 50, SCREEN_WIDTH-20, 100)];
+    UILabel *bglab = [[UILabel alloc]initWithFrame:CGRectMake(10, 50, SCREEN_WIDTH-20, 140)];
     bglab.backgroundColor = [UIColor whiteColor];
     LRViewBorderRadius(bglab, 10, .5, [UIColor colorWithWhite:.8 alpha:.3]);
+    bglab.userInteractionEnabled = YES;
     [headerV addSubview:bglab];
+    
     //物流信息
+    UIImageView *wuliuimg = [[UIImageView alloc]initWithFrame:CGRectMake(5, 22.5, 25, 25)];
+    wuliuimg.image = [UIImage imageNamed:@"物流"];
+    [bglab addSubview:wuliuimg];
+    
+    wuliudanhao = [[UILabel alloc]initWithFrame:CGRectMake(35, 15, 200, 20)];
+    wuliudanhao.font = [UIFont systemFontOfSize:14];
+    [bglab addSubview:wuliudanhao];
+    
+     self.pBoard = [UIPasteboard generalPasteboard];
     
     
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.backgroundColor = [UIColor lightGrayColor];
+    btn.frame = CGRectMake(235, 15, 35, 20);
+    [btn setTitle:@"复制" forState:UIControlStateNormal];
+    btn.titleLabel.font = [UIFont systemFontOfSize:14];
+    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [btn addTarget:self action:@selector(coptext) forControlEvents:UIControlEventTouchUpInside];
+    [bglab addSubview:btn];
     
+    
+    fahuoshijian = [[UILabel alloc]initWithFrame:CGRectMake(35, 35, SCREEN_WIDTH-55, 20)];
+    fahuoshijian.font = [UIFont systemFontOfSize:14];
+    [bglab addSubview:fahuoshijian];
     
     //地址
-    UIImageView *addreimg = [[UIImageView alloc]initWithFrame:CGRectMake(5, 37.5, 25, 25)];
+    UIImageView *addreimg = [[UIImageView alloc]initWithFrame:CGRectMake(5, 77.5, 25, 25)];
     addreimg.image = [UIImage imageNamed:@"sz1"];
     [bglab addSubview:addreimg];
-    namelab = [[UILabel alloc]initWithFrame:CGRectMake(35, 15, SCREEN_WIDTH-50, 25)];
+    namelab = [[UILabel alloc]initWithFrame:CGRectMake(35, 65, SCREEN_WIDTH-50, 25)];
     namelab.font = [UIFont systemFontOfSize:14];
     [bglab addSubview:namelab];
     addresslab = [[UILabel alloc]init];
     addresslab.font = [UIFont systemFontOfSize:14];
     addresslab.numberOfLines = 0;
     [bglab addSubview:addresslab];
+    
+    
+    
+}
+- (void)coptext{
+    NSString *str = [wuliudanhao.text substringFromIndex:5];
+    self.pBoard.string = str;
+    
+    [self TextButtonAction];
 }
 
 
-
+// 只显示文字
+- (void)TextButtonAction{
+    MBProgressHUD *hud= [[MBProgressHUD alloc] initWithView:self.view];
+    [hud setRemoveFromSuperViewOnHide:YES];
+    hud.label.text =@"复制成功";
+    UIImageView *imageview=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"dui"]];
+    [hud setCustomView:imageview];
+    [hud setMode:MBProgressHUDModeCustomView];
+    [self.view addSubview:hud];
+    [hud showAnimated:YES];
+    [hud hideAnimated:YES afterDelay:1.0];
+}
 
 - (void)setUpFooterView{
     UIView *footerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 345)];
@@ -263,7 +336,7 @@
     UILabel *line3 = [[UILabel alloc]initWithFrame:CGRectMake(0, 60, SCREEN_WIDTH, 1)];
     line3.backgroundColor = RGBACOLOR(237, 236, 242, 1);
     [footerBgv1 addSubview:line3];
-   
+    
     
     ProductTotalPriceLab = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-90, 0, 80, 30)];
     [footerBgv1 addSubview:ProductTotalPriceLab];
@@ -339,39 +412,7 @@
 
 
 
-- (void)clickCancelOrder{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"确认取消？" message:@"温馨提示" preferredStyle:1];
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-    }];
-    [alert addAction:cancel];
-    
-    UIAlertAction *sure = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        
-        //NSLog(@"-------%@",[self.sectionArray objectAtIndex:sender.tag]);
-        __weak typeof(self) weakSelf = self;
-        NSString *str = [NSString stringWithFormat:@"order/cancel/%@",self.orderNo];
-        //NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        [Manager requestPOSTWithURLStr:KURLNSString(str) paramArr:nil token:nil finish:^(id responseObject) {
-            NSDictionary *diction = [Manager returndictiondata:responseObject];
-            NSLog(@"%@",diction);
-            NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
-            if ([code isEqualToString:@"200"]){
-                [weakSelf.navigationController popViewControllerAnimated:YES];
-            }else{
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:[diction objectForKey:@"msg"] message:@"温馨提示" preferredStyle:1];
-                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                }];
-                [alert addAction:cancel];
-                [weakSelf presentViewController:alert animated:YES completion:nil];
-            }
-        } enError:^(NSError *error) {
-            NSLog(@"%@",error);
-        }];
-        
-    }];
-    [alert addAction:sure];
-    [self presentViewController:alert animated:YES completion:nil];
-}
+
 
 - (void)setupDibuView{
     UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT-60, SCREEN_WIDTH, 60)];
@@ -385,7 +426,6 @@
     btn.titleLabel.font = [UIFont systemFontOfSize:14];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     LRViewBorderRadius(btn, 13, 0, [UIColor clearColor]);
-    [btn addTarget:self action:@selector(clickCancelOrder) forControlEvents:UIControlEventTouchUpInside];
     [v addSubview:btn];
     
     UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];

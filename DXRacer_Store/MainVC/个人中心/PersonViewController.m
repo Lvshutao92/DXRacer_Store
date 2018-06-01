@@ -53,7 +53,7 @@
     [self getInfomation];
     
     
-    if ([Manager redingwenjianming:@"phone.text"] == nil) {
+    if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"phone.text"]] != YES) {
         user1.text = @"登录/注册";
         userImg.image = [UIImage imageNamed:@"tx.jpg"];
     }
@@ -70,7 +70,7 @@
         
         [self->userImg sd_setImageWithURL:[NSURL URLWithString:[diction objectForKey:@"iconUrl"]]placeholderImage:[UIImage imageNamed:@"tx.jpg"]];
         
-        if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"phone.text"]]==YES) {
+        if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"phone.text"]] == YES) {
             if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"nickName"]]==YES) {
                 self->user1.text = [diction objectForKey:@"nickName"];
             }else{
