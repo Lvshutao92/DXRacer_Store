@@ -19,7 +19,6 @@
 @implementation XPPD_ViewController
 - (void)viewWillAppear:(BOOL)animated{
     self.tabBarController.tabBar.hidden = YES;
-    [self lodList];
 }
 - (void)viewWillDisappear:(BOOL)animated{
     self.tabBarController.tabBar.hidden = YES;
@@ -35,6 +34,18 @@
     [self.tableview registerClass:[MiaoSha_Cell class] forCellReuseIdentifier:@"cell"];
     [self.view addSubview:self.tableview];
     
+    [self setUpReflash];
+}
+
+
+-(void)setUpReflash
+{
+    __weak typeof (self) weakSelf = self;
+    self.tableview.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [weakSelf lodList];
+        [weakSelf.tableview.mj_header endRefreshing];
+    }];
+    [self.tableview.mj_header beginRefreshing];
 }
 
 

@@ -56,7 +56,7 @@
     __weak typeof(self) weakSelf = self;
     [Manager requestGETWithURLStr:KURLNSString(@"index/poster") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        //NSLog(@"******%@",diction);
+//        NSLog(@"******%@",diction);
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
             if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"object"]] == YES) {
@@ -83,11 +83,13 @@
         
         weakSelf.cycleScrollView.localizationImageNamesGroup = array;
         
-//        weakSelf.cycleScrollView.titlesGroup = array1;
         
         [weakSelf.tableview reloadData];
+        
+        [weakSelf.tableview.mj_header endRefreshing];
     } enError:^(NSError *error) {
         NSLog(@"------%@",error);
+        [weakSelf.tableview.mj_header endRefreshing];
     }];
 }
 
@@ -300,7 +302,33 @@
     
     [self NavigationBa];
     
+    
+    [self setUpReflash];
+    
 }
+
+
+
+
+-(void)setUpReflash
+{
+    __weak typeof (self) weakSelf = self;
+    WNXRefresgHeader *header = [WNXRefresgHeader headerWithRefreshingBlock:^{
+        [weakSelf getTopPic];
+        [weakSelf getGuanggao];
+        [weakSelf getBottomInfo];
+        NSLog(@"52345234523452");
+    }];
+    [header beginRefreshing];
+    self.tableview.mj_header = header;
+}
+
+
+
+
+
+
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 0;
 }
@@ -656,9 +684,7 @@
     [self SetNavBarHidden:YES];
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
-    [self getTopPic];
-    [self getGuanggao];
-    [self getBottomInfo];
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated{

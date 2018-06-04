@@ -735,7 +735,7 @@
 //        createOrder.dataArray = selectGoods;
 //        [self.navigationController pushViewController:createOrder animated:YES];
         if (productCanshu.length > 0 && stringID.length > 0) {
-            NSLog(@"%@---%@",productCanshu,stringID);
+//            NSLog(@"%@---%@",productCanshu,stringID);
         }else{
             if (productCanshu.length <=0) {
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请选择商品属性" message:@"温馨提示" preferredStyle:1];

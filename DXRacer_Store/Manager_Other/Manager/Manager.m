@@ -635,7 +635,7 @@ static Manager *manager = nil;
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]) {
             [Manager writewenjianming:@"token.text" content:[diction objectForKey:@"msg"]];
-            NSLog(@"刷新token");
+//            NSLog(@"刷新token");
         }
     } enError:^(NSError *error) {
     }];

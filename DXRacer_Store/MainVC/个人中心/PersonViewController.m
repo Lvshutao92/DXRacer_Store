@@ -50,20 +50,29 @@
 - (void)viewWillAppear:(BOOL)animated{
     self.tabBarController.tabBar.hidden = NO;
     
+    
     [self getInfomation];
-    
-    
     if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"phone.text"]] != YES) {
         user1.text = @"登录/注册";
         userImg.image = [UIImage imageNamed:@"tx.jpg"];
     }
 }
 
+
+-(void)setUpReflash
+{
+    __weak typeof (self) weakSelf = self;
+    WNXRefresgHeader *header = [WNXRefresgHeader headerWithRefreshingBlock:^{
+        [weakSelf getInfomation];
+    }];
+    [header beginRefreshing];
+    self.tableview.mj_header = header;
+}
 - (void)getInfomation{
     __weak typeof (self) weakSelf = self;
     [Manager requestPOSTWithURLStr:KURLNSString(@"account") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSLog(@"%@",diction);
+//        NSLog(@"%@",diction);
         
         [Manager writewenjianming:@"img.text" content:[diction objectForKey:@"iconUrl"]];
         [Manager writewenjianming:@"nikname.text" content:[diction objectForKey:@"nickName"]];
@@ -98,6 +107,7 @@
 //            [alert addAction:sure];
 //            [weakSelf presentViewController:alert animated:YES completion:nil];
         }
+        [weakSelf.tableview.mj_header endRefreshing];
     } enError:^(NSError *error) {
     }];
 }

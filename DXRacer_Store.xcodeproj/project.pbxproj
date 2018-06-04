@@ -131,6 +131,8 @@
 		0887E87820AC0E2E00174C84 /* HJCAjustNumButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 0887E87620AC0E2D00174C84 /* HJCAjustNumButton.m */; };
 		0888FB82209957FA003D2A9F /* AddrViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0888FB81209957FA003D2A9F /* AddrViewController.m */; };
 		0888FBA12099B9A4003D2A9F /* UINavigationBar+ChangeColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 0888FB9F2099B9A4003D2A9F /* UINavigationBar+ChangeColor.m */; };
+		088B789E20C50E9000494108 /* WNXRefresgHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B789D20C50E9000494108 /* WNXRefresgHeader.m */; };
+		088B78A120C5195D00494108 /* UIView+Animation.m in Sources */ = {isa = PBXBuildFile; fileRef = 088B78A020C5195D00494108 /* UIView+Animation.m */; };
 		088C641A20AFBF49003FE5D1 /* BigImgTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 088C641820AFBF49003FE5D1 /* BigImgTableViewCell.m */; };
 		088C641B20AFBF49003FE5D1 /* BigImgTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 088C641920AFBF49003FE5D1 /* BigImgTableViewCell.xib */; };
 		088C642820AFCBF6003FE5D1 /* LLCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 088C641D20AFCBF3003FE5D1 /* LLCollectionViewCell.m */; };
@@ -476,6 +478,10 @@
 		0888FB81209957FA003D2A9F /* AddrViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddrViewController.m; sourceTree = "<group>"; };
 		0888FB9F2099B9A4003D2A9F /* UINavigationBar+ChangeColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationBar+ChangeColor.m"; sourceTree = "<group>"; };
 		0888FBA02099B9A4003D2A9F /* UINavigationBar+ChangeColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+ChangeColor.h"; sourceTree = "<group>"; };
+		088B789C20C50E9000494108 /* WNXRefresgHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WNXRefresgHeader.h; sourceTree = "<group>"; };
+		088B789D20C50E9000494108 /* WNXRefresgHeader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WNXRefresgHeader.m; sourceTree = "<group>"; };
+		088B789F20C5195C00494108 /* UIView+Animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Animation.h"; sourceTree = "<group>"; };
+		088B78A020C5195D00494108 /* UIView+Animation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Animation.m"; sourceTree = "<group>"; };
 		088C641720AFBF49003FE5D1 /* BigImgTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BigImgTableViewCell.h; sourceTree = "<group>"; };
 		088C641820AFBF49003FE5D1 /* BigImgTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BigImgTableViewCell.m; sourceTree = "<group>"; };
 		088C641920AFBF49003FE5D1 /* BigImgTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BigImgTableViewCell.xib; sourceTree = "<group>"; };
@@ -984,6 +990,17 @@
 			path = "新品";
 			sourceTree = "<group>";
 		};
+		088B789B20C50E5700494108 /* 自定义刷新样式 */ = {
+			isa = PBXGroup;
+			children = (
+				088B789C20C50E9000494108 /* WNXRefresgHeader.h */,
+				088B789D20C50E9000494108 /* WNXRefresgHeader.m */,
+				088B789F20C5195C00494108 /* UIView+Animation.h */,
+				088B78A020C5195D00494108 /* UIView+Animation.m */,
+			);
+			path = "自定义刷新样式";
+			sourceTree = "<group>";
+		};
 		088C641120AFB570003FE5D1 /* New Group */ = {
 			isa = PBXGroup;
 			children = (
@@ -1172,6 +1189,7 @@
 		08F82AA020941F7C00D36A68 /* MainVC */ = {
 			isa = PBXGroup;
 			children = (
+				088B789B20C50E5700494108 /* 自定义刷新样式 */,
 				086F054C20AD0AFB00CD508C /* 生产订单 */,
 				084D2331209C039000776B84 /* 注册登录 */,
 				08F82AB22094277100D36A68 /* Model */,
@@ -1638,6 +1656,7 @@
 				080BC6B920A2A62200BFDEAF /* UIView+CZHExtension.m in Sources */,
 				755D87CB20B10971008F892E /* CALayer+Transition.m in Sources */,
 				088C641A20AFBF49003FE5D1 /* BigImgTableViewCell.m in Sources */,
+				088B789E20C50E9000494108 /* WNXRefresgHeader.m in Sources */,
 				08A834842094156F000BCFBB /* main.m in Sources */,
 				0871B9CF20A040A20035B3B7 /* EasyShowLabel.m in Sources */,
 				08F82A9820941DDE00D36A68 /* GTMBase64.m in Sources */,
@@ -1650,6 +1669,7 @@
 				088C642820AFCBF6003FE5D1 /* LLCollectionViewCell.m in Sources */,
 				080228DE20B6A11500EB9243 /* MiaoShaXiangqingViewController.m in Sources */,
 				0858BC30209AD99300C4489B /* CouponsViewController.m in Sources */,
+				088B78A120C5195D00494108 /* UIView+Animation.m in Sources */,
 				086F058520AD4AC200CD508C /* CartTableViewCell.m in Sources */,
 				0888FB82209957FA003D2A9F /* AddrViewController.m in Sources */,
 				75DCF98B209803B000FEBBD9 /* TWScrollViewVC.m in Sources */,

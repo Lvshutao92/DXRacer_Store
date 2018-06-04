@@ -29,7 +29,7 @@ UIBackgroundTaskIdentifier taskId;
 
     
     
-    if ([Manager redingwenjianming:@"token.text"] != nil){
+    if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"token.text"]]==YES){
         NSDictionary *dic = @{@"passWord":[Manager redingwenjianming:@"password.text"],
                               @"loginName":[Manager redingwenjianming:@"phone.text"]};
         [Manager requestPOSTWithURLStr:KURLNSString(@"customer/login") paramDic:dic token:nil finish:^(id responseObject) {
@@ -39,7 +39,7 @@ UIBackgroundTaskIdentifier taskId;
                 [Manager writewenjianming:@"token.text" content:[[diction objectForKey:@"object"]objectForKey:@"token"]];
                 [Manager writewenjianming:@"userid.text" content:[[diction objectForKey:@"object"]objectForKey:@"userId"]];
             }
-            NSLog(@"----%@",diction);
+//            NSLog(@"----%@",diction);
         } enError:^(NSError *error) {
             NSLog(@"---%@",error);
         }];
@@ -88,7 +88,7 @@ UIBackgroundTaskIdentifier taskId;
 
 - (void)timeFireMethod{
     //已登录，刷新token
-    if ([Manager redingwenjianming:@"token.text"] != nil) {
+    if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"token.text"]]==YES) {
         [Manager clickLogin];
     }
 }
@@ -110,7 +110,7 @@ UIBackgroundTaskIdentifier taskId;
         [application endBackgroundTask:taskId];
         //开启一个新的后台
         taskId = [application beginBackgroundTaskWithExpirationHandler:NULL];
-        if ([Manager redingwenjianming:@"token.text"] != nil) {
+        if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"token.text"]]==YES) {
             [Manager clickLogin];
         }
     }
@@ -119,13 +119,13 @@ UIBackgroundTaskIdentifier taskId;
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     //已登录，刷新token
-    if ([Manager redingwenjianming:@"token.text"] != nil) {
+    if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"token.text"]]==YES) {
         [Manager clickLogin];
     }
     //NSLog(@"\n ===> 程序重新激活 !");
 }
 - (void)applicationWillTerminate:(UIApplication *)application {
-    NSLog(@"\n ===> 程序意外暂行 !");
+//    NSLog(@"\n ===> 程序意外暂行 !");
 //    [Manager remove:@"phone.text"];
 //    [Manager remove:@"password.text"];
 //    [Manager remove:@"token.text"];
@@ -171,7 +171,7 @@ UIBackgroundTaskIdentifier taskId;
     if ([url.host isEqualToString:@"safepay"]) {
         // 支付跳转支付宝钱包进行支付，处理支付结果
         [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
-            NSLog(@"^^^^^^^^^^^^^^^^^^^ result = %@",resultDic);
+//            NSLog(@"^^^^^^^^^^^^^^^^^^^ result = %@",resultDic);
             
             NSData *jsonData = [[resultDic objectForKey:@"result"] dataUsingEncoding:NSUTF8StringEncoding];
             NSError *err;
@@ -196,7 +196,7 @@ UIBackgroundTaskIdentifier taskId;
         
         // 授权跳转支付宝钱包进行支付，处理支付结果
         [[AlipaySDK defaultService] processAuth_V2Result:url standbyCallback:^(NSDictionary *resultDic) {
-            NSLog(@"&&&&&&&&&&&&&&&&&&&&&&& result = %@",resultDic);
+//            NSLog(@"&&&&&&&&&&&&&&&&&&&&&&& result = %@",resultDic);
             
             
             
@@ -245,7 +245,7 @@ UIBackgroundTaskIdentifier taskId;
     if ([url.host isEqualToString:@"safepay"]) {
         // 支付跳转支付宝钱包进行支付，处理支付结果
         [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
-            NSLog(@"$$$$$$$$$$$$$$$$$$$---result = %@",resultDic);
+//            NSLog(@"$$$$$$$$$$$$$$$$$$$---result = %@",resultDic);
             NSData *jsonData = [[resultDic objectForKey:@"result"] dataUsingEncoding:NSUTF8StringEncoding];
             NSError *err;
             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData
@@ -267,7 +267,7 @@ UIBackgroundTaskIdentifier taskId;
         
         // 授权跳转支付宝钱包进行支付，处理支付结果
         [[AlipaySDK defaultService] processAuth_V2Result:url standbyCallback:^(NSDictionary *resultDic) {
-       NSLog(@"--------------------------------result = %@",resultDic);
+//       NSLog(@"--------------------------------result = %@",resultDic);
             
             
             NSData *jsonData = [[resultDic objectForKey:@"result"] dataUsingEncoding:NSUTF8StringEncoding];
@@ -312,11 +312,20 @@ UIBackgroundTaskIdentifier taskId;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     //NSLog(@"\n ===> 程序进入前台 !");
-    
-    
-    
     
 }
 - (void)applicationWillResignActive:(UIApplication *)application {

@@ -403,7 +403,7 @@
 }
 -(void)goToMainmenuView
 {
-    NSLog(@"去首页");
+//    NSLog(@"去首页");
     
 }
 #pragma mark - tableView 数据源方法

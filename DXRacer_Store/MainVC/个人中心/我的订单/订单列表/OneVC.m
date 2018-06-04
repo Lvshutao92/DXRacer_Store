@@ -222,21 +222,21 @@
 - (void)clickBtn:(UIButton *)sender{
     __weak typeof(self) weakSelf = self;
     NSString *orderNo = [self.sectionArray objectAtIndex:sender.tag-100];
-    NSLog(@"---%@",orderNo);
+//    NSLog(@"---%@",orderNo);
     self.tfSheetView = [[TFSheetView alloc]init];
     //取消
     self.tfSheetView.cancelBlock = ^{
-        NSLog(@"取消");
+//        NSLog(@"取消");
         [weakSelf.tfSheetView disMissView];
     };
     //微信支付
     self.tfSheetView.wxBlock = ^{
-        NSLog(@"微信支付");
+//        NSLog(@"微信支付");
         [weakSelf.tfSheetView disMissView];
     };
     //支付宝支付
     self.tfSheetView.zfbBlock = ^{
-        NSLog(@"支付宝支付");
+//        NSLog(@"支付宝支付");
         [weakSelf doAPPay:orderNo];
         [weakSelf.tfSheetView disMissView];
     };
@@ -358,7 +358,7 @@
         //NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         [Manager requestPOSTWithURLStr:KURLNSString(str) paramArr:nil token:nil finish:^(id responseObject) {
             NSDictionary *diction = [Manager returndictiondata:responseObject];
-            NSLog(@"%@",diction);
+//            NSLog(@"%@",diction);
             NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
             if ([code isEqualToString:@"200"]){
                 [weakSelf getOrderList];

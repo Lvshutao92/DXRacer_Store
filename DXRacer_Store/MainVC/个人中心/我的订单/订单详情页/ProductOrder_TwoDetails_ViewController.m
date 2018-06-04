@@ -92,7 +92,7 @@
     NSString *str = [NSString stringWithFormat:@"order/%@",self.orderNo];
     [Manager requestGETWithURLStr:KURLNSString(str) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSLog(@"==////======%@",diction);
+//        NSLog(@"==////======%@",diction);
         
         //地址
         NSDictionary *addressDic = [diction objectForKey:@"shippingAddress"];
@@ -332,17 +332,17 @@
     self.tfSheetView = [[TFSheetView alloc]init];
     //取消
     self.tfSheetView.cancelBlock = ^{
-        NSLog(@"取消");
+//        NSLog(@"取消");
         [weakSelf.tfSheetView disMissView];
     };
     //微信支付
     self.tfSheetView.wxBlock = ^{
-        NSLog(@"微信支付");
+//        NSLog(@"微信支付");
         [weakSelf.tfSheetView disMissView];
     };
     //支付宝支付
     self.tfSheetView.zfbBlock = ^{
-        NSLog(@"支付宝支付");
+//        NSLog(@"支付宝支付");
         [weakSelf doAPPay:weakSelf.orderNo];
         [weakSelf.tfSheetView disMissView];
     };

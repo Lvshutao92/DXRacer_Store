@@ -88,7 +88,7 @@
                                   };
             [Manager requestPOSTWithURLStr:KURLNSString(@"account/update") paramDic:dic token:nil finish:^(id responseObject) {
                 NSDictionary *diction = [Manager returndictiondata:responseObject];
-                NSLog(@"----%@",diction);
+//                NSLog(@"----%@",diction);
                 if ([[NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]] isEqualToString:@"200"]){
                     cell.lab.text = TextField.text;
                     self->str2 = TextField.text;
