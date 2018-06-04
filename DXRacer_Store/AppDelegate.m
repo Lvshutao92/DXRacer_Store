@@ -47,7 +47,7 @@ UIBackgroundTaskIdentifier taskId;
     
     
     //测试的时候改变info 里的版本号就可以了
-    NSArray *images = @[@"gud1.jpg",@"gud2.jpg",@"gud3.jpg", @"av3.jpg"];
+    NSArray *images = @[@"gud1.jpg",@"gud2.jpg",@"gud3.jpg",@"gud4.jpg",@"av1.jpg",@"av2.jpg",@"av3.jpg"];
     BOOL y = [XTGuidePagesViewController isShow];
     if (y) {
         XTGuidePagesViewController *xt = [[XTGuidePagesViewController alloc] init];

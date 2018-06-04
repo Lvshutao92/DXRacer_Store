@@ -68,7 +68,6 @@
                 }
             }
         }
-        
         NSMutableArray *array = [NSMutableArray arrayWithCapacity:1];
         NSMutableArray *array1 = [NSMutableArray arrayWithCapacity:1];
         [array removeAllObjects];
@@ -77,15 +76,8 @@
             [array addObject:NSString(mo.phoneUrl)];
             [array1 addObject:mo.title1];
         }
-        
-        
-        
-        
         weakSelf.cycleScrollView.localizationImageNamesGroup = array;
-        
-        
         [weakSelf.tableview reloadData];
-        
         [weakSelf.tableview.mj_header endRefreshing];
     } enError:^(NSError *error) {
         NSLog(@"------%@",error);
@@ -179,7 +171,7 @@
 
 
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index{
-    NSLog(@"---------%ld",index);
+//    NSLog(@"---------%ld",index);
     
 }
 
@@ -253,7 +245,7 @@
     
     img1 = [[UIImageView alloc]init];
     LRViewBorderRadius(img1, 0, .5, [UIColor colorWithWhite:.9 alpha:.3]);
-    img1.image = [UIImage imageNamed:@"xstq.jpg"];
+    img1.image = [UIImage imageNamed:@"miao.jpg"];
     img1.userInteractionEnabled = YES;
     img1.contentMode = UIViewContentModeScaleAspectFit;
     UITapGestureRecognizer *tap1 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickbtn1:)];
@@ -262,7 +254,7 @@
     
     img2 = [[UIImageView alloc]init];
     LRViewBorderRadius(img2, 0, .5, [UIColor colorWithWhite:.9 alpha:.3]);
-    img2.image = [UIImage imageNamed:@"xppd.jpg"];
+    img2.image = [UIImage imageNamed:@"2a.jpg"];
     img2.userInteractionEnabled = YES;
     UITapGestureRecognizer *tap2 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickbtn2:)];
     [img2 addGestureRecognizer:tap2];
@@ -317,7 +309,6 @@
         [weakSelf getTopPic];
         [weakSelf getGuanggao];
         [weakSelf getBottomInfo];
-        NSLog(@"52345234523452");
     }];
     [header beginRefreshing];
     self.tableview.mj_header = header;
@@ -364,7 +355,7 @@
 
 - (void)getHotSearch{
     //1.创建热门搜索
-    NSArray *hotSeaches = @[@"电竞椅", @"电竞桌", @"鼠标垫", @"鼠标", @"显示屏", @"升降器", @"支架",@"键盘"];
+    NSArray *hotSeaches = @[@"电竞椅", @"电竞桌", @"鼠标", @"显示屏", @"升降器", @"支架",@"键盘"];
     PYSearchViewController *searchViewController = [PYSearchViewController searchViewControllerWithHotSearches:hotSeaches searchBarPlaceholder:@"商品名称" didSearchBlock:^(PYSearchViewController *searchViewController, UISearchBar *searchBar, NSString *searchText) {
         SearchController *search = [[SearchController alloc] init];
         search.str = searchText;
