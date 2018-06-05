@@ -1,14 +1,28 @@
 //
-//  CancelOrder_ViewController.m
+//  DaiFuKuan_ViewController.m
 //  DXRacer_Store
 //
-//  Created by ilovedxracer on 2018/5/24.
+//  Created by ilovedxracer on 2018/6/5.
 //  Copyright © 2018年 ilovedxracer. All rights reserved.
 //
 
-#import "CancelOrder_ViewController.h"
+#import "DaiFuKuan_ViewController.h"
 #import "DZFOrderCell.h"
-@interface CancelOrder_ViewController ()<UITableViewDelegate,UITableViewDataSource>
+
+#import <AlipaySDK/AlipaySDK.h>
+
+#import "APAuthInfo.h"
+#import "APOrderInfo.h"
+#import "APRSASigner.h"
+
+
+#define AP_SUBVIEW_XGAP   (20.0f)
+#define AP_SUBVIEW_YGAP   (30.0f)
+#define AP_SUBVIEW_WIDTH  (([UIScreen mainScreen].bounds.size.width) - 2*(AP_SUBVIEW_XGAP))
+
+#define AP_BUTTON_HEIGHT  (60.0f)
+#define AP_INFO_HEIGHT    (200.0f)
+@interface DaiFuKuan_ViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
     //bottom
     NSString *btn1Title;
@@ -33,24 +47,28 @@
     UILabel *freightLab;
     UILabel *shifukuanLab;
     
-    UIButton *btn;
+    UIButton *btn2;
 }
 
 @property(nonatomic,strong)UITableView *tableview;
 @property(nonatomic,strong)NSMutableArray *dataArray;//数据源
 
 
+@property(nonatomic,strong)TFSheetView *tfSheetView;
 
 @end
 
-@implementation CancelOrder_ViewController
-
+@implementation DaiFuKuan_ViewController
+- (void)viewWillAppear:(BOOL)animated{
+    [self getOrderDetailsInfomation];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = RGBACOLOR(237, 236, 242, 1);
     self.navigationItem.title = @"订单详情";
     
-    btn1Title = @"删除订单";
+    btn1Title = @"去支付";
+    btn2Title = @"取消订单";
     
     
     self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-51) style:UITableViewStylePlain];
@@ -69,9 +87,7 @@
     
 }
 
-- (void)viewWillAppear:(BOOL)animated{
-    [self getOrderDetailsInfomation];
-}
+
 
 
 
@@ -93,6 +109,14 @@
         self->addresslab.text = [NSString stringWithFormat:@"收货地址：%@%@%@%@",[addressDic objectForKey:@"receiverState"],[addressDic objectForKey:@"receiverCity"],[addressDic objectForKey:@"receiverDistrict"],[addressDic objectForKey:@"receiverAddress"]];
         
         
+        if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"shippingInvoice"]]!=YES) {
+            self->btn2.hidden = NO;
+        }else{
+            self->btn2.hidden = YES;
+        }
+        
+        
+        
         //产品信息
         [weakSelf.dataArray removeAllObjects];
         for (NSDictionary *dic in [diction objectForKey:@"shippingOrderItems"]) {
@@ -108,19 +132,10 @@
         self->ProductTotalPriceLab.text = [Manager jinegeshi:[orderDic objectForKey:@"productFee"]];
         self->freightLab.text = [Manager jinegeshi:[orderDic objectForKey:@"discountFee"]];
         
-        NSMutableAttributedString *noteStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"实付款：%@",[Manager jinegeshi:[orderDic objectForKey:@"orderTotalFee"]]]];
+        NSMutableAttributedString *noteStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"需付款：%@",[Manager jinegeshi:[orderDic objectForKey:@"orderTotalFee"]]]];
         NSRange range1 = NSMakeRange(0, 4);
         [noteStr addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:range1];
         [self->shifukuanLab setAttributedText:noteStr];
-        
-        
-        
-        
-        
-        self->payTypeLab.text = [Manager TimeCuoToTimes:[orderDic objectForKey:@"refundTime"]];
-      
-        
-        
         //发票
         
         [weakSelf.tableview reloadData];
@@ -173,11 +188,11 @@
 
 
 - (void)setUpFooterView{
-    UIView *footerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 315)];
+    UIView *footerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 275)];
     footerV.backgroundColor = RGBACOLOR(237, 236, 242, 1);
     self.tableview.tableFooterView = footerV;
     
-    UIView *footerBgv = [[UIView alloc]initWithFrame:CGRectMake(0, 10, SCREEN_WIDTH, 200)];
+    UIView *footerBgv = [[UIView alloc]initWithFrame:CGRectMake(0, 10, SCREEN_WIDTH, 160)];
     footerBgv.backgroundColor = [UIColor whiteColor];
     [footerV addSubview:footerBgv];
     
@@ -202,40 +217,26 @@
     [footerBgv addSubview:line1];
     
     
-    UILabel *lab3 = [[UILabel alloc]initWithFrame:CGRectMake(10, 70, 80, 30)];
-    lab3.text = @"取消时间：";
-    lab3.font = [UIFont systemFontOfSize:15];
-    [footerBgv addSubview:lab3];
-    payTypeLab = [[UILabel alloc]initWithFrame:CGRectMake(90, 70, SCREEN_WIDTH-100, 30)];
-    payTypeLab.textColor = [UIColor grayColor];
-    [footerBgv addSubview:payTypeLab];
-    payTypeLab.font = [UIFont systemFontOfSize:14];
-    UILabel *line2 = [[UILabel alloc]initWithFrame:CGRectMake(0, 104, SCREEN_WIDTH, 1)];
-    line2.backgroundColor = RGBACOLOR(237, 236, 242, 1);
-    [footerBgv addSubview:line2];
     
-    
-    
-    
-    UILabel *lab5 = [[UILabel alloc]initWithFrame:CGRectMake(10, 110, 80, 30)];
+    UILabel *lab5 = [[UILabel alloc]initWithFrame:CGRectMake(10, 70, 80, 30)];
     lab5.text = @"发票类型：";
     lab5.font = [UIFont systemFontOfSize:15];
     [footerBgv addSubview:lab5];
-    UILabel *lab6 = [[UILabel alloc]initWithFrame:CGRectMake(10, 140, 80, 30)];
+    UILabel *lab6 = [[UILabel alloc]initWithFrame:CGRectMake(10, 100, 80, 30)];
     lab6.text = @"发票抬头：";
     lab6.font = [UIFont systemFontOfSize:15];
     [footerBgv addSubview:lab6];
-    UILabel *lab7 = [[UILabel alloc]initWithFrame:CGRectMake(10, 170, 80, 30)];
+    UILabel *lab7 = [[UILabel alloc]initWithFrame:CGRectMake(10, 130, 80, 30)];
     lab7.text = @"发票内容：";
     lab7.font = [UIFont systemFontOfSize:15];
     [footerBgv addSubview:lab7];
-    invioceTypeLab = [[UILabel alloc]initWithFrame:CGRectMake(90, 110, SCREEN_WIDTH-100, 30)];
+    invioceTypeLab = [[UILabel alloc]initWithFrame:CGRectMake(90, 70, SCREEN_WIDTH-100, 30)];
     invioceTypeLab.textColor = [UIColor grayColor];
     [footerBgv addSubview:invioceTypeLab];
-    invioceTitleLab = [[UILabel alloc]initWithFrame:CGRectMake(90, 140, SCREEN_WIDTH-100, 30)];
+    invioceTitleLab = [[UILabel alloc]initWithFrame:CGRectMake(90, 100, SCREEN_WIDTH-100, 30)];
     invioceTitleLab.textColor = [UIColor grayColor];
     [footerBgv addSubview:invioceTitleLab];
-    invioceContentLab = [[UILabel alloc]initWithFrame:CGRectMake(90, 170, SCREEN_WIDTH-100, 30)];
+    invioceContentLab = [[UILabel alloc]initWithFrame:CGRectMake(90, 130, SCREEN_WIDTH-100, 30)];
     invioceContentLab.textColor = [UIColor grayColor];
     [footerBgv addSubview:invioceContentLab];
     invioceTypeLab.font = [UIFont systemFontOfSize:14];
@@ -244,7 +245,7 @@
     
     
     
-    UIView *footerBgv1 = [[UIView alloc]initWithFrame:CGRectMake(0, 215, SCREEN_WIDTH, 100)];
+    UIView *footerBgv1 = [[UIView alloc]initWithFrame:CGRectMake(0, 175, SCREEN_WIDTH, 100)];
     footerBgv1.backgroundColor = [UIColor whiteColor];
     [footerV addSubview:footerBgv1];
     UILabel *label1 = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, 80, 30)];
@@ -271,7 +272,7 @@
     //    label3.font = [UIFont systemFontOfSize:15];
     //    [footerBgv1 addSubview:label3];
     
-    shifukuanLab = [[UILabel alloc]initWithFrame:CGRectMake(20, 61, SCREEN_WIDTH-40, 39)];
+    shifukuanLab = [[UILabel alloc]initWithFrame:CGRectMake(10, 61, SCREEN_WIDTH-20, 39)];
     shifukuanLab.textColor = [UIColor redColor];
     [footerBgv1 addSubview:shifukuanLab];
     
@@ -325,8 +326,39 @@
 
 
 
-- (void)click{
-   
+- (void)clickPay{
+    __weak typeof(self) weakSelf = self;
+    self.tfSheetView = [[TFSheetView alloc]init];
+    //取消
+    self.tfSheetView.cancelBlock = ^{
+        //        NSLog(@"取消");
+        [weakSelf.tfSheetView disMissView];
+    };
+    //微信支付
+    self.tfSheetView.wxBlock = ^{
+        //        NSLog(@"微信支付");
+        [weakSelf.tfSheetView disMissView];
+    };
+    //支付宝支付
+    self.tfSheetView.zfbBlock = ^{
+        //        NSLog(@"支付宝支付");
+        [weakSelf doAPPay:weakSelf.orderNo];
+        [weakSelf.tfSheetView disMissView];
+    };
+    [self.tfSheetView showInView:self.view];
+}
+#pragma mark   ==============点击订单模拟支付行为==============
+- (void)doAPPay:(NSString *)orderNo
+{
+    NSString *str = [NSString stringWithFormat:@"order/alipay/%@",orderNo];
+    [Manager requestPOSTWithURLStr:KURLNSString(str) paramDic:nil token:nil finish:^(id responseObject) {
+        NSString *base64Decoded = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+        [[AlipaySDK defaultService] payOrder:base64Decoded fromScheme:@"dxracerdiruikesi" callback:^(NSDictionary *resultDic) {
+            //                NSLog(@"*****************************result%@",resultDic);
+        }];
+    } enError:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
 }
 
 
@@ -338,20 +370,75 @@
 
 
 
+- (void)clickCancelOrder{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"确认取消？" message:@"温馨提示" preferredStyle:1];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    }];
+    [alert addAction:cancel];
+    
+    UIAlertAction *sure = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        //NSLog(@"-------%@",[self.sectionArray objectAtIndex:sender.tag]);
+        __weak typeof(self) weakSelf = self;
+        NSString *str = [NSString stringWithFormat:@"order/cancel/%@",self.orderNo];
+        //NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        [Manager requestPOSTWithURLStr:KURLNSString(str) paramArr:nil token:nil finish:^(id responseObject) {
+            NSDictionary *diction = [Manager returndictiondata:responseObject];
+            NSLog(@"%@",diction);
+            NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
+            if ([code isEqualToString:@"200"]){
+                [weakSelf.navigationController popViewControllerAnimated:YES];
+            }else{
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:[diction objectForKey:@"msg"] message:@"温馨提示" preferredStyle:1];
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                }];
+                [alert addAction:cancel];
+                [weakSelf presentViewController:alert animated:YES completion:nil];
+            }
+        } enError:^(NSError *error) {
+            NSLog(@"%@",error);
+        }];
+        
+    }];
+    [alert addAction:sure];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+
 - (void)setupDibuView{
     UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT-50, SCREEN_WIDTH, 50)];
     v.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:v];
     
-    btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.backgroundColor = [UIColor whiteColor];
-    btn.frame = CGRectMake(SCREEN_WIDTH-100, 10, 90, 30);
-    [btn setTitle:@"编辑发票" forState:UIControlStateNormal];
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.backgroundColor = [UIColor redColor];
+    btn.frame = CGRectMake(SCREEN_WIDTH-95, 10, 90, 30);
+    [btn setTitle:btn1Title forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:14];
-    [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    LRViewBorderRadius(btn, 13, 1, [UIColor blackColor]);
-    [btn addTarget:self action:@selector(clickEditInvioce) forControlEvents:UIControlEventTouchUpInside];
+    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    LRViewBorderRadius(btn, 13, 0, [UIColor clearColor]);
+    [btn addTarget:self action:@selector(clickPay) forControlEvents:UIControlEventTouchUpInside];
     [v addSubview:btn];
+    
+    UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn1.backgroundColor = [UIColor whiteColor];
+    btn1.frame = CGRectMake(SCREEN_WIDTH-200, 10, 90, 30);
+    [btn1 setTitle:btn2Title forState:UIControlStateNormal];
+    btn1.titleLabel.font = [UIFont systemFontOfSize:14];
+    [btn1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    LRViewBorderRadius(btn1, 13, 1, [UIColor blackColor]);
+    [btn1 addTarget:self action:@selector(clickCancelOrder) forControlEvents:UIControlEventTouchUpInside];
+    [v addSubview:btn1];
+    
+    btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn2.backgroundColor = [UIColor whiteColor];
+    btn2.frame = CGRectMake(SCREEN_WIDTH-300, 10, 90, 30);
+    [btn2 setTitle:@"编辑发票" forState:UIControlStateNormal];
+    btn2.titleLabel.font = [UIFont systemFontOfSize:14];
+    [btn2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    LRViewBorderRadius(btn2, 13, 1, [UIColor blackColor]);
+    [btn2 addTarget:self action:@selector(clickEditInvioce) forControlEvents:UIControlEventTouchUpInside];
+    [v addSubview:btn2];
     
 }
 
@@ -362,11 +449,24 @@
     [self.navigationController pushViewController:fapiao animated:YES];
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
 - (NSMutableArray *)dataArray {
     if (_dataArray == nil) {
         self.dataArray = [NSMutableArray arrayWithCapacity:1];
     }
     return _dataArray;
 }
+
 
 @end

@@ -66,7 +66,7 @@
     btn3Title = @"我要催单";
     
     
-    self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-61) style:UITableViewStylePlain];
+    self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-51) style:UITableViewStylePlain];
     //    self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
@@ -87,9 +87,10 @@
     
     [self setupDibuView];
     
+}
+- (void)viewWillAppear:(BOOL)animated{
     [self getOrderDetailsInfomation];
 }
-
 
 
 
@@ -344,7 +345,7 @@
     freightLab = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-90, 30, 80, 30)];
     [footerBgv1 addSubview:freightLab];
     
-    shifukuanLab = [[UILabel alloc]initWithFrame:CGRectMake(20, 61, SCREEN_WIDTH-40, 39)];
+    shifukuanLab = [[UILabel alloc]initWithFrame:CGRectMake(10, 61, SCREEN_WIDTH-20, 39)];
     shifukuanLab.textColor = [UIColor redColor];
     [footerBgv1 addSubview:shifukuanLab];
     
@@ -409,23 +410,56 @@
 
 
 
+- (void)clickShouHuo:(UIButton *)sender{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"确认签收？" message:@"温馨提示" preferredStyle:1];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    }];
+    [alert addAction:cancel];
+    
+    UIAlertAction *sure = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        __weak typeof(self) weakSelf = self;
+        NSString *str = [NSString stringWithFormat:@"order/receive/%@",weakSelf.orderNo];
+        [Manager requestPOSTWithURLStr:KURLNSString(str) paramArr:nil token:nil finish:^(id responseObject) {
+            NSDictionary *diction = [Manager returndictiondata:responseObject];
+            NSLog(@"%@",diction);
+            NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
+            if ([code isEqualToString:@"200"]){
+                [weakSelf.navigationController popViewControllerAnimated:YES];
+            }else{
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:[diction objectForKey:@"msg"] message:@"温馨提示" preferredStyle:1];
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                }];
+                [alert addAction:cancel];
+                [weakSelf presentViewController:alert animated:YES completion:nil];
+            }
+        } enError:^(NSError *error) {
+            NSLog(@"%@",error);
+        }];
+        
+    }];
+    [alert addAction:sure];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 
 
 
 
 
 - (void)setupDibuView{
-    UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT-60, SCREEN_WIDTH, 60)];
+    UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT-50, SCREEN_WIDTH, 50)];
     v.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:v];
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.backgroundColor = [UIColor redColor];
-    btn.frame = CGRectMake(SCREEN_WIDTH-95, 15, 90, 30);
+    btn.frame = CGRectMake(SCREEN_WIDTH-95, 10, 90, 30);
     [btn setTitle:btn1Title forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:14];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     LRViewBorderRadius(btn, 13, 0, [UIColor clearColor]);
+    [btn addTarget:self action:@selector(clickShouHuo:) forControlEvents:UIControlEventTouchUpInside];
     [v addSubview:btn];
     
     UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];

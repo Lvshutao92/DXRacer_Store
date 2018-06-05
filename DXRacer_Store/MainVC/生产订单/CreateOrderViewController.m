@@ -10,8 +10,10 @@
 #import "AddrViewController.h"
 #import "CartModel.h"
 
-#import "ProductOrder_TwoDetails_ViewController.h"
-#import "ProductOrderDetailsViewController.h"
+
+
+
+#import "DaiFuKuan_ViewController.h"
 
 #import <AlipaySDK/AlipaySDK.h>
 
@@ -411,7 +413,7 @@
                     weakSelf.tfSheetView.cancelBlock = ^{
                         [weakSelf.dataArray removeAllObjects];
                         [weakSelf.tableview reloadData];
-                        ProductOrder_TwoDetails_ViewController *or = [[ProductOrder_TwoDetails_ViewController alloc]init];
+                        DaiFuKuan_ViewController *or = [[DaiFuKuan_ViewController alloc]init];
                         or.orderNo = [diction objectForKey:@"msg"];
                         or.orderStatus = @"待付款";
                         [self.navigationController pushViewController:or animated:YES];

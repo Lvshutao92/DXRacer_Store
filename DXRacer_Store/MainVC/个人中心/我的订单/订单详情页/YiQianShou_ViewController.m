@@ -1,14 +1,14 @@
 //
-//  CancelOrder_ViewController.m
+//  YiQianShou_ViewController.m
 //  DXRacer_Store
 //
-//  Created by ilovedxracer on 2018/5/24.
+//  Created by ilovedxracer on 2018/6/5.
 //  Copyright © 2018年 ilovedxracer. All rights reserved.
 //
 
-#import "CancelOrder_ViewController.h"
+#import "YiQianShou_ViewController.h"
 #import "DZFOrderCell.h"
-@interface CancelOrder_ViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface YiQianShou_ViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
     //bottom
     NSString *btn1Title;
@@ -32,18 +32,15 @@
     UILabel *ProductTotalPriceLab;
     UILabel *freightLab;
     UILabel *shifukuanLab;
-    
-    UIButton *btn;
 }
 
 @property(nonatomic,strong)UITableView *tableview;
 @property(nonatomic,strong)NSMutableArray *dataArray;//数据源
 
 
-
 @end
 
-@implementation CancelOrder_ViewController
+@implementation YiQianShou_ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -53,7 +50,7 @@
     btn1Title = @"删除订单";
     
     
-    self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-51) style:UITableViewStylePlain];
+    self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) style:UITableViewStylePlain];
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
     [self.tableview registerNib:[UINib nibWithNibName:@"DZFOrderCell" bundle:nil] forCellReuseIdentifier:@"DZFOrderCell"];
@@ -66,13 +63,12 @@
     
     [self setupDibuView];
     
-    
 }
+
 
 - (void)viewWillAppear:(BOOL)animated{
     [self getOrderDetailsInfomation];
 }
-
 
 
 
@@ -116,9 +112,9 @@
         
         
         
+       
+        self->payTypeLab.text = [Manager TimeCuoToTimes:[orderDic objectForKey:@"receiveTime"]];
         
-        self->payTypeLab.text = [Manager TimeCuoToTimes:[orderDic objectForKey:@"refundTime"]];
-      
         
         
         //发票
@@ -203,7 +199,7 @@
     
     
     UILabel *lab3 = [[UILabel alloc]initWithFrame:CGRectMake(10, 70, 80, 30)];
-    lab3.text = @"取消时间：";
+    lab3.text = @"签收时间：";
     lab3.font = [UIFont systemFontOfSize:15];
     [footerBgv addSubview:lab3];
     payTypeLab = [[UILabel alloc]initWithFrame:CGRectMake(90, 70, SCREEN_WIDTH-100, 30)];
@@ -271,7 +267,7 @@
     //    label3.font = [UIFont systemFontOfSize:15];
     //    [footerBgv1 addSubview:label3];
     
-    shifukuanLab = [[UILabel alloc]initWithFrame:CGRectMake(20, 61, SCREEN_WIDTH-40, 39)];
+    shifukuanLab = [[UILabel alloc]initWithFrame:CGRectMake(10, 61, SCREEN_WIDTH-20, 39)];
     shifukuanLab.textColor = [UIColor redColor];
     [footerBgv1 addSubview:shifukuanLab];
     
@@ -326,7 +322,7 @@
 
 
 - (void)click{
-   
+    
 }
 
 
@@ -339,27 +335,19 @@
 
 
 - (void)setupDibuView{
-    UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT-50, SCREEN_WIDTH, 50)];
+    UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT-60, SCREEN_WIDTH, 60)];
     v.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:v];
+    //[self.view addSubview:v];
     
-    btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.backgroundColor = [UIColor whiteColor];
-    btn.frame = CGRectMake(SCREEN_WIDTH-100, 10, 90, 30);
-    [btn setTitle:@"编辑发票" forState:UIControlStateNormal];
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.backgroundColor = [UIColor redColor];
+    btn.frame = CGRectMake(SCREEN_WIDTH-95, 15, 90, 30);
+    [btn setTitle:btn1Title forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:14];
-    [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    LRViewBorderRadius(btn, 13, 1, [UIColor blackColor]);
-    [btn addTarget:self action:@selector(clickEditInvioce) forControlEvents:UIControlEventTouchUpInside];
+    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    LRViewBorderRadius(btn, 13, 0, [UIColor clearColor]);
+    [btn addTarget:self action:@selector(click) forControlEvents:UIControlEventTouchUpInside];
     [v addSubview:btn];
-    
-}
-
-- (void)clickEditInvioce{
-    FaPiao_ViewController *fapiao = [[FaPiao_ViewController alloc]init];
-    fapiao.navigationItem.title = @"编辑发票";
-    fapiao.orderNo = self.orderNo;
-    [self.navigationController pushViewController:fapiao animated:YES];
 }
 
 - (NSMutableArray *)dataArray {
@@ -368,5 +356,6 @@
     }
     return _dataArray;
 }
+
 
 @end

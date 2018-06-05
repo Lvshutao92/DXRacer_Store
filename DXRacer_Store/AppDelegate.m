@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import <AlipaySDK/AlipaySDK.h>
-#import "ProductOrderDetailsViewController.h"
+#import "YiFuKuan_ViewController.h"
 
 @interface AppDelegate ()<selectDelegate>
 {
@@ -28,22 +28,21 @@ UIBackgroundTaskIdentifier taskId;
     [IQKeyboardManager sharedManager].shouldResignOnTouchOutside = YES;
 
     
-    
-    if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"token.text"]]==YES){
-        NSDictionary *dic = @{@"passWord":[Manager redingwenjianming:@"password.text"],
-                              @"loginName":[Manager redingwenjianming:@"phone.text"]};
-        [Manager requestPOSTWithURLStr:KURLNSString(@"customer/login") paramDic:dic token:nil finish:^(id responseObject) {
-            NSDictionary *diction = [Manager returndictiondata:responseObject];
-            NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
-            if ([code isEqualToString:@"200"]) {
-                [Manager writewenjianming:@"token.text" content:[[diction objectForKey:@"object"]objectForKey:@"token"]];
-                [Manager writewenjianming:@"userid.text" content:[[diction objectForKey:@"object"]objectForKey:@"userId"]];
-            }
-//            NSLog(@"----%@",diction);
-        } enError:^(NSError *error) {
-            NSLog(@"---%@",error);
-        }];
-    }
+//    if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"token.text"]]==YES){
+//        NSDictionary *dic = @{@"passWord":[Manager redingwenjianming:@"password.text"],
+//                              @"loginName":[Manager redingwenjianming:@"phone.text"]};
+//        [Manager requestPOSTWithURLStr:KURLNSString(@"customer/login") paramDic:dic token:nil finish:^(id responseObject) {
+//            NSDictionary *diction = [Manager returndictiondata:responseObject];
+//            NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
+//            if ([code isEqualToString:@"200"]) {
+//                [Manager writewenjianming:@"token.text" content:[[diction objectForKey:@"object"]objectForKey:@"token"]];
+//                [Manager writewenjianming:@"userid.text" content:[[diction objectForKey:@"object"]objectForKey:@"userId"]];
+//            }
+//            //NSLog(@"----%@",diction);
+//        } enError:^(NSError *error) {
+//            NSLog(@"---%@",error);
+//        }];
+//    }
     
     
     //测试的时候改变info 里的版本号就可以了
@@ -60,11 +59,28 @@ UIBackgroundTaskIdentifier taskId;
     
     [self requestAuthorizationAddressBook];
 
-
+    
+    
+    self.window.backgroundColor = [UIColor whiteColor];
+    MainTabbarViewController *mainVC = [[MainTabbarViewController alloc]init];
+    mainVC.selectedIndex = 0;
+    for (UIBarItem *item in mainVC.tabBar.items) {
+        [item setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                      [UIFont fontWithName:@"Helvetica" size:13.0], NSFontAttributeName, nil]
+                            forState:UIControlStateNormal];
+    }
+    self.window.rootViewController = mainVC;
+    //    [self.window makeKeyWindow];
+    //    self.window.rootViewController = vc;
+    [self.window.layer transitionWithAnimType:TransitionAnimTypeRamdom subType:TransitionSubtypesFromRamdom curve:TransitionCurveRamdom duration:2.0f];
+    
+    
+    
+    
     //进入后台后可继续运行定时器
-    [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
-    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:3600 target:self selector:@selector(timeFireMethod)userInfo:nil repeats:YES];
-    [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+//    [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
+//    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:3600 target:self selector:@selector(timeFireMethod)userInfo:nil repeats:YES];
+//    [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
     
     return YES;
 }
@@ -88,19 +104,19 @@ UIBackgroundTaskIdentifier taskId;
 
 - (void)timeFireMethod{
     //已登录，刷新token
-    if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"token.text"]]==YES) {
-        [Manager clickLogin];
-    }
+//    if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"token.text"]]==YES) {
+//        [Manager clickLogin];
+//    }
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     //NSLog(@"\n ===> 程序进入后台 !");
     //开启一个后台任务
-    taskId = [application beginBackgroundTaskWithExpirationHandler:^{
-        //结束指定的任务
-        [application endBackgroundTask:taskId];
-    }];
-    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerAction:) userInfo:nil repeats:YES];
+//    taskId = [application beginBackgroundTaskWithExpirationHandler:^{
+//        //结束指定的任务
+//        [application endBackgroundTask:taskId];
+//    }];
+//    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerAction:) userInfo:nil repeats:YES];
 }
 - (void)timerAction:(NSTimer *)timer {
     count++;
@@ -119,9 +135,9 @@ UIBackgroundTaskIdentifier taskId;
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     //已登录，刷新token
-    if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"token.text"]]==YES) {
-        [Manager clickLogin];
-    }
+//    if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"token.text"]]==YES) {
+//        [Manager clickLogin];
+//    }
     //NSLog(@"\n ===> 程序重新激活 !");
 }
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -181,7 +197,7 @@ UIBackgroundTaskIdentifier taskId;
             NSString *str = [NSString stringWithFormat:@"%@",[[dic objectForKey:@"alipay_trade_app_pay_response"]objectForKey:@"code"]];
             
             if ([str isEqualToString:@"10000"]) {
-                ProductOrderDetailsViewController *vvv = [[ProductOrderDetailsViewController alloc]init];
+                YiFuKuan_ViewController *vvv = [[YiFuKuan_ViewController alloc]init];
                 vvv.orderNo = [[dic objectForKey:@"alipay_trade_app_pay_response"]objectForKey:@"out_trade_no"];
                 // 取到tabbarcontroller
                 UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
@@ -209,7 +225,7 @@ UIBackgroundTaskIdentifier taskId;
             NSString *str = [NSString stringWithFormat:@"%@",[[dic objectForKey:@"alipay_trade_app_pay_response"]objectForKey:@"code"]];
             
             if ([str isEqualToString:@"10000"]) {
-                ProductOrderDetailsViewController *vvv = [[ProductOrderDetailsViewController alloc]init];
+                YiFuKuan_ViewController *vvv = [[YiFuKuan_ViewController alloc]init];
                 vvv.orderNo = [[dic objectForKey:@"alipay_trade_app_pay_response"]objectForKey:@"out_trade_no"];
                 // 取到tabbarcontroller
                 UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
@@ -254,7 +270,7 @@ UIBackgroundTaskIdentifier taskId;
             NSString *str = [NSString stringWithFormat:@"%@",[[dic objectForKey:@"alipay_trade_app_pay_response"]objectForKey:@"code"]];
             
             if ([str isEqualToString:@"10000"]) {
-                ProductOrderDetailsViewController *vvv = [[ProductOrderDetailsViewController alloc]init];
+                YiFuKuan_ViewController *vvv = [[YiFuKuan_ViewController alloc]init];
                 vvv.orderNo = [[dic objectForKey:@"alipay_trade_app_pay_response"]objectForKey:@"out_trade_no"];
                 // 取到tabbarcontroller
                 UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
@@ -278,7 +294,7 @@ UIBackgroundTaskIdentifier taskId;
             NSString *str = [NSString stringWithFormat:@"%@",[[dic objectForKey:@"alipay_trade_app_pay_response"]objectForKey:@"code"]];
             
             if ([str isEqualToString:@"10000"]) {
-                ProductOrderDetailsViewController *vvv = [[ProductOrderDetailsViewController alloc]init];
+                YiFuKuan_ViewController *vvv = [[YiFuKuan_ViewController alloc]init];
                 vvv.orderNo = [[dic objectForKey:@"alipay_trade_app_pay_response"]objectForKey:@"out_trade_no"];
                 // 取到tabbarcontroller
                 UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;

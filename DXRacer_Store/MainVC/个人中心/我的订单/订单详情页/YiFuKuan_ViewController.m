@@ -1,14 +1,14 @@
 //
-//  ProductOrderDetailsViewController.m
+//  YiFuKuan_ViewController.m
 //  DXRacer_Store
 //
-//  Created by ilovedxracer on 2018/5/18.
+//  Created by ilovedxracer on 2018/6/5.
 //  Copyright © 2018年 ilovedxracer. All rights reserved.
 //
 
-#import "ProductOrderDetailsViewController.h"
+#import "YiFuKuan_ViewController.h"
 #import "DZFOrderCell.h"
-@interface ProductOrderDetailsViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface YiFuKuan_ViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
     //bottom
     NSString *btn1Title;
@@ -40,9 +40,10 @@
 @property(nonatomic,strong)UITableView *tableview;
 @property(nonatomic,strong)NSMutableArray *dataArray;//数据源
 
+
 @end
 
-@implementation ProductOrderDetailsViewController
+@implementation YiFuKuan_ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -53,8 +54,8 @@
     
     
     
-    self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) style:UITableViewStylePlain];
-//    self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-51) style:UITableViewStylePlain];
+    //    self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
     [self.tableview registerNib:[UINib nibWithNibName:@"DZFOrderCell" bundle:nil] forCellReuseIdentifier:@"DZFOrderCell"];
@@ -64,11 +65,12 @@
     [self setUpFooterView];
     
     
-//    [self setupDibuView];
+    [self setupDibuView];
     
+}
+- (void)viewWillAppear:(BOOL)animated{
     [self getOrderDetailsInfomation];
 }
-
 
 
 
@@ -79,7 +81,7 @@
     NSString *str = [NSString stringWithFormat:@"order/%@",self.orderNo];
     [Manager requestGETWithURLStr:KURLNSString(str) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-//        NSLog(@"==////======%@",diction);
+                NSLog(@"==////======%@",diction);
         
         //物流
         //地址
@@ -99,9 +101,10 @@
         NSDictionary *orderDic = [diction objectForKey:@"shippingOrder"];
         self->orderNumLab.text = [orderDic objectForKey:@"orderNo"];
         
-        if ([Manager judgeWhetherIsEmptyAnyObject:[orderDic objectForKey:@"paiedTime"]]==YES) {
-            self->payCreatetimeLab.text = [Manager TimeCuoToTimes:[orderDic objectForKey:@"paiedTime"]];
-        }
+       
+        
+        self->payCreatetimeLab.text = [Manager TimeCuoToTimes:[orderDic objectForKey:@"paiedTime"]];
+        
         self->orderCreatetimeLab.text = [Manager TimeCuoToTimes:[orderDic objectForKey:@"createTime"]];
         
         self->ProductTotalPriceLab.text = [Manager jinegeshi:[orderDic objectForKey:@"productFee"]];
@@ -140,7 +143,7 @@
     [imgV addSubview:leftBtn];
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     rightBtn.frame = CGRectMake(SCREEN_WIDTH-90, 15, 80, 30);
-//    [rightBtn setTitle:@"申通快递" forState:UIControlStateNormal];
+    //    [rightBtn setTitle:@"申通快递" forState:UIControlStateNormal];
     [imgV addSubview:rightBtn];
     
     
@@ -263,7 +266,7 @@
     UILabel *line3 = [[UILabel alloc]initWithFrame:CGRectMake(0, 60, SCREEN_WIDTH, 1)];
     line3.backgroundColor = RGBACOLOR(237, 236, 242, 1);
     [footerBgv1 addSubview:line3];
-   
+    
     
     ProductTotalPriceLab = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-90, 0, 80, 30)];
     [footerBgv1 addSubview:ProductTotalPriceLab];
@@ -271,7 +274,7 @@
     freightLab = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-90, 30, 80, 30)];
     [footerBgv1 addSubview:freightLab];
     
-    shifukuanLab = [[UILabel alloc]initWithFrame:CGRectMake(20, 61, SCREEN_WIDTH-40, 39)];
+    shifukuanLab = [[UILabel alloc]initWithFrame:CGRectMake(10, 61, SCREEN_WIDTH-20, 39)];
     shifukuanLab.textColor = [UIColor redColor];
     [footerBgv1 addSubview:shifukuanLab];
     
@@ -374,13 +377,13 @@
 }
 
 - (void)setupDibuView{
-    UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT-60, SCREEN_WIDTH, 60)];
+    UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT-50, SCREEN_WIDTH, 50)];
     v.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:v];
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.backgroundColor = [UIColor redColor];
-    btn.frame = CGRectMake(SCREEN_WIDTH-95, 15, 90, 30);
+    btn.frame = CGRectMake(SCREEN_WIDTH-95, 10, 90, 30);
     [btn setTitle:btn1Title forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:14];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -390,21 +393,21 @@
     
     UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
     btn1.backgroundColor = [UIColor whiteColor];
-    btn1.frame = CGRectMake(SCREEN_WIDTH-200, 15, 90, 30);
+    btn1.frame = CGRectMake(SCREEN_WIDTH-200, 10, 90, 30);
     [btn1 setTitle:btn2Title forState:UIControlStateNormal];
     btn1.titleLabel.font = [UIFont systemFontOfSize:14];
     [btn1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     LRViewBorderRadius(btn1, 13, 1, [UIColor blackColor]);
-//    [v addSubview:btn1];
+    //    [v addSubview:btn1];
     
     UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
     btn2.backgroundColor = [UIColor whiteColor];
-    btn2.frame = CGRectMake(SCREEN_WIDTH-305, 15, 90, 30);
+    btn2.frame = CGRectMake(SCREEN_WIDTH-305, 10, 90, 30);
     [btn2 setTitle:btn3Title forState:UIControlStateNormal];
     btn2.titleLabel.font = [UIFont systemFontOfSize:14];
     [btn2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     LRViewBorderRadius(btn2, 13, 1, [UIColor blackColor]);
-//    [v addSubview:btn2];
+    //    [v addSubview:btn2];
     
 }
 
@@ -414,4 +417,5 @@
     }
     return _dataArray;
 }
+
 @end

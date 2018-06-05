@@ -33,6 +33,10 @@
 #import "LoginViewController.h"
 #import "RegisterViewController.h"
 
+#import "FaPiao_ViewController.h"
+
+
+
 //控件
 #import "HJCAjustNumButton.h"
 #import "KGCustomButton.h"
@@ -128,15 +132,15 @@
 
 
 //显示头像的域名是
-//#define NSString(str) [NSString stringWithFormat:@"http://test-shop-img.dxracer.com.cn/%@",str]
-#define NSString(str) [NSString stringWithFormat:@"http://10.0.0.2/%@",str]
+#define NSString(str) [NSString stringWithFormat:@"http://test-shop-img.dxracer.com.cn/%@",str]
+//#define NSString(str) [NSString stringWithFormat:@"http://10.0.0.2/%@",str]
 
 #define CHECKWORD @""
 //#define KURLNSString(str) [NSString stringWithFormat:@"http://10.0.0.2:8080/dxracer-mall-api/app/%@",str]
 
-#define KURLNSString(str) [NSString stringWithFormat:@"http://10.0.0.2:8081/mall/app/%@",str]
+//#define KURLNSString(str) [NSString stringWithFormat:@"http://10.0.0.2:8081/mall/app/%@",str]
 
-//#define KURLNSString(str) [NSString stringWithFormat:@"http://test-shop.dxracer.com.cn:8084/mall/app/%@",str]
+#define KURLNSString(str) [NSString stringWithFormat:@"http://test-shop.dxracer.com.cn:8084/mall/app/%@",str]
 
 
 #import "UIView+DWQExtension.h"

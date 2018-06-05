@@ -21,7 +21,7 @@
 #import "APAuthInfo.h"
 #import "APOrderInfo.h"
 #import "APRSASigner.h"
-#import "ProductOrder_TwoDetails_ViewController.h"
+#import "DaiFuKuan_ViewController.h"
 
 #define AP_SUBVIEW_XGAP   (20.0f)
 #define AP_SUBVIEW_YGAP   (30.0f)
@@ -500,7 +500,7 @@
                 weakSelf.tfSheetView = [[TFSheetView alloc]init];
                 //取消
                 weakSelf.tfSheetView.cancelBlock = ^{
-                    ProductOrder_TwoDetails_ViewController *or = [[ProductOrder_TwoDetails_ViewController alloc]init];
+                    DaiFuKuan_ViewController *or = [[DaiFuKuan_ViewController alloc]init];
                     or.orderNo = [diction objectForKey:@"object"];
                     or.orderStatus = @"待付款";
                     [self.navigationController pushViewController:or animated:YES];
