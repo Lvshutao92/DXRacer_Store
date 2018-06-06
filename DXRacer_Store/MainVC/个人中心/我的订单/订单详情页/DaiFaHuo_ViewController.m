@@ -35,11 +35,24 @@
     UILabel *ProductTotalPriceLab;
     UILabel *freightLab;
     UILabel *shifukuanLab;
+    
+    UIButton *btn1;
 }
 
 @property(nonatomic,strong)UITableView *tableview;
 @property(nonatomic,strong)NSMutableArray *dataArray;//数据源
-
+@property(nonatomic,strong)NSString *str1;
+@property(nonatomic,strong)NSString *str2;
+@property(nonatomic,strong)NSString *str3;
+@property(nonatomic,strong)NSString *str4;
+@property(nonatomic,strong)NSString *str5;
+@property(nonatomic,strong)NSString *str6;
+@property(nonatomic,strong)NSString *str7;
+@property(nonatomic,strong)NSString *str8;
+@property(nonatomic,strong)NSString *str9;
+@property(nonatomic,strong)NSString *str10;
+@property(nonatomic,strong)NSString *str11;
+@property(nonatomic,strong)NSString *str12;
 @end
 
 @implementation DaiFaHuo_ViewController
@@ -50,7 +63,7 @@
     self.navigationItem.title = @"订单详情";
     
     btn1Title = @"取消订单";
-    
+    btn2Title = @"编辑发票";
     
     
     self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-51) style:UITableViewStylePlain];
@@ -100,7 +113,17 @@
         NSDictionary *orderDic = [diction objectForKey:@"shippingOrder"];
         self->orderNumLab.text = [orderDic objectForKey:@"orderNo"];
         
-        self->payCreatetimeLab.text = [Manager TimeCuoToTimes:[orderDic objectForKey:@"paiedTime"]];
+        
+        NSDictionary *payDic = [[diction objectForKey:@"shippingOrderPayList"] firstObject];
+        if ([[payDic objectForKey:@"payType"] isEqualToString:@"alipay"]) {
+            self->payTypeLab.text = @"支付宝支付";
+        }else{
+            self->payTypeLab.text = @"微信支付";
+        }
+        self->payCreatetimeLab.text = [Manager TimeCuoToTimes:[payDic objectForKey:@"payTime"]];
+        
+        
+        
         
         
         self->orderCreatetimeLab.text = [Manager TimeCuoToTimes:[orderDic objectForKey:@"createTime"]];
@@ -113,6 +136,33 @@
         [noteStr addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:range1];
         [self->shifukuanLab setAttributedText:noteStr];
         //发票
+        if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"shippingInvoice"]]==YES) {
+            NSDictionary *invDic = [diction objectForKey:@"shippingInvoice"];
+            self->invioceTypeLab.text = [invDic objectForKey:@"invoiceType"];
+            
+            weakSelf.str1  = [invDic objectForKey:@"invoiceTitle"];
+            weakSelf.str2  = [invDic objectForKey:@"invoiceType"];
+            
+            weakSelf.str3  = [invDic objectForKey:@"bankName"];
+            weakSelf.str4  = [invDic objectForKey:@"bankNo"];
+            weakSelf.str5  = [invDic objectForKey:@"invoiceCode"];
+            weakSelf.str6  = [invDic objectForKey:@"registerAddress"];
+            
+            weakSelf.str7  = [invDic objectForKey:@"receiveProvince"];
+            weakSelf.str8  = [invDic objectForKey:@"receiveCity"];
+            weakSelf.str9  = [invDic objectForKey:@"receiveDistrict"];
+            weakSelf.str10 = [invDic objectForKey:@"receiveAddress"];
+            weakSelf.str11 = [invDic objectForKey:@"receivePerson"];
+            weakSelf.str12 = [invDic objectForKey:@"receivePhone"];
+            
+            self->invioceTitleLab.text = [invDic objectForKey:@"invoiceTitle"];
+            if (![[invDic objectForKey:@"invoiceStatus"] isEqualToString:@"created"]) {
+                self->btn1.hidden = YES;
+            }
+        }
+        
+        
+        
         
         [weakSelf.tableview reloadData];
     } enError:^(NSError *error) {
@@ -389,14 +439,15 @@
     [btn addTarget:self action:@selector(clickCancelOrder) forControlEvents:UIControlEventTouchUpInside];
     [v addSubview:btn];
     
-    UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
     btn1.backgroundColor = [UIColor whiteColor];
-    btn1.frame = CGRectMake(SCREEN_WIDTH-200, 15, 90, 30);
+    btn1.frame = CGRectMake(SCREEN_WIDTH-200, 10, 90, 30);
     [btn1 setTitle:btn2Title forState:UIControlStateNormal];
     btn1.titleLabel.font = [UIFont systemFontOfSize:14];
     [btn1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     LRViewBorderRadius(btn1, 13, 1, [UIColor blackColor]);
-    //    [v addSubview:btn1];
+    [btn1 addTarget:self action:@selector(clickEditInvioce) forControlEvents:UIControlEventTouchUpInside];
+    [v addSubview:btn1];
     
     UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
     btn2.backgroundColor = [UIColor whiteColor];
@@ -408,7 +459,26 @@
     //    [v addSubview:btn2];
     
 }
-
+- (void)clickEditInvioce{
+    FaPiao_ViewController *fapiao = [[FaPiao_ViewController alloc]init];
+    fapiao.navigationItem.title = @"编辑发票";
+    fapiao.orderNo = self.orderNo;
+    fapiao.invioceTitle    = self.str1;
+    fapiao.invioceType     = self.str2;
+    
+    fapiao.bankName        = self.str3;
+    fapiao.bankNo          = self.str4;
+    fapiao.invoiceCode     = self.str5;
+    fapiao.registerAddress = self.str6;
+    
+    fapiao.receiveProvince = self.str7;
+    fapiao.receiveCity     = self.str8;
+    fapiao.receiveDistrict = self.str9;
+    fapiao.receiveAddress  = self.str10;
+    fapiao.receivePerson   = self.str11;
+    fapiao.receivePhone    = self.str12;
+    [self.navigationController pushViewController:fapiao animated:YES];
+}
 - (NSMutableArray *)dataArray {
     if (_dataArray == nil) {
         self.dataArray = [NSMutableArray arrayWithCapacity:1];

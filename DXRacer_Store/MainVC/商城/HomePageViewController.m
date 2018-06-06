@@ -76,7 +76,12 @@
             [array addObject:NSString(mo.phoneUrl)];
             [array1 addObject:mo.title1];
         }
-        weakSelf.cycleScrollView.localizationImageNamesGroup = array;
+        
+        if (array.count > 0) {
+            weakSelf.cycleScrollView.localizationImageNamesGroup = array;
+        }
+        
+        
         [weakSelf.tableview reloadData];
         [weakSelf.tableview.mj_header endRefreshing];
     } enError:^(NSError *error) {

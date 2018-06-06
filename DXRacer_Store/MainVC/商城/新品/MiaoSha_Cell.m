@@ -80,7 +80,7 @@
 }
 - (UILabel *)dayLabel{
     if (_dayLabel == nil) {
-        self.dayLabel = [[UILabel alloc]initWithFrame:CGRectMake(190, 90, 30, 20)];
+        self.dayLabel = [[UILabel alloc]initWithFrame:CGRectMake(190, 90, 40, 20)];
         self.dayLabel.textColor = [UIColor blackColor];
         self.dayLabel.textAlignment = NSTextAlignmentCenter;
         self.dayLabel.font = [UIFont systemFontOfSize:14];

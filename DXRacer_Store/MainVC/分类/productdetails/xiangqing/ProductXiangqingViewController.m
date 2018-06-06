@@ -143,7 +143,7 @@
     headerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 580)];
     self.tableview1.tableHeaderView = headerV;
     
-    footerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 100)];
+    footerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 1)];
     self.tableview1.tableFooterView = footerV;
     
     
@@ -281,8 +281,8 @@
             [self presentViewController:login animated:YES completion:nil];
         }else{
             if (stringID.length <=0) {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请选择商品属性" message:@"温馨提示" preferredStyle:1];
-                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"请选择商品属性" preferredStyle:1];
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"关闭" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                 }];
                 [alert addAction:cancel];
                 [self presentViewController:alert animated:YES completion:nil];
@@ -298,15 +298,15 @@
             [self addCurt];
         }else{
             if (productCanshu.length <=0) {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请选择商品属性" message:@"温馨提示" preferredStyle:1];
-                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"请选择商品属性" preferredStyle:1];
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"关闭" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                 }];
                 [alert addAction:cancel];
                 [self presentViewController:alert animated:YES completion:nil];
             }
             if (stringID.length <=0) {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"暂无该商品" message:@"温馨提示" preferredStyle:1];
-                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"暂无该商品" preferredStyle:1];
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"关闭" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                 }];
                 [alert addAction:cancel];
                 [self presentViewController:alert animated:YES completion:nil];
@@ -738,15 +738,15 @@
 //            NSLog(@"%@---%@",productCanshu,stringID);
         }else{
             if (productCanshu.length <=0) {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请选择商品属性" message:@"温馨提示" preferredStyle:1];
-                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"请选择商品属性" preferredStyle:1];
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"关闭" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                 }];
                 [alert addAction:cancel];
                 [self presentViewController:alert animated:YES completion:nil];
             }
             if (stringID.length <=0) {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"暂无该商品" message:@"温馨提示" preferredStyle:1];
-                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"暂无该商品" preferredStyle:1];
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"关闭" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                 }];
                 [alert addAction:cancel];
                 [self presentViewController:alert animated:YES completion:nil];

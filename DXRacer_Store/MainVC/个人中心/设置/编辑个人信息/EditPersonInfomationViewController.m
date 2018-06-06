@@ -72,7 +72,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     PInfoCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if (indexPath.row == 0) {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"用户名不可修改" message:@"温馨提示" preferredStyle:1];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"用户名不可修改" preferredStyle:1];
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         }];
         [alert addAction:cancel];

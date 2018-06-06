@@ -13,7 +13,6 @@
 
 #import "DaiFuKuan_ViewController.h"
 #import "YiFuKuan_ViewController.h"
-#import "QuXiaoZhong_ViewController.h"
 #import "CancelOrder_ViewController.h"
 #import "DaiFaHuo_ViewController.h"
 #import "YiFaHuo_ViewController.h"
@@ -221,6 +220,7 @@
     //微信支付
     self.tfSheetView.wxBlock = ^{
 //        NSLog(@"微信支付");
+        [weakSelf doWXPay:orderNo];
         [weakSelf.tfSheetView disMissView];
     };
     //支付宝支付
@@ -245,7 +245,16 @@
         NSLog(@"%@",error);
     }];
 }
-
+//微信
+- (void)doWXPay:(NSString *)orderNo{
+    NSString *str = [NSString stringWithFormat:@"order/weixin/%@",orderNo];
+    [Manager requestPOSTWithURLStr:KURLNSString(str) paramDic:nil token:nil finish:^(id responseObject) {
+        NSString *base64Decoded = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+        NSLog(@"---%@",base64Decoded);
+    } enError:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
 
 
 
@@ -261,6 +270,13 @@
         return 60;
     }
     return 10;
+}
+- (void)clickbutton{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"再有30分钟就要取消了，快前往支付吧" preferredStyle:1];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"关闭" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    }];
+    [alert addAction:cancel];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     UIView *view = [[UIView alloc]init];
@@ -280,6 +296,14 @@
     }
     
     if ([str isEqualToString:@"01"]) {
+    
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.frame = CGRectMake(10, 10, 40, 30);
+        [button setTitle:@"⏰" forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(clickbutton) forControlEvents:UIControlEventTouchUpInside];
+        [lab addSubview:button];
+        
+        
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.frame = CGRectMake(SCREEN_WIDTH-80, 10, 70, 30);
         [btn setTitle:@"去支付" forState:UIControlStateNormal];
@@ -356,7 +380,7 @@
 
 
 - (void)clickShouHuo:(UIButton *)sender{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"确认签收？" message:@"温馨提示" preferredStyle:1];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"确认签收？" preferredStyle:1];
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
     }];
     [alert addAction:cancel];
@@ -369,12 +393,12 @@
 //        NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         [Manager requestPOSTWithURLStr:KURLNSString(str) paramArr:nil token:nil finish:^(id responseObject) {
             NSDictionary *diction = [Manager returndictiondata:responseObject];
-            NSLog(@"%@",diction);
+            //NSLog(@"%@",diction);
             NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
             if ([code isEqualToString:@"200"]){
                 [weakSelf getOrderList];
             }else{
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:[diction objectForKey:@"msg"] message:@"温馨提示" preferredStyle:1];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:[diction objectForKey:@"msg"] preferredStyle:1];
                 UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                     [weakSelf getOrderList];
                 }];
@@ -393,7 +417,7 @@
 
 
 - (void)clickCancelOrder:(UIButton *)sender{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"确认取消？" message:@"温馨提示" preferredStyle:1];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"确认取消？" preferredStyle:1];
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
     }];
     [alert addAction:cancel];
@@ -411,7 +435,7 @@
             if ([code isEqualToString:@"200"]){
                 [weakSelf getOrderList];
             }else{
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:[diction objectForKey:@"msg"] message:@"温馨提示" preferredStyle:1];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:[diction objectForKey:@"msg"] preferredStyle:1];
                 UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                     [weakSelf getOrderList];
                 }];

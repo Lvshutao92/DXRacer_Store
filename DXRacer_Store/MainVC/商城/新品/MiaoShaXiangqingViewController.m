@@ -177,12 +177,12 @@
     
     
     
-    headerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 750)];
+    headerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 730)];
     headerV.userInteractionEnabled = YES;
     self.tableview1.tableHeaderView = headerV;
     
-    footerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 100)];
-    self.tableview1.tableFooterView = footerV;
+//    footerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 1)];
+//    self.tableview1.tableFooterView = footerV;
     
     
     _headerImg = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_WIDTH)];
@@ -474,7 +474,7 @@
     }else{
         if ([isorno_star isEqualToString:@"no"])
         {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"活动暂未开始" message:@"温馨提示" preferredStyle:1];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"活动暂未开始" preferredStyle:1];
             UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             }];
             [alert addAction:cancel];
@@ -524,7 +524,7 @@
                 login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
                 [weakSelf presentViewController:login animated:YES completion:nil];
             }else{
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:[diction objectForKey:@"object"] message:@"温馨提示" preferredStyle:1];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:[diction objectForKey:@"object"] preferredStyle:1];
                 UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                 }];
                 [alert addAction:cancel];

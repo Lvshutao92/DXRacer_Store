@@ -56,6 +56,20 @@
 
 @property(nonatomic,strong)TFSheetView *tfSheetView;
 
+
+@property(nonatomic,strong)NSString *str1;
+@property(nonatomic,strong)NSString *str2;
+@property(nonatomic,strong)NSString *str3;
+@property(nonatomic,strong)NSString *str4;
+@property(nonatomic,strong)NSString *str5;
+@property(nonatomic,strong)NSString *str6;
+@property(nonatomic,strong)NSString *str7;
+@property(nonatomic,strong)NSString *str8;
+@property(nonatomic,strong)NSString *str9;
+@property(nonatomic,strong)NSString *str10;
+@property(nonatomic,strong)NSString *str11;
+@property(nonatomic,strong)NSString *str12;
+
 @end
 
 @implementation DaiFuKuan_ViewController
@@ -109,14 +123,31 @@
         self->addresslab.text = [NSString stringWithFormat:@"收货地址：%@%@%@%@",[addressDic objectForKey:@"receiverState"],[addressDic objectForKey:@"receiverCity"],[addressDic objectForKey:@"receiverDistrict"],[addressDic objectForKey:@"receiverAddress"]];
         
         
-        if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"shippingInvoice"]]!=YES) {
-            self->btn2.hidden = NO;
-        }else{
-            self->btn2.hidden = YES;
+        if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"shippingInvoice"]]==YES) {
+            NSDictionary *invDic = [diction objectForKey:@"shippingInvoice"];
+            self->invioceTypeLab.text = [invDic objectForKey:@"invoiceType"];
+            self->invioceTitleLab.text = [invDic objectForKey:@"invoiceTitle"];
+            
+            weakSelf.str1  = [invDic objectForKey:@"invoiceTitle"];
+            weakSelf.str2  = [invDic objectForKey:@"invoiceType"];
+            
+            weakSelf.str3  = [invDic objectForKey:@"bankName"];
+            weakSelf.str4  = [invDic objectForKey:@"bankNo"];
+            weakSelf.str5  = [invDic objectForKey:@"invoiceCode"];
+            weakSelf.str6  = [invDic objectForKey:@"registerAddress"];
+            
+            weakSelf.str7  = [invDic objectForKey:@"receiveProvince"];
+            weakSelf.str8  = [invDic objectForKey:@"receiveCity"];
+            weakSelf.str9  = [invDic objectForKey:@"receiveDistrict"];
+            weakSelf.str10 = [invDic objectForKey:@"receiveAddress"];
+            weakSelf.str11 = [invDic objectForKey:@"receivePerson"];
+            weakSelf.str12 = [invDic objectForKey:@"receivePhone"];
+            
+            if (![[invDic objectForKey:@"invoiceStatus"] isEqualToString:@"created"]) {
+                self->btn2.hidden = YES;
+            }
         }
-        
-        
-        
+
         //产品信息
         [weakSelf.dataArray removeAllObjects];
         for (NSDictionary *dic in [diction objectForKey:@"shippingOrderItems"]) {
@@ -446,16 +477,26 @@
     FaPiao_ViewController *fapiao = [[FaPiao_ViewController alloc]init];
     fapiao.navigationItem.title = @"编辑发票";
     fapiao.orderNo = self.orderNo;
+    
+    
+    
+    fapiao.invioceTitle    = self.str1;
+    fapiao.invioceType     = self.str2;
+    
+    fapiao.bankName        = self.str3;
+    fapiao.bankNo          = self.str4;
+    fapiao.invoiceCode     = self.str5;
+    fapiao.registerAddress = self.str6;
+    
+    fapiao.receiveProvince = self.str7;
+    fapiao.receiveCity     = self.str8;
+    fapiao.receiveDistrict = self.str9;
+    fapiao.receiveAddress  = self.str10;
+    fapiao.receivePerson   = self.str11;
+    fapiao.receivePhone    = self.str12;
+    
     [self.navigationController pushViewController:fapiao animated:YES];
 }
-
-
-
-
-
-
-
-
 
 
 

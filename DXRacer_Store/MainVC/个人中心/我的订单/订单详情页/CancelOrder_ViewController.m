@@ -34,13 +34,25 @@
     UILabel *shifukuanLab;
     
     UIButton *btn;
+    UIView *v;
 }
 
 @property(nonatomic,strong)UITableView *tableview;
 @property(nonatomic,strong)NSMutableArray *dataArray;//数据源
 
 
-
+@property(nonatomic,strong)NSString *str1;
+@property(nonatomic,strong)NSString *str2;
+@property(nonatomic,strong)NSString *str3;
+@property(nonatomic,strong)NSString *str4;
+@property(nonatomic,strong)NSString *str5;
+@property(nonatomic,strong)NSString *str6;
+@property(nonatomic,strong)NSString *str7;
+@property(nonatomic,strong)NSString *str8;
+@property(nonatomic,strong)NSString *str9;
+@property(nonatomic,strong)NSString *str10;
+@property(nonatomic,strong)NSString *str11;
+@property(nonatomic,strong)NSString *str12;
 @end
 
 @implementation CancelOrder_ViewController
@@ -53,11 +65,14 @@
     btn1Title = @"删除订单";
     
     
-    self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-51) style:UITableViewStylePlain];
+    self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) style:UITableViewStylePlain];
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
     [self.tableview registerNib:[UINib nibWithNibName:@"DZFOrderCell" bundle:nil] forCellReuseIdentifier:@"DZFOrderCell"];
     [self.view addSubview:self.tableview];
+    
+    UIView *vvv = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 51)];
+    self.tableview.tableFooterView = vvv;
     
     
     [self setUpHeaderView];
@@ -91,6 +106,40 @@
         CGFloat titleHeight = [Manager getLabelHeightWithContent:[NSString stringWithFormat:@"收货地址：%@%@%@%@",[addressDic objectForKey:@"receiverState"],[addressDic objectForKey:@"receiverCity"],[addressDic objectForKey:@"receiverDistrict"],[addressDic objectForKey:@"receiverAddress"]] andLabelWidth:SCREEN_WIDTH-65 andLabelFontSize:14];
         self->addresslab.frame = CGRectMake(35, 45, SCREEN_WIDTH-65, titleHeight);
         self->addresslab.text = [NSString stringWithFormat:@"收货地址：%@%@%@%@",[addressDic objectForKey:@"receiverState"],[addressDic objectForKey:@"receiverCity"],[addressDic objectForKey:@"receiverDistrict"],[addressDic objectForKey:@"receiverAddress"]];
+        
+        
+        
+        if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"shippingInvoice"]]==YES) {
+            NSDictionary *invDic = [diction objectForKey:@"shippingInvoice"];
+            self->invioceTypeLab.text = [invDic objectForKey:@"invoiceType"];
+            self->invioceTitleLab.text = [invDic objectForKey:@"invoiceTitle"];
+            
+            
+            
+            
+            weakSelf.str1  = [invDic objectForKey:@"invoiceTitle"];
+            weakSelf.str2  = [invDic objectForKey:@"invoiceType"];
+            
+            
+            
+            
+            weakSelf.str3  = [invDic objectForKey:@"bankName"];
+            weakSelf.str4  = [invDic objectForKey:@"bankNo"];
+            weakSelf.str5  = [invDic objectForKey:@"invoiceCode"];
+            weakSelf.str6  = [invDic objectForKey:@"registerAddress"];
+            
+            weakSelf.str7  = [invDic objectForKey:@"receiveProvince"];
+            weakSelf.str8  = [invDic objectForKey:@"receiveCity"];
+            weakSelf.str9  = [invDic objectForKey:@"receiveDistrict"];
+            weakSelf.str10 = [invDic objectForKey:@"receiveAddress"];
+            weakSelf.str11 = [invDic objectForKey:@"receivePerson"];
+            weakSelf.str12 = [invDic objectForKey:@"receivePhone"];
+            
+            if (![[invDic objectForKey:@"invoiceStatus"] isEqualToString:@"created"]) {
+                self->v.hidden = YES;
+            }
+        }
+
         
         
         //产品信息
@@ -339,7 +388,7 @@
 
 
 - (void)setupDibuView{
-    UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT-50, SCREEN_WIDTH, 50)];
+    v = [[UIView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT-50, SCREEN_WIDTH, 50)];
     v.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:v];
     
@@ -359,6 +408,22 @@
     FaPiao_ViewController *fapiao = [[FaPiao_ViewController alloc]init];
     fapiao.navigationItem.title = @"编辑发票";
     fapiao.orderNo = self.orderNo;
+    
+    
+    fapiao.invioceTitle    = self.str1;
+    fapiao.invioceType     = self.str2;
+    
+    fapiao.bankName        = self.str3;
+    fapiao.bankNo          = self.str4;
+    fapiao.invoiceCode     = self.str5;
+    fapiao.registerAddress = self.str6;
+    
+    fapiao.receiveProvince = self.str7;
+    fapiao.receiveCity     = self.str8;
+    fapiao.receiveDistrict = self.str9;
+    fapiao.receiveAddress  = self.str10;
+    fapiao.receivePerson   = self.str11;
+    fapiao.receivePhone    = self.str12;
     [self.navigationController pushViewController:fapiao animated:YES];
 }
 

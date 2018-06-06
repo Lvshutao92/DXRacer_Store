@@ -87,7 +87,7 @@ self.earthImageView.bounds = CGRectMake(0, 0,750/2, 659/2);
     
     for (NSInteger i=1; i<=10; i++) {
 NSString *imageName = [NSString stringWithFormat:@"%@%02ld",imgStrP, i];
-NSLog(@"===%@",imageName);
+//NSLog(@"===%@",imageName);
 UIImage *image = [UIImage imageNamed:imageName];
 [idleImages addObject:image];
 }
@@ -105,7 +105,7 @@ UIImage *image = [UIImage imageNamed:imageName];
     // 隐藏状态
     self.stateLabel.hidden = YES;
     
-    NSLog(@"----%f",self.pullingPercent);
+//    NSLog(@"----%f",self.pullingPercent);
     
     self.mj_h = PULLHEIGHT;
     
@@ -145,7 +145,7 @@ UIImage *image = [UIImage imageNamed:imageName];
 - (void)setPullingPercent:(CGFloat)pullingPercent
 {
     //    [super setPullingPercent:pullingPercent];
-    NSLog(@"pullingPercent===%lf",pullingPercent);
+//    NSLog(@"pullingPercent===%lf",pullingPercent);
     self.gifImm.mj_h = MIN(125*pullingPercent/2, 125/2);
     self.gifImm.mj_w = MIN(120*pullingPercent/2, 120/2);
     

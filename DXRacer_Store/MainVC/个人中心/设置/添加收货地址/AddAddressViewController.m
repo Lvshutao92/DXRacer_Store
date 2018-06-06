@@ -73,7 +73,7 @@ CG_INLINE CGRect CGRectMakes(CGFloat x, CGFloat y, CGFloat width, CGFloat height
     }
     if ([self.navigationItem.title isEqualToString:@"编辑"]){
         if ([XYQRegexPatternHelper validateMobile:text2.text]!=YES) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请输入正确的手机号" message:@"温馨提示" preferredStyle:1];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"请输入正确的手机号" preferredStyle:1];
             UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                 [self->text2 becomeFirstResponder];
             }];
@@ -84,7 +84,7 @@ CG_INLINE CGRect CGRectMakes(CGFloat x, CGFloat y, CGFloat width, CGFloat height
         }
     }else{
         if ([XYQRegexPatternHelper validateMobile:text2.text]!=YES) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请输入正确的手机号" message:@"温馨提示" preferredStyle:1];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"请输入正确的手机号" preferredStyle:1];
             UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                 [self->text2 becomeFirstResponder];
             }];

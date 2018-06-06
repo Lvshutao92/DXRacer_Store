@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import <AlipaySDK/AlipaySDK.h>
 #import "YiFuKuan_ViewController.h"
+#import "WXApi.h"
+#import "PaymentAction.h"
 
 @interface AppDelegate ()<selectDelegate>
 {
@@ -73,6 +75,15 @@ UIBackgroundTaskIdentifier taskId;
     //    [self.window makeKeyWindow];
     //    self.window.rootViewController = vc;
     [self.window.layer transitionWithAnimType:TransitionAnimTypeRamdom subType:TransitionSubtypesFromRamdom curve:TransitionCurveRamdom duration:2.0f];
+    
+    
+    
+//    [WXApi startLogByLevel:WXLogLevelNormal logBlock:^(NSString *log) {
+//        NSLog(@"log : %@", log);
+//    }];
+//    //向微信注册,发起支付必须注册
+//    [WXApi registerApp:@"wx000999888777"];//注册appid
+    
     
     
     
@@ -177,6 +188,11 @@ UIBackgroundTaskIdentifier taskId;
 }
 
 
+//
+//- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
+//    [WXApi handleOpenURL:url delegate:[PaymentAction sharedManager]];
+//    return YES;
+//}
 
 
 

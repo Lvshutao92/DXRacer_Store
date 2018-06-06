@@ -95,6 +95,8 @@
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"401"]){
             [Manager logout];
+            self->user1.text = @"登录/注册";
+            self->userImg.image = [UIImage imageNamed:@"tx.jpg"];
 //            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"您的账号已在其他设备登录，请重新登录" message:@"温馨提示" preferredStyle:1];
 //            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
 //            }];
