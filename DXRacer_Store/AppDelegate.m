@@ -48,7 +48,7 @@ UIBackgroundTaskIdentifier taskId;
     
     
     //测试的时候改变info 里的版本号就可以了
-    NSArray *images = @[@"gud1.jpg",@"gud2.jpg",@"gud3.jpg",@"gud4.jpg",@"av1.jpg",@"av2.jpg",@"av3.jpg"];
+    NSArray *images = @[@"gud1.jpg",@"gud2.jpg",@"gud3.jpg",@"gud4.jpg",@"av3.jpg"];
     BOOL y = [XTGuidePagesViewController isShow];
     if (y) {
         XTGuidePagesViewController *xt = [[XTGuidePagesViewController alloc] init];
@@ -61,21 +61,6 @@ UIBackgroundTaskIdentifier taskId;
     
     [self requestAuthorizationAddressBook];
 
-    
-    
-    self.window.backgroundColor = [UIColor whiteColor];
-    MainTabbarViewController *mainVC = [[MainTabbarViewController alloc]init];
-    mainVC.selectedIndex = 0;
-    for (UIBarItem *item in mainVC.tabBar.items) {
-        [item setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                      [UIFont fontWithName:@"Helvetica" size:13.0], NSFontAttributeName, nil]
-                            forState:UIControlStateNormal];
-    }
-    self.window.rootViewController = mainVC;
-    //    [self.window makeKeyWindow];
-    //    self.window.rootViewController = vc;
-    [self.window.layer transitionWithAnimType:TransitionAnimTypeRamdom subType:TransitionSubtypesFromRamdom curve:TransitionCurveRamdom duration:2.0f];
-    
     
     
 //    [WXApi startLogByLevel:WXLogLevelNormal logBlock:^(NSString *log) {
