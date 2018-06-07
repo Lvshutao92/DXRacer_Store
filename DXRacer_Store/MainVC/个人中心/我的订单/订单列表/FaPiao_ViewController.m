@@ -149,7 +149,7 @@
                           @"receivePhone":text10.text,
                           @"registerAddress":textView11.text,
                           };
-    NSLog(@"6666666------%@",dic);
+//    NSLog(@"6666666------%@",dic);
     [Manager requestPOSTWithURLStr:KURLNSString(@"order/invoice/save") paramDic:dic token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
         NSLog(@"------%@",diction);

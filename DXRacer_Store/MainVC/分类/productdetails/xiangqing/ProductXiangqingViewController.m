@@ -407,13 +407,15 @@
                                         self.selectView.LB_kucun.text= @"暂缺货";
                                         for (Model *model in self.kucunArray) {
                                             if ([model.skuId isEqualToString:self->stringID]) {
-                                                self.selectView.LB_kucun.text= [NSString stringWithFormat:@"库存:%ld",[model.quantity integerValue]-[model.lockQuantity integerValue]];
-                                                if ([model.quantity integerValue]-[model.lockQuantity integerValue] == 0) {
+                                                
+                                                if ([model.quantity integerValue]-[model.lockQuantity integerValue] <= 0) {
                                                     [self.selectView.addBtn setTitle:@"暂缺货，请耐心等待😳" forState:UIControlStateNormal];
                                                     [btn2 setTitle:@"暂缺货，请选择其他规格😯" forState:UIControlStateNormal];
+                                                    self.selectView.LB_kucun.text= @"库存:0";
                                                 }else{
                                                     [self.selectView.addBtn setTitle:@"加入购物车" forState:UIControlStateNormal];
                                                     [btn2 setTitle:@"加入购物车" forState:UIControlStateNormal];
+                                                    self.selectView.LB_kucun.text= [NSString stringWithFormat:@"库存:%ld",[model.quantity integerValue]-[model.lockQuantity integerValue]];
                                                 }
                                             }
                                         }
@@ -488,7 +490,7 @@
     NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [Manager requestPOSTWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        //NSLog(@"******%@",diction);
+//        NSLog(@"******%@",diction);
         NSString *videoId;
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
@@ -606,13 +608,14 @@
     
         for (Model *model in self.kucunArray) {
             if ([model.skuId isEqualToString:self->stringID]) {
-                weakSelf.selectView.LB_kucun.text= [NSString stringWithFormat:@"库存:%ld",[model.quantity integerValue]-[model.lockQuantity integerValue]];
-                if ([model.quantity integerValue]-[model.lockQuantity integerValue] == 0) {
+                if ([model.quantity integerValue]-[model.lockQuantity integerValue] <= 0) {
                     [weakSelf.selectView.addBtn setTitle:@"暂缺货，请耐心等待😭" forState:UIControlStateNormal];
                     [self->btn2 setTitle:@"暂缺货，请选择其他规格☺️" forState:UIControlStateNormal];
+                    weakSelf.selectView.LB_kucun.text= @"库存:0";
                 }else{
                     [weakSelf.selectView.addBtn setTitle:@"加入购物车" forState:UIControlStateNormal];
                     [self->btn2 setTitle:@"加入购物车" forState:UIControlStateNormal];
+                    weakSelf.selectView.LB_kucun.text= [NSString stringWithFormat:@"库存:%ld",[model.quantity integerValue]-[model.lockQuantity integerValue]];
                 }
             }
         }
@@ -646,7 +649,7 @@
         for (Model *mo in weakSelf.lunboArray) {
             [array addObject:NSString(mo.listImg)];
         }
-        
+
         if (videoId.length > 0) {
             self.detailsV = [[LZProductDetails alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_WIDTH)];
             [self->headerV addSubview:self.detailsV];
@@ -669,9 +672,12 @@
             self.cycleScrollView.pageDotImage = [UIImage imageNamed:@"pageControlDot"];
 //            self.cycleScrollView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight;
             [self->headerV addSubview:self.cycleScrollView];
-            weakSelf.cycleScrollView.localizationImageNamesGroup = array;
+            
+            if (array.count>0) {
+                weakSelf.cycleScrollView.localizationImageNamesGroup = array;
+            }
         }
-        
+//
         
         [weakSelf.tableview1 reloadData];
     } enError:^(NSError *error) {

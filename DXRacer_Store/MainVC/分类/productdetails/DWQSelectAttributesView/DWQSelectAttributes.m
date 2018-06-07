@@ -121,7 +121,7 @@
     
     [self addSubview:self.packView];
     
-    [Manager sharedManager].gouwuNumHeight = self.packView.dwq_height;
+    [Manager sharedManager].gouwuNumHeight = self.dwq_y+self.packView.dwq_height;
 //    NSLog(@"----%lf------%lf",self.dwq_y,self.packView.dwq_height);
     
     
