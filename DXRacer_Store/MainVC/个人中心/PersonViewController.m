@@ -149,7 +149,7 @@
     
     
     
-    self.dataArray = [@[@"我的订单",@"我的优惠券",@"领券中心",@"我的收藏",@"在线客服",@"联系我们",@"关于我们"]mutableCopy];
+    self.dataArray = [@[@"我的订单",@"我的优惠券",@"领券中心",@"我的收藏",@"QQ客服",@"联系我们",@"关于我们"]mutableCopy];
     
     
     UIBarButtonItem *bar = [[UIBarButtonItem alloc]initWithTitle:@"设置" style:UIBarButtonItemStylePlain target:self action:@selector(clickedit)];

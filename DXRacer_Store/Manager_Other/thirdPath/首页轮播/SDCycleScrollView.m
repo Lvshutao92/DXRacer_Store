@@ -577,7 +577,7 @@ NSString * const ID = @"SDCycleScrollViewCell";
 {
     SDCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ID forIndexPath:indexPath];
     
-   
+    
     
     
     long itemIndex = [self pageControlIndexWithCurrentCellIndex:indexPath.item];
@@ -627,6 +627,7 @@ NSString * const ID = @"SDCycleScrollViewCell";
         
         cell.imageView.contentMode = self.bannerImageViewContentMode;
         cell.clipsToBounds = YES;
+        cell.imageView.backgroundColor = [UIColor whiteColor];
         
         cell.onlyDisplayText = self.onlyDisplayText;
     }

@@ -665,7 +665,6 @@ static Manager *manager = nil;
 
 
 
-
 //post arr
 + (void)requestPOSTWithURLStr:(NSString *)urlStr
                      paramArr:(NSMutableArray *)paramArr

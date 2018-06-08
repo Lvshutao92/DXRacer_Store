@@ -71,15 +71,15 @@
     [self.tableview registerNib:[UINib nibWithNibName:@"DZFOrderCell" bundle:nil] forCellReuseIdentifier:@"DZFOrderCell"];
     [self.view addSubview:self.tableview];
     
-    UIView *vvv = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 51)];
-    self.tableview.tableFooterView = vvv;
+//    UIView *vvv = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 51)];
+//    self.tableview.tableFooterView = vvv;
     
     
     [self setUpHeaderView];
     [self setUpFooterView];
     
     
-    [self setupDibuView];
+//    [self setupDibuView];
     
     
 }

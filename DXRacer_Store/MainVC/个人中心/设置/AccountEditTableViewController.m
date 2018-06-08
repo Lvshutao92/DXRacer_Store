@@ -9,6 +9,7 @@
 #import "AccountEditTableViewController.h"
 #import "EditPersonInfomationViewController.h"
 #import "AddrViewController.h"
+#import "UpdatePasswordViewController.h"
 @interface AccountEditTableViewController ()
 {
     UIImageView *userImg;
@@ -124,6 +125,7 @@
     
     return cell;
 }
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     PersonCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if ([cell.lab.text isEqualToString:@"地址管理"]) {
@@ -136,6 +138,10 @@
             [self TextButtonAction];
         }];
         [[SDImageCache sharedImageCache] clearMemory];//可不写
+    }else if([cell.lab.text isEqualToString:@"修改密码"]){
+        UpdatePasswordViewController *update = [[UpdatePasswordViewController alloc]init];
+        update.navigationItem.title = @"修改密码";
+        [self.navigationController pushViewController:update animated:YES];
     }
     
 }

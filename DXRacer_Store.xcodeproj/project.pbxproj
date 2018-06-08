@@ -20,6 +20,7 @@
 		080BC6B720A2A62200BFDEAF /* CZHDatePickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 080BC6B120A2A62200BFDEAF /* CZHDatePickerView.m */; };
 		080BC6B820A2A62200BFDEAF /* UIButton+CZHExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 080BC6B420A2A62200BFDEAF /* UIButton+CZHExtension.m */; };
 		080BC6B920A2A62200BFDEAF /* UIView+CZHExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 080BC6B620A2A62200BFDEAF /* UIView+CZHExtension.m */; };
+		080D64A420CA0D52002269B1 /* UpdatePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 080D64A320CA0D52002269B1 /* UpdatePasswordViewController.m */; };
 		08171B7B20C662C600151ECD /* YiQianShou_ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08171B7A20C662C600151ECD /* YiQianShou_ViewController.m */; };
 		08171B7E20C6632400151ECD /* DaiFuKuan_ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08171B7D20C6632400151ECD /* DaiFuKuan_ViewController.m */; };
 		08171B8120C6635B00151ECD /* YiFuKuan_ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08171B8020C6635B00151ECD /* YiFuKuan_ViewController.m */; };
@@ -234,6 +235,8 @@
 		080BC6B420A2A62200BFDEAF /* UIButton+CZHExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+CZHExtension.m"; sourceTree = "<group>"; };
 		080BC6B520A2A62200BFDEAF /* UIView+CZHExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+CZHExtension.h"; sourceTree = "<group>"; };
 		080BC6B620A2A62200BFDEAF /* UIView+CZHExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+CZHExtension.m"; sourceTree = "<group>"; };
+		080D64A220CA0D52002269B1 /* UpdatePasswordViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UpdatePasswordViewController.h; sourceTree = "<group>"; };
+		080D64A320CA0D52002269B1 /* UpdatePasswordViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UpdatePasswordViewController.m; sourceTree = "<group>"; };
 		08171B7920C662C600151ECD /* YiQianShou_ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YiQianShou_ViewController.h; sourceTree = "<group>"; };
 		08171B7A20C662C600151ECD /* YiQianShou_ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YiQianShou_ViewController.m; sourceTree = "<group>"; };
 		08171B7C20C6632400151ECD /* DaiFuKuan_ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DaiFuKuan_ViewController.h; sourceTree = "<group>"; };
@@ -684,6 +687,8 @@
 				0888FB7F209957CE003D2A9F /* 添加收货地址 */,
 				084D232E209BEE1000776B84 /* AccountEditTableViewController.h */,
 				084D232F209BEE1000776B84 /* AccountEditTableViewController.m */,
+				080D64A220CA0D52002269B1 /* UpdatePasswordViewController.h */,
+				080D64A320CA0D52002269B1 /* UpdatePasswordViewController.m */,
 			);
 			path = "设置";
 			sourceTree = "<group>";
@@ -1753,6 +1758,7 @@
 				0871B9C420A03FE50035B3B7 /* EasyAlertItem.m in Sources */,
 				75DCF97B2098033000FEBBD9 /* OneVC.m in Sources */,
 				0890FBA320C7769800AAE3F7 /* PaymentAction.m in Sources */,
+				080D64A420CA0D52002269B1 /* UpdatePasswordViewController.m in Sources */,
 				0858BC33209ADCB300C4489B /* CouponsOneVC.m in Sources */,
 				75A3D35420ADBDC000ABA831 /* FrankMiddleToolbar.m in Sources */,
 				0858BC39209ADCCE00C4489B /* CouponsThreeVC.m in Sources */,

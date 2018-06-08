@@ -160,6 +160,21 @@
     
     [self initCollectionView];
     
+    
+    
+    self.window = [[UIWindow alloc] initWithFrame:CGRectMake(SCREEN_WIDTH, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+    self.window.backgroundColor = [UIColor colorWithWhite:.3 alpha:.5];
+    self.window.windowLevel = UIWindowLevelNormal;
+    self.window.hidden = NO;
+    UITapGestureRecognizer *tap  = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction)];
+    tap.delegate = self;
+    [self.window addGestureRecognizer:tap];
+    [self.window makeKeyAndVisible];
+    
+    self.upView = [[UIScrollView alloc] initWithFrame:CGRectMake(100, 0, SCREEN_WIDTH-100, SCREEN_HEIGHT-50)];
+    self.upView.backgroundColor = [UIColor whiteColor];
+    [self.window addSubview:self.upView];
+    
 }
 
 - (void)pinpai{
@@ -234,37 +249,29 @@
     }else{
         hei = 20;
     }
-    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(60, 0, SCREEN_WIDTH-120, 35)];//allocate titleView
+    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 2, SCREEN_WIDTH, 40)];//allocate titleView
     [titleView setBackgroundColor:[UIColor whiteColor]];
     self.searchBar = [[DXSearchBar alloc] init];
     self.searchBar.delegate = self;
     self.searchBar.placeholder = @"请输入商品名称";
-    self.searchBar.frame = CGRectMake(0, 0, SCREEN_WIDTH-120, 35);
+    self.searchBar.frame = CGRectMake(70, 2.5, SCREEN_WIDTH-140, 35);
     self.searchBar.backgroundColor = [UIColor whiteColor];
     [[[self.searchBar.subviews objectAtIndex:0].subviews objectAtIndex:1] setTintColor:[UIColor clearColor]];
-    LRViewBorderRadius(self.searchBar, 15, 1, [UIColor colorWithWhite:.8 alpha:.15]);
+    LRViewBorderRadius(titleView, 10, 1, [UIColor colorWithWhite:.99 alpha:2]);
     [titleView addSubview:self.searchBar];
     self.navigationItem.titleView = titleView;
     
-    
-    
-    UIButton *bbb = [[UIButton alloc] initWithFrame:CGRectMake(5, 8, 40, 25)];
-    //    [picBtn setImage:[UIImage imageNamed:@"分类2"] forState:UIControlStateNormal];
+    UIButton *bbb = [[UIButton alloc] initWithFrame:CGRectMake(10, 7, 30, 30)];
+    [bbb setImage:[UIImage imageNamed:@"筛选"] forState:UIControlStateNormal];
     [bbb setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [bbb setTitle:@"筛选" forState:UIControlStateNormal];
     [bbb addTarget:self action:@selector(clickshaixuan) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *bar = [[UIBarButtonItem alloc]initWithCustomView:bbb];
-    self.navigationItem.leftBarButtonItem = bar;
-    
-    
-    UIView *vv = [[UIView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-60, hei, 50, 44)];
-    picBtn = [[UIButton alloc] initWithFrame:CGRectMake(20, 8, 25, 25)];
+    [titleView addSubview:bbb];
+
+    picBtn = [[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-60, 7, 30, 30)];
     [picBtn setImage:[UIImage imageNamed:@"分类2"] forState:UIControlStateNormal];
     [picBtn addTarget:self action:@selector(clickqiehuan) forControlEvents:UIControlEventTouchUpInside];
-    [vv addSubview:picBtn];
-    UIBarButtonItem *bar1 = [[UIBarButtonItem alloc]initWithCustomView:vv];
-    self.navigationItem.rightBarButtonItem = bar1;
-    
+    [titleView addSubview:picBtn];
+
     
     
     UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-80, SCREEN_HEIGHT-170, 60, 60)];
@@ -392,10 +399,9 @@
     str4 = @"";
 }
 - (void)sure{
-    [self.window resignKeyWindow];
-    [self.upView removeFromSuperview];
-    self.window  = nil;
-    self.upView = nil;
+    [UIView animateWithDuration:.3 animations:^{
+        self.window.frame = CGRectMake(SCREEN_WIDTH, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    }];
     [self setUpReflash];
 }
 
@@ -414,47 +420,60 @@
     str3 = @"";
     str4 = @"";
     
-    UIWindow *window = [[UIWindow alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
-    window.backgroundColor = [UIColor colorWithWhite:.5 alpha:.5];
-    window.windowLevel = UIWindowLevelNormal;
-    window.hidden = NO;
-    UITapGestureRecognizer *tap  = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction)];
-    tap.delegate = self;
-    [window addGestureRecognizer:tap];
-    [window makeKeyAndVisible];
-    self.window = window;
-    
-    UIScrollView *view = [[UIScrollView alloc] initWithFrame:CGRectMake(100, 0, SCREEN_WIDTH-100, SCREEN_HEIGHT-50)];
-    view.backgroundColor = [UIColor whiteColor];
-    [window addSubview:view];
-    self.upView = view;
+    [UIView animateWithDuration:.3 animations:^{
+        self.window.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    }];
     
     UIButton *btn1 = [[UIButton alloc]initWithFrame:CGRectMake(100, SCREEN_HEIGHT-50, (SCREEN_WIDTH-100)/2, 50)];
     btn1.backgroundColor = [UIColor orangeColor];
     [btn1 setTitle:@"重置" forState:UIControlStateNormal];
     [btn1 addTarget:self action:@selector(chongzhi) forControlEvents:UIControlEventTouchUpInside];
-    [window addSubview:btn1];
+    [self.window addSubview:btn1];
     
     UIButton *btn2 = [[UIButton alloc]initWithFrame:CGRectMake(100+(SCREEN_WIDTH-100)/2, SCREEN_HEIGHT-50, (SCREEN_WIDTH-100)/2, 50)];
     btn2.backgroundColor = [UIColor redColor];
     [btn2 setTitle:@"确定" forState:UIControlStateNormal];
     [btn2 addTarget:self action:@selector(sure) forControlEvents:UIControlEventTouchUpInside];
-    [window addSubview:btn2];
+    [self.window addSubview:btn2];
     
     [self.btn1arr removeAllObjects];
     [self.btn2arr removeAllObjects];
     [self.btn3arr removeAllObjects];
     [self.btn4arr removeAllObjects];
     
-    label1 = [[UILabel alloc]initWithFrame:CGRectMake(20, 20, 80, 30)];
+    
+    
+    UILabel *label5 = [[UILabel alloc]initWithFrame:CGRectMake(20, 20, 80, 30)];
+    label5.text = @"价格区间";
+    [self.upView addSubview:label5];
+    text1 = [[UITextField alloc]initWithFrame:CGRectMake(10, 60, 60, 35)];
+    text1.delegate = self;
+    text1.text = @"";
+    text1.borderStyle = UITextBorderStyleRoundedRect;
+    [_upView addSubview:text1];
+    UILabel *lin = [[UILabel alloc]initWithFrame:CGRectMake(70, 60, 40, 35)];
+    lin.text = @"~";
+    lin.textAlignment = NSTextAlignmentCenter;
+    [self.upView addSubview:lin];
+    text2 = [[UITextField alloc]initWithFrame:CGRectMake(110, 60, 60, 35)];
+    text2.delegate = self;
+    text2.text = @"";
+    text2.borderStyle = UITextBorderStyleRoundedRect;
+    [_upView addSubview:text2];
+    
+    
+    
+    
+    
+    label1 = [[UILabel alloc]initWithFrame:CGRectMake(20, 105, 80, 30)];
     label1.text = @"品牌";
     [self.upView addSubview:label1];
     CGFloat w = 0;//保存前一个button的宽以及前一个button距离屏幕边缘的距离
-    CGFloat h = 60;//用来控制button距离父视图的高
+    CGFloat h = 145;//用来控制button距离父视图的高
     for (int i = 0; i < self.array1.count; i++) {
         button1 = [UIButton buttonWithType:UIButtonTypeSystem];
         button1.tag = 100 + i;
-        button1.backgroundColor = [UIColor colorWithWhite:.8 alpha:.3];
+        button1.backgroundColor = [UIColor colorWithWhite:.9 alpha:.3];
         button1.layer.masksToBounds = YES;
         button1.layer.cornerRadius = 5.0;
         [button1 addTarget:self action:@selector(handleClick1:) forControlEvents:UIControlEventTouchUpInside];
@@ -495,7 +514,7 @@
     for (int i = 0; i < self.array4.count; i++) {
         button2 = [UIButton buttonWithType:UIButtonTypeSystem];
         button2.tag = 100 + i;
-        button2.backgroundColor = [UIColor colorWithWhite:.8 alpha:.3];
+        button2.backgroundColor = [UIColor colorWithWhite:.9 alpha:.3];
         button2.layer.masksToBounds = YES;
         button2.layer.cornerRadius = 5.0;
         [button2 addTarget:self action:@selector(handleClick2:) forControlEvents:UIControlEventTouchUpInside];
@@ -533,7 +552,7 @@
     for (int i = 0; i < self.array2.count; i++) {
         button3 = [UIButton buttonWithType:UIButtonTypeSystem];
         button3.tag = 100 + i;
-        button3.backgroundColor = [UIColor colorWithWhite:.8 alpha:.3];
+        button3.backgroundColor = [UIColor colorWithWhite:.9 alpha:.3];
         button3.layer.masksToBounds = YES;
         button3.layer.cornerRadius = 5.0;
         [button3 addTarget:self action:@selector(handleClick3:) forControlEvents:UIControlEventTouchUpInside];
@@ -572,7 +591,7 @@
     for (int i = 0; i < self.array3.count; i++) {
         button4 = [UIButton buttonWithType:UIButtonTypeSystem];
         button4.tag = 100 + i;
-        button4.backgroundColor = [UIColor colorWithWhite:.8 alpha:.3];
+        button4.backgroundColor = [UIColor colorWithWhite:.9 alpha:.3];
         button4.layer.masksToBounds = YES;
         button4.layer.cornerRadius = 5.0;
         [button4 addTarget:self action:@selector(handleClick4:) forControlEvents:UIControlEventTouchUpInside];
@@ -602,27 +621,7 @@
     
     
     
-    
-    UILabel *label5 = [[UILabel alloc]initWithFrame:CGRectMake(20, h4+40, 80, 30)];
-    label5.text = @"价格区间";
-    [self.upView addSubview:label5];
-    CGFloat h5 = h4+80;
-    text1 = [[UITextField alloc]initWithFrame:CGRectMake(10, h5, 60, 35)];
-    text1.delegate = self;
-    text1.text = @"";
-    text1.borderStyle = UITextBorderStyleRoundedRect;
-    [_upView addSubview:text1];
-    UILabel *lin = [[UILabel alloc]initWithFrame:CGRectMake(70, h5, 40, 35)];
-    lin.text = @"~";
-    lin.textAlignment = NSTextAlignmentCenter;
-    [self.upView addSubview:lin];
-    text2 = [[UITextField alloc]initWithFrame:CGRectMake(110, h5, 60, 35)];
-    text2.delegate = self;
-    text2.text = @"";
-    text2.borderStyle = UITextBorderStyleRoundedRect;
-    [_upView addSubview:text2];
-    
-    _upView.contentSize = CGSizeMake(0, h5+60);
+    _upView.contentSize = CGSizeMake(0, h4+60);
     
     label1.textColor = [UIColor orangeColor];
     label2.textColor = [UIColor orangeColor];
@@ -652,12 +651,11 @@
     str2 = @"";
     str3 = @"";
     str4 = @"";
+
     
-    
-    [self.window resignKeyWindow];
-    [self.upView removeFromSuperview];
-    self.window  = nil;
-    self.upView = nil;
+    [UIView animateWithDuration:.3 animations:^{
+        self.window.frame = CGRectMake(SCREEN_WIDTH, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    }];
 }
 
 
@@ -688,7 +686,7 @@
     
     [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSLog(@"******%@",diction);
+        //NSLog(@"******%@",diction);
         [weakSelf.dataArray removeAllObjects];
         self->number = [[diction objectForKey:@"total"] integerValue];
         
@@ -715,13 +713,13 @@
         [weakSelf.goosdCollectionView.mj_header endRefreshing];
         
         
-        if (weakSelf.dataArray.count == 0) {
-            UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
-            lab.text = @"抱歉！暂无该商品";
-            lab.textAlignment = NSTextAlignmentCenter;
-            lab.textColor = [UIColor lightGrayColor];
-            [weakSelf.view addSubview:lab];
-        }
+//        if (weakSelf.dataArray.count == 0) {
+//            UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+//            lab.text = @"抱歉！暂无该商品";
+//            lab.textAlignment = NSTextAlignmentCenter;
+//            lab.textColor = [UIColor lightGrayColor];
+//            [weakSelf.view addSubview:lab];
+//        }
     } enError:^(NSError *error) {
 //        NSLog(@"------%@",error);
     }];

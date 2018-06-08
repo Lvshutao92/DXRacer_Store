@@ -97,7 +97,7 @@
     __weak typeof(self) weakSelf = self;
     [Manager requestGETWithURLStr:KURLNSString(@"index/advert") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSLog(@"******%@",diction);
+//        NSLog(@"******%@",diction);
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
             if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"object"]] == YES) {
@@ -360,7 +360,7 @@
 
 - (void)getHotSearch{
     //1.创建热门搜索
-    NSArray *hotSeaches = @[@"电竞椅", @"电竞桌", @"鼠标", @"显示屏", @"升降器", @"支架",@"键盘"];
+    NSArray *hotSeaches = @[@"电竞椅", @"电竞桌", @"电竞服",  @"赛车椅", @"办公桌",@"搁脚凳", @"游戏支架", @"工作服", @"游戏周边",@"办公椅"];
     PYSearchViewController *searchViewController = [PYSearchViewController searchViewControllerWithHotSearches:hotSeaches searchBarPlaceholder:@"商品名称" didSearchBlock:^(PYSearchViewController *searchViewController, UISearchBar *searchBar, NSString *searchText) {
         SearchController *search = [[SearchController alloc] init];
         search.str = searchText;
@@ -680,6 +680,10 @@
     [self SetNavBarHidden:YES];
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
+    
+    [self getTopPic];
+    [self getGuanggao];
+    [self getBottomInfo];
     
 }
 

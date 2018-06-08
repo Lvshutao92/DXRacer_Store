@@ -112,6 +112,11 @@
                         token:(NSString *)token
                        finish:(void(^)(id responseObject))finish
                       enError:(void(^)(NSError *error))enError;
+
+
+
+
+
 //16进制颜色(html颜色值)字符串转为UIColor
 +(UIColor *) hexStringToColor: (NSString *) stringToConvert;
 
