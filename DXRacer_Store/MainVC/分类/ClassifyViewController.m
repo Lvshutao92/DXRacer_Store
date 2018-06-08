@@ -67,6 +67,35 @@
 
 @implementation ClassifyViewController
 
+
+
+
+
+
+
+//注册3DTouch
+/*
+ 因为只有在6s及其以上的设备才支持3D Touch,我们可以通过UITraitCollection这个类的UITraitEnvironment协议属性来判断设备是否支持3D Touch。
+ UITraitCollection是UIViewController所遵守的其中一个协议，不仅包含了UI界面环境特征，而且包含了3D Touch的特征描述
+ */
+-(void)register3DTouch:(UITableViewCell *)cell{
+    if ([self respondsToSelector:@selector(traitCollection)]) {
+        if ([self.traitCollection respondsToSelector:@selector(forceTouchCapability)]) {
+            if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable) {
+                [self registerForPreviewingWithDelegate:(id)self sourceView:cell];
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = NO;

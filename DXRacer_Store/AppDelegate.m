@@ -16,7 +16,7 @@
 {
     NSInteger count;
 }
-
+@property(nonatomic,strong)MainTabbarViewController *mainVC;
 @end
 //1385994805
 UIBackgroundTaskIdentifier taskId;
@@ -70,7 +70,7 @@ UIBackgroundTaskIdentifier taskId;
 //    [WXApi registerApp:@"wx000999888777"];//注册appid
     
     
-    
+    [self initShortcutItems];
     
     
     //进入后台后可继续运行定时器
@@ -82,17 +82,88 @@ UIBackgroundTaskIdentifier taskId;
 }
 
 
+
+
+
+
+
+
+
+
+-(void)initShortcutItems{
+   
+    //快捷菜单的图标
+    //这个是系统提供‘添加’图标
+    if (@available(iOS 9.0, *)) {
+        UIApplicationShortcutIcon *icon1 = [UIApplicationShortcutIcon iconWithType:UIApplicationShortcutIconTypeAdd];
+        UIApplicationShortcutItem *item1 = [[UIApplicationShortcutItem alloc]initWithType:@"item1"
+                                                                           localizedTitle:@"去购物车"
+                                                                        localizedSubtitle:nil
+                                                                                     icon:icon1
+                                                                                 userInfo:nil];
+        UIApplicationShortcutIcon * icon2 = [UIApplicationShortcutIcon iconWithTemplateImageName:@"自定义的图片"];
+        UIApplicationShortcutItem * item2 = [[UIApplicationShortcutItem alloc]initWithType:@"item2"
+                                                                            localizedTitle:@"前往查找产品"
+                                                                         localizedSubtitle:@"买些什么"
+                                                                                      icon:icon2
+                                                                                  userInfo:nil];
+        [[UIApplication sharedApplication] setShortcutItems:@[item1,item2]];
+    } else {
+        
+    }
+   
+    
+    /*
+     参数一：标示符，书写唯一性，当你点击时需要通过判断与它是否相同进行特定的事件操作
+     参数二：大标题
+     参数三：小标题，一般用作说明、介绍使用，可不写
+     参数四：图标，可设置系统的，也可以设置自定义的（自定义的图片必须是正方形、单色并且尺寸是35*35像素的图片）
+     参数五：传一些需求数据
+     */
+   
+    //设置app的快捷菜单
+    
+    
+}
+
+#pragma mark--3DTouch点击事件处理
+-(void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler API_AVAILABLE(ios(9.0)){
+    NSString * type = shortcutItem.type;
+    if ([type isEqualToString:@"item1"]) {
+        
+        self.mainVC.selectedIndex = 2;
+        
+    }else if ([type isEqualToString:@"item2"]) {
+        
+        self.mainVC.selectedIndex = 1;
+        
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 - (void)clickEnter
 {
     self.window.backgroundColor = [UIColor whiteColor];
-    MainTabbarViewController *mainVC = [[MainTabbarViewController alloc]init];
-    mainVC.selectedIndex = 0;
-    for (UIBarItem *item in mainVC.tabBar.items) {
+    self.mainVC = [[MainTabbarViewController alloc]init];
+    self.mainVC.selectedIndex = 0;
+    for (UIBarItem *item in self.mainVC.tabBar.items) {
         [item setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                       [UIFont fontWithName:@"Helvetica" size:13.0], NSFontAttributeName, nil]
                             forState:UIControlStateNormal];
     }
-    self.window.rootViewController = mainVC;
+    self.window.rootViewController = self.mainVC;
 //    [self.window makeKeyWindow];
 //    self.window.rootViewController = vc;
     [self.window.layer transitionWithAnimType:TransitionAnimTypeRamdom subType:TransitionSubtypesFromRamdom curve:TransitionCurveRamdom duration:2.0f];
