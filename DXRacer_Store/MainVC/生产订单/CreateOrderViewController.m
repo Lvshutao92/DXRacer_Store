@@ -29,7 +29,7 @@
 #define AP_BUTTON_HEIGHT  (60.0f)
 #define AP_INFO_HEIGHT    (200.0f)
 
-
+#import "YiFuKuan_ViewController.h"
 
 @interface CreateOrderViewController ()<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 {
@@ -52,6 +52,8 @@
     NSString *modeValue;
     
     CGFloat totheight;
+    
+    NSString *orderNum;
 }
 @property(nonatomic,strong)UITableView *tableview;
 @property(nonatomic,strong)UILabel *totalPrice;
@@ -60,7 +62,7 @@
 
 @property(nonatomic,strong)TFSheetView *tfSheetView;
 
-
+@property (nonatomic,strong)NSTimer *timer;
 
 @end
 
@@ -471,17 +473,70 @@
             NSLog(@"%@",error);
         }];
 }
+
 //微信
 - (void)doWXPay:(NSString *)orderNo{
-    NSString *str = [NSString stringWithFormat:@"order/weixin/%@",orderNo];
-    [Manager requestPOSTWithURLStr:KURLNSString(str) paramDic:nil token:nil finish:^(id responseObject) {
-        NSString *base64Decoded = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-        NSLog(@"---%@",base64Decoded);
+    orderNum = orderNo;
+    if (self.timer != nil) {
+        [self.timer invalidate];
+        self.timer = nil;
+    }
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerAction:) userInfo:nil repeats:YES];
+    
+    __weak typeof(self) weakSelf = self;
+    NSString *str = [NSString stringWithFormat:@"order/weixin/h5/%@",orderNo];
+    NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
+        NSDictionary *diction = [Manager returndictiondata:responseObject];
+        NSLog(@"%@",diction);
+        
+        UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",[diction objectForKey:@"msg"]]];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+        [request setValue:@"test-shop.dxracer.com.cn://" forHTTPHeaderField:@"Referer"];
+        [webView loadRequest:request];
+        webView.hidden = YES;
+        [weakSelf.view addSubview:webView];
+        
     } enError:^(NSError *error) {
         NSLog(@"%@",error);
     }];
 }
 
+
+- (void)timerAction:(NSTimer *)timer{
+    [self judjePayFailAndSuccess];
+}
+
+- (void)judjePayFailAndSuccess{
+    if ([Manager judgeWhetherIsEmptyAnyObject:orderNum]==YES) {
+        __weak typeof(self) weakSelf = self;
+        NSString *str = [NSString stringWithFormat:@"order/payment/check/%@",orderNum];
+        NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        
+        [Manager requestPOSTWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
+            NSDictionary *diction = [Manager returndictiondata:responseObject];
+            NSLog(@"111-----------%@",diction);
+            //            NSString *code = [diction objectForKey:@"code"]
+            if ([[diction objectForKey:@"msg"] isEqualToString:@"yes"]) {
+                YiFuKuan_ViewController *vvv = [[YiFuKuan_ViewController alloc]init];
+                vvv.orderNo = self->orderNum;
+                [weakSelf.navigationController pushViewController:vvv animated:YES];
+                [weakSelf.timer invalidate];
+                weakSelf.timer = nil;
+            }
+        } enError:^(NSError *error) {
+            NSLog(@"222-----------%@",error);
+        }];
+    }
+}
+- (void)viewDidDisappear:(BOOL)animated{
+    if (self.timer != nil) {
+        [self.timer invalidate];
+        self.timer = nil;
+    }
+}
 
 
 

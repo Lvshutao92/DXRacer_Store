@@ -32,12 +32,20 @@
 #define AP_BUTTON_HEIGHT  (60.0f)
 #define AP_INFO_HEIGHT    (200.0f)
 
-@interface OneVC ()<UITableViewDelegate,UITableViewDataSource>
 
+#import "ABABViewController.h"
+
+
+@interface OneVC ()<UITableViewDelegate,UITableViewDataSource>
+{
+    NSString *orderNum;
+}
 @property (nonatomic,strong)NSMutableArray *sectionArray;//分区标题
 
 @property (nonatomic,strong)NSMutableArray *sectionArrayStatus;
 
+
+@property (nonatomic,strong)NSTimer *timer;
 
 @property(nonatomic,strong)NSMutableArray *statusArray;
 
@@ -57,6 +65,44 @@
     [self getOrderStatus];
     [self getOrderList];
 }
+
+
+- (void)timerAction:(NSTimer *)timer{
+    [self judjePayFailAndSuccess];
+}
+
+- (void)judjePayFailAndSuccess{
+    if ([Manager judgeWhetherIsEmptyAnyObject:orderNum]==YES) {
+        __weak typeof(self) weakSelf = self;
+        NSString *str = [NSString stringWithFormat:@"order/payment/check/%@",orderNum];
+        NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        
+        [Manager requestPOSTWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
+            NSDictionary *diction = [Manager returndictiondata:responseObject];
+//            NSString *code = [diction objectForKey:@"code"]
+           NSLog(@"222-----------%@",diction);
+            if ([[diction objectForKey:@"msg"] isEqualToString:@"yes"]) {
+                [weakSelf getOrderList];
+                [weakSelf.timer invalidate];
+                weakSelf.timer = nil;
+            }
+        } enError:^(NSError *error) {
+            NSLog(@"222-----------%@",error);
+        }];
+    }
+}
+
+
+
+
+
+
+- (void)viewDidDisappear:(BOOL)animated{
+    if (self.timer != nil) {
+        [self.timer invalidate];
+        self.timer = nil;
+    }
+}
 - (void)viewWillDisappear:(BOOL)animated{
     self.tabBarController.tabBar.hidden = YES;
 }
@@ -65,6 +111,7 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     self.navigationItem.title = @"订单";
+    
     
     self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT+50) style:UITableViewStylePlain];
     self.tableview.delegate = self;
@@ -247,10 +294,29 @@
 }
 //微信
 - (void)doWXPay:(NSString *)orderNo{
-    NSString *str = [NSString stringWithFormat:@"order/weixin/%@",orderNo];
-    [Manager requestPOSTWithURLStr:KURLNSString(str) paramDic:nil token:nil finish:^(id responseObject) {
-        NSString *base64Decoded = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-        NSLog(@"---%@",base64Decoded);
+    orderNum = orderNo;
+    if (self.timer != nil) {
+        [self.timer invalidate];
+        self.timer = nil;
+    }
+   self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerAction:) userInfo:nil repeats:YES];
+    
+    __weak typeof(self) weakSelf = self;
+    NSString *str = [NSString stringWithFormat:@"order/weixin/h5/%@",orderNo];
+    NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+
+    [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
+        NSDictionary *diction = [Manager returndictiondata:responseObject];
+        NSLog(@"%@",diction);
+        
+        UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",[diction objectForKey:@"msg"]]];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+        [request setValue:@"test-shop.dxracer.com.cn://" forHTTPHeaderField:@"Referer"];
+        [webView loadRequest:request];
+        webView.hidden = YES;
+        [weakSelf.view addSubview:webView];
+        
     } enError:^(NSError *error) {
         NSLog(@"%@",error);
     }];

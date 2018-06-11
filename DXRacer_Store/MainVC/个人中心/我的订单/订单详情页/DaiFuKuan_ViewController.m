@@ -52,6 +52,7 @@
 
 @property(nonatomic,strong)UITableView *tableview;
 @property(nonatomic,strong)NSMutableArray *dataArray;//数据源
+@property (nonatomic,strong)NSTimer *timer;
 
 
 @property(nonatomic,strong)TFSheetView *tfSheetView;
@@ -368,6 +369,7 @@
     //微信支付
     self.tfSheetView.wxBlock = ^{
         //        NSLog(@"微信支付");
+        [weakSelf doWXPay:weakSelf.orderNo];
         [weakSelf.tfSheetView disMissView];
     };
     //支付宝支付
@@ -393,8 +395,71 @@
 }
 
 
+//微信
+- (void)doWXPay:(NSString *)orderNo{
+    if (self.timer != nil) {
+        [self.timer invalidate];
+        self.timer = nil;
+    }
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerAction:) userInfo:nil repeats:YES];
+    
+    __weak typeof(self) weakSelf = self;
+    NSString *str = [NSString stringWithFormat:@"order/weixin/h5/%@",orderNo];
+    NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
+        NSDictionary *diction = [Manager returndictiondata:responseObject];
+        NSLog(@"%@",diction);
+        
+        UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",[diction objectForKey:@"msg"]]];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+        [request setValue:@"test-shop.dxracer.com.cn://" forHTTPHeaderField:@"Referer"];
+        [webView loadRequest:request];
+        webView.hidden = YES;
+        [weakSelf.view addSubview:webView];
+        
+    } enError:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
 
 
+- (void)timerAction:(NSTimer *)timer{
+    [self judjePayFailAndSuccess];
+}
+
+- (void)judjePayFailAndSuccess{
+    if ([Manager judgeWhetherIsEmptyAnyObject:self.orderNo]==YES) {
+        __weak typeof(self) weakSelf = self;
+        NSString *str = [NSString stringWithFormat:@"order/payment/check/%@",self.orderNo];
+        NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        
+        [Manager requestPOSTWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
+            NSDictionary *diction = [Manager returndictiondata:responseObject];
+            //            NSString *code = [diction objectForKey:@"code"]
+            if ([[diction objectForKey:@"msg"] isEqualToString:@"yes"]) {
+                [weakSelf.timer invalidate];
+                weakSelf.timer = nil;
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"支付完成" message:@"温馨提示" preferredStyle:1];
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"关闭" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    [weakSelf.navigationController popViewControllerAnimated:YES];
+                }];
+                [alert addAction:cancel];
+                [weakSelf presentViewController:alert animated:YES completion:nil];
+            }
+            
+        } enError:^(NSError *error) {
+            NSLog(@"222-----------%@",error);
+        }];
+    }
+}
+- (void)viewDidDisappear:(BOOL)animated{
+    if (self.timer != nil) {
+        [self.timer invalidate];
+        self.timer = nil;
+    }
+}
 
 
 

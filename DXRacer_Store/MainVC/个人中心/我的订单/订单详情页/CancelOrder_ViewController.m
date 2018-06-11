@@ -166,7 +166,7 @@
         
         
         
-        self->payTypeLab.text = [Manager TimeCuoToTimes:[orderDic objectForKey:@"refundTime"]];
+        self->payTypeLab.text = [Manager TimeCuoToTimes:[orderDic objectForKey:@"cancelTime"]];
       
         
         

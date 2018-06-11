@@ -10,6 +10,7 @@
 #import "EditPersonInfomationViewController.h"
 #import "AddrViewController.h"
 #import "UpdatePasswordViewController.h"
+#import "ABABViewController.h"
 @interface AccountEditTableViewController ()
 {
     UIImageView *userImg;
@@ -142,6 +143,10 @@
         UpdatePasswordViewController *update = [[UpdatePasswordViewController alloc]init];
         update.navigationItem.title = @"修改密码";
         [self.navigationController pushViewController:update animated:YES];
+    }else if([cell.lab.text isEqualToString:@"实名认证"]){
+//        ABABViewController *update = [[ABABViewController alloc]init];
+//        update.navigationItem.title = @"实名认证";
+//        [self.navigationController pushViewController:update animated:YES];
     }
     
 }

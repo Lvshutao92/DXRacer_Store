@@ -12,6 +12,10 @@
 #import "WXApi.h"
 #import "PaymentAction.h"
 
+
+#import "OneVC.h"
+#import "LoginViewController.h"
+#import "XPPD_ViewController.h"
 @interface AppDelegate ()<selectDelegate>
 {
     NSInteger count;
@@ -67,7 +71,7 @@ UIBackgroundTaskIdentifier taskId;
 //        NSLog(@"log : %@", log);
 //    }];
 //    //向微信注册,发起支付必须注册
-//    [WXApi registerApp:@"wx000999888777"];//注册appid
+//    [WXApi registerApp:@"wxc6a4ecf6eccfc55c"];//注册appid
     
     
     [self initShortcutItems];
@@ -91,7 +95,6 @@ UIBackgroundTaskIdentifier taskId;
 
 
 -(void)initShortcutItems{
-   
     //快捷菜单的图标
     //这个是系统提供‘添加’图标
     if (@available(iOS 9.0, *)) {
@@ -101,18 +104,41 @@ UIBackgroundTaskIdentifier taskId;
                                                                         localizedSubtitle:nil
                                                                                      icon:icon1
                                                                                  userInfo:nil];
-        UIApplicationShortcutIcon * icon2 = [UIApplicationShortcutIcon iconWithTemplateImageName:@"自定义的图片"];
+        UIApplicationShortcutIcon * icon2 = [UIApplicationShortcutIcon iconWithTemplateImageName:@"a1"];
         UIApplicationShortcutItem * item2 = [[UIApplicationShortcutItem alloc]initWithType:@"item2"
-                                                                            localizedTitle:@"前往查找产品"
-                                                                         localizedSubtitle:@"买些什么"
+                                                                            localizedTitle:@"查看订单"
+                                                                         localizedSubtitle:@""
                                                                                       icon:icon2
                                                                                   userInfo:nil];
-        [[UIApplication sharedApplication] setShortcutItems:@[item1,item2]];
+        
+        
+        UIApplicationShortcutIcon * icon3 = [UIApplicationShortcutIcon iconWithTemplateImageName:@"秒杀"];
+        UIApplicationShortcutItem * item3 = [[UIApplicationShortcutItem alloc]initWithType:@"item3"
+                                                                            localizedTitle:@"抢购秒杀"
+                                                                         localizedSubtitle:@""
+                                                                                      icon:icon3
+                                                                                  userInfo:nil];
+        
+        
+//        UIApplicationShortcutIcon * icon4 = [UIApplicationShortcutIcon iconWithTemplateImageName:@"自定义的图片"];
+//        UIApplicationShortcutItem * item4 = [[UIApplicationShortcutItem alloc]initWithType:@"item4"
+//                                                                            localizedTitle:@"QQ客服"
+//                                                                         localizedSubtitle:@""
+//                                                                                      icon:icon4
+//                                                                                  userInfo:nil];
+        
+        
+        UIApplicationShortcutIcon * icon5 = [UIApplicationShortcutIcon iconWithTemplateImageName:@"a6"];
+        UIApplicationShortcutItem * item5 = [[UIApplicationShortcutItem alloc]initWithType:@"item5"
+                                                                            localizedTitle:@"联系我们"
+                                                                         localizedSubtitle:@"咨询了解更多信息"
+                                                                                      icon:icon5
+                                                                                  userInfo:nil];
+        
+        [[UIApplication sharedApplication] setShortcutItems:@[item1,item2,item3,item5]];
     } else {
         
     }
-   
-    
     /*
      参数一：标示符，书写唯一性，当你点击时需要通过判断与它是否相同进行特定的事件操作
      参数二：大标题
@@ -120,10 +146,7 @@ UIBackgroundTaskIdentifier taskId;
      参数四：图标，可设置系统的，也可以设置自定义的（自定义的图片必须是正方形、单色并且尺寸是35*35像素的图片）
      参数五：传一些需求数据
      */
-   
     //设置app的快捷菜单
-    
-    
 }
 
 #pragma mark--3DTouch点击事件处理
@@ -134,11 +157,35 @@ UIBackgroundTaskIdentifier taskId;
         self.mainVC.selectedIndex = 2;
         
     }else if ([type isEqualToString:@"item2"]) {
-        
-        self.mainVC.selectedIndex = 1;
-        
+        if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"token.text"]]==YES){
+            OneVC *vvv = [[OneVC alloc]init];
+            MainTabbarViewController *tabBarController = (MainTabbarViewController *)self.window.rootViewController;
+            MainNavigationViewController *nav = (MainNavigationViewController *)tabBarController.selectedViewController;
+            [nav pushViewController:vvv animated:YES];
+        }else{
+            LoginViewController *login = [[LoginViewController alloc]init];
+            login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+            MainTabbarViewController *tabBarController = (MainTabbarViewController *)self.window.rootViewController;
+            MainNavigationViewController *nav = (MainNavigationViewController *)tabBarController.selectedViewController;
+            [nav presentViewController:login animated:YES completion:nil];
+        }
+    }else if ([type isEqualToString:@"item3"]) {
+            XPPD_ViewController *xppd = [[XPPD_ViewController alloc]init];
+            xppd.navigationItem.title = @"秒杀专场";
+            MainTabbarViewController *tabBarController = (MainTabbarViewController *)self.window.rootViewController;
+            MainNavigationViewController *nav = (MainNavigationViewController *)tabBarController.selectedViewController;
+            [nav pushViewController:xppd animated:YES];
+    }else if ([type isEqualToString:@"item4"]) {
+        UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectZero];
+        NSString *qqstr = [NSString stringWithFormat:@"mqq://im/chat?chat_type=wpa&uin=%@&version=1&src_type=web",@"309718069"];
+        NSURL *url = [NSURL URLWithString:qqstr];
+        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+        [webView loadRequest:request];
+        [self.window addSubview:webView];
+    }else if ([type isEqualToString:@"item5"]) {
+        NSMutableString *str=[[NSMutableString alloc]initWithFormat:@"tel:%@",@"4009005033"];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
     }
-    
 }
 
 
@@ -244,7 +291,7 @@ UIBackgroundTaskIdentifier taskId;
 }
 
 
-//
+
 //- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
 //    [WXApi handleOpenURL:url delegate:[PaymentAction sharedManager]];
 //    return YES;
@@ -271,10 +318,8 @@ UIBackgroundTaskIdentifier taskId;
             if ([str isEqualToString:@"10000"]) {
                 YiFuKuan_ViewController *vvv = [[YiFuKuan_ViewController alloc]init];
                 vvv.orderNo = [[dic objectForKey:@"alipay_trade_app_pay_response"]objectForKey:@"out_trade_no"];
-                // 取到tabbarcontroller
-                UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
-                // 取到navigationcontroller
-                UINavigationController *nav = (UINavigationController *)tabBarController.selectedViewController;
+                MainTabbarViewController *tabBarController = (MainTabbarViewController *)self.window.rootViewController;
+                MainNavigationViewController *nav = (MainNavigationViewController *)tabBarController.selectedViewController;
                 [nav pushViewController:vvv animated:YES];
             }
             
@@ -299,10 +344,8 @@ UIBackgroundTaskIdentifier taskId;
             if ([str isEqualToString:@"10000"]) {
                 YiFuKuan_ViewController *vvv = [[YiFuKuan_ViewController alloc]init];
                 vvv.orderNo = [[dic objectForKey:@"alipay_trade_app_pay_response"]objectForKey:@"out_trade_no"];
-                // 取到tabbarcontroller
-                UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
-                // 取到navigationcontroller
-                UINavigationController *nav = (UINavigationController *)tabBarController.selectedViewController;
+                MainTabbarViewController *tabBarController = (MainTabbarViewController *)self.window.rootViewController;
+                MainNavigationViewController *nav = (MainNavigationViewController *)tabBarController.selectedViewController;
                 [nav pushViewController:vvv animated:YES];
             }
             
@@ -344,10 +387,8 @@ UIBackgroundTaskIdentifier taskId;
             if ([str isEqualToString:@"10000"]) {
                 YiFuKuan_ViewController *vvv = [[YiFuKuan_ViewController alloc]init];
                 vvv.orderNo = [[dic objectForKey:@"alipay_trade_app_pay_response"]objectForKey:@"out_trade_no"];
-                // 取到tabbarcontroller
-                UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
-                // 取到navigationcontroller
-                UINavigationController *nav = (UINavigationController *)tabBarController.selectedViewController;
+                MainTabbarViewController *tabBarController = (MainTabbarViewController *)self.window.rootViewController;
+                MainNavigationViewController *nav = (MainNavigationViewController *)tabBarController.selectedViewController;
                 [nav pushViewController:vvv animated:YES];
             }
             
@@ -368,10 +409,8 @@ UIBackgroundTaskIdentifier taskId;
             if ([str isEqualToString:@"10000"]) {
                 YiFuKuan_ViewController *vvv = [[YiFuKuan_ViewController alloc]init];
                 vvv.orderNo = [[dic objectForKey:@"alipay_trade_app_pay_response"]objectForKey:@"out_trade_no"];
-                // 取到tabbarcontroller
-                UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
-                // 取到navigationcontroller
-                UINavigationController *nav = (UINavigationController *)tabBarController.selectedViewController;
+                MainTabbarViewController *tabBarController = (MainTabbarViewController *)self.window.rootViewController;
+                MainNavigationViewController *nav = (MainNavigationViewController *)tabBarController.selectedViewController;
                 [nav pushViewController:vvv animated:YES];
             }
             

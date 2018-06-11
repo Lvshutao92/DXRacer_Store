@@ -122,17 +122,14 @@
             
 //            self.webview.frame = CGRectMake(i*self.frame.size.width, 0, SCREEN_WIDTH, SCREEN_WIDTH);
             NSString *content = [NSString stringWithFormat:@"http://player.youku.com/embed/%@",detailsArr[i]];
-//            NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:str]];
-//            [self.webview loadRequest:request];
-//            [self.webview setMediaPlaybackRequiresUserAction:NO];
-//            [self.scrolV addSubview:self.webview];
-            
-            
+
+       
            
-            
             self.webview.frame = CGRectMake(i*self.frame.size.width, 0, SCREEN_WIDTH, SCREEN_WIDTH);
             
             
+            
+
             [self.webview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:content]]];
             
             self.webview.scrollView.scrollEnabled = NO;
