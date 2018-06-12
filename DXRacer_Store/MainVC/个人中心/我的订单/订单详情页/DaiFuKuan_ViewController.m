@@ -112,7 +112,7 @@
     NSString *str = [NSString stringWithFormat:@"order/%@",self.orderNo];
     [Manager requestGETWithURLStr:KURLNSString(str) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSLog(@"==////======%@",diction);
+//        NSLog(@"==////======%@",diction);
         
         //地址
         NSDictionary *addressDic = [diction objectForKey:@"shippingAddress"];
@@ -369,7 +369,18 @@
     //微信支付
     self.tfSheetView.wxBlock = ^{
         //        NSLog(@"微信支付");
-        [weakSelf doWXPay:weakSelf.orderNo];
+        if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"weixin://"]])
+        {
+            [weakSelf doWXPay:weakSelf.orderNo];
+        }
+        else
+        {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"该手机未安装微信，请安装好再进行支付" preferredStyle:1];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"关闭" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            }];
+            [alert addAction:cancel];
+            [weakSelf presentViewController:alert animated:YES completion:nil];
+        }
         [weakSelf.tfSheetView disMissView];
     };
     //支付宝支付
@@ -390,7 +401,7 @@
             //                NSLog(@"*****************************result%@",resultDic);
         }];
     } enError:^(NSError *error) {
-        NSLog(@"%@",error);
+//        NSLog(@"%@",error);
     }];
 }
 
@@ -409,7 +420,7 @@
     
     [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSLog(@"%@",diction);
+//        NSLog(@"%@",diction);
         
         UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
         NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",[diction objectForKey:@"msg"]]];
@@ -420,7 +431,7 @@
         [weakSelf.view addSubview:webView];
         
     } enError:^(NSError *error) {
-        NSLog(@"%@",error);
+//        NSLog(@"%@",error);
     }];
 }
 
@@ -450,7 +461,7 @@
             }
             
         } enError:^(NSError *error) {
-            NSLog(@"222-----------%@",error);
+//            NSLog(@"222-----------%@",error);
         }];
     }
 }
@@ -480,7 +491,7 @@
         //NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         [Manager requestPOSTWithURLStr:KURLNSString(str) paramArr:nil token:nil finish:^(id responseObject) {
             NSDictionary *diction = [Manager returndictiondata:responseObject];
-            NSLog(@"%@",diction);
+//            NSLog(@"%@",diction);
             NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
             if ([code isEqualToString:@"200"]){
                 [weakSelf.navigationController popViewControllerAnimated:YES];
@@ -492,7 +503,7 @@
                 [weakSelf presentViewController:alert animated:YES completion:nil];
             }
         } enError:^(NSError *error) {
-            NSLog(@"%@",error);
+//            NSLog(@"%@",error);
         }];
         
     }];

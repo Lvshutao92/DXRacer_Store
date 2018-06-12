@@ -51,7 +51,7 @@
     UILabel *line2;
     
     NSMutableArray *afe;
-    
+    NSMutableArray *abc;
     
     CGFloat titleHeight;
     
@@ -392,10 +392,21 @@
                             if (![self.attributesArray containsObject:view.selectBtn.titleLabel.text]) {
                                 [self.attributesArray addObject:view.selectBtn.titleLabel.text];
                                 
-                                [arr_sID addObject:[dic_sID objectForKey:view.selectBtn.titleLabel.text]];
                                 
                                 
-                                st = [arr_sID componentsJoinedByString:@","];
+                                [afe replaceObjectAtIndex:i withObject:[dic_sID objectForKey:view.selectBtn.titleLabel.text]];
+                                
+                                
+                                
+                                [abc replaceObjectAtIndex:i withObject:view.selectBtn.titleLabel.text];
+                                
+                                
+                                
+                                
+                                st = [afe componentsJoinedByString:@","];
+                                
+                                
+                                
                                 for (NSDictionary *dict in productItemList_Arr) {
                                     if ([[dict objectForKey:@"productModelAttrs"]isEqualToString:st]) {
                                         stringID = [dict objectForKey:@"id"];
@@ -405,20 +416,30 @@
                                         itemNo = [dict objectForKey:@"itemNo"];
                                         
                                         self.selectView.LB_kucun.text= @"暂缺货";
-                                        for (Model *model in self.kucunArray) {
-                                            if ([model.skuId isEqualToString:self->stringID]) {
-                                                
-                                                if ([model.quantity integerValue]-[model.lockQuantity integerValue] <= 0) {
-                                                    [self.selectView.addBtn setTitle:@"暂缺货，请耐心等待😳" forState:UIControlStateNormal];
-                                                    [btn2 setTitle:@"暂缺货，请选择其他规格😯" forState:UIControlStateNormal];
-                                                    self.selectView.LB_kucun.text= @"库存:0";
-                                                }else{
-                                                    [self.selectView.addBtn setTitle:@"加入购物车" forState:UIControlStateNormal];
-                                                    [btn2 setTitle:@"加入购物车" forState:UIControlStateNormal];
-                                                    self.selectView.LB_kucun.text= [NSString stringWithFormat:@"库存:%ld",[model.quantity integerValue]-[model.lockQuantity integerValue]];
+                                        
+                                        
+                                        
+                                        if (self.kucunArray>0) {
+                                            for (Model *model in self.kucunArray) {
+                                                if ([model.skuId isEqualToString:self->stringID]) {
+                                                    if ([model.quantity integerValue]-[model.lockQuantity integerValue] > 0) {
+                                                        [self.selectView.addBtn setTitle:@"加入购物车" forState:UIControlStateNormal];
+                                                        [btn2 setTitle:@"加入购物车" forState:UIControlStateNormal];
+                                                        self.selectView.LB_kucun.text= [NSString stringWithFormat:@"库存:%ld",[model.quantity integerValue]-[model.lockQuantity integerValue]];
+                                                        
+                                                    }else{
+                                                        [self.selectView.addBtn setTitle:@"暂缺货，请耐心等待😳" forState:UIControlStateNormal];
+                                                        [btn2 setTitle:@"暂缺货，请选择其他规格😯" forState:UIControlStateNormal];
+                                                        self.selectView.LB_kucun.text= @"库存:0";
+                                                    }
                                                 }
                                             }
+                                        }else{
+                                            [self.selectView.addBtn setTitle:@"暂缺货，请耐心等待😳" forState:UIControlStateNormal];
+                                            [btn2 setTitle:@"暂缺货，请选择其他规格😯" forState:UIControlStateNormal];
+                                            self.selectView.LB_kucun.text= @"库存:0";
                                         }
+                                        
                                         
                                         
                                         
@@ -431,7 +452,7 @@
                                     self.selectView.LB_stock.text = itemNo;
                                     //self.selectView.LB_showSales.text=stringStatus;
                                     
-                                    [self.selectView.headImage sd_setImageWithURL:[NSURL URLWithString:NSString(stringImg)]];
+                                    [self.selectView.headImage sd_setImageWithURL:[NSURL URLWithString:NSString(stringImg)]placeholderImage:[UIImage imageNamed:@"zw"]];
                                 }else{
                                     self.selectView.LB_price.text = [Manager jinegeshi:stringPrice];
                                     priceLab.text = [Manager jinegeshi:stringPrice];
@@ -450,7 +471,9 @@
         }
     }
     
-    productCanshu = [self.attributesArray componentsJoinedByString:@","];
+    
+    productCanshu = [abc componentsJoinedByString:@","];
+    
     if (productCanshu == nil) {
         guigeLab.text = @"请选择规格属性";
     }else{
@@ -490,7 +513,7 @@
     NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [Manager requestPOSTWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-//        NSLog(@"******%@",diction);
+        NSLog(@"******%@",diction);
         NSString *videoId;
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
@@ -528,8 +551,13 @@
             NSMutableArray *attrList_b = [NSMutableArray arrayWithCapacity:1];
             self->arr_sID = [NSMutableArray arrayWithCapacity:1];
             self->dic_sID = [NSMutableDictionary dictionaryWithCapacity:1];
-            NSMutableArray *abc = [NSMutableArray arrayWithCapacity:1];
+            self->abc = [NSMutableArray arrayWithCapacity:1];
+            
             NSString *string;
+            
+            self->afe = [NSMutableArray arrayWithCapacity:1];
+            
+            
             for (NSDictionary *dic in attrList) {
                 [attrList_a addObject:[[dic objectForKey:@"attrKey"] objectForKey:@"catalogAttrValue"]];
                 
@@ -538,8 +566,8 @@
                 
                 NSDictionary *dict1 = [aaa firstObject];
                 //NSLog(@"******%@",[dict1 objectForKey:@"modelAttrValue"]);
-                [abc addObject:[dict1 objectForKey:@"modelAttrValue"]];
-                self->afe = [NSMutableArray arrayWithCapacity:1];
+                [self->abc addObject:[dict1 objectForKey:@"modelAttrValue"]];
+                
                 int i = 0;
                 for (NSDictionary *dicts in aaa) {
                     [self->arr addObject:[dicts objectForKey:@"modelAttrValue"]];
@@ -552,9 +580,9 @@
                 [attrList_b addObject:self->arr];
             }
             string = [self->afe componentsJoinedByString:@","];
+//            NSLog(@"-------------##########%@========%@",string,self->afe);
             
-            
-            self->productCanshu = [abc componentsJoinedByString:@","];
+            self->productCanshu = [self->abc componentsJoinedByString:@","];
             self->guigeLab.text = [NSString stringWithFormat:@"已选：%@",self->productCanshu];
             
             
@@ -590,11 +618,14 @@
                 self->line2.frame = CGRectMake(0, 10+SCREEN_WIDTH+self->titleHeight+105, SCREEN_WIDTH, 5);
                 
                 [weakSelf initSelectView];
-//                NSLog(@"##########%@",string);
+                
 //                NSDictionary *dicc = [self->productItemList_Arr lastObject];
                 for (NSDictionary *dicc in self->productItemList_Arr) {
                     if ([[dicc objectForKey:@"productModelAttrs"] isEqualToString:string]) {
-                        [weakSelf.selectView.headImage sd_setImageWithURL:[NSURL URLWithString:NSString([dicc objectForKey:@"listImg"])]];
+                        [weakSelf.selectView.headImage sd_setImageWithURL:[NSURL URLWithString:NSString([dicc objectForKey:@"listImg"])]placeholderImage:[UIImage imageNamed:@"zw"]];
+                        
+//                        NSLog(@"---%@",NSString([dicc objectForKey:@"listImg"]));
+                        
                         weakSelf.selectView.LB_price.text = [Manager jinegeshi:[dicc objectForKey:@"salePrice"]];
                         weakSelf.selectView.LB_stock.text = [dicc objectForKey:@"itemNo"];
                         //weakSelf.selectView.LB_showSales.text=[dicc objectForKey:@"status"];
@@ -606,19 +637,28 @@
             }
         }
     
-        for (Model *model in self.kucunArray) {
-            if ([model.skuId isEqualToString:self->stringID]) {
-                if ([model.quantity integerValue]-[model.lockQuantity integerValue] <= 0) {
-                    [weakSelf.selectView.addBtn setTitle:@"暂缺货，请耐心等待😭" forState:UIControlStateNormal];
-                    [self->btn2 setTitle:@"暂缺货，请选择其他规格☺️" forState:UIControlStateNormal];
-                    weakSelf.selectView.LB_kucun.text= @"库存:0";
-                }else{
-                    [weakSelf.selectView.addBtn setTitle:@"加入购物车" forState:UIControlStateNormal];
-                    [self->btn2 setTitle:@"加入购物车" forState:UIControlStateNormal];
-                    weakSelf.selectView.LB_kucun.text= [NSString stringWithFormat:@"库存:%ld",[model.quantity integerValue]-[model.lockQuantity integerValue]];
+        
+        if (self.kucunArray.count > 0) {
+            for (Model *model in self.kucunArray) {
+                if ([model.skuId isEqualToString:self->stringID]) {
+                    if ([model.quantity integerValue]-[model.lockQuantity integerValue] > 0) {
+                        [weakSelf.selectView.addBtn setTitle:@"加入购物车" forState:UIControlStateNormal];
+                        [self->btn2 setTitle:@"加入购物车" forState:UIControlStateNormal];
+                        weakSelf.selectView.LB_kucun.text= [NSString stringWithFormat:@"库存:%ld",[model.quantity integerValue]-[model.lockQuantity integerValue]];
+                    }else{
+                        [weakSelf.selectView.addBtn setTitle:@"暂缺货，请耐心等待😭" forState:UIControlStateNormal];
+                        [self->btn2 setTitle:@"暂缺货，请选择其他规格☺️" forState:UIControlStateNormal];
+                        weakSelf.selectView.LB_kucun.text= @"库存:0";
+                    }
                 }
             }
+        }else{
+            [weakSelf.selectView.addBtn setTitle:@"暂缺货，请耐心等待😭" forState:UIControlStateNormal];
+            [self->btn2 setTitle:@"暂缺货，请选择其他规格☺️" forState:UIControlStateNormal];
+            weakSelf.selectView.LB_kucun.text= @"库存:0";
         }
+        
+        
         
         
         

@@ -80,6 +80,8 @@
  */
 -(void)creatData
 {
+//    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//    hud.label.text = NSLocalizedString(@"加载中....", @"HUD loading title");
     __weak typeof(self) weakSelf = self;
     [Manager requestPOSTWithURLStr:KURLNSString(@"order/shopping/list") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
@@ -119,8 +121,9 @@
             [weakSelf.view addSubview:v];
             //[weakSelf.view bringSubviewToFront:v];
         }
-        
+//        [hud hideAnimated:YES];
     } enError:^(NSError *error) {
+//        [hud hideAnimated:YES];
         NSLog(@"-------%@",error);
     }];
     
@@ -378,7 +381,7 @@
     backgroundView.tag = TAG_BACKGROUNDVIEW;
     [self.view addSubview:backgroundView];
     //默认图片
-    UIImageView *img = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cart_default_bg"]];
+    UIImageView *img = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"no-content"]];
     img.center = CGPointMake(SCREEN_WIDTH/2.0, SCREEN_HEIGHT/2.0 - 120);
     img.bounds = CGRectMake(0, 0, 247.0/187 * 100, 100);
     [backgroundView addSubview:img];

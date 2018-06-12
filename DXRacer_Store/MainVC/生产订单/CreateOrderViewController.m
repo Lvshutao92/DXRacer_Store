@@ -12,7 +12,6 @@
 
 
 
-
 #import "DaiFuKuan_ViewController.h"
 
 #import <AlipaySDK/AlipaySDK.h>
@@ -424,9 +423,29 @@
                     //微信支付
                     weakSelf.tfSheetView.wxBlock = ^{
                         //NSLog(@"微信支付");
+                        
+                        
+                        
+                        
+                        
+                        
                         [weakSelf.dataArray removeAllObjects];
                         [weakSelf.tableview reloadData];
-                        [weakSelf doWXPay:[diction objectForKey:@"msg"]];
+                        
+                        if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"weixin://"]])
+                        {
+                            [weakSelf doWXPay:[diction objectForKey:@"msg"]];
+                        }
+                        else
+                        {
+                            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"该手机未安装微信，请安装好再进行支付" preferredStyle:1];
+                            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"关闭" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                            }];
+                            [alert addAction:cancel];
+                            [weakSelf presentViewController:alert animated:YES completion:nil];
+                        }
+                        
+                        
                         [weakSelf.tfSheetView disMissView];
                     };
                     //支付宝支付
@@ -470,7 +489,7 @@
 //                NSLog(@"*****************************result%@",resultDic);
             }];
         } enError:^(NSError *error) {
-            NSLog(@"%@",error);
+//            NSLog(@"%@",error);
         }];
 }
 
@@ -489,7 +508,7 @@
     
     [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSLog(@"%@",diction);
+//        NSLog(@"%@",diction);
         
         UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
         NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",[diction objectForKey:@"msg"]]];
@@ -500,7 +519,7 @@
         [weakSelf.view addSubview:webView];
         
     } enError:^(NSError *error) {
-        NSLog(@"%@",error);
+//        NSLog(@"%@",error);
     }];
 }
 
@@ -517,7 +536,7 @@
         
         [Manager requestPOSTWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
             NSDictionary *diction = [Manager returndictiondata:responseObject];
-            NSLog(@"111-----------%@",diction);
+//            NSLog(@"111-----------%@",diction);
             //            NSString *code = [diction objectForKey:@"code"]
             if ([[diction objectForKey:@"msg"] isEqualToString:@"yes"]) {
                 YiFuKuan_ViewController *vvv = [[YiFuKuan_ViewController alloc]init];
@@ -527,7 +546,7 @@
                 weakSelf.timer = nil;
             }
         } enError:^(NSError *error) {
-            NSLog(@"222-----------%@",error);
+//            NSLog(@"222-----------%@",error);
         }];
     }
 }

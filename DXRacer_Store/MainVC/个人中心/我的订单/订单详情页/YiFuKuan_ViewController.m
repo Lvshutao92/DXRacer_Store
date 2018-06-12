@@ -94,7 +94,7 @@
     NSString *str = [NSString stringWithFormat:@"order/%@",self.orderNo];
     [Manager requestGETWithURLStr:KURLNSString(str) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-                NSLog(@"==////======%@",diction);
+//                NSLog(@"==////======%@",diction);
         
         //物流
         //地址
@@ -405,7 +405,7 @@
         //NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         [Manager requestPOSTWithURLStr:KURLNSString(str) paramArr:nil token:nil finish:^(id responseObject) {
             NSDictionary *diction = [Manager returndictiondata:responseObject];
-            NSLog(@"%@",diction);
+//            NSLog(@"%@",diction);
             NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
             if ([code isEqualToString:@"200"]){
                 [weakSelf.navigationController popViewControllerAnimated:YES];

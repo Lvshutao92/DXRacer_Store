@@ -470,7 +470,7 @@
         NSString *str = [NSString stringWithFormat:@"order/receive/%@",weakSelf.orderNo];
         [Manager requestPOSTWithURLStr:KURLNSString(str) paramArr:nil token:nil finish:^(id responseObject) {
             NSDictionary *diction = [Manager returndictiondata:responseObject];
-            NSLog(@"%@",diction);
+//            NSLog(@"%@",diction);
             NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
             if ([code isEqualToString:@"200"]){
                 [weakSelf.navigationController popViewControllerAnimated:YES];

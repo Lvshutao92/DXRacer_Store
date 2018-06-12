@@ -233,17 +233,17 @@ UIBackgroundTaskIdentifier taskId;
 //    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerAction:) userInfo:nil repeats:YES];
 }
 - (void)timerAction:(NSTimer *)timer {
-    count++;
-    if (count % 3600 == 0) {
-        UIApplication *application = [UIApplication sharedApplication];
-        //结束旧的后台任务
-        [application endBackgroundTask:taskId];
-        //开启一个新的后台
-        taskId = [application beginBackgroundTaskWithExpirationHandler:NULL];
-        if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"token.text"]]==YES) {
-            [Manager clickLogin];
-        }
-    }
+//    count++;
+//    if (count % 3600 == 0) {
+//        UIApplication *application = [UIApplication sharedApplication];
+//        //结束旧的后台任务
+//        [application endBackgroundTask:taskId];
+//        //开启一个新的后台
+//        taskId = [application beginBackgroundTaskWithExpirationHandler:NULL];
+//        if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"token.text"]]==YES) {
+//            [Manager clickLogin];
+//        }
+//    }
 //    NSLog(@"-----%ld",count);
 }
 

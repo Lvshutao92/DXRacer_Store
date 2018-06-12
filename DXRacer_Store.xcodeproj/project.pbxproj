@@ -75,6 +75,7 @@
 		085B81A420A177ED005BA24C /* AddressCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 085B81A220A177ED005BA24C /* AddressCell.m */; };
 		085B81A520A177ED005BA24C /* AddressCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 085B81A320A177ED005BA24C /* AddressCell.xib */; };
 		085F82E020C0D84100B112B0 /* YiFaHuo_ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 085F82DF20C0D84100B112B0 /* YiFaHuo_ViewController.m */; };
+		0864B9A620CF65190069988E /* no-content.png in Resources */ = {isa = PBXBuildFile; fileRef = 0864B9A520CF65190069988E /* no-content.png */; };
 		0866F0C820AE76020035AD95 /* DZFOrderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0866F0C620AE76020035AD95 /* DZFOrderCell.m */; };
 		0866F0C920AE76020035AD95 /* DZFOrderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0866F0C720AE76020035AD95 /* DZFOrderCell.xib */; };
 		0866F13E20AEC52E0035AD95 /* AlipaySDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0866F13C20AEC52D0035AD95 /* AlipaySDK.bundle */; };
@@ -331,6 +332,7 @@
 		085B81A320A177ED005BA24C /* AddressCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddressCell.xib; sourceTree = "<group>"; };
 		085F82DE20C0D84100B112B0 /* YiFaHuo_ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YiFaHuo_ViewController.h; sourceTree = "<group>"; };
 		085F82DF20C0D84100B112B0 /* YiFaHuo_ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YiFaHuo_ViewController.m; sourceTree = "<group>"; };
+		0864B9A520CF65190069988E /* no-content.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "no-content.png"; sourceTree = "<group>"; };
 		0866F0C520AE76020035AD95 /* DZFOrderCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DZFOrderCell.h; sourceTree = "<group>"; };
 		0866F0C620AE76020035AD95 /* DZFOrderCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DZFOrderCell.m; sourceTree = "<group>"; };
 		0866F0C720AE76020035AD95 /* DZFOrderCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DZFOrderCell.xib; sourceTree = "<group>"; };
@@ -901,6 +903,7 @@
 				086F057420AD4ABF00CD508C /* cart_cutBtn_highlight@2x.png */,
 				086F057920AD4AC100CD508C /* cart_cutBtn_nomal@2x.png */,
 				086F057C20AD4AC200CD508C /* cart_default_bg.png */,
+				0864B9A520CF65190069988E /* no-content.png */,
 				086F057720AD4AC000CD508C /* cart_selected_btn@2x.png */,
 				086F057120AD4ABE00CD508C /* cart_unSelect_btn@2x.png */,
 				086F057820AD4AC100CD508C /* CartModel.h */,
@@ -1611,6 +1614,7 @@
 				086F058320AD4AC200CD508C /* cart_selected_btn@2x.png in Resources */,
 				088C643C20AFEEE8003FE5D1 /* BiaogeTableViewCell.xib in Resources */,
 				08A8347E2094156F000BCFBB /* Assets.xcassets in Resources */,
+				0864B9A620CF65190069988E /* no-content.png in Resources */,
 				086F057E20AD4AC200CD508C /* cart_unSelect_btn@2x.png in Resources */,
 				088B78AB20C535DF00494108 /* gud1.jpg in Resources */,
 				080228C920B654DF00EB9243 /* tx.jpg in Resources */,

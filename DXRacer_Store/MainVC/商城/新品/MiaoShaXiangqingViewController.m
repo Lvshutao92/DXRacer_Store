@@ -938,7 +938,7 @@
     
     NSDate *startDate = [NSDate date];
     NSString* dateString = [dateFormatter stringFromDate:startDate];
-    NSLog(@"现在的时间 === %@",dateString);
+//    NSLog(@"现在的时间 === %@",dateString);
     
     
     NSTimeInterval  timeInterval =[endDate_tomorrow timeIntervalSinceDate:startDate];

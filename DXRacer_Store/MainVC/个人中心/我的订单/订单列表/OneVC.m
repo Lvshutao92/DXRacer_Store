@@ -80,14 +80,14 @@
         [Manager requestPOSTWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
             NSDictionary *diction = [Manager returndictiondata:responseObject];
 //            NSString *code = [diction objectForKey:@"code"]
-           NSLog(@"222-----------%@",diction);
+//           NSLog(@"222-----------%@",diction);
             if ([[diction objectForKey:@"msg"] isEqualToString:@"yes"]) {
                 [weakSelf getOrderList];
                 [weakSelf.timer invalidate];
                 weakSelf.timer = nil;
             }
         } enError:^(NSError *error) {
-            NSLog(@"222-----------%@",error);
+//            NSLog(@"222-----------%@",error);
         }];
     }
 }
@@ -124,6 +124,8 @@
 }
 
 - (void)getOrderStatus{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.label.text = NSLocalizedString(@"加载中....", @"HUD loading title");
     __weak typeof (self) weakSelf = self;
     [Manager requestGETWithURLStr:KURLNSString(@"order/enums") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
@@ -138,7 +140,9 @@
             }
         }
         [weakSelf.tableview reloadData];
+        [hud hideAnimated:YES];
     } enError:^(NSError *error) {
+        [hud hideAnimated:YES];
         //NSLog(@"%@",error);
     }];
 }
@@ -267,7 +271,19 @@
     //微信支付
     self.tfSheetView.wxBlock = ^{
 //        NSLog(@"微信支付");
-        [weakSelf doWXPay:orderNo];
+        
+        if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"weixin://"]])
+        {
+            [weakSelf doWXPay:orderNo];
+        }
+        else
+        {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"该手机未安装微信，请安装好再进行支付" preferredStyle:1];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"关闭" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            }];
+            [alert addAction:cancel];
+            [weakSelf presentViewController:alert animated:YES completion:nil];
+        }
         [weakSelf.tfSheetView disMissView];
     };
     //支付宝支付
@@ -289,7 +305,7 @@
 //            NSLog(@"*****************************result%@",resultDic);
         }];
     } enError:^(NSError *error) {
-        NSLog(@"%@",error);
+//        NSLog(@"%@",error);
     }];
 }
 //微信
@@ -307,7 +323,7 @@
 
     [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSLog(@"%@",diction);
+//        NSLog(@"%@",diction);
         
         UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
         NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",[diction objectForKey:@"msg"]]];
@@ -318,7 +334,7 @@
         [weakSelf.view addSubview:webView];
         
     } enError:^(NSError *error) {
-        NSLog(@"%@",error);
+//        NSLog(@"%@",error);
     }];
 }
 

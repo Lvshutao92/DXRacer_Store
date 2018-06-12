@@ -190,6 +190,8 @@
 
 
 - (void)lodinfo{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.label.text = NSLocalizedString(@"加载中....", @"HUD loading title");
 //    NSLog(@"%@      %@",[Manager redingwenjianming:@"token.text"],[Manager redingwenjianming:@"userid.text"]);
     __weak typeof (self) weakSelf = self;
     [Manager requestPOSTWithURLStr:KURLNSString(@"address") paramDic:nil token:nil finish:^(id responseObject) {
@@ -204,7 +206,7 @@
             }
         }
         [weakSelf.tableview reloadData];
-        
+        [hud hideAnimated:YES];
         
         if (weakSelf.arr.count == 0) {
             UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
@@ -216,6 +218,7 @@
         
         
     } enError:^(NSError *error) {
+        [hud hideAnimated:YES];
         //NSLog(@"----%@",error);
     }];
 }

@@ -51,6 +51,7 @@
     headImage = [[UIImageView alloc] initWithFrame:CGRectMake(20, -20, 90, 90)];
 //    headImage.image = [UIImage imageNamed:@"凯迪拉克.jpg"];
     headImage.layer.cornerRadius = 4;
+    headImage.backgroundColor = [UIColor whiteColor];
     headImage.layer.borderColor = [UIColor lightGrayColor].CGColor;
     headImage.layer.borderWidth = 1;
     [headImage.layer setMasksToBounds:YES];

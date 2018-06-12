@@ -708,6 +708,8 @@
     }];
 }
 - (void)loddeList{
+   
+    
     [self.goosdCollectionView.mj_footer endRefreshing];
     __weak typeof(self) weakSelf = self;
     NSString *str = [NSString stringWithFormat:@"product/search?keyWord=%@&startRow=0&pageSize=10&brand=%@&catalog=%@&series=%@&type=%@&price=%@",seacherStr,str1,str3,str2,str4,@""];
@@ -741,7 +743,6 @@
         [weakSelf.goosdCollectionView reloadData];
         [weakSelf.goosdCollectionView.mj_header endRefreshing];
         
-        
 //        if (weakSelf.dataArray.count == 0) {
 //            UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
 //            lab.text = @"抱歉！暂无该商品";
@@ -750,9 +751,12 @@
 //            [weakSelf.view addSubview:lab];
 //        }
     } enError:^(NSError *error) {
+        
 //        NSLog(@"------%@",error);
     }];
 }
+
+
 - (void)loddeSLList{
     [self.goosdCollectionView.mj_header endRefreshing];
     __weak typeof(self) weakSelf = self;
