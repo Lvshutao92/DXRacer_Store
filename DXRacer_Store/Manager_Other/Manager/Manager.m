@@ -714,7 +714,7 @@ static Manager *manager = nil;
         [manager.requestSerializer setValue:[Manager redingwenjianming:@"token.text"] forHTTPHeaderField:@"token"];
         [manager.requestSerializer setValue:[Manager redingwenjianming:@"userid.text"] forHTTPHeaderField:@"loginUserId"];
     }
-//    NSLog(@"%@\n%@",[Manager redingwenjianming:@"token.text"],[Manager redingwenjianming:@"userid.text"]);
+    NSLog(@"%@\n%@",[Manager redingwenjianming:@"token.text"],[Manager redingwenjianming:@"userid.text"]);
     
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html",@"image/jpeg",@"text/plain", nil];
     [manager POST:urlStr parameters:paramDic progress:^(NSProgress * _Nonnull uploadProgress) {

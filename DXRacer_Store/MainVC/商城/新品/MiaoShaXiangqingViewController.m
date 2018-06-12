@@ -22,7 +22,7 @@
 #import "APOrderInfo.h"
 #import "APRSASigner.h"
 #import "DaiFuKuan_ViewController.h"
-
+#import "YiFuKuan_ViewController.h"
 #define AP_SUBVIEW_XGAP   (20.0f)
 #define AP_SUBVIEW_YGAP   (30.0f)
 #define AP_SUBVIEW_WIDTH  (([UIScreen mainScreen].bounds.size.width) - 2*(AP_SUBVIEW_XGAP))
@@ -51,7 +51,7 @@
     NSString *stringImg;
     NSString *itemNo;
     
-    
+    NSString *orderNum;
     UIView *headerV;
     UIView *footerV;
     
@@ -105,7 +105,7 @@
 
 @property (nonatomic, strong) FrankDropBounsView * dropView;
 @property (nonatomic, strong) UILabel * tabbarView;
-
+@property (nonatomic,strong)NSTimer *timer_s;
 
 @property (nonatomic, strong) UITableView * tableview1;
 @property (nonatomic, strong) UITableView * tableview2;
@@ -509,6 +509,20 @@
                 //微信支付
                 weakSelf.tfSheetView.wxBlock = ^{
                     //NSLog(@"微信支付");
+                    
+                    if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"weixin://"]])
+                    {
+                        [weakSelf doWXPay:[diction objectForKey:@"object"]];
+                    }
+                    else
+                    {
+                        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"该手机未安装微信，请安装好再进行支付" preferredStyle:1];
+                        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"关闭" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                        }];
+                        [alert addAction:cancel];
+                        [weakSelf presentViewController:alert animated:YES completion:nil];
+                    }
+                    
                     [weakSelf.tfSheetView disMissView];
                 };
                 //支付宝支付
@@ -547,6 +561,70 @@
     } enError:^(NSError *error) {
         NSLog(@"%@",error);
     }];
+}
+
+//微信
+- (void)doWXPay:(NSString *)orderNo{
+    orderNum = orderNo;
+    if (self.timer_s != nil) {
+        [self.timer_s invalidate];
+        self.timer_s = nil;
+    }
+    self.timer_s = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerAction:) userInfo:nil repeats:YES];
+    
+    __weak typeof(self) weakSelf = self;
+    NSString *str = [NSString stringWithFormat:@"order/weixin/h5/%@",orderNo];
+    NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
+        NSDictionary *diction = [Manager returndictiondata:responseObject];
+        //        NSLog(@"%@",diction);
+        
+        UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",[diction objectForKey:@"msg"]]];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+        [request setValue:@"test-shop.dxracer.com.cn://" forHTTPHeaderField:@"Referer"];
+        [webView loadRequest:request];
+        webView.hidden = YES;
+        [weakSelf.view addSubview:webView];
+        
+    } enError:^(NSError *error) {
+        //        NSLog(@"%@",error);
+    }];
+}
+
+
+- (void)timerAction:(NSTimer *)timer{
+    [self judjePayFailAndSuccess];
+}
+
+- (void)judjePayFailAndSuccess{
+    if ([Manager judgeWhetherIsEmptyAnyObject:orderNum]==YES) {
+        __weak typeof(self) weakSelf = self;
+        NSString *str = [NSString stringWithFormat:@"order/payment/check/%@",orderNum];
+        NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        
+        [Manager requestPOSTWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
+            NSDictionary *diction = [Manager returndictiondata:responseObject];
+            //            NSLog(@"111-----------%@",diction);
+            //            NSString *code = [diction objectForKey:@"code"]
+            if ([[diction objectForKey:@"msg"] isEqualToString:@"yes"]) {
+                YiFuKuan_ViewController *vvv = [[YiFuKuan_ViewController alloc]init];
+                vvv.orderNo = self->orderNum;
+                [weakSelf.navigationController pushViewController:vvv animated:YES];
+                [weakSelf.timer_s invalidate];
+                weakSelf.timer_s = nil;
+            }
+        } enError:^(NSError *error) {
+            //            NSLog(@"222-----------%@",error);
+        }];
+    }
+}
+- (void)viewDidDisappear:(BOOL)animated{
+    if (self.timer_s != nil) {
+        [self.timer_s invalidate];
+        self.timer_s = nil;
+    }
 }
 
 
@@ -591,7 +669,8 @@
     //[self.dropView viewControllerWillAppear];
     self.tabBarController.tabBar.hidden = YES;
     
-   
+    
+    
     
     
     

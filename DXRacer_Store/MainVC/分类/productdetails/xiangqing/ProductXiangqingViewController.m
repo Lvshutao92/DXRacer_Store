@@ -228,11 +228,10 @@
 
 
 -(void)initSelectView{
-    
     self.selectView = [[DWQSelectView alloc] initWithFrame:CGRectMake(0, screen_Height, screen_Width, screen_Height)];
     self.selectView.LB_detail.text = @"";
-    
     [self.view addSubview:self.selectView];
+    
     
     CGFloat maxY = 0;
     CGFloat height = 0;
@@ -245,7 +244,9 @@
         self.selectAttributes.delegate = self;
         [self.selectView.mainscrollview addSubview:self.selectAttributes];
     }
-    self.selectView.mainscrollview.contentSize = CGSizeMake(0, height);
+    
+    
+    self.selectView.mainscrollview.contentSize = CGSizeMake(0, [Manager sharedManager].gouwuNumHeight+130);
     //加入购物车按钮
     [self.selectView.addBtn addTarget:self action:@selector(addGoodsCartBtnClick) forControlEvents:UIControlEventTouchUpInside];
     //立即购买
@@ -260,14 +261,14 @@
     UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(10, [Manager sharedManager].gouwuNumHeight+10, 90, 40)];
     lab.text = @"购买数量：";
     [self.selectView.mainscrollview addSubview:lab];
-    
+
     HJCAjustNumButton *btn = [[HJCAjustNumButton alloc] init];
     btn.frame = CGRectMake(100, [Manager sharedManager].gouwuNumHeight+10, 150, 40);
     btn.callBack = ^(NSString *currentNum){
         self->productnumber = currentNum;
     };
     [self.selectView.mainscrollview addSubview:btn];
-    
+    [self.selectView.mainscrollview bringSubviewToFront:btn];
     
     
 }
@@ -513,7 +514,7 @@
     NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [Manager requestPOSTWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSLog(@"******%@",diction);
+//        NSLog(@"******%@",diction);
         NSString *videoId;
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){

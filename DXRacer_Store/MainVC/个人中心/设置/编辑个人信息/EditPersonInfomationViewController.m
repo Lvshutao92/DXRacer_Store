@@ -8,7 +8,7 @@
 
 #import "EditPersonInfomationViewController.h"
 
-@interface EditPersonInfomationViewController ()<UITableViewDataSource,UITableViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface EditPersonInfomationViewController ()<UITableViewDataSource,UITableViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,DateTimePickerViewDelegate>
 {
     UIImageView *userImg;
     NSString *imgUrl;
@@ -17,9 +17,13 @@
     NSString *str3;
     NSString *str4;
     NSString *xingbie;
+    
+    NSIndexPath *indexpath;
 }
 @property(nonatomic,strong)UITableView *tableview;
 @property(nonatomic,strong)NSMutableArray *arr;
+
+@property (nonatomic, strong) DateTimePickerView *datePickerView;
 @end
 
 @implementation EditPersonInfomationViewController
@@ -169,46 +173,50 @@
         [alertV showAlertView];
     }
     else  if (indexPath.row == 3) {
-        CZHWeakSelf(self);
-        if (str4 == nil) {
-            str4 = @"";
-        }
-        [CZHDatePickerView sharePickerViewWithCurrentDate:str4 DateBlock:^(NSString *dateString) {
-            CZHStrongSelf(self);
-            self->str4 = dateString;
-            NSDictionary *dic = @{@"birthday":self->str4,
-                                  };
-            [Manager requestPOSTWithURLStr:KURLNSString(@"account/update") paramDic:dic token:nil finish:^(id responseObject) {
-                NSDictionary *diction = [Manager returndictiondata:responseObject];
-                //NSLog(@"----%@",diction);
-                if ([[NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]] isEqualToString:@"200"]){
-                    cell.lab.text = self->str4;
-                }
-                else  if ([[NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]] isEqualToString:@"401"]){
-                    [Manager logout];
-                    UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
-                    v.backgroundColor = [UIColor whiteColor];
-                    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-                    btn.frame = CGRectMake(SCREEN_WIDTH/2-60, SCREEN_HEIGHT/2-22.5, 120, 45);
-                    [btn setTitle:@"去登录" forState:UIControlStateNormal];
-                    [btn addTarget:self action:@selector(ciclk) forControlEvents:UIControlEventTouchUpInside];
-                    LRViewBorderRadius(btn, 8, 1, [UIColor colorWithWhite:.7 alpha:.5]);
-                    [btn setTitleColor:[UIColor colorWithWhite:.7 alpha:.5] forState:UIControlStateNormal];
-                    [v addSubview:btn];
-                    [self.view addSubview:v];
-                    [self.view bringSubviewToFront:v];
-                }
-            } enError:^(NSError *error) {
-                NSLog(@"%@",error);
-            }];
-        }];
+       
+        DateTimePickerView *pickerView = [[DateTimePickerView alloc] init];
+        self.datePickerView = pickerView;
+        pickerView.delegate = self;
+        pickerView.pickerViewMode = DatePickerViewDateMode;
+        [self.view addSubview:pickerView];
+        [pickerView showDateTimePickerView];
+        indexpath = indexPath;
+
         
     }
 }
 
 
 
+#pragma mark - delegate
 
+- (void)didClickFinishDateTimePickerView:(NSString *)date{
+    PInfoCell *cell = [self.tableview cellForRowAtIndexPath:indexpath];
+    NSDictionary *dic = @{@"birthday":date,
+                          };
+    [Manager requestPOSTWithURLStr:KURLNSString(@"account/update") paramDic:dic token:nil finish:^(id responseObject) {
+        NSDictionary *diction = [Manager returndictiondata:responseObject];
+//        NSLog(@"----%@",diction);
+        if ([[NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]] isEqualToString:@"200"]){
+            cell.lab.text = date;
+        }else  if ([[NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]] isEqualToString:@"401"]){
+            [Manager logout];
+            UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+            v.backgroundColor = [UIColor whiteColor];
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+            btn.frame = CGRectMake(SCREEN_WIDTH/2-60, SCREEN_HEIGHT/2-22.5, 120, 45);
+            [btn setTitle:@"去登录" forState:UIControlStateNormal];
+            [btn addTarget:self action:@selector(ciclk) forControlEvents:UIControlEventTouchUpInside];
+            LRViewBorderRadius(btn, 8, 1, [UIColor colorWithWhite:.7 alpha:.5]);
+            [btn setTitleColor:[UIColor colorWithWhite:.7 alpha:.5] forState:UIControlStateNormal];
+            [v addSubview:btn];
+            [self.view addSubview:v];
+            [self.view bringSubviewToFront:v];
+        }
+    } enError:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
 
 
 

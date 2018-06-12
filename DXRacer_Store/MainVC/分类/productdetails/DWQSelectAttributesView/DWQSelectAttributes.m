@@ -32,7 +32,7 @@
     self.packView.dwq_y = 0;
     
     UILabel *line = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, screen_Width, 0.5)];
-    line.backgroundColor = [UIColor lightGrayColor];
+    line.backgroundColor = [UIColor colorWithWhite:.8 alpha:.85];
     [self.packView addSubview:line];
     
     UILabel *titleLB = [[UILabel alloc] initWithFrame:CGRectMake(20, 5, screen_Width, 25)];
@@ -122,9 +122,10 @@
     [self addSubview:self.packView];
     
     [Manager sharedManager].gouwuNumHeight = self.dwq_y+self.packView.dwq_height;
-//    NSLog(@"----%lf------%lf",self.dwq_y,self.packView.dwq_height);
     
     
+    
+    NSLog(@"----%lf------%lf",self.dwq_y,self.packView.dwq_height);
 }
 
 

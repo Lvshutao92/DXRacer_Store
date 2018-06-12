@@ -35,7 +35,6 @@
 
 
 -(void)creatUI{
-    
     //半透明视图
     alphaView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screen_Width, screen_Height)];
     alphaView.backgroundColor = [UIColor blackColor];
@@ -151,9 +150,9 @@
     stockBtn.hidden = YES;
     
     //有的商品尺码和颜色分类特别多 所以用UIScrollView 分类过多显示不全的时候可滑动查看
-    mainscrollview = [[UIScrollView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(headImage.frame)+10, screen_Width, whiteView.dwq_height-CGRectGetMaxY(headImage.frame)+10-60)];
+    mainscrollview = [[UIScrollView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(headImage.frame)+10, screen_Width, whiteView.dwq_height-CGRectGetMaxY(headImage.frame)-60)];
     mainscrollview.backgroundColor = [UIColor clearColor];
-    mainscrollview.contentSize = CGSizeMake(0, 200);
+//    mainscrollview.contentSize = CGSizeMake(0, 200);
     mainscrollview.showsHorizontalScrollIndicator = NO;
     mainscrollview.showsVerticalScrollIndicator = NO;
     [whiteView addSubview:mainscrollview];

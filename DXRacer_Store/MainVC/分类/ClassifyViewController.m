@@ -78,15 +78,15 @@
  因为只有在6s及其以上的设备才支持3D Touch,我们可以通过UITraitCollection这个类的UITraitEnvironment协议属性来判断设备是否支持3D Touch。
  UITraitCollection是UIViewController所遵守的其中一个协议，不仅包含了UI界面环境特征，而且包含了3D Touch的特征描述
  */
--(void)register3DTouch:(UITableViewCell *)cell{
-    if ([self respondsToSelector:@selector(traitCollection)]) {
-        if ([self.traitCollection respondsToSelector:@selector(forceTouchCapability)]) {
-            if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable) {
-                [self registerForPreviewingWithDelegate:(id)self sourceView:cell];
-            }
-        }
-    }
-}
+//-(void)register3DTouch:(UITableViewCell *)cell{
+//    if ([self respondsToSelector:@selector(traitCollection)]) {
+//        if ([self.traitCollection respondsToSelector:@selector(forceTouchCapability)]) {
+//            if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable) {
+//                [self registerForPreviewingWithDelegate:(id)self sourceView:cell];
+//            }
+//        }
+//    }
+//}
 
 
 
@@ -148,7 +148,7 @@
         [searchViewController.navigationController pushViewController:search animated:YES];
     }];
     
-    searchViewController.hotSearchStyle = PYHotSearchStyleRankTag; // 热门搜索风格为默认
+    searchViewController.hotSearchStyle = 4; // 热门搜索风格为默认
     //    PYHotSearchStyleNormalTag,      // 普通标签(不带边框)
     //    PYHotSearchStyleColorfulTag,    // 彩色标签（不带边框，背景色为随机彩色）
     //    PYHotSearchStyleBorderTag,      // 带有边框的标签,此时标签背景色为clearColor
@@ -156,7 +156,7 @@
     //    PYHotSearchStyleRankTag,        // 带有排名标签
     //    PYHotSearchStyleRectangleTag,   // 矩形标签,此时标签背景色为clearColor
     //    PYHotSearchStyleDefault = PYHotSearchStyleNormalTag // 默认为普通标签
-    searchViewController.searchHistoryStyle = 4; // 搜索历史风格根据选择
+    searchViewController.searchHistoryStyle = 2; // 搜索历史风格根据选择
     //    PYSearchHistoryStyleCell,           // UITableViewCell 风格
     //    PYSearchHistoryStyleNormalTag,      // PYHotSearchStyleNormalTag 标签风格
     //    PYSearchHistoryStyleColorfulTag,    // 彩色标签（不带边框，背景色为随机彩色）
@@ -475,23 +475,23 @@
     UILabel *label5 = [[UILabel alloc]initWithFrame:CGRectMake(20, 20, 80, 30)];
     label5.text = @"价格区间";
     [self.upView addSubview:label5];
-    text1 = [[UITextField alloc]initWithFrame:CGRectMake(10, 60, 60, 35)];
+    text1 = [[UITextField alloc]initWithFrame:CGRectMake(10, 60, 80, 35)];
     text1.delegate = self;
     text1.text = @"";
     text1.borderStyle = UITextBorderStyleRoundedRect;
     [_upView addSubview:text1];
-    UILabel *lin = [[UILabel alloc]initWithFrame:CGRectMake(70, 60, 40, 35)];
-    lin.text = @"~";
+    UILabel *lin = [[UILabel alloc]initWithFrame:CGRectMake(90, 60, 40, 35)];
+    lin.text = @"-";
     lin.textAlignment = NSTextAlignmentCenter;
     [self.upView addSubview:lin];
-    text2 = [[UITextField alloc]initWithFrame:CGRectMake(110, 60, 60, 35)];
+    text2 = [[UITextField alloc]initWithFrame:CGRectMake(130, 60, 80, 35)];
     text2.delegate = self;
     text2.text = @"";
     text2.borderStyle = UITextBorderStyleRoundedRect;
     [_upView addSubview:text2];
-    
-    
-    
+    text1.backgroundColor = [UIColor colorWithWhite:.9 alpha:.3];
+    text2.backgroundColor = [UIColor colorWithWhite:.9 alpha:.3];
+    lin.textColor = [UIColor lightGrayColor];
     
     
     label1 = [[UILabel alloc]initWithFrame:CGRectMake(20, 105, 80, 30)];
@@ -502,9 +502,13 @@
     for (int i = 0; i < self.array1.count; i++) {
         button1 = [UIButton buttonWithType:UIButtonTypeSystem];
         button1.tag = 100 + i;
+        
+//        LRViewBorderRadius(button1, 5, 1, [UIColor blackColor]);
         button1.backgroundColor = [UIColor colorWithWhite:.9 alpha:.3];
         button1.layer.masksToBounds = YES;
         button1.layer.cornerRadius = 5.0;
+        
+        
         [button1 addTarget:self action:@selector(handleClick1:) forControlEvents:UIControlEventTouchUpInside];
         
         

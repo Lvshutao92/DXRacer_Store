@@ -17,9 +17,6 @@
 		080BC6AA20A29B6800BFDEAF /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 080BC6A920A29B6800BFDEAF /* AddressBook.framework */; };
 		080BC6AC20A29D4A00BFDEAF /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 080BC6AB20A29D4A00BFDEAF /* AddressBookUI.framework */; };
 		080BC6AE20A2A0A500BFDEAF /* ContactsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 080BC6AD20A2A0A500BFDEAF /* ContactsUI.framework */; };
-		080BC6B720A2A62200BFDEAF /* CZHDatePickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 080BC6B120A2A62200BFDEAF /* CZHDatePickerView.m */; };
-		080BC6B820A2A62200BFDEAF /* UIButton+CZHExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 080BC6B420A2A62200BFDEAF /* UIButton+CZHExtension.m */; };
-		080BC6B920A2A62200BFDEAF /* UIView+CZHExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 080BC6B620A2A62200BFDEAF /* UIView+CZHExtension.m */; };
 		080D64A420CA0D52002269B1 /* UpdatePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 080D64A320CA0D52002269B1 /* UpdatePasswordViewController.m */; };
 		08171B7B20C662C600151ECD /* YiQianShou_ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08171B7A20C662C600151ECD /* YiQianShou_ViewController.m */; };
 		08171B7E20C6632400151ECD /* DaiFuKuan_ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08171B7D20C6632400151ECD /* DaiFuKuan_ViewController.m */; };
@@ -70,6 +67,7 @@
 		0858BC3D209ADF7A00C4489B /* GetACouponViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0858BC3C209ADF7A00C4489B /* GetACouponViewController.m */; };
 		0858BC43209B0A6900C4489B /* IrregularLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0858BC42209B0A6900C4489B /* IrregularLabel.m */; };
 		0858BC46209B0BD100C4489B /* GetACouponCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0858BC45209B0BD100C4489B /* GetACouponCell.m */; };
+		085AF6DF20CFD27A00D0A117 /* DateTimePickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 085AF6DD20CFD27A00D0A117 /* DateTimePickerView.m */; };
 		085B819A20A13BAB005BA24C /* AddAddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 085B819920A13BAB005BA24C /* AddAddressViewController.m */; };
 		085B81A020A14DCC005BA24C /* XFTreePopupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 085B819F20A14DCC005BA24C /* XFTreePopupView.m */; };
 		085B81A420A177ED005BA24C /* AddressCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 085B81A220A177ED005BA24C /* AddressCell.m */; };
@@ -230,13 +228,6 @@
 		080BC6A920A29B6800BFDEAF /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		080BC6AB20A29D4A00BFDEAF /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		080BC6AD20A2A0A500BFDEAF /* ContactsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ContactsUI.framework; path = System/Library/Frameworks/ContactsUI.framework; sourceTree = SDKROOT; };
-		080BC6B020A2A62200BFDEAF /* CZHDatePickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CZHDatePickerView.h; sourceTree = "<group>"; };
-		080BC6B120A2A62200BFDEAF /* CZHDatePickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CZHDatePickerView.m; sourceTree = "<group>"; };
-		080BC6B220A2A62200BFDEAF /* DatePickerHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatePickerHeader.h; sourceTree = "<group>"; };
-		080BC6B320A2A62200BFDEAF /* UIButton+CZHExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+CZHExtension.h"; sourceTree = "<group>"; };
-		080BC6B420A2A62200BFDEAF /* UIButton+CZHExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+CZHExtension.m"; sourceTree = "<group>"; };
-		080BC6B520A2A62200BFDEAF /* UIView+CZHExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+CZHExtension.h"; sourceTree = "<group>"; };
-		080BC6B620A2A62200BFDEAF /* UIView+CZHExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+CZHExtension.m"; sourceTree = "<group>"; };
 		080D64A220CA0D52002269B1 /* UpdatePasswordViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UpdatePasswordViewController.h; sourceTree = "<group>"; };
 		080D64A320CA0D52002269B1 /* UpdatePasswordViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UpdatePasswordViewController.m; sourceTree = "<group>"; };
 		08171B7920C662C600151ECD /* YiQianShou_ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YiQianShou_ViewController.h; sourceTree = "<group>"; };
@@ -322,6 +313,8 @@
 		0858BC42209B0A6900C4489B /* IrregularLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IrregularLabel.m; sourceTree = "<group>"; };
 		0858BC44209B0BD100C4489B /* GetACouponCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GetACouponCell.h; sourceTree = "<group>"; };
 		0858BC45209B0BD100C4489B /* GetACouponCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GetACouponCell.m; sourceTree = "<group>"; };
+		085AF6DD20CFD27A00D0A117 /* DateTimePickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateTimePickerView.m; sourceTree = "<group>"; };
+		085AF6DE20CFD27A00D0A117 /* DateTimePickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateTimePickerView.h; sourceTree = "<group>"; };
 		085B819720A12DCA005BA24C /* PYSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYSearchViewController.h; sourceTree = "<group>"; };
 		085B819820A13BAB005BA24C /* AddAddressViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddAddressViewController.h; sourceTree = "<group>"; };
 		085B819920A13BAB005BA24C /* AddAddressViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddAddressViewController.m; sourceTree = "<group>"; };
@@ -662,20 +655,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		080BC6AF20A2A62200BFDEAF /* CZHDatePickerView */ = {
-			isa = PBXGroup;
-			children = (
-				080BC6B020A2A62200BFDEAF /* CZHDatePickerView.h */,
-				080BC6B120A2A62200BFDEAF /* CZHDatePickerView.m */,
-				080BC6B220A2A62200BFDEAF /* DatePickerHeader.h */,
-				080BC6B320A2A62200BFDEAF /* UIButton+CZHExtension.h */,
-				080BC6B420A2A62200BFDEAF /* UIButton+CZHExtension.m */,
-				080BC6B520A2A62200BFDEAF /* UIView+CZHExtension.h */,
-				080BC6B620A2A62200BFDEAF /* UIView+CZHExtension.m */,
-			);
-			path = CZHDatePickerView;
-			sourceTree = "<group>";
-		};
 		082D0D8F20B3AFEB00886BDF /* topfenlei */ = {
 			isa = PBXGroup;
 			children = (
@@ -760,6 +739,15 @@
 				0858BC3C209ADF7A00C4489B /* GetACouponViewController.m */,
 			);
 			path = "领券中心";
+			sourceTree = "<group>";
+		};
+		085AF6C720CFD10C00D0A117 /* DateTimePickerViewDemo */ = {
+			isa = PBXGroup;
+			children = (
+				085AF6DE20CFD27A00D0A117 /* DateTimePickerView.h */,
+				085AF6DD20CFD27A00D0A117 /* DateTimePickerView.m */,
+			);
+			path = DateTimePickerViewDemo;
 			sourceTree = "<group>";
 		};
 		085B819B20A14DB5005BA24C /* address */ = {
@@ -1217,7 +1205,7 @@
 		08F82A9020941DAA00D36A68 /* thirdPath */ = {
 			isa = PBXGroup;
 			children = (
-				080BC6AF20A2A62200BFDEAF /* CZHDatePickerView */,
+				085AF6C720CFD10C00D0A117 /* DateTimePickerViewDemo */,
 				085B819B20A14DB5005BA24C /* address */,
 				0871B9C820A040A20035B3B7 /* EasyShowUtils */,
 				0871B9B520A03FE50035B3B7 /* EasyAlert */,
@@ -1713,13 +1701,10 @@
 				0858BC23209AB2F800C4489B /* PYSearchSuggestionViewController.m in Sources */,
 				08F82AD320944EE900D36A68 /* SDCycleScrollView.m in Sources */,
 				080228D520B6650900EB9243 /* MiaoSha_Cell.m in Sources */,
-				080BC6B720A2A62200BFDEAF /* CZHDatePickerView.m in Sources */,
 				75DCF9812098034F00FEBBD9 /* ThreeVC.m in Sources */,
 				083197F420AA92100069176E /* KGCustomButton.m in Sources */,
-				080BC6B820A2A62200BFDEAF /* UIButton+CZHExtension.m in Sources */,
 				08F82AD520944EE900D36A68 /* TAAnimatedDotView.m in Sources */,
 				0858BC21209AB2F800C4489B /* UIColor+PYExtension.m in Sources */,
-				080BC6B920A2A62200BFDEAF /* UIView+CZHExtension.m in Sources */,
 				755D87CB20B10971008F892E /* CALayer+Transition.m in Sources */,
 				088C641A20AFBF49003FE5D1 /* BigImgTableViewCell.m in Sources */,
 				088B789E20C50E9000494108 /* WNXRefresgHeader.m in Sources */,
@@ -1744,6 +1729,7 @@
 				080228DB20B670CE00EB9243 /* DaojishiLab.m in Sources */,
 				755AED7A2094C3D100BCFB71 /* Model.m in Sources */,
 				088C642B20AFCBF6003FE5D1 /* LLImageCache.m in Sources */,
+				085AF6DF20CFD27A00D0A117 /* DateTimePickerView.m in Sources */,
 				0831980220AAB7400069176E /* Collec_3_Cell.m in Sources */,
 				080228D820B665E600EB9243 /* Model_A.m in Sources */,
 				08F82AA720941FE800D36A68 /* PersonViewController.m in Sources */,

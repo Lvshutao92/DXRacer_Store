@@ -144,9 +144,13 @@
         update.navigationItem.title = @"修改密码";
         [self.navigationController pushViewController:update animated:YES];
     }else if([cell.lab.text isEqualToString:@"实名认证"]){
-//        ABABViewController *update = [[ABABViewController alloc]init];
-//        update.navigationItem.title = @"实名认证";
-//        [self.navigationController pushViewController:update animated:YES];
+        MBProgressHUD *hud= [[MBProgressHUD alloc] initWithView:self.view];
+        [hud setRemoveFromSuperViewOnHide:YES];
+        hud.label.text =@"等待更新";
+        [hud setMode:MBProgressHUDModeCustomView];
+        [self.view addSubview:hud];
+        [hud showAnimated:YES];
+        [hud hideAnimated:YES afterDelay:1.0];
     }
     
 }

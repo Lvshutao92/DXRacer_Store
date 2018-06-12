@@ -312,7 +312,7 @@
     [botomV bringSubviewToFront:btn];
     [btn touchAction:^(SQCustomButton * _Nonnull button) {
         if ([Manager redingwenjianming:@"phone.text"]!= nil){
-            NSLog(@"去购物抵扣");
+            [self dengdaiupdate];
         }else{
             LoginViewController *login = [[LoginViewController alloc]init];
             login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
@@ -354,7 +354,15 @@
 
 
 
-
+- (void)dengdaiupdate{
+    MBProgressHUD *hud= [[MBProgressHUD alloc] initWithView:self.view];
+    [hud setRemoveFromSuperViewOnHide:YES];
+    hud.label.text =@"等待更新";
+    [hud setMode:MBProgressHUDModeCustomView];
+    [self.view addSubview:hud];
+    [hud showAnimated:YES];
+    [hud hideAnimated:YES afterDelay:1.0];
+}
 
 
 
@@ -389,8 +397,9 @@
         }
     }else if (indexPath.row == 1){
         if ([Manager redingwenjianming:@"phone.text"]!= nil){
-            CouponsViewController *scr = [[CouponsViewController alloc] initWithAddVCARY:@[[CouponsOneVC new],[CouponsTwoVC new],[CouponsThreeVC new]]TitleS:@[@"未使用",@"已使用",@"已过期"] index:0];
-            [self.navigationController pushViewController:scr animated:YES];
+            [self dengdaiupdate];
+//            CouponsViewController *scr = [[CouponsViewController alloc] initWithAddVCARY:@[[CouponsOneVC new],[CouponsTwoVC new],[CouponsThreeVC new]]TitleS:@[@"未使用",@"已使用",@"已过期"] index:0];
+//            [self.navigationController pushViewController:scr animated:YES];
         }else{
             LoginViewController *login = [[LoginViewController alloc]init];
             login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
@@ -398,9 +407,10 @@
         }
     }else if (indexPath.row == 2){
         if ([Manager redingwenjianming:@"phone.text"]!= nil){
-            GetACouponViewController *about = [[GetACouponViewController alloc]init];
-            about.navigationItem.title = @"领券中心";
-            [self.navigationController pushViewController:about animated:YES];
+            [self dengdaiupdate];
+//            GetACouponViewController *about = [[GetACouponViewController alloc]init];
+//            about.navigationItem.title = @"领券中心";
+//            [self.navigationController pushViewController:about animated:YES];
         }else{
             LoginViewController *login = [[LoginViewController alloc]init];
             login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
@@ -408,7 +418,7 @@
         }
     }else if (indexPath.row == 3){
         if ([Manager redingwenjianming:@"phone.text"]!= nil){
-            
+            [self dengdaiupdate];
         }else{
             LoginViewController *login = [[LoginViewController alloc]init];
             login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
