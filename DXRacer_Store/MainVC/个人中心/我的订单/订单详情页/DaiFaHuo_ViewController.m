@@ -38,7 +38,7 @@
     
     UIButton *btn1;
 }
-
+@property UIPasteboard *pBoard;
 @property(nonatomic,strong)UITableView *tableview;
 @property(nonatomic,strong)NSMutableArray *dataArray;//数据源
 @property(nonatomic,strong)NSString *str1;
@@ -53,6 +53,7 @@
 @property(nonatomic,strong)NSString *str10;
 @property(nonatomic,strong)NSString *str11;
 @property(nonatomic,strong)NSString *str12;
+@property(nonatomic,strong)NSString *str13;
 @end
 
 @implementation DaiFaHuo_ViewController
@@ -86,7 +87,24 @@
 }
 
 
+- (void)coptext{
+    NSString *str = orderNumLab.text;
+    self.pBoard.string = str;
+    [self TextButtonAction];
+}
 
+// 只显示文字
+- (void)TextButtonAction{
+    MBProgressHUD *hud= [[MBProgressHUD alloc] initWithView:self.view];
+    [hud setRemoveFromSuperViewOnHide:YES];
+    hud.label.text =@"复制成功";
+    UIImageView *imageview=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"dui"]];
+    [hud setCustomView:imageview];
+    [hud setMode:MBProgressHUDModeCustomView];
+    [self.view addSubview:hud];
+    [hud showAnimated:YES];
+    [hud hideAnimated:YES afterDelay:1.0];
+}
 
 - (void)getOrderDetailsInfomation{
     __weak typeof (self) weakSelf = self;
@@ -136,6 +154,7 @@
         [noteStr addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:range1];
         [self->shifukuanLab setAttributedText:noteStr];
         //发票
+        weakSelf.str13 = @"created";
         if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"shippingInvoice"]]==YES) {
             NSDictionary *invDic = [diction objectForKey:@"shippingInvoice"];
             self->invioceTypeLab.text = [invDic objectForKey:@"invoiceType"];
@@ -160,7 +179,8 @@
             
             self->invioceTitleLab.text = [invDic objectForKey:@"invoiceTitle"];
             if (![[invDic objectForKey:@"invoiceStatus"] isEqualToString:@"created"]) {
-                self->btn1.hidden = YES;
+                [self->btn1 setTitle:@"发票详情" forState:UIControlStateNormal];
+                weakSelf.str13 = @"no";
             }
         }
         
@@ -240,9 +260,19 @@
     lab2.text = @"下单时间：";
     lab2.font = [UIFont systemFontOfSize:15];
     [footerBgv addSubview:lab2];
-    orderNumLab = [[UILabel alloc]initWithFrame:CGRectMake(90, 0, SCREEN_WIDTH-100, 30)];
+    orderNumLab = [[UILabel alloc]initWithFrame:CGRectMake(90, 0, 180, 30)];
     orderNumLab.textColor = [UIColor grayColor];
     [footerBgv addSubview:orderNumLab];
+    
+    self.pBoard = [UIPasteboard generalPasteboard];
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.backgroundColor = [UIColor lightGrayColor];
+    btn.frame = CGRectMake(280, 5, 35, 20);
+    [btn setTitle:@"复制" forState:UIControlStateNormal];
+    btn.titleLabel.font = [UIFont systemFontOfSize:14];
+    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [btn addTarget:self action:@selector(coptext) forControlEvents:UIControlEventTouchUpInside];
+    [footerBgv addSubview:btn];
     orderCreatetimeLab = [[UILabel alloc]initWithFrame:CGRectMake(90, 30, SCREEN_WIDTH-100, 30)];
     orderCreatetimeLab.textColor = [UIColor grayColor];
     [footerBgv addSubview:orderCreatetimeLab];
@@ -480,6 +510,7 @@
     fapiao.receiveAddress  = self.str10;
     fapiao.receivePerson   = self.str11;
     fapiao.receivePhone    = self.str12;
+     fapiao.status = self.str13;
     [self.navigationController pushViewController:fapiao animated:YES];
 }
 - (NSMutableArray *)dataArray {

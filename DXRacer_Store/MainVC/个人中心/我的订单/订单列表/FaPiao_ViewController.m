@@ -48,6 +48,8 @@
     UILabel *lab11;
     UILabel *line11;
     UITextView *textView11;
+    
+    UIButton *comitbtn;
 }
 @property(nonatomic,strong)UIScrollView *scrollview;
 
@@ -68,12 +70,18 @@
     
     [self.view addSubview:self.scrollview];
     
-    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.frame = CGRectMake(0, SCREEN_HEIGHT-50, SCREEN_WIDTH, 50);
-    btn.backgroundColor = [UIColor redColor];
-    [btn setTitle:@"提交" forState:UIControlStateNormal];
-    [btn addTarget:self action:@selector(clicksave) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:btn];
+    comitbtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    comitbtn.frame = CGRectMake(0, SCREEN_HEIGHT-50, SCREEN_WIDTH, 50);
+    comitbtn.backgroundColor = [UIColor redColor];
+    [comitbtn setTitle:@"提交" forState:UIControlStateNormal];
+    [comitbtn addTarget:self action:@selector(clicksave) forControlEvents:UIControlEventTouchUpInside];
+//    NSLog(@"------%@",self.status);
+    if (![self.status isEqualToString:@"created"]) {
+        comitbtn.hidden = YES;
+    }else{
+        comitbtn.hidden = NO;
+    }
+    [self.view addSubview:comitbtn];
     
     [self lodaddr];
     
@@ -94,6 +102,7 @@
 
 
 - (void)clicksave{
+    
     if ([text3.text isEqualToString:@"增值税普通发票"]) {
         if ([Manager judgeWhetherIsEmptyAnyObject:text2.text]==YES &&
             [Manager judgeWhetherIsEmptyAnyObject:str1]==YES &&

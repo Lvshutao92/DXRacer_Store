@@ -31,6 +31,6 @@
 
 
 
-
+@property(nonatomic,strong)NSString *status;
 
 @end
