@@ -76,7 +76,7 @@
     
     
     UIView *bgv;
-    UIImageView *addreimg;
+    UILabel *addtitlab;
     UIImageView *jiantou;
     UILabel *namelab;
     UILabel *phonelab;
@@ -133,19 +133,18 @@
     //    __weak typeof (self) weakSelf = self;
     [Manager requestPOSTWithURLStr:KURLNSString(@"address") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        //NSLog(@"----%@",diction);
+        NSLog(@"----%@",diction);
             NSMutableArray *array = (NSMutableArray *)diction;
             if ([Manager judgeWhetherIsEmptyAnyObject:array]==YES) {
-                NSDictionary *dic = [array firstObject];
-                self->addressID = [dic objectForKey:@"id"];
-                self->namelab.text    = [NSString stringWithFormat:@"收货人：%@",[dic objectForKey:@"person"]];
-                self->phonelab.text   = [dic objectForKey:@"phone"];
-                self->addresslab.text = [NSString stringWithFormat:@"收货地址：%@",[NSString stringWithFormat:@"%@%@%@%@",[dic objectForKey:@"receiveProvince"],[dic objectForKey:@"receiveCity"],[dic objectForKey:@"receiveDistrict"],[dic objectForKey:@"address"]]];
-                if (self->namelab.text.length <= 0) {
-                    [self->btn setTitle:@"请选择收货地址" forState:UIControlStateNormal];
+                if (array.count>0) {
+                    NSDictionary *dic = [array firstObject];
+                    self->addressID = [dic objectForKey:@"id"];
+                    self->addresslab.text = [NSString stringWithFormat:@"%@%@%@%@",[dic objectForKey:@"receiveProvince"],[dic objectForKey:@"receiveCity"],[dic objectForKey:@"receiveDistrict"],[dic objectForKey:@"address"]];
                 }else{
                     [self->btn setTitle:@"" forState:UIControlStateNormal];
                 }
+            }else{
+                [self->btn setTitle:@"" forState:UIControlStateNormal];
             }
         //NSLog(@"----%@",diction);
     } enError:^(NSError *error) {
@@ -266,31 +265,31 @@
     bgv.userInteractionEnabled = YES;
     [headerV addSubview:bgv];
     
-    addreimg = [[UIImageView alloc]initWithFrame:CGRectMake(10, 37.5, 25, 25)];
-    addreimg.image = [UIImage imageNamed:@"sz1"];
-    [bgv addSubview:addreimg];
+    addtitlab = [[UILabel alloc]initWithFrame:CGRectMake(10, 20, 70, 20)];
+    addtitlab.text = @"配送至：";
+    [bgv addSubview:addtitlab];
     
-    jiantou = [[UIImageView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-25, 40, 20, 20)];
+    jiantou = [[UIImageView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-25, 20, 20, 20)];
     jiantou.image = [UIImage imageNamed:@"箭头3"];
     [bgv addSubview:jiantou];
     
-    namelab = [[UILabel alloc]initWithFrame:CGRectMake(40, 20, SCREEN_WIDTH-180, 20)];
-    namelab.font = [UIFont systemFontOfSize:14];
-    [bgv addSubview:namelab];
+//    namelab = [[UILabel alloc]initWithFrame:CGRectMake(40, 20, SCREEN_WIDTH-180, 20)];
+//    namelab.font = [UIFont systemFontOfSize:14];
+//    [bgv addSubview:namelab];
+//
+//    phonelab = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-135, 20, 110, 20)];
+//    phonelab.font = [UIFont systemFontOfSize:14];
+//    phonelab.textAlignment = NSTextAlignmentRight;
+//    [bgv addSubview:phonelab];
     
-    phonelab = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-135, 20, 110, 20)];
-    phonelab.font = [UIFont systemFontOfSize:14];
-    phonelab.textAlignment = NSTextAlignmentRight;
-    [bgv addSubview:phonelab];
     
-    
-    addresslab = [[UILabel alloc]initWithFrame:CGRectMake(40, 45, SCREEN_WIDTH-65, 50)];
+    addresslab = [[UILabel alloc]initWithFrame:CGRectMake(85, 0, SCREEN_WIDTH-110, 60)];
     addresslab.font = [UIFont systemFontOfSize:14];
     addresslab.numberOfLines = 0;
     [bgv addSubview:addresslab];
     
     btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.frame = CGRectMake(0, 0, SCREEN_WIDTH, 100);
+    btn.frame = CGRectMake(0, 0, SCREEN_WIDTH, 60);
     [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(getaddress) forControlEvents:UIControlEventTouchUpInside];
     [bgv addSubview:btn];
@@ -303,7 +302,7 @@
     
     
     numberLab = [[UILabel alloc]init];
-    numberLab.text = @"购买数量";
+    numberLab.text = @"数量：";
     [headerV addSubview:numberLab];
     tf = [[UITextField alloc]init];
     tf.delegate = self;
@@ -410,11 +409,11 @@
                 self->line2.frame = CGRectMake(0, 10+SCREEN_WIDTH+self->titleHeight+105, SCREEN_WIDTH, 5);
                 
                 
-                self->bgv.frame = CGRectMake(0, SCREEN_WIDTH+self->titleHeight+120, SCREEN_WIDTH, 100);
-                self->line3.frame = CGRectMake(0, SCREEN_WIDTH+self->titleHeight+220, SCREEN_WIDTH, 5);
+                self->bgv.frame = CGRectMake(0, SCREEN_WIDTH+self->titleHeight+120, SCREEN_WIDTH, 60);
+                self->line3.frame = CGRectMake(0, SCREEN_WIDTH+self->titleHeight+180, SCREEN_WIDTH, 5);
                 
-                self->numberLab.frame =  CGRectMake(10, SCREEN_WIDTH+self->titleHeight+230, 80, 40);
-                self->tf.frame =  CGRectMake(95, SCREEN_WIDTH+self->titleHeight+230, 100, 40);
+                self->numberLab.frame =  CGRectMake(10, SCREEN_WIDTH+self->titleHeight+190, 80, 40);
+                self->tf.frame =  CGRectMake(95, SCREEN_WIDTH+self->titleHeight+190, 100, 40);
                 
                 
                 
@@ -674,22 +673,17 @@
     
     
     
-    if (namelab.text.length <= 0) {
-        [btn setTitle:@"请选择收货地址" forState:UIControlStateNormal];
+    if (addresslab.text.length <= 0) {
+        [btn setTitle:@"" forState:UIControlStateNormal];
     }
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chuanzhi:) name:@"chuanzhi" object:nil];
 }
 - (void)chuanzhi:(NSNotification *)text {
     NSDictionary *dic = text.userInfo;
-    namelab.text = [NSString stringWithFormat:@"收货人：%@",[dic objectForKey:@"name"]];
-    phonelab.text = [dic objectForKey:@"phone"];
-    addresslab.text = [NSString stringWithFormat:@"收货地址：%@",[dic objectForKey:@"address"]];
+    addresslab.text = [NSString stringWithFormat:@"%@",[dic objectForKey:@"address"]];
     addressID = [dic objectForKey:@"id"];
-    if (namelab.text.length <= 0) {
-        [btn setTitle:@"请选择收货地址" forState:UIControlStateNormal];
-    }else{
-        [btn setTitle:@"" forState:UIControlStateNormal];
-    }
+    [btn setTitle:@"" forState:UIControlStateNormal];
 }
 
 

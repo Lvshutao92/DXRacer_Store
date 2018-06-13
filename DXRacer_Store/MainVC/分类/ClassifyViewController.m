@@ -101,8 +101,22 @@
     self.tabBarController.tabBar.hidden = NO;
     self.navigationController.navigationBarHidden = NO;
     
-    
-   
+    for (UIButton *btn in _btn1arr) {
+        [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    }
+    for (UIButton *btn in _btn2arr) {
+        [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    }
+    for (UIButton *btn in _btn3arr) {
+        [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    }
+    for (UIButton *btn in _btn4arr) {
+        [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    }
+    str1 = @"";
+    str2 = @"";
+    str3 = @"";
+    str4 = @"";
 }
 
 

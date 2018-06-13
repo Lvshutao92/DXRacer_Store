@@ -337,7 +337,7 @@
     [imgV addSubview:userImg];
     
     
-    user1 = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/2-75, 110, 150, 30)];
+    user1 = [[UILabel alloc]initWithFrame:CGRectMake(50, 110, SCREEN_WIDTH-100, 30)];
     user1.textColor = [UIColor whiteColor];
     user1.textAlignment = NSTextAlignmentCenter;
     user1.numberOfLines = 0;

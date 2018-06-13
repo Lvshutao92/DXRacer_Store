@@ -138,6 +138,7 @@
             NSDictionary *invDic = [diction objectForKey:@"shippingInvoice"];
             self->invioceTypeLab.text = [invDic objectForKey:@"invoiceType"];
             self->invioceTitleLab.text = [invDic objectForKey:@"invoiceTitle"];
+            self->invioceContentLab.text = [invDic objectForKey:@"receivePerson"];
             
             weakSelf.str1  = [invDic objectForKey:@"invoiceTitle"];
             weakSelf.str2  = [invDic objectForKey:@"invoiceType"];
@@ -265,7 +266,7 @@
     lab6.font = [UIFont systemFontOfSize:15];
     [footerBgv addSubview:lab6];
     UILabel *lab7 = [[UILabel alloc]initWithFrame:CGRectMake(10, 170, 80, 30)];
-    lab7.text = @"发票内容：";
+    lab7.text = @"收票人：";
     lab7.font = [UIFont systemFontOfSize:15];
     [footerBgv addSubview:lab7];
     invioceTypeLab = [[UILabel alloc]initWithFrame:CGRectMake(90, 110, SCREEN_WIDTH-100, 30)];

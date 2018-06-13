@@ -354,7 +354,7 @@
     return 10;
 }
 - (void)clickbutton{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"再有30分钟就要取消了，快前往支付吧" preferredStyle:1];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"订单生成30分钟后自动取消，快前往支付吧" preferredStyle:1];
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"关闭" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
     }];
     [alert addAction:cancel];

@@ -741,13 +741,13 @@
 			path = "领券中心";
 			sourceTree = "<group>";
 		};
-		085AF6C720CFD10C00D0A117 /* DateTimePickerViewDemo */ = {
+		085AF6C720CFD10C00D0A117 /* DateTimePicker */ = {
 			isa = PBXGroup;
 			children = (
 				085AF6DE20CFD27A00D0A117 /* DateTimePickerView.h */,
 				085AF6DD20CFD27A00D0A117 /* DateTimePickerView.m */,
 			);
-			path = DateTimePickerViewDemo;
+			path = DateTimePicker;
 			sourceTree = "<group>";
 		};
 		085B819B20A14DB5005BA24C /* address */ = {
@@ -1205,7 +1205,7 @@
 		08F82A9020941DAA00D36A68 /* thirdPath */ = {
 			isa = PBXGroup;
 			children = (
-				085AF6C720CFD10C00D0A117 /* DateTimePickerViewDemo */,
+				085AF6C720CFD10C00D0A117 /* DateTimePicker */,
 				085B819B20A14DB5005BA24C /* address */,
 				0871B9C820A040A20035B3B7 /* EasyShowUtils */,
 				0871B9B520A03FE50035B3B7 /* EasyAlert */,
