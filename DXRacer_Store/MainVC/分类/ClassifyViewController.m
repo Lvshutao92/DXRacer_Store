@@ -195,10 +195,20 @@
     str2 = @"";
     str3 = @"";
     str4 = @"";
-    [self pinpai];
-    [self xilie];
-    [self leixing];
-    [self fenlei];
+    
+    
+    LRWeakSelf(self)
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        [weakSelf pinpai];
+        [weakSelf xilie];
+        [weakSelf leixing];
+        [weakSelf fenlei];
+//        //通知主线程刷新
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [weakSelf.tableview reloadData];
+//        });
+    });
+    
     
     
     [self initCollectionView];

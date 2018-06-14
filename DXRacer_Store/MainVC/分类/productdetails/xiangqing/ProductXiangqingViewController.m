@@ -190,11 +190,22 @@
     [headerV addSubview:line2];
     
     
-    
     [self getDetailsInfo];
     [self getIndexOneInfomation];
     [self getIndexTwoInfomation];
-    
+//    LRWeakSelf(self)
+//    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//
+//        [weakSelf getIndexOneInfomation];
+//        [weakSelf getIndexTwoInfomation];
+//                //通知主线程刷新
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    [weakSelf.tableview1 reloadData];
+//                    [weakSelf.tableview2 reloadData];
+//                    [weakSelf.tableview3 reloadData];
+//                    [weakSelf.tableview4 reloadData];
+//                });
+//    });
 }
 
 
@@ -825,7 +836,10 @@
 
 
 
-
+- (void)viewLayoutMarginsDidChange{
+    [super viewLayoutMarginsDidChange];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -833,7 +847,7 @@
     [self.dropView viewControllerWillAppear];
     self.tabBarController.tabBar.hidden = YES;
     
-   
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
 }
 
 
@@ -843,7 +857,7 @@
     // 消除导航影响
     [self.dropView viewControllerWillDisappear];
     
-   
+   [[UIApplication sharedApplication] setStatusBarHidden:NO];
 
 //    [self.detailsV.webview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
 }

@@ -31,7 +31,7 @@
 #define AP_INFO_HEIGHT    (200.0f)
 
 
-@interface MiaoShaXiangqingViewController ()<FrankDetailDropDelegate,UITableViewDataSource,UITableViewDelegate, UIScrollViewDelegate , UIWebViewDelegate,LLPhotoBrowserDelegate,UITextFieldDelegate>
+@interface MiaoShaXiangqingViewController ()<FrankDetailDropDelegate,UITableViewDataSource,UITableViewDelegate, UIScrollViewDelegate , UIWebViewDelegate,LLPhotoBrowserDelegate>
 {
     dispatch_source_t _timer;
     
@@ -88,15 +88,15 @@
     
     
     UILabel *numberLab;
-    UITextField *tf;
     NSString *stt;
     NSString *isorno_star;
     
-    NSString *zuidagoumainum;
+    
+    HJCAjustNumButton *btns;
 }
 @property(nonatomic,strong)MBProgressHUD *HUD;
 
-
+@property(nonatomic,strong)NSString *zuidagoumainum;
 @property(nonatomic,strong)UIView *backgroundView;
 
 
@@ -133,7 +133,7 @@
     //    __weak typeof (self) weakSelf = self;
     [Manager requestPOSTWithURLStr:KURLNSString(@"address") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSLog(@"----%@",diction);
+//        NSLog(@"----%@",diction);
             NSMutableArray *array = (NSMutableArray *)diction;
             if ([Manager judgeWhetherIsEmptyAnyObject:array]==YES) {
                 if (array.count>0) {
@@ -304,14 +304,28 @@
     numberLab = [[UILabel alloc]init];
     numberLab.text = @"数量：";
     [headerV addSubview:numberLab];
-    tf = [[UITextField alloc]init];
-    tf.delegate = self;
-    tf.text = @"1";
-    tf.borderStyle = UITextBorderStyleRoundedRect;
-    tf.textAlignment = NSTextAlignmentCenter;
-    tf.keyboardType = UIKeyboardTypePhonePad;
-    [headerV addSubview:tf];
-   
+    
+    LRWeakSelf(self);
+    btns = [[HJCAjustNumButton alloc] init];
+    btns.callBack = ^(NSString *currentNum){
+        self->productnumber = currentNum;
+        NSInteger inde0 = [weakSelf.zuidagoumainum integerValue];
+        NSInteger inde1 = [currentNum integerValue];
+        //NSLog(@"%ld------%ld",inde0,inde1);
+        if (inde0 < inde1) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"超过最大购买数量" message:[NSString stringWithFormat:@"最大购买数量%ld",inde0] preferredStyle:1];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            }];
+            [alert addAction:cancel];
+            [weakSelf presentViewController:alert animated:YES completion:nil];
+        }
+        
+    };
+    [headerV addSubview:btns];
+    
+    
+    
+    
     if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"token.text"]]==YES){
         [self lodinfo];
     }
@@ -338,23 +352,6 @@
     }
 }
 
-
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
-    return YES;
-}
-- (void)textFieldDidEndEditing:(UITextField *)textField{
-    NSInteger inde0 = [zuidagoumainum integerValue];
-    NSInteger inde1 = [textField.text integerValue];
-    //NSLog(@"%ld------%ld",inde0,inde1);
-    if (inde0 < inde1) {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"超过最大购买数量" message:[NSString stringWithFormat:@"最大购买数量%ld",inde0] preferredStyle:1];
-        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            [self->tf becomeFirstResponder];
-        }];
-        [alert addAction:cancel];
-        [self presentViewController:alert animated:YES completion:nil];
-    }
-}
 
 
 
@@ -413,8 +410,7 @@
                 self->line3.frame = CGRectMake(0, SCREEN_WIDTH+self->titleHeight+180, SCREEN_WIDTH, 5);
                 
                 self->numberLab.frame =  CGRectMake(10, SCREEN_WIDTH+self->titleHeight+190, 80, 40);
-                self->tf.frame =  CGRectMake(95, SCREEN_WIDTH+self->titleHeight+190, 100, 40);
-                
+                self->btns.frame = CGRectMake(90, SCREEN_WIDTH+self->titleHeight+190, 150, 40);
                 
                 
                 NSDictionary *attribtDic1 = @{NSStrikethroughStyleAttributeName: [NSNumber numberWithInteger:NSUnderlineStyleSingle]};
@@ -441,7 +437,7 @@
                 }
                 
                 
-                self->zuidagoumainum = [dicti objectForKey:@"unitQuantity"];
+                weakSelf.zuidagoumainum = [dicti objectForKey:@"unitQuantity"];
             }
         }
         [weakSelf.tableview1 reloadData];
@@ -478,8 +474,7 @@
             }];
             [alert addAction:cancel];
             [self presentViewController:alert animated:YES completion:nil];
-        }
-        else
+        }else
         {
             [self commitOrder];
         }
@@ -487,13 +482,14 @@
 }
 - (void)commitOrder{
     __weak typeof(self) weakSelf = self;
-    if (self.idString.length > 0 && addressID.length > 0 && tf.text.length > 0) {
+    if (self.idString.length > 0 && addressID.length > 0 && productnumber.length > 0) {
         NSDictionary *dic = @{@"skuId":self.idStr,
-                              @"quantity":tf.text,
+                              @"quantity":productnumber,
                               @"addressId":addressID};
+//         NSLog(@"--=====%@",dic);
         [Manager requestPOSTWithURLStr:KURLNSString(@"promotion/crush/confirm") paramDic:dic token:nil finish:^(id responseObject) {
             NSDictionary *diction = [Manager returndictiondata:responseObject];
-            //NSLog(@"--%@",diction);
+//            NSLog(@"--%@",diction);
             NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
             if ([code isEqualToString:@"200"]){
                 weakSelf.tfSheetView = [[TFSheetView alloc]init];

@@ -46,11 +46,11 @@
     if (!_myProgressView) {
         _myProgressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
         _myProgressView.frame = CGRectMake(140, 70, 120, 10);
-        _myProgressView.backgroundColor = [UIColor grayColor];
-        _myProgressView.transform = CGAffineTransformMakeScale(1.0f, 5.0f);    // 设置高度
-        _myProgressView.progressTintColor = [UIColor blackColor];  // 已走过的颜色
-        _myProgressView.trackTintColor = [UIColor redColor];  // 为走过的颜色
-        //_myProgressView.progress = 0.4; // 进度 默认为0.0∈[0.0,1.0]
+        _myProgressView.transform = CGAffineTransformMakeScale(1.0f, 2.5f);
+        //设置进度条颜色
+        _myProgressView.trackTintColor = [UIColor redColor];
+        //设置进度条上进度的颜色
+        _myProgressView.progressTintColor = [UIColor blackColor];
     }
     return _myProgressView;
 }

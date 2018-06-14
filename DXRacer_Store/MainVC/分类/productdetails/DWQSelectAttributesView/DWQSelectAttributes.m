@@ -125,7 +125,7 @@
     
     
     
-    NSLog(@"----%lf------%lf",self.dwq_y,self.packView.dwq_height);
+//    NSLog(@"----%lf------%lf",self.dwq_y,self.packView.dwq_height);
 }
 
 

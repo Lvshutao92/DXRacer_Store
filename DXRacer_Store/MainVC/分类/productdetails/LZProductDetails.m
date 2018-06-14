@@ -9,7 +9,7 @@
 #import "LZProductDetails.h"
 
 
-
+#import "AppDelegate.h"
 
 @implementation LZProductDetails
 - (NSArray *)productDetailsArr{
@@ -102,7 +102,6 @@
 
 
 
-
 - (void)updateUIWithImageAndVideoArray:(NSArray *)detailsArr{
     self.productDetailsArr = detailsArr;
     self.scrolV.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_WIDTH);
@@ -119,25 +118,25 @@
 //            [self.videoCoverImgV addSubview:self.playBtn];
 //            self.videoCoverImgV.image = [UIImage imageNamed:[NSString stringWithFormat:@"%d.JPG",i]];
 //            [self.scrolV addSubview:self.videoCoverImgV];
-            
 //            self.webview.frame = CGRectMake(i*self.frame.size.width, 0, SCREEN_WIDTH, SCREEN_WIDTH);
+            
+            
+            
             NSString *content = [NSString stringWithFormat:@"http://player.youku.com/embed/%@",detailsArr[i]];
-
-       
+//             NSArray *arr = [NSArray arrayWithObjects:@"XMTM0MzE3NTAyNA==", @"XMTcyOTQwMjA4NA==", @"XMjUyMDM2Mjc1Mg==", @"XMjUxOTAzMDE0NA==", @"XMTgyMzE0NTYxNg==", nil];
+//              NSString *content = [NSString stringWithFormat:@"http://player.youku.com/embed/%@",arr[4]];
            
+            
+            
             self.webview.frame = CGRectMake(i*self.frame.size.width, 0, SCREEN_WIDTH, SCREEN_WIDTH);
-            
-            
-            
-
             [self.webview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:content]]];
-            
             self.webview.scrollView.scrollEnabled = NO;
             //开了支持滑动返回
             self.webview.allowsBackForwardNavigationGestures = YES;
-            
-            
             [self.scrolV addSubview:self.webview];
+            
+           
+            
             
         }
         else{

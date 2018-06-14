@@ -444,6 +444,7 @@
             }else{
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:[diction objectForKey:@"msg"] message:@"温馨提示" preferredStyle:1];
                 UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    [weakSelf.navigationController popViewControllerAnimated:YES];
                 }];
                 [alert addAction:cancel];
                 [weakSelf presentViewController:alert animated:YES completion:nil];

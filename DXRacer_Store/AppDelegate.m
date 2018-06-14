@@ -21,11 +21,33 @@
     NSInteger count;
 }
 @property(nonatomic,strong)MainTabbarViewController *mainVC;
+
+
+
+
+
 @end
 //1385994805
 UIBackgroundTaskIdentifier taskId;
 
 @implementation AppDelegate
+
+
+
+
+//- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+//    if ([NSStringFromClass([[[window subviews]lastObject] class]) isEqualToString:@"UITransitionView"]) {
+//        return UIInterfaceOrientationMaskAll;
+//    }
+//    return UIInterfaceOrientationMaskPortrait;
+//}
+
+
+
+
+
+
+
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
