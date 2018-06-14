@@ -195,15 +195,12 @@
     [self getIndexTwoInfomation];
 //    LRWeakSelf(self)
 //    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-//
+//        [weakSelf getDetailsInfo];
 //        [weakSelf getIndexOneInfomation];
 //        [weakSelf getIndexTwoInfomation];
 //                //通知主线程刷新
 //                dispatch_async(dispatch_get_main_queue(), ^{
 //                    [weakSelf.tableview1 reloadData];
-//                    [weakSelf.tableview2 reloadData];
-//                    [weakSelf.tableview3 reloadData];
-//                    [weakSelf.tableview4 reloadData];
 //                });
 //    });
 }

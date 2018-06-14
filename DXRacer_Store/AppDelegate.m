@@ -35,21 +35,6 @@ UIBackgroundTaskIdentifier taskId;
 
 
 
-//- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
-//    if ([NSStringFromClass([[[window subviews]lastObject] class]) isEqualToString:@"UITransitionView"]) {
-//        return UIInterfaceOrientationMaskAll;
-//    }
-//    return UIInterfaceOrientationMaskPortrait;
-//}
-
-
-
-
-
-
-
-
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     //键盘处理
     [IQKeyboardManager sharedManager].enable = YES;

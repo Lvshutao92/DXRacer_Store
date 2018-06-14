@@ -123,18 +123,24 @@
                             he =  he + imgheight;
                         }
                         
-                        
+                       
                         NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:NSString(model.imgUrl)]];
                         UIImage *image = [UIImage imageWithData:data];
                         CGSize size = image.size;
                         CGFloat wid = [model.proportion floatValue]/100*SCREEN_WIDTH;
-                        imgheight = wid/size.width*size.height;
+                        
+                        if (size.width>0) {
+                            imgheight = wid/size.width*size.height;
+                        }
+                        
+                        
+                        
                         
                         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+                        
                         btn.frame = CGRectMake(heit, 200+he, wid, imgheight);
                         
                         btn.adjustsImageWhenHighlighted=NO;
-                        
                         [btn setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
                         
                         
