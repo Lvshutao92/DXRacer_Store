@@ -193,6 +193,9 @@
     [self getDetailsInfo];
     [self getIndexOneInfomation];
     [self getIndexTwoInfomation];
+    
+    
+    
 //    LRWeakSelf(self)
 //    dispatch_async(dispatch_get_global_queue(0, 0), ^{
 //        [weakSelf getDetailsInfo];
@@ -765,16 +768,10 @@
 
 #pragma mark --弹出规格属性
 -(void)chooseViewClick{
-    if ([Manager redingwenjianming:@"token.text"]==nil) {
-        LoginViewController *login = [[LoginViewController alloc]init];
-        login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-        [self presentViewController:login animated:YES completion:nil];
-    }else{
         [UIView animateWithDuration: 0.35 animations: ^{
             self.backgroundView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.9, 0.9);
             self.selectView.frame =CGRectMake(0, 0, screen_Width, screen_Height);
         } completion: nil];
-    }
 }
 
 
@@ -962,7 +959,7 @@
  自定义切换标题模块 代理方法
  */
 - (NSArray *) resetToolbarTitles{
-    return @[@"图文详情",@"规格参数",@"评价"];
+    return @[@"图文详情",@"规格参数",@"评价(0)"];
 }
 /**
  自定义底部展示视图模块 代理方法
@@ -1064,12 +1061,11 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if ([tableView isEqual:self.tableview2]) {
-//        if (imgheight == 0) {
-//            imgheight = 300;
-//        }
         return imgheight;
     }else if ([tableView isEqual:self.tableview3]) {
         return 60;
+    }else if ([tableView isEqual:self.tableview4]) {
+        return 100;
     }
     return 55;
 }
@@ -1081,7 +1077,10 @@
     if ([tableView isEqual:self.tableview3]) {
         return self.dataArray2.count;
     }
-    return 1;
+    if ([tableView isEqual:self.tableview4]) {
+        return self.dataArray3.count;
+    }
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -1138,7 +1137,8 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifierCell];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//    cell.textLabel.text = @"44444";
+    
+    
     return cell;
 }
 

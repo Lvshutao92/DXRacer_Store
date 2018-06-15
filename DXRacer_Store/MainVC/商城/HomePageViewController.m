@@ -166,10 +166,10 @@
                 //NSLog(@"----%f",he+imgheight+200);
                 CGFloat gao = SCREEN_WIDTH/2*18/32;
                 //NSLog(@"-------%lf",gao);
-                self->img1.frame = CGRectMake(0, he+imgheight+200+10, SCREEN_WIDTH/2, gao);
-                self->img2.frame = CGRectMake(SCREEN_WIDTH/2, he+imgheight+200+10, SCREEN_WIDTH/2, gao);
+                self->img1.frame = CGRectMake(0, he+imgheight+200+5, SCREEN_WIDTH/2, gao);
+                self->img2.frame = CGRectMake(SCREEN_WIDTH/2, he+imgheight+200+5, SCREEN_WIDTH/2, gao);
 //                self->centerV.frame = CGRectMake(0, he+imgheight+200+20+gao, SCREEN_WIDTH, 100);
-                self->headerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, he+imgheight+200+10+gao);
+                self->headerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, he+imgheight+200+5+gao);
             }
         }
         [weakSelf.tableview reloadData];
@@ -182,8 +182,16 @@
 
 
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index{
-//    NSLog(@"---------%ld",index);
     
+    Model *model = [_lunboArray objectAtIndex:index];
+    
+    Home_fenleilist_ViewController *details = [[Home_fenleilist_ViewController alloc]init];
+    
+    details.idstr = model.id;
+    
+    details.navigationItem.title = @"分类";
+    
+    [self.navigationController pushViewController:details animated:YES];
 }
 
 
@@ -247,7 +255,7 @@
     headerV.backgroundColor = [UIColor colorWithWhite:.9 alpha:.3];
     self.tableview.tableHeaderView = headerV;
     
-    self.cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 200) delegate:self placeholderImage:[UIImage imageNamed:@"placeholder"]];
+    self.cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 200) delegate:self placeholderImage:[UIImage imageNamed:@"占位图"]];
     self.cycleScrollView.currentPageDotImage = [UIImage imageNamed:@"pageControlCurrentDot"];
     self.cycleScrollView.pageDotImage = [UIImage imageNamed:@"pageControlDot"];
     self.cycleScrollView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight;
@@ -256,8 +264,9 @@
     
     img1 = [[UIImageView alloc]init];
     LRViewBorderRadius(img1, 0, .5, [UIColor colorWithWhite:.9 alpha:.3]);
-    img1.image = [UIImage imageNamed:@"miao.jpg"];
+    img1.image = [UIImage imageNamed:@"miao1"];
     img1.userInteractionEnabled = YES;
+    img1.backgroundColor = [UIColor whiteColor];
     img1.contentMode = UIViewContentModeScaleAspectFit;
     UITapGestureRecognizer *tap1 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickbtn1:)];
     [img1 addGestureRecognizer:tap1];
@@ -265,7 +274,7 @@
     
     img2 = [[UIImageView alloc]init];
     LRViewBorderRadius(img2, 0, .5, [UIColor colorWithWhite:.9 alpha:.3]);
-    img2.image = [UIImage imageNamed:@"2a.jpg"];
+    img2.image = [UIImage imageNamed:@"xppd.jpg"];
     img2.userInteractionEnabled = YES;
     UITapGestureRecognizer *tap2 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickbtn2:)];
     [img2 addGestureRecognizer:tap2];
@@ -295,7 +304,7 @@
     footerV.backgroundColor = [UIColor colorWithWhite:.9 alpha:.3];
     
     fhlab = [[UILabel alloc]init];
-    fhlab.text = @"特色推荐";
+    fhlab.text = @"热门推荐";
     fhlab.font = [UIFont systemFontOfSize:20];
     fhlab.textAlignment = NSTextAlignmentCenter;
     fhlab.textColor = [UIColor redColor];
@@ -307,7 +316,6 @@
     
     
     [self setUpReflash];
-    
 }
 
 
@@ -317,7 +325,6 @@
 {
     LRWeakSelf(self)
     WNXRefresgHeader *header = [WNXRefresgHeader headerWithRefreshingBlock:^{
-        
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             // 处理耗时操作的代码块...
             [weakSelf getTopPic];
@@ -328,7 +335,6 @@
                 [weakSelf.tableview reloadData];
             });
         });
-        
     }];
     [header beginRefreshing];
     self.tableview.mj_header = header;
@@ -362,8 +368,6 @@
     cell.img.image = [UIImage imageNamed:@""];
     cell.img.contentMode = UIViewContentModeScaleAspectFill;
     cell.img.clipsToBounds = YES;
-    
-    
     return cell;
 }
 
@@ -586,7 +590,7 @@
 {
     static NSString *identify = @"cell3";
     Collec_3_Cell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identify forIndexPath:indexPath];
-    LRViewBorderRadius(cell.bgv, 0, .5, [UIColor colorWithWhite:.9 alpha:.3]);
+    LRViewBorderRadius(cell.bgv, 0, .5, [UIColor colorWithWhite:.8 alpha:.3]);
     cell.img.contentMode = UIViewContentModeScaleAspectFit;
     Model *model = [self.dataArray3 objectAtIndex:indexPath.row];
     

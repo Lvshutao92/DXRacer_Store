@@ -142,13 +142,12 @@
         else{
             
             self.imgV = [[UIImageView alloc]initWithFrame:CGRectMake(i*self.frame.size.width, 0, SCREEN_WIDTH, SCREEN_WIDTH)];
-            self.imgV.backgroundColor = [UIColor redColor];
+            self.imgV.backgroundColor = [UIColor lightGrayColor];
             self.imgV.contentMode = UIViewContentModeScaleAspectFill;
-            [self.imgV sd_setImageWithURL:[NSURL URLWithString:detailsArr[i]]];
+            [self.imgV sd_setImageWithURL:[NSURL URLWithString:detailsArr[i]]placeholderImage:[UIImage imageNamed:@"占位图"]];
             self.imgV.userInteractionEnabled = YES;
             
             self.imgV.tag = i;
-            
             
             UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(click:)];
             [self.imgV addGestureRecognizer:tap];

@@ -19,6 +19,17 @@
 @implementation XPPD_ViewController
 - (void)viewWillAppear:(BOOL)animated{
     self.tabBarController.tabBar.hidden = YES;
+    
+    [Manager requestPOSTWithURLStr:KURLNSString(@"account") paramDic:nil token:nil finish:^(id responseObject) {
+        NSDictionary *diction = [Manager returndictiondata:responseObject];
+        //        NSLog(@"%@",diction);
+        NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
+        if ([code isEqualToString:@"401"]){
+            [Manager logout];
+        }
+    } enError:^(NSError *error) {
+    }];
+   
 }
 - (void)viewWillDisappear:(BOOL)animated{
     self.tabBarController.tabBar.hidden = YES;

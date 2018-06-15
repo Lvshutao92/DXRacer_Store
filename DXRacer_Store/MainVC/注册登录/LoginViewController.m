@@ -25,7 +25,6 @@
         text1.text = [Manager sharedManager].mobile;
         [text2 becomeFirstResponder];
     }
-    
 }
 - (void)viewDidLoad {
     [super viewDidLoad];

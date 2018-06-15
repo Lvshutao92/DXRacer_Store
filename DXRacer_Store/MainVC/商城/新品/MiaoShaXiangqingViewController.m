@@ -304,7 +304,7 @@
     numberLab = [[UILabel alloc]init];
     numberLab.text = @"数量：";
     [headerV addSubview:numberLab];
-    
+    productnumber = @"1";
     LRWeakSelf(self);
     btns = [[HJCAjustNumButton alloc] init];
     btns.callBack = ^(NSString *currentNum){

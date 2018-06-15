@@ -144,7 +144,6 @@ UIBackgroundTaskIdentifier taskId;
         
         [[UIApplication sharedApplication] setShortcutItems:@[item1,item2,item3,item5]];
     } else {
-        
     }
     /*
      参数一：标示符，书写唯一性，当你点击时需要通过判断与它是否相同进行特定的事件操作
@@ -155,14 +154,11 @@ UIBackgroundTaskIdentifier taskId;
      */
     //设置app的快捷菜单
 }
-
 #pragma mark--3DTouch点击事件处理
 -(void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler API_AVAILABLE(ios(9.0)){
     NSString * type = shortcutItem.type;
     if ([type isEqualToString:@"item1"]) {
-        
         self.mainVC.selectedIndex = 2;
-        
     }else if ([type isEqualToString:@"item2"]) {
         if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"token.text"]]==YES){
             OneVC *vvv = [[OneVC alloc]init];
