@@ -189,6 +189,9 @@ UIBackgroundTaskIdentifier taskId;
         NSMutableString *str=[[NSMutableString alloc]initWithFormat:@"tel:%@",@"4009005033"];
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
     }
+    
+    
+   
 }
 
 

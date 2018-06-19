@@ -661,7 +661,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     // 消除导航影响
-    //[self.dropView viewControllerWillAppear];
+//    [self.dropView viewControllerWillAppear];
     self.tabBarController.tabBar.hidden = YES;
     
     
@@ -690,7 +690,7 @@
     [super viewWillDisappear:animated];
     //    self.tabBarController.tabBar.hidden = YES;
     // 消除导航影响
-    //[self.dropView viewControllerWillDisappear];
+//    [self.dropView viewControllerWillDisappear];
 }
 
 
@@ -847,7 +847,7 @@
     NSString *str = [NSString stringWithFormat:@"product/img/%@",self.idString];
     [Manager requestPOSTWithURLStr:KURLNSString(str) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        //        NSLog(@"******%@",diction);
+//        NSLog(@"******%@",diction);
         [weakSelf.dataArray1 removeAllObjects];
         NSMutableArray *arr = (NSMutableArray *)diction;
         for (NSDictionary *dic in arr) {

@@ -264,7 +264,7 @@
     
     img1 = [[UIImageView alloc]init];
     LRViewBorderRadius(img1, 0, .5, [UIColor colorWithWhite:.9 alpha:.3]);
-    img1.image = [UIImage imageNamed:@"miao1"];
+    img1.image = [UIImage imageNamed:@"秒杀-3"];
     img1.userInteractionEnabled = YES;
     img1.backgroundColor = [UIColor whiteColor];
     img1.contentMode = UIViewContentModeScaleAspectFit;
@@ -274,7 +274,9 @@
     
     img2 = [[UIImageView alloc]init];
     LRViewBorderRadius(img2, 0, .5, [UIColor colorWithWhite:.9 alpha:.3]);
+    
     img2.image = [UIImage imageNamed:@"xppd.jpg"];
+    
     img2.userInteractionEnabled = YES;
     UITapGestureRecognizer *tap2 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickbtn2:)];
     [img2 addGestureRecognizer:tap2];
@@ -304,11 +306,6 @@
     footerV.backgroundColor = [UIColor colorWithWhite:.9 alpha:.3];
     
     fhlab = [[UILabel alloc]init];
-    fhlab.text = @"热门推荐";
-    fhlab.font = [UIFont systemFontOfSize:20];
-    fhlab.textAlignment = NSTextAlignmentCenter;
-    fhlab.textColor = [UIColor redColor];
-    [Manager changeWordSpaceForLabel:fhlab WithSpace:20];
     [footerV addSubview:fhlab];
     
     
@@ -633,9 +630,15 @@
     __weak typeof(self) weakSelf = self;
     [Manager requestGETWithURLStr:KURLNSString(@"index/index/product") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-//        NSLog(@"******%@",diction);
+        NSLog(@"******%@",[diction objectForKey:@"object"]);
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
+            self->fhlab.text = @"热门推荐";
+            self->fhlab.font = [UIFont systemFontOfSize:20];
+            self->fhlab.textAlignment = NSTextAlignmentCenter;
+            self->fhlab.textColor = [UIColor redColor];
+            [Manager changeWordSpaceForLabel:self->fhlab WithSpace:20];
+            
             if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"object"]] == YES) {
                 NSMutableArray *arr = [diction objectForKey:@"object"];
                 [weakSelf.dataArray3 removeAllObjects];

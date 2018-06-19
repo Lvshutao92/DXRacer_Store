@@ -182,8 +182,11 @@
     MiaoShaXiangqingViewController *details = [[MiaoShaXiangqingViewController alloc]init];
     details.idStr = model.skuId;
     details.idString = model.productItem_model.productId;
-    [self.navigationController pushViewController:details animated:YES];
     
+    
+//    [self presentViewController:details animated:YES completion:nil];
+    
+    [self.navigationController pushViewController:details animated:YES];
 }
 
 
