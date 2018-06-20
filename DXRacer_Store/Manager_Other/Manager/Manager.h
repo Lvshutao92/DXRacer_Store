@@ -155,5 +155,8 @@
 
 
 @property(nonatomic,strong)NSString *mobile;
+
+
+@property(nonatomic,strong)NSMutableArray *arr_K;
 @end
 

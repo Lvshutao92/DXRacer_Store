@@ -85,7 +85,7 @@
     LB_kucun = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(headImage.frame)+120, CGRectGetMaxY(LB_price.frame), SCREEN_WIDTH-CGRectGetMaxX(headImage.frame)-120, 20)];
     LB_kucun.textColor = [UIColor blueColor];
     LB_kucun.font = [UIFont systemFontOfSize:14];
-    LB_kucun.text = @"暂缺货";
+    LB_kucun.text = @"";
     [whiteView addSubview:LB_kucun];
     
     
@@ -128,6 +128,22 @@
     addBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     [addBtn setTitle:@"加入购物车" forState:0];
     [whiteView addSubview:addBtn];
+    
+    
+    
+    CAGradientLayer *_gradientLayer = [CAGradientLayer layer];
+    _gradientLayer.bounds = addBtn.bounds;
+    _gradientLayer.borderWidth = 0;
+    _gradientLayer.frame = addBtn.bounds;
+    _gradientLayer.colors = [NSArray arrayWithObjects:
+                             (id)RGBACOLOR(220, 20, 60, 1.0).CGColor,
+                             (id)RGBACOLOR(255, 0, 0, 1.0).CGColor, nil ,nil];
+    _gradientLayer.startPoint = CGPointMake(0, 0);
+    _gradientLayer.endPoint   = CGPointMake(1.0, 1.0);
+    [addBtn.layer insertSublayer:_gradientLayer atIndex:0];
+    
+    
+    
     
     //立即购买按钮
     buyBtn = [UIButton buttonWithType:UIButtonTypeCustom];

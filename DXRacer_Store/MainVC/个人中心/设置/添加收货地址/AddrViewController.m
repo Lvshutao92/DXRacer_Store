@@ -37,6 +37,19 @@
     [self.view addSubview:btn];
     [self.view bringSubviewToFront:btn];
     
+    CAGradientLayer *_gradientLayer = [CAGradientLayer layer];
+    _gradientLayer.bounds = btn.bounds;
+    _gradientLayer.borderWidth = 0;
+    _gradientLayer.frame = btn.bounds;
+    _gradientLayer.colors = [NSArray arrayWithObjects:
+                             (id)RGBACOLOR(220, 20, 60, 1.0).CGColor,
+                             (id)RGBACOLOR(255, 0, 0, 1.0).CGColor, nil ,nil];
+    _gradientLayer.startPoint = CGPointMake(0, 0);
+    _gradientLayer.endPoint   = CGPointMake(1.0, 1.0);
+    [btn.layer insertSublayer:_gradientLayer atIndex:0];
+    
+    
+    
     self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-50) style:UITableViewStylePlain];
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableview.backgroundColor = RGBACOLOR(237, 236, 242, 1);

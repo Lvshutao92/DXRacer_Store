@@ -478,16 +478,43 @@
     }];
     
     UIButton *btn1 = [[UIButton alloc]initWithFrame:CGRectMake(100, SCREEN_HEIGHT-50, (SCREEN_WIDTH-100)/2, 50)];
-    btn1.backgroundColor = [UIColor orangeColor];
+//    btn1.backgroundColor = [UIColor orangeColor];
     [btn1 setTitle:@"重置" forState:UIControlStateNormal];
     [btn1 addTarget:self action:@selector(chongzhi) forControlEvents:UIControlEventTouchUpInside];
     [self.window addSubview:btn1];
     
     UIButton *btn2 = [[UIButton alloc]initWithFrame:CGRectMake(100+(SCREEN_WIDTH-100)/2, SCREEN_HEIGHT-50, (SCREEN_WIDTH-100)/2, 50)];
-    btn2.backgroundColor = [UIColor redColor];
+//    btn2.backgroundColor = [UIColor redColor];
     [btn2 setTitle:@"确定" forState:UIControlStateNormal];
     [btn2 addTarget:self action:@selector(sure) forControlEvents:UIControlEventTouchUpInside];
     [self.window addSubview:btn2];
+    
+    
+    CAGradientLayer *_gradientLayer = [CAGradientLayer layer];
+    _gradientLayer.bounds = btn1.bounds;
+    _gradientLayer.borderWidth = 0;
+    _gradientLayer.frame = btn1.bounds;
+    _gradientLayer.colors = [NSArray arrayWithObjects:
+                             (id)RGBACOLOR(255, 127, 80, 1.0).CGColor,
+                             (id)RGBACOLOR(255, 69, 0, 1.0).CGColor, nil ,nil];
+    _gradientLayer.startPoint = CGPointMake(0, 0);
+    _gradientLayer.endPoint   = CGPointMake(1.0, 1.0);
+    [btn1.layer insertSublayer:_gradientLayer atIndex:0];
+    
+    
+    CAGradientLayer *_gradientLayer2 = [CAGradientLayer layer];
+    _gradientLayer2.bounds = btn2.bounds;
+    _gradientLayer2.borderWidth = 0;
+    _gradientLayer2.frame = btn2.bounds;
+    _gradientLayer2.colors = [NSArray arrayWithObjects:
+                             (id)RGBACOLOR(220, 20, 60, 1.0).CGColor,
+                             (id)RGBACOLOR(255, 0, 0, 1.0).CGColor, nil ,nil];
+    _gradientLayer2.startPoint = CGPointMake(0, 0);
+    _gradientLayer2.endPoint   = CGPointMake(1.0, 1.0);
+    [btn2.layer insertSublayer:_gradientLayer2 atIndex:0];
+    
+    
+    
     
     [self.btn1arr removeAllObjects];
     [self.btn2arr removeAllObjects];

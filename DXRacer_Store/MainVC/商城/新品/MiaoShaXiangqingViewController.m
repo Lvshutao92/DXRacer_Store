@@ -711,6 +711,19 @@
         [btn1 addTarget:self action:@selector(cilck1) forControlEvents:UIControlEventTouchUpInside];
         [_tabbarView addSubview:btn1];
         
+        CAGradientLayer *_gradientLayer = [CAGradientLayer layer];
+        _gradientLayer.bounds = btn1.bounds;
+        _gradientLayer.borderWidth = 0;
+        _gradientLayer.frame = btn1.bounds;
+        _gradientLayer.colors = [NSArray arrayWithObjects:
+                                 (id)RGBACOLOR(220, 20, 60, 1.0).CGColor,
+                                 (id)RGBACOLOR(255, 0, 0, 1.0).CGColor, nil ,nil];
+        _gradientLayer.startPoint = CGPointMake(0, 0);
+        _gradientLayer.endPoint   = CGPointMake(1.0, 1.0);
+        [btn1.layer insertSublayer:_gradientLayer atIndex:0];
+        
+        
+        
         
 //        UIButton *btn3 = [UIButton buttonWithType:UIButtonTypeCustom];
 //        btn3.frame = CGRectMake((SCREEN_WIDTH-260)/2+10, 0, (SCREEN_WIDTH-260)/2, 55);

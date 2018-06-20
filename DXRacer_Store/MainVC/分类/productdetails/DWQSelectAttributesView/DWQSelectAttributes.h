@@ -10,9 +10,12 @@
 
 #import "UIView+DWQExtension.h"
 
+
+
+
 @protocol SelectAttributesDelegate <NSObject>
 @required
--(void)selectBtnTitle:(NSString *)title andBtn:(UIButton *)btn;
+-(void)selectBtnTitle:(NSString *)title andBtn:(UIButton *)btn ;
 
 @end
 
@@ -21,6 +24,8 @@
 @property(nonatomic,copy)NSString *title;
 @property(nonatomic,strong)NSArray *attributesArray;
 
+
+@property(nonatomic,strong)UIButton *btn;
 @property(nonatomic,strong)UIButton *selectBtn;
 
 @property(nonatomic,strong)UIView *packView;
@@ -31,6 +36,7 @@
 
 
 -(instancetype)initWithTitle:(NSString *)title titleArr:(NSArray *)titleArr andFrame:(CGRect)frame;
+
 
 
 @end

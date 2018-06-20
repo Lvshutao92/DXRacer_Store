@@ -183,15 +183,15 @@
 
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index{
     
-    Model *model = [_lunboArray objectAtIndex:index];
-    
-    Home_fenleilist_ViewController *details = [[Home_fenleilist_ViewController alloc]init];
-    
-    details.idstr = model.id;
-    
-    details.navigationItem.title = @"分类";
-    
-    [self.navigationController pushViewController:details animated:YES];
+//    Model *model = [_lunboArray objectAtIndex:index];
+//    
+//    Home_fenleilist_ViewController *details = [[Home_fenleilist_ViewController alloc]init];
+//    
+//    details.idstr = model.id;
+//    
+//    details.navigationItem.title = @"分类";
+//    
+//    [self.navigationController pushViewController:details animated:YES];
 }
 
 

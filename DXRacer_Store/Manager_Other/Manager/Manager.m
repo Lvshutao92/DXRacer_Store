@@ -731,7 +731,12 @@ static Manager *manager = nil;
     }];
     
 }
-
+- (NSMutableArray *)arr_K{
+    if (_arr_K == nil) {
+        self.arr_K = [NSMutableArray arrayWithCapacity:1];
+    }
+    return _arr_K;
+}
 //put
 + (void)requestPUTWithURLStr:(NSString *)urlStr
                     paramDic:(NSDictionary *)paramDic

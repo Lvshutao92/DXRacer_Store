@@ -18,6 +18,7 @@
 
 @interface ProductXiangqingViewController ()<FrankDetailDropDelegate,UITableViewDataSource,UITableViewDelegate,SDCycleScrollViewDelegate, UIScrollViewDelegate , UIWebViewDelegate,SelectAttributesDelegate,LLPhotoBrowserDelegate>
 {
+    CAGradientLayer *_gradientLayer;
     
     CGFloat imgheight;
     
@@ -390,6 +391,9 @@
     self.selectView.LB_price.text = @"";
     self.selectView.LB_detail.text = @"";
     self.selectView.LB_showSales.text = @"";
+    self.selectView.LB_kucun.text= @"";
+    
+    
     for (int i=0; i < _standardList.count; i++)
     {
         
@@ -404,21 +408,20 @@
                             if (![self.attributesArray containsObject:view.selectBtn.titleLabel.text]) {
                                 [self.attributesArray addObject:view.selectBtn.titleLabel.text];
                                 
-                                
-                                
                                 [afe replaceObjectAtIndex:i withObject:[dic_sID objectForKey:view.selectBtn.titleLabel.text]];
                                 
-                                
-                                
                                 [abc replaceObjectAtIndex:i withObject:view.selectBtn.titleLabel.text];
-                                
-                                
-                                
                                 
                                 st = [afe componentsJoinedByString:@","];
                                 
                                 
-                                
+                                priceLab.text = @"";
+                                self.selectView.LB_price.text = @"";
+                                self.selectView.LB_detail.text = @"";
+                                self.selectView.LB_showSales.text = @"";
+                                self.selectView.LB_kucun.text= @"";
+                                self.selectView.LB_stock.text = @"";
+                                [self.selectView.headImage sd_setImageWithURL:[NSURL URLWithString:NSString(@"121")]placeholderImage:[UIImage imageNamed:@"zw"]];
                                 for (NSDictionary *dict in productItemList_Arr) {
                                     if ([[dict objectForKey:@"productModelAttrs"]isEqualToString:st]) {
                                         stringID = [dict objectForKey:@"id"];
@@ -426,9 +429,7 @@
                                         stringStatus = [dict objectForKey:@"status"];
                                         stringImg = [dict objectForKey:@"listImg"];
                                         itemNo = [dict objectForKey:@"itemNo"];
-                                        
-                                        self.selectView.LB_kucun.text= @"暂缺货";
-                                        
+                                        self.selectView.LB_kucun.text= @"库存:0";
                                         
                                         
                                         if (self.kucunArray>0) {
@@ -440,41 +441,63 @@
                                                         self.selectView.LB_kucun.text= [NSString stringWithFormat:@"库存:%ld",[model.quantity integerValue]-[model.lockQuantity integerValue]];
                                                         
                                                     }else{
-                                                        [self.selectView.addBtn setTitle:@"暂缺货，请耐心等待😳" forState:UIControlStateNormal];
-                                                        [btn2 setTitle:@"暂缺货，请选择其他规格😯" forState:UIControlStateNormal];
+                                                        [self.selectView.addBtn setTitle:@"暂缺货，您可以选择其他规格" forState:UIControlStateNormal];
+                                                        [btn2 setTitle:@"暂缺货，您可以选择其他规格" forState:UIControlStateNormal];
                                                         self.selectView.LB_kucun.text= @"库存:0";
                                                     }
                                                 }
                                             }
                                         }else{
-                                            [self.selectView.addBtn setTitle:@"暂缺货，请耐心等待😳" forState:UIControlStateNormal];
-                                            [btn2 setTitle:@"暂缺货，请选择其他规格😯" forState:UIControlStateNormal];
+                                            [self.selectView.addBtn setTitle:@"暂缺货，您可以选择其他规格" forState:UIControlStateNormal];
+                                            [btn2 setTitle:@"暂缺货，您可以选择其他规格" forState:UIControlStateNormal];
                                             self.selectView.LB_kucun.text= @"库存:0";
                                         }
                                         
                                         
+                                        if ([stringPrice floatValue]>0) {
+                                            self.selectView.LB_price.text = [Manager jinegeshi:stringPrice];
+                                            priceLab.text = [Manager jinegeshi:stringPrice];
+                                        }else{
+                                            self.selectView.LB_price.text = @"";
+                                            priceLab.text = @"";
+                                        }
                                         
+                                        self.selectView.LB_stock.text = itemNo;
+                                        //self.selectView.LB_showSales.text=stringStatus;
+                                        [self.selectView.headImage sd_setImageWithURL:[NSURL URLWithString:NSString(stringImg)]placeholderImage:[UIImage imageNamed:@"zw"]];
                                         
+                                        break;
                                     }
                                 }
                                 
-                                if (stringID.length <=0){
-                                    self.selectView.LB_price.text = [Manager jinegeshi:stringPrice];
-                                    priceLab.text = [Manager jinegeshi:stringPrice];
-                                    self.selectView.LB_stock.text = itemNo;
-                                    //self.selectView.LB_showSales.text=stringStatus;
-                                    
-                                    [self.selectView.headImage sd_setImageWithURL:[NSURL URLWithString:NSString(stringImg)]placeholderImage:[UIImage imageNamed:@"zw"]];
-                                }else{
-                                    self.selectView.LB_price.text = [Manager jinegeshi:stringPrice];
-                                    priceLab.text = [Manager jinegeshi:stringPrice];
-                                    
-                                    
-                                    self.selectView.LB_stock.text = itemNo;
-                                    
-                                    
-                                    [self.selectView.headImage sd_setImageWithURL:[NSURL URLWithString:NSString(stringImg)]];
-                                }
+                                
+                                
+//                                if (stringID.length <=0){
+//                                    if ([stringPrice floatValue]>0) {
+//                                        self.selectView.LB_price.text = [Manager jinegeshi:stringPrice];
+//                                        priceLab.text = [Manager jinegeshi:stringPrice];
+//                                    }else{
+//                                        self.selectView.LB_price.text = @"";
+//                                        priceLab.text = @"";
+//                                    }
+//
+//                                    self.selectView.LB_stock.text = itemNo;
+//                                    //self.selectView.LB_showSales.text=stringStatus;
+//
+//                                    [self.selectView.headImage sd_setImageWithURL:[NSURL URLWithString:NSString(stringImg)]placeholderImage:[UIImage imageNamed:@"zw"]];
+//                                }else{
+//                                    if ([stringPrice floatValue]>0) {
+//                                        self.selectView.LB_price.text = [Manager jinegeshi:stringPrice];
+//                                        priceLab.text = [Manager jinegeshi:stringPrice];
+//                                    }else{
+//                                        self.selectView.LB_price.text = @"";
+//                                        priceLab.text = @"";
+//                                    }
+//
+//                                    self.selectView.LB_stock.text = itemNo;
+//                                    [self.selectView.headImage sd_setImageWithURL:[NSURL URLWithString:NSString(stringImg)]];
+//                                }
+                                
                             }
                         }
                     }
@@ -496,7 +519,6 @@
     for (Model *model in self.cuxiaoArr) {
         //NSLog(@"%@----%@",stringID,model.productItemId);
         if ([model.productItemId isEqualToString:stringID]) {
-            
             activityNameLab.text =model.activityName;
             activityPriceLab.text = [Manager jinegeshi:model.onSalePrice];
             
@@ -519,6 +541,7 @@
 }
 
 - (void)getDetailsInfo{
+   
     
     __weak typeof(self) weakSelf = self;
     NSString *str = [NSString stringWithFormat:@"product/%@",self.idStr];
@@ -547,7 +570,7 @@
                     [weakSelf.lunboArray addObject:model];
                 }
             }
-            //
+            //-------------
             if ([Manager judgeWhetherIsEmptyAnyObject:[[diction objectForKey:@"object"]objectForKey:@"promotions"]] == YES) {
                 NSMutableArray *arr = [[diction objectForKey:@"object"]objectForKey:@"promotions"];
                 [weakSelf.cuxiaoArr removeAllObjects];
@@ -556,7 +579,9 @@
                     [weakSelf.cuxiaoArr addObject:model];
                 }
             }
-            //
+            
+            
+            //----------------
             self->productItemList_Arr = [[diction objectForKey:@"object"]objectForKey:@"productItemList"];
             NSMutableArray *attrList = [[diction objectForKey:@"object"]objectForKey:@"productAttrList"];
             NSMutableArray *attrList_a = [NSMutableArray arrayWithCapacity:1];
@@ -564,35 +589,41 @@
             self->arr_sID = [NSMutableArray arrayWithCapacity:1];
             self->dic_sID = [NSMutableDictionary dictionaryWithCapacity:1];
             self->abc = [NSMutableArray arrayWithCapacity:1];
-            
             NSString *string;
-            
             self->afe = [NSMutableArray arrayWithCapacity:1];
             
             
-            for (NSDictionary *dic in attrList) {
+            
+            
+            for (int k = 0; k<attrList.count; k++) {
+                NSDictionary *dic = attrList[k];
                 [attrList_a addObject:[[dic objectForKey:@"attrKey"] objectForKey:@"catalogAttrValue"]];
-                
                 NSMutableArray *aaa = [dic objectForKey:@"attrValues"];
-                self->arr = [NSMutableArray arrayWithCapacity:1];
                 
+                self->arr = [NSMutableArray arrayWithCapacity:1];
                 NSDictionary *dict1 = [aaa firstObject];
                 //NSLog(@"******%@",[dict1 objectForKey:@"modelAttrValue"]);
                 [self->abc addObject:[dict1 objectForKey:@"modelAttrValue"]];
                 
-                int i = 0;
-                for (NSDictionary *dicts in aaa) {
+                for (int i = 0; i<aaa.count; i++) {
+                    NSDictionary *dicts = aaa[i];
+                    
+                    
                     [self->arr addObject:[dicts objectForKey:@"modelAttrValue"]];
                     [self->dic_sID setValue:[dicts objectForKey:@"id"] forKey:[dicts objectForKey:@"modelAttrValue"]];
                     if (i==0) {
                         [self->afe addObject:[dicts objectForKey:@"id"]];
                     }
-                    i++;
                 }
                 [attrList_b addObject:self->arr];
             }
             string = [self->afe componentsJoinedByString:@","];
-//            NSLog(@"-------------##########%@========%@",string,self->afe);
+            
+            
+            
+            
+            
+            
             
             self->productCanshu = [self->abc componentsJoinedByString:@","];
             self->guigeLab.text = [NSString stringWithFormat:@"已选：%@",self->productCanshu];
@@ -658,22 +689,19 @@
                         [self->btn2 setTitle:@"加入购物车" forState:UIControlStateNormal];
                         weakSelf.selectView.LB_kucun.text= [NSString stringWithFormat:@"库存:%ld",[model.quantity integerValue]-[model.lockQuantity integerValue]];
                     }else{
-                        [weakSelf.selectView.addBtn setTitle:@"暂缺货，请耐心等待😭" forState:UIControlStateNormal];
-                        [self->btn2 setTitle:@"暂缺货，请选择其他规格☺️" forState:UIControlStateNormal];
+                        [weakSelf.selectView.addBtn setTitle:@"暂缺货，您可以选择其他规格" forState:UIControlStateNormal];
+                        [self->btn2 setTitle:@"暂缺货，您可以选择其他规格" forState:UIControlStateNormal];
                         weakSelf.selectView.LB_kucun.text= @"库存:0";
                     }
                 }
             }
         }else{
-            [weakSelf.selectView.addBtn setTitle:@"暂缺货，请耐心等待😭" forState:UIControlStateNormal];
-            [self->btn2 setTitle:@"暂缺货，请选择其他规格☺️" forState:UIControlStateNormal];
+            [weakSelf.selectView.addBtn setTitle:@"暂缺货，您可以选择其他规格" forState:UIControlStateNormal];
+            [self->btn2 setTitle:@"暂缺货，您可以选择其他规格" forState:UIControlStateNormal];
             weakSelf.selectView.LB_kucun.text= @"库存:0";
         }
         
-        
-        
-        
-        
+       
         
         
         for (Model *model in self.cuxiaoArr) {
@@ -722,14 +750,11 @@
             self.cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_WIDTH) delegate:self placeholderImage:[UIImage imageNamed:@"placeholder"]];
             self.cycleScrollView.currentPageDotImage = [UIImage imageNamed:@"pageControlCurrentDot"];
             self.cycleScrollView.pageDotImage = [UIImage imageNamed:@"pageControlDot"];
-//            self.cycleScrollView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight;
             [self->headerV addSubview:self.cycleScrollView];
-            
             if (array.count>0) {
                 weakSelf.cycleScrollView.localizationImageNamesGroup = array;
             }
         }
-//
         
         [weakSelf.tableview1 reloadData];
     } enError:^(NSError *error) {
@@ -887,6 +912,21 @@
         btn2.backgroundColor = [UIColor redColor];
         [btn2 setTitle:@"加入购物车" forState:UIControlStateNormal];
         [btn2 addTarget:self action:@selector(cllll:) forControlEvents:UIControlEventTouchUpInside];
+        
+        
+        _gradientLayer = [CAGradientLayer layer];
+        _gradientLayer.bounds = btn2.bounds;
+        _gradientLayer.borderWidth = 0;
+        _gradientLayer.frame = btn2.bounds;
+        _gradientLayer.colors = [NSArray arrayWithObjects:
+                                 (id)RGBACOLOR(220, 20, 60, 1.0).CGColor,
+                                 (id)RGBACOLOR(255, 0, 0, 1.0).CGColor, nil ,nil];
+        _gradientLayer.startPoint = CGPointMake(0, 0);
+        _gradientLayer.endPoint   = CGPointMake(1.0, 1.0);
+        [btn2.layer insertSublayer:_gradientLayer atIndex:0];
+        
+        
+        
         [_tabbarView addSubview:btn2];
         
         

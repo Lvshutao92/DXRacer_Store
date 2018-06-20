@@ -11,19 +11,16 @@
 #import "YiFuKuan_ViewController.h"
 #import "WXApi.h"
 #import "PaymentAction.h"
-
-
 #import "OneVC.h"
 #import "LoginViewController.h"
 #import "XPPD_ViewController.h"
+
+
 @interface AppDelegate ()<selectDelegate>
 {
     NSInteger count;
 }
 @property(nonatomic,strong)MainTabbarViewController *mainVC;
-
-
-
 
 
 @end
@@ -72,8 +69,6 @@ UIBackgroundTaskIdentifier taskId;
     
     [self requestAuthorizationAddressBook];
 
-    
-    
 //    [WXApi startLogByLevel:WXLogLevelNormal logBlock:^(NSString *log) {
 //        NSLog(@"log : %@", log);
 //    }];
@@ -82,6 +77,15 @@ UIBackgroundTaskIdentifier taskId;
     
     
     [self initShortcutItems];
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     //进入后台后可继续运行定时器

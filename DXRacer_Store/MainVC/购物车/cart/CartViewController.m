@@ -243,12 +243,23 @@
         [btn setTitle:@"去结算" forState:UIControlStateNormal];
         [btn addTarget:self action:@selector(goPayBtnClick) forControlEvents:UIControlEventTouchUpInside];
         [bgView addSubview:btn];
+        
+        
+       
+        
+        
+        
         //结算按钮
         [btn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(bgView);
             make.right.equalTo(bgView);
             make.bottom.equalTo(bgView);
             make.width.equalTo(@100);
+            
+            
+            
+            
+            
             
         }];
         

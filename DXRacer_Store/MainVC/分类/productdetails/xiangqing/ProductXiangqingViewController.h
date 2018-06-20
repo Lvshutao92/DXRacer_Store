@@ -9,6 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "DWQSelectAttributes.h"
 #import "DWQSelectView.h"
+
+
+
+
+
+
 @interface ProductXiangqingViewController : UIViewController
 
 
@@ -20,7 +26,6 @@
 @property(nonatomic,strong)DWQSelectAttributes *selectAttributes;
 
 @property(nonatomic,strong)NSMutableArray *attributesArray;
-
 
 
 @end

@@ -397,7 +397,7 @@
         [lab addSubview:btn];
         
         UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn1.frame = CGRectMake(SCREEN_WIDTH-200, 10, 90, 30);
+        btn1.frame = CGRectMake(SCREEN_WIDTH-190, 10, 90, 30);
         [btn1 setTitle:@"取消订单" forState:UIControlStateNormal];
         [btn1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         LRViewBorderRadius(btn1, 15, 1, [UIColor blackColor]);
