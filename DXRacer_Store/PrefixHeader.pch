@@ -136,31 +136,14 @@
 
 
 //显示头像的域名是
-<<<<<<< HEAD
-#define NSString(str) [NSString stringWithFormat:@"http://test-shop-img.dxracer.com.cn/%@",str]
-//#define NSString(str) [NSString stringWithFormat:@"http://10.0.0.2/%@",str]
-=======
 #define NSString(str) [NSString stringWithFormat:@"http://image-shop.dxracer.com.cn/%@",str]
-//#define NSString(str) [NSString stringWithFormat:@"http://test-shop-img.dxracer.com.cn/%@",str]
-//#define NSString(str) [NSString stringWithFormat:@"http://10.0.0.2/%@",str]
-
->>>>>>> 0ef056ab9288b59458eaeaa02aa2fc5d7ec3f8af
 
 #define CHECKWORD @""
-//#define KURLNSString(str) [NSString stringWithFormat:@"http://10.0.0.2:8080/dxracer-mall-api/app/%@",str]
-//#define KURLNSString(str) [NSString stringWithFormat:@"http://10.0.0.2:8081/mall/app/%@",str]
-//#define KURLNSString(str) [NSString stringWithFormat:@"http://test-shop.dxracer.com.cn:8084/mall/app/%@",str]
+
 #define KURLNSString(str) [NSString stringWithFormat:@"http://server-shop.dxracer.cn/mall/app/%@",str]
 
 
 
-<<<<<<< HEAD
-//#define KURLNSString(str) [NSString stringWithFormat:@"http://10.0.0.2:8081/mall/app/%@",str]
-
-#define KURLNSString(str) [NSString stringWithFormat:@"http://test-shop.dxracer.com.cn:8084/mall/app/%@",str]
-=======
-
->>>>>>> 0ef056ab9288b59458eaeaa02aa2fc5d7ec3f8af
 
 
 #import "UIView+DWQExtension.h"
