@@ -112,6 +112,11 @@
                         token:(NSString *)token
                        finish:(void(^)(id responseObject))finish
                       enError:(void(^)(NSError *error))enError;
+
+
+
+
+
 //16进制颜色(html颜色值)字符串转为UIColor
 +(UIColor *) hexStringToColor: (NSString *) stringToConvert;
 
@@ -139,7 +144,6 @@
 + (void)logout;
 
 
-
 + (CGFloat )returnDaohanglanHeight;
 + (CGFloat )returnDianchitiaoHeight;
 // 根据图片url获取图片尺寸
@@ -150,5 +154,8 @@
 
 
 @property(nonatomic,strong)NSString *mobile;
+
+
+@property(nonatomic,strong)NSMutableArray *arr_K;
 @end
 

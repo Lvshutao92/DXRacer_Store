@@ -106,31 +106,24 @@
     UIBarButtonItem *bar = [[UIBarButtonItem alloc]initWithCustomView:vv];
     self.navigationItem.rightBarButtonItem = bar;
     
+ 
     
     
-//    UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-80, SCREEN_HEIGHT-170, 60, 60)];
-//    LRViewBorderRadius(lab, 30, 0, [UIColor clearColor]);
-//    lab.backgroundColor = RGBACOLOR(237, 236, 242, 1);
-//    [self.view addSubview:lab];
-//    [self.view bringSubviewToFront:lab];
-//
-//    lab1 = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 60, 29.5)];
-//    lab1.text = @"1";
-//    lab1.textAlignment = NSTextAlignmentCenter;
-//    [lab addSubview:lab1];
-//
-//    UILabel *line = [[UILabel alloc]initWithFrame:CGRectMake(0, 29.5, 60, 1)];
-//    line.backgroundColor = [UIColor colorWithWhite:.8 alpha:.5];
-//    [lab addSubview:line];
-//
-//
-//    lab2 = [[UILabel alloc]initWithFrame:CGRectMake(0, 30.5, 60, 30)];
-//    lab2.textAlignment = NSTextAlignmentCenter;
-//    [lab addSubview:lab2];
-    
-    
-    [self loddeList];
+    [self setUpReflash];
 }
+
+
+-(void)setUpReflash
+{
+    __weak typeof (self) weakSelf = self;
+    self.goosdCollectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [weakSelf loddeList];
+        [weakSelf.goosdCollectionView.mj_header endRefreshing];
+    }];
+    [self.goosdCollectionView.mj_header beginRefreshing];
+}
+
+
 
 - (void)clickqiehuan{
     if (self.isPermutation == YES) {
@@ -160,48 +153,17 @@
 
 
 
-//刷新数据
--(void)setUpReflash
-{
-    __weak typeof (self) weakSelf = self;
-    self.goosdCollectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        [weakSelf loddeList];
-    }];
-    [self.goosdCollectionView.mj_header beginRefreshing];
-    self.goosdCollectionView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-        if (self.dataArray.count == self->number) {
-            [self.goosdCollectionView.mj_footer setState:MJRefreshStateNoMoreData];
-        }else {
-            [weakSelf loddeSLList];
-        }
-    }];
-}
-
-
 
 - (void)loddeList{
 //    [self.goosdCollectionView.mj_footer endRefreshing];
     __weak typeof(self) weakSelf = self;
-    NSString *str = [NSString stringWithFormat:@"product/search?keyword=%@&startRow=0&pageSize=10",self.str];
+    NSString *str = [NSString stringWithFormat:@"product/search?keyWord=%@&startRow=0&pageSize=10",self.str];
     NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
     [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
         //        NSLog(@"******%@",diction);
-        
-//        self->number = [[diction objectForKey:@"total"] integerValue];
-//
-//        NSInteger yeshu;
-//        if (self->number % 10 != 0) {
-//            yeshu = self->number/10+1;
-//        }else{
-//            yeshu = self->number/10;
-//        }
-//        if (yeshu == 0) {
-//            yeshu = 1;
-//        }
-//        self->lab2.text = [NSString stringWithFormat:@"%ld",yeshu];
-        
+ 
         if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"itemsList"]] == YES) {
             NSMutableArray *arr = [diction objectForKey:@"itemsList"];
             [weakSelf.dataArray removeAllObjects];
@@ -210,7 +172,6 @@
                 [weakSelf.dataArray addObject:model];
             }
         }
-//        self->page = 0;
         [weakSelf.goosdCollectionView reloadData];
         
         
@@ -224,70 +185,16 @@
             
         }
         
-        
-        
-        
 //        [weakSelf.goosdCollectionView.mj_header endRefreshing];
     } enError:^(NSError *error) {
         NSLog(@"------%@",error);
     }];
 }
-- (void)loddeSLList{
-    [self.goosdCollectionView.mj_header endRefreshing];
-    __weak typeof(self) weakSelf = self;
-    NSString *str = [NSString stringWithFormat:@"product/search?keyword=%@&startRow=%ld&pageSize=10",self.str,page];
-    NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
-        NSDictionary *diction = [Manager returndictiondata:responseObject];
-        if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"itemsList"]] == YES) {
-            NSMutableArray *arr = [diction objectForKey:@"itemsList"];
-            for (NSDictionary *dicc in arr) {
-                Model *model = [Model mj_objectWithKeyValues:dicc];
-                [weakSelf.dataArray addObject:model];
-            }
-        }
-        //self->page++;
-        [weakSelf.goosdCollectionView reloadData];
-        [weakSelf.goosdCollectionView.mj_footer endRefreshing];
-        
-        
-    } enError:^(NSError *error) {
-        NSLog(@"------%@",error);
-    }];
-}
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-- (void)collectionView:(UICollectionView *)collectionView
-  didEndDisplayingCell:(UICollectionViewCell *)cell
-    forItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSIndexPath *firstIndexPath = [[self.goosdCollectionView indexPathsForVisibleItems] firstObject];
-    // 赋值给记录当前坐标的变量
-    NSInteger yeshu;
-    if (firstIndexPath.row % 10 != 0) {
-        yeshu = firstIndexPath.row/10+1;
-    }else{
-        yeshu = firstIndexPath.row/10;
-    }
-    
-    if (yeshu == 0) {
-        yeshu = 1;
-    }
-    
-    self->lab1.text = [NSString stringWithFormat:@"%ld",yeshu];
-    
-}
 
 
 

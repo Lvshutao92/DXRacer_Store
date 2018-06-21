@@ -56,7 +56,7 @@
     __weak typeof(self) weakSelf = self;
     [Manager requestGETWithURLStr:KURLNSString(@"index/poster") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        //NSLog(@"******%@",diction);
+//        NSLog(@"******%@",diction);
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
             if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"object"]] == YES) {
@@ -68,7 +68,6 @@
                 }
             }
         }
-        
         NSMutableArray *array = [NSMutableArray arrayWithCapacity:1];
         NSMutableArray *array1 = [NSMutableArray arrayWithCapacity:1];
         [array removeAllObjects];
@@ -78,16 +77,16 @@
             [array1 addObject:mo.title1];
         }
         
+        if (array.count > 0) {
+            weakSelf.cycleScrollView.localizationImageNamesGroup = array;
+        }
         
-        
-        
-        weakSelf.cycleScrollView.localizationImageNamesGroup = array;
-        
-//        weakSelf.cycleScrollView.titlesGroup = array1;
         
         [weakSelf.tableview reloadData];
+        [weakSelf.tableview.mj_header endRefreshing];
     } enError:^(NSError *error) {
         NSLog(@"------%@",error);
+        [weakSelf.tableview.mj_header endRefreshing];
     }];
 }
 
@@ -124,18 +123,24 @@
                             he =  he + imgheight;
                         }
                         
-                        
+                       
                         NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:NSString(model.imgUrl)]];
                         UIImage *image = [UIImage imageWithData:data];
                         CGSize size = image.size;
                         CGFloat wid = [model.proportion floatValue]/100*SCREEN_WIDTH;
-                        imgheight = wid/size.width*size.height;
+                        
+                        if (size.width>0) {
+                            imgheight = wid/size.width*size.height;
+                        }
+                        
+                        
+                        
                         
                         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+                        
                         btn.frame = CGRectMake(heit, 200+he, wid, imgheight);
                         
                         btn.adjustsImageWhenHighlighted=NO;
-                        
                         [btn setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
                         
                         
@@ -161,10 +166,10 @@
                 //NSLog(@"----%f",he+imgheight+200);
                 CGFloat gao = SCREEN_WIDTH/2*18/32;
                 //NSLog(@"-------%lf",gao);
-                self->img1.frame = CGRectMake(0, he+imgheight+200+10, SCREEN_WIDTH/2, gao);
-                self->img2.frame = CGRectMake(SCREEN_WIDTH/2, he+imgheight+200+10, SCREEN_WIDTH/2, gao);
+                self->img1.frame = CGRectMake(0, he+imgheight+200+5, SCREEN_WIDTH/2, gao);
+                self->img2.frame = CGRectMake(SCREEN_WIDTH/2, he+imgheight+200+5, SCREEN_WIDTH/2, gao);
 //                self->centerV.frame = CGRectMake(0, he+imgheight+200+20+gao, SCREEN_WIDTH, 100);
-                self->headerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, he+imgheight+200+10+gao);
+                self->headerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, he+imgheight+200+5+gao);
             }
         }
         [weakSelf.tableview reloadData];
@@ -177,8 +182,16 @@
 
 
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index{
-    NSLog(@"---------%ld",index);
     
+//    Model *model = [_lunboArray objectAtIndex:index];
+//
+//    Home_fenleilist_ViewController *details = [[Home_fenleilist_ViewController alloc]init];
+//
+//    details.idstr = model.id;
+//
+//    details.navigationItem.title = @"分类";
+//
+//    [self.navigationController pushViewController:details animated:YES];
 }
 
 
@@ -242,7 +255,7 @@
     headerV.backgroundColor = [UIColor colorWithWhite:.9 alpha:.3];
     self.tableview.tableHeaderView = headerV;
     
-    self.cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 200) delegate:self placeholderImage:[UIImage imageNamed:@"placeholder"]];
+    self.cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 200) delegate:self placeholderImage:[UIImage imageNamed:@"占位图"]];
     self.cycleScrollView.currentPageDotImage = [UIImage imageNamed:@"pageControlCurrentDot"];
     self.cycleScrollView.pageDotImage = [UIImage imageNamed:@"pageControlDot"];
     self.cycleScrollView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight;
@@ -251,8 +264,9 @@
     
     img1 = [[UIImageView alloc]init];
     LRViewBorderRadius(img1, 0, .5, [UIColor colorWithWhite:.9 alpha:.3]);
-    img1.image = [UIImage imageNamed:@"xstq.jpg"];
+    img1.image = [UIImage imageNamed:@"miao1"];
     img1.userInteractionEnabled = YES;
+    img1.backgroundColor = [UIColor whiteColor];
     img1.contentMode = UIViewContentModeScaleAspectFit;
     UITapGestureRecognizer *tap1 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickbtn1:)];
     [img1 addGestureRecognizer:tap1];
@@ -260,7 +274,9 @@
     
     img2 = [[UIImageView alloc]init];
     LRViewBorderRadius(img2, 0, .5, [UIColor colorWithWhite:.9 alpha:.3]);
+    
     img2.image = [UIImage imageNamed:@"xppd.jpg"];
+    
     img2.userInteractionEnabled = YES;
     UITapGestureRecognizer *tap2 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickbtn2:)];
     [img2 addGestureRecognizer:tap2];
@@ -290,17 +306,43 @@
     footerV.backgroundColor = [UIColor colorWithWhite:.9 alpha:.3];
     
     fhlab = [[UILabel alloc]init];
-    fhlab.text = @"特色推荐";
-    fhlab.font = [UIFont systemFontOfSize:20];
-    fhlab.textAlignment = NSTextAlignmentCenter;
-    fhlab.textColor = [UIColor redColor];
-    [Manager changeWordSpaceForLabel:fhlab WithSpace:20];
     [footerV addSubview:fhlab];
     
     
     [self NavigationBa];
     
+    
+    [self setUpReflash];
 }
+
+
+
+
+-(void)setUpReflash
+{
+    LRWeakSelf(self)
+    WNXRefresgHeader *header = [WNXRefresgHeader headerWithRefreshingBlock:^{
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            // 处理耗时操作的代码块...
+            [weakSelf getTopPic];
+            [weakSelf getGuanggao];
+            [weakSelf getBottomInfo];
+            //通知主线程刷新
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.tableview reloadData];
+            });
+        });
+    }];
+    [header beginRefreshing];
+    self.tableview.mj_header = header;
+}
+
+
+
+
+
+
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 0;
 }
@@ -323,8 +365,6 @@
     cell.img.image = [UIImage imageNamed:@""];
     cell.img.contentMode = UIViewContentModeScaleAspectFill;
     cell.img.clipsToBounds = YES;
-    
-    
     return cell;
 }
 
@@ -336,7 +376,7 @@
 
 - (void)getHotSearch{
     //1.创建热门搜索
-    NSArray *hotSeaches = @[@"电竞椅", @"电竞桌", @"鼠标垫", @"鼠标", @"显示屏", @"升降器", @"支架",@"键盘"];
+    NSArray *hotSeaches = @[@"电竞椅", @"电竞桌", @"电竞服",  @"赛车椅", @"办公桌",@"搁脚凳", @"游戏支架", @"工作服", @"游戏周边",@"办公椅"];
     PYSearchViewController *searchViewController = [PYSearchViewController searchViewControllerWithHotSearches:hotSeaches searchBarPlaceholder:@"商品名称" didSearchBlock:^(PYSearchViewController *searchViewController, UISearchBar *searchBar, NSString *searchText) {
         SearchController *search = [[SearchController alloc] init];
         search.str = searchText;
@@ -547,7 +587,7 @@
 {
     static NSString *identify = @"cell3";
     Collec_3_Cell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identify forIndexPath:indexPath];
-    LRViewBorderRadius(cell.bgv, 0, .5, [UIColor colorWithWhite:.9 alpha:.3]);
+    LRViewBorderRadius(cell.bgv, 0, .5, [UIColor colorWithWhite:.8 alpha:.3]);
     cell.img.contentMode = UIViewContentModeScaleAspectFit;
     Model *model = [self.dataArray3 objectAtIndex:indexPath.row];
     
@@ -590,9 +630,15 @@
     __weak typeof(self) weakSelf = self;
     [Manager requestGETWithURLStr:KURLNSString(@"index/index/product") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-//        NSLog(@"******%@",diction);
+        NSLog(@"******%@",[diction objectForKey:@"object"]);
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
+            self->fhlab.text = @"热门推荐";
+            self->fhlab.font = [UIFont systemFontOfSize:20];
+            self->fhlab.textAlignment = NSTextAlignmentCenter;
+            self->fhlab.textColor = [UIColor redColor];
+            [Manager changeWordSpaceForLabel:self->fhlab WithSpace:20];
+            
             if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"object"]] == YES) {
                 NSMutableArray *arr = [diction objectForKey:@"object"];
                 [weakSelf.dataArray3 removeAllObjects];
@@ -656,9 +702,10 @@
     [self SetNavBarHidden:YES];
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
-    [self getTopPic];
-    [self getGuanggao];
-    [self getBottomInfo];
+    
+    
+    
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated{

@@ -10,11 +10,13 @@
 #import "DZFOrderCell.h"
 
 
-#import "ProductOrderDetailsViewController.h"
-#import "ProductOrder_TwoDetails_ViewController.h"
-#import "CancelOrder_ViewController.h"
-#import "YiFaHuo_ViewController.h"
 
+#import "DaiFuKuan_ViewController.h"
+#import "YiFuKuan_ViewController.h"
+#import "CancelOrder_ViewController.h"
+#import "DaiFaHuo_ViewController.h"
+#import "YiFaHuo_ViewController.h"
+#import "YiQianShou_ViewController.h"
 
 #import <AlipaySDK/AlipaySDK.h>
 
@@ -30,12 +32,20 @@
 #define AP_BUTTON_HEIGHT  (60.0f)
 #define AP_INFO_HEIGHT    (200.0f)
 
-@interface OneVC ()<UITableViewDelegate,UITableViewDataSource>
 
+#import "ABABViewController.h"
+
+
+@interface OneVC ()<UITableViewDelegate,UITableViewDataSource>
+{
+    NSString *orderNum;
+}
 @property (nonatomic,strong)NSMutableArray *sectionArray;//分区标题
 
 @property (nonatomic,strong)NSMutableArray *sectionArrayStatus;
 
+
+@property (nonatomic,strong)NSTimer *timer;
 
 @property(nonatomic,strong)NSMutableArray *statusArray;
 
@@ -55,6 +65,44 @@
     [self getOrderStatus];
     [self getOrderList];
 }
+
+
+- (void)timerAction:(NSTimer *)timer{
+    [self judjePayFailAndSuccess];
+}
+
+- (void)judjePayFailAndSuccess{
+    if ([Manager judgeWhetherIsEmptyAnyObject:orderNum]==YES) {
+        __weak typeof(self) weakSelf = self;
+        NSString *str = [NSString stringWithFormat:@"order/payment/check/%@",orderNum];
+        NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        
+        [Manager requestPOSTWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
+            NSDictionary *diction = [Manager returndictiondata:responseObject];
+//            NSString *code = [diction objectForKey:@"code"]
+//           NSLog(@"222-----------%@",diction);
+            if ([[diction objectForKey:@"msg"] isEqualToString:@"yes"]) {
+                [weakSelf getOrderList];
+                [weakSelf.timer invalidate];
+                weakSelf.timer = nil;
+            }
+        } enError:^(NSError *error) {
+//            NSLog(@"222-----------%@",error);
+        }];
+    }
+}
+
+
+
+
+
+
+- (void)viewDidDisappear:(BOOL)animated{
+    if (self.timer != nil) {
+        [self.timer invalidate];
+        self.timer = nil;
+    }
+}
 - (void)viewWillDisappear:(BOOL)animated{
     self.tabBarController.tabBar.hidden = YES;
 }
@@ -63,6 +111,7 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     self.navigationItem.title = @"订单";
+    
     
     self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT+50) style:UITableViewStylePlain];
     self.tableview.delegate = self;
@@ -75,6 +124,8 @@
 }
 
 - (void)getOrderStatus{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.label.text = NSLocalizedString(@"加载中....", @"HUD loading title");
     __weak typeof (self) weakSelf = self;
     [Manager requestGETWithURLStr:KURLNSString(@"order/enums") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
@@ -89,7 +140,9 @@
             }
         }
         [weakSelf.tableview reloadData];
+        [hud hideAnimated:YES];
     } enError:^(NSError *error) {
+        [hud hideAnimated:YES];
         //NSLog(@"%@",error);
     }];
 }
@@ -176,20 +229,6 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return 50;
 }
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    NSString *str;
-    for (Model *model in self.statusArray) {
-        if ([model.key isEqualToString:[self.sectionArrayStatus objectAtIndex:section]]) {
-            str = model.key;
-        }
-    }
-    if ([str isEqualToString:@"01"]){
-        return 60;
-    }else if ([str isEqualToString:@"02"]){
-        return 60;
-    }
-    return 10;
-}
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 50)];
     view.backgroundColor = RGBACOLOR(237, 236, 242, 1);
@@ -212,8 +251,8 @@
         }
     }
     lab2.text = str;
-    lab2.font = [UIFont systemFontOfSize:14];
-    lab2.textColor = [UIColor redColor];
+    lab2.font = [UIFont fontWithName:@"Helvetica-Bold" size:16];
+    lab2.textColor = RGBACOLOR(60, 179, 113, 1);
     lab2.textAlignment = NSTextAlignmentRight;
     [lab addSubview:lab2];
     return view;
@@ -222,21 +261,34 @@
 - (void)clickBtn:(UIButton *)sender{
     __weak typeof(self) weakSelf = self;
     NSString *orderNo = [self.sectionArray objectAtIndex:sender.tag-100];
-    NSLog(@"---%@",orderNo);
+//    NSLog(@"---%@",orderNo);
     self.tfSheetView = [[TFSheetView alloc]init];
     //取消
     self.tfSheetView.cancelBlock = ^{
-        NSLog(@"取消");
+//        NSLog(@"取消");
         [weakSelf.tfSheetView disMissView];
     };
     //微信支付
     self.tfSheetView.wxBlock = ^{
-        NSLog(@"微信支付");
+//        NSLog(@"微信支付");
+        
+        if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"weixin://"]])
+        {
+            [weakSelf doWXPay:orderNo];
+        }
+        else
+        {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"该手机未安装微信，请安装好再进行支付" preferredStyle:1];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"关闭" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            }];
+            [alert addAction:cancel];
+            [weakSelf presentViewController:alert animated:YES completion:nil];
+        }
         [weakSelf.tfSheetView disMissView];
     };
     //支付宝支付
     self.tfSheetView.zfbBlock = ^{
-        NSLog(@"支付宝支付");
+//        NSLog(@"支付宝支付");
         [weakSelf doAPPay:orderNo];
         [weakSelf.tfSheetView disMissView];
     };
@@ -253,15 +305,61 @@
 //            NSLog(@"*****************************result%@",resultDic);
         }];
     } enError:^(NSError *error) {
-        NSLog(@"%@",error);
+//        NSLog(@"%@",error);
+    }];
+}
+//微信
+- (void)doWXPay:(NSString *)orderNo{
+    orderNum = orderNo;
+    if (self.timer != nil) {
+        [self.timer invalidate];
+        self.timer = nil;
+    }
+   self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerAction:) userInfo:nil repeats:YES];
+    
+    __weak typeof(self) weakSelf = self;
+    NSString *str = [NSString stringWithFormat:@"order/weixin/h5/%@",orderNo];
+    NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+
+    [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
+        NSDictionary *diction = [Manager returndictiondata:responseObject];
+//        NSLog(@"%@",diction);
+        
+        UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",[diction objectForKey:@"msg"]]];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+        [request setValue:@"test-shop.dxracer.com.cn://" forHTTPHeaderField:@"Referer"];
+        [webView loadRequest:request];
+        webView.hidden = YES;
+        [weakSelf.view addSubview:webView];
+        
+    } enError:^(NSError *error) {
+//        NSLog(@"%@",error);
     }];
 }
 
 
 
 
-
-
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    NSString *str;
+    for (Model *model in self.statusArray) {
+        if ([model.key isEqualToString:[self.sectionArrayStatus objectAtIndex:section]]) {
+            str = model.key;
+        }
+    }
+    if ([str isEqualToString:@"01"] || [str isEqualToString:@"02"] || [str isEqualToString:@"05"] || [str isEqualToString:@"06"]){
+        return 60;
+    }
+    return 10;
+}
+- (void)clickbutton{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"订单生成30分钟后自动取消，快前往支付吧" preferredStyle:1];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"关闭" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    }];
+    [alert addAction:cancel];
+    [self presentViewController:alert animated:YES completion:nil];
+}
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     UIView *view = [[UIView alloc]init];
     view.backgroundColor = RGBACOLOR(237, 236, 242, 1);
@@ -273,12 +371,21 @@
     
     NSString *str;
     for (Model *model in self.statusArray) {
+//        NSLog(@"%@---------%@",model.key,model.value);
         if ([model.key isEqualToString:[self.sectionArrayStatus objectAtIndex:section]]) {
             str = model.key;
         }
     }
     
     if ([str isEqualToString:@"01"]) {
+    
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.frame = CGRectMake(10, 10, 40, 30);
+        [button setTitle:@"⏰" forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(clickbutton) forControlEvents:UIControlEventTouchUpInside];
+        [lab addSubview:button];
+        
+        
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.frame = CGRectMake(SCREEN_WIDTH-80, 10, 70, 30);
         [btn setTitle:@"去支付" forState:UIControlStateNormal];
@@ -290,7 +397,7 @@
         [lab addSubview:btn];
         
         UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn1.frame = CGRectMake(SCREEN_WIDTH-200, 10, 90, 30);
+        btn1.frame = CGRectMake(SCREEN_WIDTH-190, 10, 90, 30);
         [btn1 setTitle:@"取消订单" forState:UIControlStateNormal];
         [btn1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         LRViewBorderRadius(btn1, 15, 1, [UIColor blackColor]);
@@ -304,22 +411,6 @@
         lab.frame  = CGRectMake(0, 1, SCREEN_WIDTH, 49);
         
     }else if ([str isEqualToString:@"02"]) {
-//        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-//        btn.frame = CGRectMake(SCREEN_WIDTH-100, 10, 90, 30);
-//        [btn setTitle:@"确认收货" forState:UIControlStateNormal];
-//        [btn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-//        LRViewBorderRadius(btn, 15, 1, [UIColor redColor]);
-//        btn.titleLabel.font = [UIFont systemFontOfSize:14];
-//        [lab addSubview:btn];
-//
-//        UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
-//        btn1.frame = CGRectMake(SCREEN_WIDTH-200, 10, 90, 30);
-//        [btn1 setTitle:@"查看物流" forState:UIControlStateNormal];
-//        [btn1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-//        LRViewBorderRadius(btn1, 15, 1, [UIColor blackColor]);
-//        btn1.titleLabel.font = [UIFont systemFontOfSize:14];
-//        [lab addSubview:btn1];
-        
         
         UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
         btn2.frame = CGRectMake(SCREEN_WIDTH-100, 10, 90, 30);
@@ -333,6 +424,33 @@
         
         view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 60);
         lab.frame  = CGRectMake(0, 1, SCREEN_WIDTH, 49);
+    }else if ([str isEqualToString:@"05"]) {
+        
+        UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
+        btn2.frame = CGRectMake(SCREEN_WIDTH-100, 10, 90, 30);
+        [btn2 setTitle:@"取消订单" forState:UIControlStateNormal];
+        [btn2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        LRViewBorderRadius(btn2, 15, 1, [UIColor blackColor]);
+        btn2.titleLabel.font = [UIFont systemFontOfSize:14];
+        btn2.tag = section;
+        [btn2 addTarget:self action:@selector(clickCancelOrder:) forControlEvents:UIControlEventTouchUpInside];
+        [lab addSubview:btn2];
+        
+        view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 60);
+        lab.frame  = CGRectMake(0, 1, SCREEN_WIDTH, 49);
+    }else if ([str isEqualToString:@"06"]) {
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        btn.frame = CGRectMake(SCREEN_WIDTH-100, 10, 90, 30);
+        [btn setTitle:@"确认收货" forState:UIControlStateNormal];
+        [btn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        LRViewBorderRadius(btn, 15, 1, [UIColor redColor]);
+        btn.titleLabel.font = [UIFont systemFontOfSize:14];
+        btn.tag = section;
+        [btn addTarget:self action:@selector(clickShouHuo:) forControlEvents:UIControlEventTouchUpInside];
+        [lab addSubview:btn];
+        
+        view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 60);
+        lab.frame  = CGRectMake(0, 1, SCREEN_WIDTH, 49);
     }else{
        
         view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 10);
@@ -343,28 +461,28 @@
 }
 
 
-
-- (void)clickCancelOrder:(UIButton *)sender{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"确认取消？" message:@"温馨提示" preferredStyle:1];
+- (void)clickShouHuo:(UIButton *)sender{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"确认签收？" preferredStyle:1];
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
     }];
     [alert addAction:cancel];
     
     UIAlertAction *sure = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         
-        //NSLog(@"-------%@",[self.sectionArray objectAtIndex:sender.tag]);
+//        NSLog(@"-------%@",[self.sectionArray objectAtIndex:sender.tag]);
         __weak typeof(self) weakSelf = self;
-        NSString *str = [NSString stringWithFormat:@"order/cancel/%@",[self.sectionArray objectAtIndex:sender.tag]];
-        //NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        NSString *str = [NSString stringWithFormat:@"order/receive/%@",[self.sectionArray objectAtIndex:sender.tag]];
+//        NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         [Manager requestPOSTWithURLStr:KURLNSString(str) paramArr:nil token:nil finish:^(id responseObject) {
             NSDictionary *diction = [Manager returndictiondata:responseObject];
-            NSLog(@"%@",diction);
+            //NSLog(@"%@",diction);
             NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
             if ([code isEqualToString:@"200"]){
                 [weakSelf getOrderList];
             }else{
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:[diction objectForKey:@"msg"] message:@"温馨提示" preferredStyle:1];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:[diction objectForKey:@"msg"] preferredStyle:1];
                 UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    [weakSelf getOrderList];
                 }];
                 [alert addAction:cancel];
                 [weakSelf presentViewController:alert animated:YES completion:nil];
@@ -380,8 +498,55 @@
 
 
 
+- (void)clickCancelOrder:(UIButton *)sender{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"确认取消？" preferredStyle:1];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    }];
+    [alert addAction:cancel];
+    
+    UIAlertAction *sure = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        //NSLog(@"-------%@",[self.sectionArray objectAtIndex:sender.tag]);
+        __weak typeof(self) weakSelf = self;
+        NSString *str = [NSString stringWithFormat:@"order/cancel/%@",[self.sectionArray objectAtIndex:sender.tag]];
+        //NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        [Manager requestPOSTWithURLStr:KURLNSString(str) paramArr:nil token:nil finish:^(id responseObject) {
+            NSDictionary *diction = [Manager returndictiondata:responseObject];
+            //NSLog(@"%@",diction);
+            NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
+            if ([code isEqualToString:@"200"]){
+                [weakSelf getOrderList];
+            }else{
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:[diction objectForKey:@"msg"] preferredStyle:1];
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    [weakSelf getOrderList];
+                }];
+                [alert addAction:cancel];
+                [weakSelf presentViewController:alert animated:YES completion:nil];
+            }
+        } enError:^(NSError *error) {
+            NSLog(@"%@",error);
+            
+        }];
+        
+    }];
+    [alert addAction:sure];
+    [self presentViewController:alert animated:YES completion:nil];
+}
 
 
+
+
+// 01---------待付款
+// 02---------已付款
+// 03---------取消中
+
+// 04---------已取消
+
+// 05---------待发货
+
+// 06---------已发货
+// 07---------已签收
 
 
 
@@ -393,19 +558,31 @@
         }
     }
     if ([str isEqualToString:@"待付款"]){
-        ProductOrder_TwoDetails_ViewController *or = [[ProductOrder_TwoDetails_ViewController alloc]init];
+        DaiFuKuan_ViewController *or = [[DaiFuKuan_ViewController alloc]init];
         or.orderNo = [self.sectionArray objectAtIndex:indexPath.section];
         or.orderStatus = str;
         [self.navigationController pushViewController:or animated:YES];
     }
-    else if ([str isEqualToString:@"已付款"]||[str isEqualToString:@"待发货"]) {
-        ProductOrderDetailsViewController *or = [[ProductOrderDetailsViewController alloc]init];
+    else if ([str isEqualToString:@"已付款"]) {
+        YiFuKuan_ViewController *or = [[YiFuKuan_ViewController alloc]init];
         or.orderNo = [self.sectionArray objectAtIndex:indexPath.section];
         or.orderStatus = str;
         [self.navigationController pushViewController:or animated:YES];
     }
-    else if ([str isEqualToString:@"已发货"]||[str isEqualToString:@"待收货"]){
+    else if ([str isEqualToString:@"待发货"]) {
+        DaiFaHuo_ViewController *or = [[DaiFaHuo_ViewController alloc]init];
+        or.orderNo = [self.sectionArray objectAtIndex:indexPath.section];
+        or.orderStatus = str;
+        [self.navigationController pushViewController:or animated:YES];
+    }
+    else if ([str isEqualToString:@"已发货"]){
         YiFaHuo_ViewController *or = [[YiFaHuo_ViewController alloc]init];
+        or.orderNo = [self.sectionArray objectAtIndex:indexPath.section];
+        or.orderStatus = str;
+        [self.navigationController pushViewController:or animated:YES];
+    }
+    else if ([str isEqualToString:@"已签收"]){
+        YiQianShou_ViewController *or = [[YiQianShou_ViewController alloc]init];
         or.orderNo = [self.sectionArray objectAtIndex:indexPath.section];
         or.orderStatus = str;
         [self.navigationController pushViewController:or animated:YES];

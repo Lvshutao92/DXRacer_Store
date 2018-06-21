@@ -9,6 +9,8 @@
 #import "AccountEditTableViewController.h"
 #import "EditPersonInfomationViewController.h"
 #import "AddrViewController.h"
+#import "UpdatePasswordViewController.h"
+#import "ABABViewController.h"
 @interface AccountEditTableViewController ()
 {
     UIImageView *userImg;
@@ -124,6 +126,7 @@
     
     return cell;
 }
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     PersonCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if ([cell.lab.text isEqualToString:@"地址管理"]) {
@@ -136,6 +139,18 @@
             [self TextButtonAction];
         }];
         [[SDImageCache sharedImageCache] clearMemory];//可不写
+    }else if([cell.lab.text isEqualToString:@"修改密码"]){
+        UpdatePasswordViewController *update = [[UpdatePasswordViewController alloc]init];
+        update.navigationItem.title = @"修改密码";
+        [self.navigationController pushViewController:update animated:YES];
+    }else if([cell.lab.text isEqualToString:@"实名认证"]){
+        MBProgressHUD *hud= [[MBProgressHUD alloc] initWithView:self.view];
+        [hud setRemoveFromSuperViewOnHide:YES];
+        hud.label.text =@"等待更新";
+        [hud setMode:MBProgressHUDModeCustomView];
+        [self.view addSubview:hud];
+        [hud showAnimated:YES];
+        [hud hideAnimated:YES afterDelay:1.0];
     }
     
 }

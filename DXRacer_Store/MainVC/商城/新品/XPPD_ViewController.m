@@ -19,7 +19,17 @@
 @implementation XPPD_ViewController
 - (void)viewWillAppear:(BOOL)animated{
     self.tabBarController.tabBar.hidden = YES;
-    [self lodList];
+    
+    [Manager requestPOSTWithURLStr:KURLNSString(@"account") paramDic:nil token:nil finish:^(id responseObject) {
+        NSDictionary *diction = [Manager returndictiondata:responseObject];
+        //        NSLog(@"%@",diction);
+        NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
+        if ([code isEqualToString:@"401"]){
+            [Manager logout];
+        }
+    } enError:^(NSError *error) {
+    }];
+   
 }
 - (void)viewWillDisappear:(BOOL)animated{
     self.tabBarController.tabBar.hidden = YES;
@@ -35,6 +45,18 @@
     [self.tableview registerClass:[MiaoSha_Cell class] forCellReuseIdentifier:@"cell"];
     [self.view addSubview:self.tableview];
     
+    [self setUpReflash];
+}
+
+
+-(void)setUpReflash
+{
+    __weak typeof (self) weakSelf = self;
+    self.tableview.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [weakSelf lodList];
+        [weakSelf.tableview.mj_header endRefreshing];
+    }];
+    [self.tableview.mj_header beginRefreshing];
 }
 
 
@@ -160,8 +182,11 @@
     MiaoShaXiangqingViewController *details = [[MiaoShaXiangqingViewController alloc]init];
     details.idStr = model.skuId;
     details.idString = model.productItem_model.productId;
-    [self.navigationController pushViewController:details animated:YES];
     
+    
+//    [self presentViewController:details animated:YES completion:nil];
+    
+    [self.navigationController pushViewController:details animated:YES];
 }
 
 

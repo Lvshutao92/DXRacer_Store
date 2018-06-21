@@ -80,6 +80,8 @@
  */
 -(void)creatData
 {
+//    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//    hud.label.text = NSLocalizedString(@"加载中....", @"HUD loading title");
     __weak typeof(self) weakSelf = self;
     [Manager requestPOSTWithURLStr:KURLNSString(@"order/shopping/list") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
@@ -107,7 +109,7 @@
         if ([code isEqualToString:@"401"] ){
             [Manager logout];
 
-            UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+            UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-kTabBarHeight-50)];
             v.backgroundColor = [UIColor whiteColor];
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
             btn.frame = CGRectMake(SCREEN_WIDTH/2-60, SCREEN_HEIGHT/2-22.5, 120, 45);
@@ -119,8 +121,9 @@
             [weakSelf.view addSubview:v];
             //[weakSelf.view bringSubviewToFront:v];
         }
-        
+//        [hud hideAnimated:YES];
     } enError:^(NSError *error) {
+//        [hud hideAnimated:YES];
         NSLog(@"-------%@",error);
     }];
     
@@ -240,12 +243,19 @@
         [btn setTitle:@"去结算" forState:UIControlStateNormal];
         [btn addTarget:self action:@selector(goPayBtnClick) forControlEvents:UIControlEventTouchUpInside];
         [bgView addSubview:btn];
+        
+        
+       
+        
+        
+        
         //结算按钮
         [btn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(bgView);
             make.right.equalTo(bgView);
             make.bottom.equalTo(bgView);
             make.width.equalTo(@100);
+            
             
         }];
         
@@ -330,6 +340,8 @@
                 
                 
             }
+            
+           
         } enError:^(NSError *error) {
             //NSLog(@"error******%@",error);
         }];
@@ -378,7 +390,7 @@
     backgroundView.tag = TAG_BACKGROUNDVIEW;
     [self.view addSubview:backgroundView];
     //默认图片
-    UIImageView *img = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cart_default_bg"]];
+    UIImageView *img = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"no-content"]];
     img.center = CGPointMake(SCREEN_WIDTH/2.0, SCREEN_HEIGHT/2.0 - 120);
     img.bounds = CGRectMake(0, 0, 247.0/187 * 100, 100);
     [backgroundView addSubview:img];
@@ -403,7 +415,7 @@
 }
 -(void)goToMainmenuView
 {
-    NSLog(@"去首页");
+//    NSLog(@"去首页");
     
 }
 #pragma mark - tableView 数据源方法
@@ -570,7 +582,7 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定要删除该商品?" preferredStyle:1];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"确定要删除该商品?" preferredStyle:1];
         UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             
             
@@ -597,6 +609,8 @@
                     {
                         [weakSelf setupMainView];
                     }
+                    
+                   
                 }
             } enError:^(NSError *error) {
             }];

@@ -25,7 +25,6 @@
         text1.text = [Manager sharedManager].mobile;
         [text2 becomeFirstResponder];
     }
-    
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -50,10 +49,14 @@
 - (void)clickRegister{
     RegisterViewController *regis = [[RegisterViewController alloc]init];
     regis.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    regis.string = @"注册";
     [self presentViewController:regis animated:YES completion:nil];
 }
 - (void)clickWjmm{
-    
+    RegisterViewController *regis = [[RegisterViewController alloc]init];
+    regis.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    regis.string = @"忘记密码";
+    [self presentViewController:regis animated:YES completion:nil];
 }
 
 
@@ -65,8 +68,8 @@
 
 
 - (void)clickLogin{
-    __weak typeof (self) weakSelf = self;
-    if (text1.text != nil && text2.text != nil) {
+    LRWeakSelf(self);
+    if ([Manager judgeWhetherIsEmptyAnyObject:text1.text]==YES &&  [Manager judgeWhetherIsEmptyAnyObject:text2.text]==YES) {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.label.text = NSLocalizedString(@"加载中....", @"HUD loading title");
         
@@ -100,38 +103,38 @@
 
 
 
-//- (BOOL)textFieldShouldEndEditing:(UITextField *)textField{
-//    if ([textField isEqual:text1]) {
-//        __weak typeof (self) weakSelf = self;
-//        NSString *url = [NSString stringWithFormat:@"customer/validate?userName=%@",text1.text];
-//        [Manager requestPOSTWithURLStr:KURLNSString(url) paramDic:nil token:nil finish:^(id responseObject) {
-//            NSDictionary *diction = [Manager returndictiondata:responseObject];
-//            NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
-//            if (![code isEqualToString:@"500"]) {
-//                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"用户名不存在" message:@"温馨提示" preferredStyle:1];
-//                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-//                }];
-//                [alert addAction:cancel];
-//                [weakSelf presentViewController:alert animated:YES completion:nil];
-//            }else{
-//                [weakSelf getInfomation];
-//            }
-//            //NSLog(@"----%@",diction);
-//        } enError:^(NSError *error) {
-//            NSLog(@"%@",error);
-//        }];
-//    }
-//    return YES;
-//}
-//
-//
-//- (void)getInfomation{
-//    [Manager requestPOSTWithURLStr:KURLNSString(@"account") paramDic:nil token:nil finish:^(id responseObject) {
-//        NSDictionary *diction = [Manager returndictiondata:responseObject];
-//        [self->bgimg sd_setImageWithURL:[NSURL URLWithString:[diction objectForKey:@"iconUrl"]]placeholderImage:[UIImage imageNamed:@"tx.jpg"]];
-//    } enError:^(NSError *error) {
-//    }];
-//}
+
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField{
+    if ([textField isEqual:text1]) {
+        if ([XYQRegexPatternHelper validateMobile:text1.text] == YES){
+            LRWeakSelf(self);
+            NSString *url = [NSString stringWithFormat:@"customer/validate?userName=%@",text1.text];
+            [Manager requestPOSTWithURLStr:KURLNSString(url) paramDic:nil token:nil finish:^(id responseObject) {
+                NSDictionary *diction = [Manager returndictiondata:responseObject];
+                NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
+                if (![code isEqualToString:@"500"]) {
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"用户名不存在" message:@"温馨提示" preferredStyle:1];
+                    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    }];
+                    [alert addAction:cancel];
+                    [weakSelf presentViewController:alert animated:YES completion:nil];
+                }
+                //NSLog(@"----%@",diction);
+            } enError:^(NSError *error) {
+                NSLog(@"%@",error);
+            }];
+        }else{
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请输入正确的手机号" message:@"温馨提示" preferredStyle:1];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                //            [self->text1 becomeFirstResponder];
+            }];
+            [alert addAction:cancel];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+    }
+    return YES;
+}
+
 
 
 
@@ -187,6 +190,25 @@
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(clickLogin) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btn];
+    
+    
+    CAGradientLayer *_gradientLayer = [CAGradientLayer layer];
+    _gradientLayer.bounds = btn.bounds;
+    _gradientLayer.borderWidth = 0;
+    _gradientLayer.frame = btn.bounds;
+    _gradientLayer.colors = [NSArray arrayWithObjects:
+                             (id)RGBACOLOR(220, 20, 60, 1.0).CGColor,
+                             (id)RGBACOLOR(255, 0, 0, 1.0).CGColor, nil ,nil];
+    _gradientLayer.startPoint = CGPointMake(0, 0);
+    _gradientLayer.endPoint   = CGPointMake(1.0, 1.0);
+    [btn.layer insertSublayer:_gradientLayer atIndex:0];
+    
+    
+    
+    
+    
+    
+    
     
     zcBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     zcBtn.frame = CGRectMake(30, SCREEN_HEIGHT/2+70, 100, 40);

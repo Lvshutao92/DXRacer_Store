@@ -635,7 +635,7 @@ static Manager *manager = nil;
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]) {
             [Manager writewenjianming:@"token.text" content:[diction objectForKey:@"msg"]];
-            NSLog(@"刷新token");
+//            NSLog(@"刷新token");
         }
     } enError:^(NSError *error) {
     }];
@@ -665,7 +665,6 @@ static Manager *manager = nil;
 
 
 
-
 //post arr
 + (void)requestPOSTWithURLStr:(NSString *)urlStr
                      paramArr:(NSMutableArray *)paramArr
@@ -682,7 +681,7 @@ static Manager *manager = nil;
         [manager.requestSerializer setValue:[Manager redingwenjianming:@"token.text"] forHTTPHeaderField:@"token"];
         [manager.requestSerializer setValue:[Manager redingwenjianming:@"userid.text"] forHTTPHeaderField:@"loginUserId"];
     }
-    NSLog(@"%@\n%@",[Manager redingwenjianming:@"token.text"],[Manager redingwenjianming:@"userid.text"]);
+//    NSLog(@"%@\n%@",[Manager redingwenjianming:@"token.text"],[Manager redingwenjianming:@"userid.text"]);
     
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html",@"image/jpeg",@"text/plain", nil];
     [manager POST:urlStr parameters:paramArr progress:^(NSProgress * _Nonnull uploadProgress) {
@@ -715,7 +714,7 @@ static Manager *manager = nil;
         [manager.requestSerializer setValue:[Manager redingwenjianming:@"token.text"] forHTTPHeaderField:@"token"];
         [manager.requestSerializer setValue:[Manager redingwenjianming:@"userid.text"] forHTTPHeaderField:@"loginUserId"];
     }
-    NSLog(@"%@\n%@",[Manager redingwenjianming:@"token.text"],[Manager redingwenjianming:@"userid.text"]);
+//    NSLog(@"%@\n%@",[Manager redingwenjianming:@"token.text"],[Manager redingwenjianming:@"userid.text"]);
     
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html",@"image/jpeg",@"text/plain", nil];
     [manager POST:urlStr parameters:paramDic progress:^(NSProgress * _Nonnull uploadProgress) {
@@ -732,7 +731,12 @@ static Manager *manager = nil;
     }];
     
 }
-
+- (NSMutableArray *)arr_K{
+    if (_arr_K == nil) {
+        self.arr_K = [NSMutableArray arrayWithCapacity:1];
+    }
+    return _arr_K;
+}
 //put
 + (void)requestPUTWithURLStr:(NSString *)urlStr
                     paramDic:(NSDictionary *)paramDic

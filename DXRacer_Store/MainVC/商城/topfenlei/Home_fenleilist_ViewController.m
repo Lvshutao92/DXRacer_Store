@@ -12,6 +12,11 @@
 
 
 #import "ProductXiangqingViewController.h"
+
+
+
+
+
 @interface Home_fenleilist_ViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UISearchBarDelegate>
 {
     NSInteger page;
@@ -22,9 +27,10 @@
     UILabel *lab2;
     
     UIButton *picBtn;
+    
 }
-
-
+@property (nonatomic, strong) UIScrollView *upView;
+@property (nonatomic, strong) UIWindow *window;
 
 
 @property(nonatomic,strong)UICollectionView *goosdCollectionView;
@@ -117,8 +123,8 @@
     UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-80, SCREEN_HEIGHT-170, 60, 60)];
     LRViewBorderRadius(lab, 30, 0, [UIColor clearColor]);
     lab.backgroundColor = [UIColor colorWithWhite:.97 alpha:.3];
-    [self.view addSubview:lab];
-    [self.view bringSubviewToFront:lab];
+//    [self.view addSubview:lab];
+//    [self.view bringSubviewToFront:lab];
     
     lab1 = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 60, 29.5)];
     lab1.text = @"1";
@@ -140,6 +146,9 @@
 }
 
 - (void)clickqiehuan{
+  
+  
+    
     if (self.isPermutation == YES) {
         [picBtn setImage:[UIImage imageNamed:@"分类1"] forState:UIControlStateNormal];
         self.isPermutation = NO;
@@ -166,7 +175,6 @@
 
 
 
-
 //刷新数据
 -(void)setUpReflash
 {
@@ -186,16 +194,16 @@
 - (void)loddeList{
     [self.goosdCollectionView.mj_footer endRefreshing];
     __weak typeof(self) weakSelf = self;
-    NSString *str = [NSString stringWithFormat:@"product/type?id=%@&startRow=0&pageSize=10",self.idstr];
+    NSString *str = [NSString stringWithFormat:@"product/search?type=%@&startRow=0&pageSize=10",self.idstr];
    
     NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    // NSLog(@"%@",KURLNSString(utf));
     [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        //NSLog(@"******%@",diction);
+//        NSLog(@"******%@",diction);
+        
         [weakSelf.dataArray removeAllObjects];
         self->number = [[diction objectForKey:@"total"] integerValue];
-        
+
         NSInteger yeshu;
         if (self->number % 10 != 0) {
             yeshu = self->number/10+1;
@@ -206,7 +214,7 @@
             yeshu = 1;
         }
         self->lab2.text = [NSString stringWithFormat:@"%ld",yeshu];
-        
+
         if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"itemsList"]] == YES) {
             NSMutableArray *arr = [diction objectForKey:@"itemsList"];
             for (NSDictionary *dicc in arr) {
@@ -214,15 +222,17 @@
                 [weakSelf.dataArray addObject:model];
             }
         }
-        self->page = 1;
+        self->page = 10;
         [weakSelf.goosdCollectionView reloadData];
         [weakSelf.goosdCollectionView.mj_header endRefreshing];
         
         
         if (weakSelf.dataArray.count == 0) {
-            UIImageView *view = [[UIImageView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/2-75, SCREEN_HEIGHT/2-75, 150, 150)];
-            view.image = [UIImage imageNamed:@"placeholder_dropbox"];
-            [weakSelf.view addSubview:view];
+            UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+            lab.text = @"抱歉！没有商品";
+            lab.textAlignment = NSTextAlignmentCenter;
+            lab.textColor = [UIColor lightGrayColor];
+            [weakSelf.view addSubview:lab];
         }
     } enError:^(NSError *error) {
         NSLog(@"------%@",error);
@@ -231,7 +241,7 @@
 - (void)loddeSLList{
     [self.goosdCollectionView.mj_header endRefreshing];
     __weak typeof(self) weakSelf = self;
-    NSString *str = [NSString stringWithFormat:@"product/type?id=%@&startRow=%ld&pageSize=10",self.idstr,page];
+    NSString *str = [NSString stringWithFormat:@"product/type?type=%@&startRow=%ld&pageSize=10",self.idstr,page];
     NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
@@ -242,17 +252,9 @@
                 [weakSelf.dataArray addObject:model];
             }
         }
-        self->page++;
+        self->page+=10;
         [weakSelf.goosdCollectionView reloadData];
         [weakSelf.goosdCollectionView.mj_footer endRefreshing];
-        
-        if (weakSelf.dataArray.count == 0) {
-            UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
-            lab.text = @"暂无产品";
-            lab.textAlignment = NSTextAlignmentCenter;
-            lab.textColor = [UIColor lightGrayColor];
-            [weakSelf.view addSubview:lab];
-        }
     } enError:^(NSError *error) {
         NSLog(@"------%@",error);
     }];

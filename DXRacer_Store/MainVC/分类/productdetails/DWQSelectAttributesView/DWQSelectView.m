@@ -35,7 +35,6 @@
 
 
 -(void)creatUI{
-    
     //半透明视图
     alphaView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screen_Width, screen_Height)];
     alphaView.backgroundColor = [UIColor blackColor];
@@ -51,6 +50,7 @@
     headImage = [[UIImageView alloc] initWithFrame:CGRectMake(20, -20, 90, 90)];
 //    headImage.image = [UIImage imageNamed:@"凯迪拉克.jpg"];
     headImage.layer.cornerRadius = 4;
+    headImage.backgroundColor = [UIColor whiteColor];
     headImage.layer.borderColor = [UIColor lightGrayColor].CGColor;
     headImage.layer.borderWidth = 1;
     [headImage.layer setMasksToBounds:YES];
@@ -85,7 +85,7 @@
     LB_kucun = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(headImage.frame)+120, CGRectGetMaxY(LB_price.frame), SCREEN_WIDTH-CGRectGetMaxX(headImage.frame)-120, 20)];
     LB_kucun.textColor = [UIColor blueColor];
     LB_kucun.font = [UIFont systemFontOfSize:14];
-    LB_kucun.text = @"暂缺货";
+    LB_kucun.text = @"";
     [whiteView addSubview:LB_kucun];
     
     
@@ -129,6 +129,22 @@
     [addBtn setTitle:@"加入购物车" forState:0];
     [whiteView addSubview:addBtn];
     
+    
+    
+    CAGradientLayer *_gradientLayer = [CAGradientLayer layer];
+    _gradientLayer.bounds = addBtn.bounds;
+    _gradientLayer.borderWidth = 0;
+    _gradientLayer.frame = addBtn.bounds;
+    _gradientLayer.colors = [NSArray arrayWithObjects:
+                             (id)RGBACOLOR(220, 20, 60, 1.0).CGColor,
+                             (id)RGBACOLOR(255, 0, 0, 1.0).CGColor, nil ,nil];
+    _gradientLayer.startPoint = CGPointMake(0, 0);
+    _gradientLayer.endPoint   = CGPointMake(1.0, 1.0);
+    [addBtn.layer insertSublayer:_gradientLayer atIndex:0];
+    
+    
+    
+    
     //立即购买按钮
     buyBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     buyBtn.frame = CGRectMake(whiteView.frame.size.width/2,  whiteView.dwq_height-50, whiteView.frame.size.width/2, 50);
@@ -150,9 +166,9 @@
     stockBtn.hidden = YES;
     
     //有的商品尺码和颜色分类特别多 所以用UIScrollView 分类过多显示不全的时候可滑动查看
-    mainscrollview = [[UIScrollView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(headImage.frame)+10, screen_Width, whiteView.dwq_height-CGRectGetMaxY(headImage.frame)+10-60)];
+    mainscrollview = [[UIScrollView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(headImage.frame)+10, screen_Width, whiteView.dwq_height-CGRectGetMaxY(headImage.frame)-60)];
     mainscrollview.backgroundColor = [UIColor clearColor];
-    mainscrollview.contentSize = CGSizeMake(0, 200);
+//    mainscrollview.contentSize = CGSizeMake(0, 200);
     mainscrollview.showsHorizontalScrollIndicator = NO;
     mainscrollview.showsVerticalScrollIndicator = NO;
     [whiteView addSubview:mainscrollview];

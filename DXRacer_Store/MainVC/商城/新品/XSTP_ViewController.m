@@ -33,7 +33,7 @@
 - (void)viewWillAppear:(BOOL)animated{
     self.tabBarController.tabBar.hidden = YES;
     self.navigationController.navigationBar.hidden = NO;
-    [self getTopPic];
+    
 }
 - (void)viewWillDisappear:(BOOL)animated{
     self.tabBarController.tabBar.hidden = YES;
@@ -103,6 +103,18 @@
     self.navigationItem.rightBarButtonItem = bar;
     
     
+    [self setUpReflash];
+}
+
+
+-(void)setUpReflash
+{
+    __weak typeof (self) weakSelf = self;
+    self.goosdCollectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [weakSelf getTopPic];
+        [weakSelf.goosdCollectionView.mj_header endRefreshing];
+    }];
+    [self.goosdCollectionView.mj_header beginRefreshing];
 }
 
 - (void)clickqiehuan{

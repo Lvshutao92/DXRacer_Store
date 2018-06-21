@@ -50,20 +50,29 @@
 - (void)viewWillAppear:(BOOL)animated{
     self.tabBarController.tabBar.hidden = NO;
     
+    
     [self getInfomation];
-    
-    
     if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"phone.text"]] != YES) {
         user1.text = @"登录/注册";
         userImg.image = [UIImage imageNamed:@"tx.jpg"];
     }
 }
 
+
+-(void)setUpReflash
+{
+    LRWeakSelf(self);
+    WNXRefresgHeader *header = [WNXRefresgHeader headerWithRefreshingBlock:^{
+        [weakSelf getInfomation];
+    }];
+    [header beginRefreshing];
+    self.tableview.mj_header = header;
+}
 - (void)getInfomation{
-    __weak typeof (self) weakSelf = self;
+    LRWeakSelf(self);
     [Manager requestPOSTWithURLStr:KURLNSString(@"account") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSLog(@"%@",diction);
+//        NSLog(@"%@",diction);
         
         [Manager writewenjianming:@"img.text" content:[diction objectForKey:@"iconUrl"]];
         [Manager writewenjianming:@"nikname.text" content:[diction objectForKey:@"nickName"]];
@@ -86,6 +95,8 @@
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"401"]){
             [Manager logout];
+            self->user1.text = @"登录/注册";
+            self->userImg.image = [UIImage imageNamed:@"tx.jpg"];
 //            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"您的账号已在其他设备登录，请重新登录" message:@"温馨提示" preferredStyle:1];
 //            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
 //            }];
@@ -98,6 +109,7 @@
 //            [alert addAction:sure];
 //            [weakSelf presentViewController:alert animated:YES completion:nil];
         }
+        [weakSelf.tableview.mj_header endRefreshing];
     } enError:^(NSError *error) {
     }];
 }
@@ -137,7 +149,7 @@
     
     
     
-    self.dataArray = [@[@"我的订单",@"我的优惠券",@"领券中心",@"我的收藏",@"在线客服",@"联系我们",@"关于我们"]mutableCopy];
+    self.dataArray = [@[@"我的订单",@"我的优惠券",@"领券中心",@"我的收藏",@"QQ客服",@"联系我们",@"关于我们"]mutableCopy];
     
     
     UIBarButtonItem *bar = [[UIBarButtonItem alloc]initWithTitle:@"设置" style:UIBarButtonItemStylePlain target:self action:@selector(clickedit)];
@@ -300,7 +312,7 @@
     [botomV bringSubviewToFront:btn];
     [btn touchAction:^(SQCustomButton * _Nonnull button) {
         if ([Manager redingwenjianming:@"phone.text"]!= nil){
-            NSLog(@"去购物抵扣");
+            [self dengdaiupdate];
         }else{
             LoginViewController *login = [[LoginViewController alloc]init];
             login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
@@ -325,7 +337,7 @@
     [imgV addSubview:userImg];
     
     
-    user1 = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/2-75, 110, 150, 30)];
+    user1 = [[UILabel alloc]initWithFrame:CGRectMake(50, 110, SCREEN_WIDTH-100, 30)];
     user1.textColor = [UIColor whiteColor];
     user1.textAlignment = NSTextAlignmentCenter;
     user1.numberOfLines = 0;
@@ -342,7 +354,15 @@
 
 
 
-
+- (void)dengdaiupdate{
+    MBProgressHUD *hud= [[MBProgressHUD alloc] initWithView:self.view];
+    [hud setRemoveFromSuperViewOnHide:YES];
+    hud.label.text =@"等待更新";
+    [hud setMode:MBProgressHUDModeCustomView];
+    [self.view addSubview:hud];
+    [hud showAnimated:YES];
+    [hud hideAnimated:YES afterDelay:1.0];
+}
 
 
 
@@ -377,8 +397,9 @@
         }
     }else if (indexPath.row == 1){
         if ([Manager redingwenjianming:@"phone.text"]!= nil){
-            CouponsViewController *scr = [[CouponsViewController alloc] initWithAddVCARY:@[[CouponsOneVC new],[CouponsTwoVC new],[CouponsThreeVC new]]TitleS:@[@"未使用",@"已使用",@"已过期"] index:0];
-            [self.navigationController pushViewController:scr animated:YES];
+            [self dengdaiupdate];
+//            CouponsViewController *scr = [[CouponsViewController alloc] initWithAddVCARY:@[[CouponsOneVC new],[CouponsTwoVC new],[CouponsThreeVC new]]TitleS:@[@"未使用",@"已使用",@"已过期"] index:0];
+//            [self.navigationController pushViewController:scr animated:YES];
         }else{
             LoginViewController *login = [[LoginViewController alloc]init];
             login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
@@ -386,9 +407,10 @@
         }
     }else if (indexPath.row == 2){
         if ([Manager redingwenjianming:@"phone.text"]!= nil){
-            GetACouponViewController *about = [[GetACouponViewController alloc]init];
-            about.navigationItem.title = @"领券中心";
-            [self.navigationController pushViewController:about animated:YES];
+            [self dengdaiupdate];
+//            GetACouponViewController *about = [[GetACouponViewController alloc]init];
+//            about.navigationItem.title = @"领券中心";
+//            [self.navigationController pushViewController:about animated:YES];
         }else{
             LoginViewController *login = [[LoginViewController alloc]init];
             login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
@@ -396,7 +418,7 @@
         }
     }else if (indexPath.row == 3){
         if ([Manager redingwenjianming:@"phone.text"]!= nil){
-            
+            [self dengdaiupdate];
         }else{
             LoginViewController *login = [[LoginViewController alloc]init];
             login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;

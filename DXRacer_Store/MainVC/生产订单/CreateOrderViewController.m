@@ -10,8 +10,9 @@
 #import "AddrViewController.h"
 #import "CartModel.h"
 
-#import "ProductOrder_TwoDetails_ViewController.h"
-#import "ProductOrderDetailsViewController.h"
+
+
+#import "DaiFuKuan_ViewController.h"
 
 #import <AlipaySDK/AlipaySDK.h>
 
@@ -27,7 +28,7 @@
 #define AP_BUTTON_HEIGHT  (60.0f)
 #define AP_INFO_HEIGHT    (200.0f)
 
-
+#import "YiFuKuan_ViewController.h"
 
 @interface CreateOrderViewController ()<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 {
@@ -50,6 +51,8 @@
     NSString *modeValue;
     
     CGFloat totheight;
+    
+    NSString *orderNum;
 }
 @property(nonatomic,strong)UITableView *tableview;
 @property(nonatomic,strong)UILabel *totalPrice;
@@ -58,7 +61,7 @@
 
 @property(nonatomic,strong)TFSheetView *tfSheetView;
 
-
+@property (nonatomic,strong)NSTimer *timer;
 
 @end
 
@@ -169,7 +172,7 @@
         NSDictionary *dic = @{@"addressId":addressID,@"couponCode":youhuimaText.text,@"productItemIds":_idsArray,};
         [Manager requestPOSTWithURLStr:KURLNSString(@"promotion/coupon") paramDic:dic token:nil finish:^(id responseObject) {
             NSDictionary *diction = [Manager returndictiondata:responseObject];
-            NSLog(@"--%@",diction);
+            //NSLog(@"--%@",diction);
             NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
             if ([code isEqualToString:@"200"]){
                 self->zongjiage = 0.0;
@@ -180,7 +183,7 @@
                 self->modeValue = [dic objectForKey:@"modeValue"];
                 [weakSelf.tableview reloadData];
             }else{
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:[diction objectForKey:@"object"] message:@"温馨提示" preferredStyle:1];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:[diction objectForKey:@"object"] preferredStyle:1];
                 UIAlertAction *sure = [UIAlertAction actionWithTitle:@"关闭" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                     self->zongjiage = 0.0;
                     self->couponMode = @"";
@@ -387,7 +390,7 @@
     if ([Manager judgeWhetherIsEmptyAnyObject:youhuimaText.text] != YES) {
         youhuimaText.text = @"";
     }
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"确认提交？" message:@"温馨提示" preferredStyle:1];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"确认提交？" preferredStyle:1];
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
     }];
     [alert addAction:cancel];
@@ -411,7 +414,7 @@
                     weakSelf.tfSheetView.cancelBlock = ^{
                         [weakSelf.dataArray removeAllObjects];
                         [weakSelf.tableview reloadData];
-                        ProductOrder_TwoDetails_ViewController *or = [[ProductOrder_TwoDetails_ViewController alloc]init];
+                        DaiFuKuan_ViewController *or = [[DaiFuKuan_ViewController alloc]init];
                         or.orderNo = [diction objectForKey:@"msg"];
                         or.orderStatus = @"待付款";
                         [self.navigationController pushViewController:or animated:YES];
@@ -419,14 +422,35 @@
                     };
                     //微信支付
                     weakSelf.tfSheetView.wxBlock = ^{
-                        NSLog(@"微信支付");
+                        //NSLog(@"微信支付");
+                        
+                        
+                        
+                        
+                        
+                        
                         [weakSelf.dataArray removeAllObjects];
                         [weakSelf.tableview reloadData];
+                        
+                        if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"weixin://"]])
+                        {
+                            [weakSelf doWXPay:[diction objectForKey:@"msg"]];
+                        }
+                        else
+                        {
+                            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"该手机未安装微信，请安装好再进行支付" preferredStyle:1];
+                            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"关闭" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                            }];
+                            [alert addAction:cancel];
+                            [weakSelf presentViewController:alert animated:YES completion:nil];
+                        }
+                        
+                        
                         [weakSelf.tfSheetView disMissView];
                     };
                     //支付宝支付
                     weakSelf.tfSheetView.zfbBlock = ^{
-                        NSLog(@"支付宝支付");
+                        //NSLog(@"支付宝支付");
                         [weakSelf.dataArray removeAllObjects];
                         [weakSelf.tableview reloadData];
                         [weakSelf doAPPay:[diction objectForKey:@"msg"]];
@@ -437,7 +461,7 @@
                     [Manager logout];
                     [weakSelf.navigationController popViewControllerAnimated:YES];
                 }else{
-                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[diction objectForKey:@"msg"] message:@"温馨提示" preferredStyle:1];
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:[diction objectForKey:@"msg"] preferredStyle:1];
                     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"关闭" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                     }];
                     [alert addAction:cancel];
@@ -454,7 +478,8 @@
     
 }
 
-#pragma mark   ==============点击订单模拟支付行为==============
+#pragma mark   ==============点击支付==============
+//支付宝
 - (void)doAPPay:(NSString *)orderNo
 {
         NSString *str = [NSString stringWithFormat:@"order/alipay/%@",orderNo];
@@ -464,12 +489,73 @@
 //                NSLog(@"*****************************result%@",resultDic);
             }];
         } enError:^(NSError *error) {
-            NSLog(@"%@",error);
+//            NSLog(@"%@",error);
         }];
 }
 
+//微信
+- (void)doWXPay:(NSString *)orderNo{
+    orderNum = orderNo;
+    if (self.timer != nil) {
+        [self.timer invalidate];
+        self.timer = nil;
+    }
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerAction:) userInfo:nil repeats:YES];
+    
+    __weak typeof(self) weakSelf = self;
+    NSString *str = [NSString stringWithFormat:@"order/weixin/h5/%@",orderNo];
+    NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
+        NSDictionary *diction = [Manager returndictiondata:responseObject];
+//        NSLog(@"%@",diction);
+        
+        UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",[diction objectForKey:@"msg"]]];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+        [request setValue:@"test-shop.dxracer.com.cn://" forHTTPHeaderField:@"Referer"];
+        [webView loadRequest:request];
+        webView.hidden = YES;
+        [weakSelf.view addSubview:webView];
+        
+    } enError:^(NSError *error) {
+//        NSLog(@"%@",error);
+    }];
+}
 
 
+- (void)timerAction:(NSTimer *)timer{
+    [self judjePayFailAndSuccess];
+}
+
+- (void)judjePayFailAndSuccess{
+    if ([Manager judgeWhetherIsEmptyAnyObject:orderNum]==YES) {
+        __weak typeof(self) weakSelf = self;
+        NSString *str = [NSString stringWithFormat:@"order/payment/check/%@",orderNum];
+        NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        
+        [Manager requestPOSTWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
+            NSDictionary *diction = [Manager returndictiondata:responseObject];
+//            NSLog(@"111-----------%@",diction);
+            //            NSString *code = [diction objectForKey:@"code"]
+            if ([[diction objectForKey:@"msg"] isEqualToString:@"yes"]) {
+                YiFuKuan_ViewController *vvv = [[YiFuKuan_ViewController alloc]init];
+                vvv.orderNo = self->orderNum;
+                [weakSelf.navigationController pushViewController:vvv animated:YES];
+                [weakSelf.timer invalidate];
+                weakSelf.timer = nil;
+            }
+        } enError:^(NSError *error) {
+//            NSLog(@"222-----------%@",error);
+        }];
+    }
+}
+- (void)viewDidDisappear:(BOOL)animated{
+    if (self.timer != nil) {
+        [self.timer invalidate];
+        self.timer = nil;
+    }
+}
 
 
 

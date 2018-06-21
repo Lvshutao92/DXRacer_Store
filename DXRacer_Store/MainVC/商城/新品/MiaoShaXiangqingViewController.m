@@ -21,8 +21,8 @@
 #import "APAuthInfo.h"
 #import "APOrderInfo.h"
 #import "APRSASigner.h"
-#import "ProductOrder_TwoDetails_ViewController.h"
-
+#import "DaiFuKuan_ViewController.h"
+#import "YiFuKuan_ViewController.h"
 #define AP_SUBVIEW_XGAP   (20.0f)
 #define AP_SUBVIEW_YGAP   (30.0f)
 #define AP_SUBVIEW_WIDTH  (([UIScreen mainScreen].bounds.size.width) - 2*(AP_SUBVIEW_XGAP))
@@ -31,7 +31,7 @@
 #define AP_INFO_HEIGHT    (200.0f)
 
 
-@interface MiaoShaXiangqingViewController ()<FrankDetailDropDelegate,UITableViewDataSource,UITableViewDelegate, UIScrollViewDelegate , UIWebViewDelegate,LLPhotoBrowserDelegate,UITextFieldDelegate>
+@interface MiaoShaXiangqingViewController ()<FrankDetailDropDelegate,UITableViewDataSource,UITableViewDelegate, UIScrollViewDelegate , UIWebViewDelegate,LLPhotoBrowserDelegate>
 {
     dispatch_source_t _timer;
     
@@ -51,7 +51,7 @@
     NSString *stringImg;
     NSString *itemNo;
     
-    
+    NSString *orderNum;
     UIView *headerV;
     UIView *footerV;
     
@@ -76,7 +76,7 @@
     
     
     UIView *bgv;
-    UIImageView *addreimg;
+    UILabel *addtitlab;
     UIImageView *jiantou;
     UILabel *namelab;
     UILabel *phonelab;
@@ -88,15 +88,15 @@
     
     
     UILabel *numberLab;
-    UITextField *tf;
     NSString *stt;
     NSString *isorno_star;
     
-    NSString *zuidagoumainum;
+    
+    HJCAjustNumButton *btns;
 }
 @property(nonatomic,strong)MBProgressHUD *HUD;
 
-
+@property(nonatomic,strong)NSString *zuidagoumainum;
 @property(nonatomic,strong)UIView *backgroundView;
 
 
@@ -105,7 +105,7 @@
 
 @property (nonatomic, strong) FrankDropBounsView * dropView;
 @property (nonatomic, strong) UILabel * tabbarView;
-
+@property (nonatomic,strong)NSTimer *timer_s;
 
 @property (nonatomic, strong) UITableView * tableview1;
 @property (nonatomic, strong) UITableView * tableview2;
@@ -133,19 +133,18 @@
     //    __weak typeof (self) weakSelf = self;
     [Manager requestPOSTWithURLStr:KURLNSString(@"address") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        //NSLog(@"----%@",diction);
+//        NSLog(@"----%@",diction);
             NSMutableArray *array = (NSMutableArray *)diction;
             if ([Manager judgeWhetherIsEmptyAnyObject:array]==YES) {
-                NSDictionary *dic = [array firstObject];
-                self->addressID = [dic objectForKey:@"id"];
-                self->namelab.text    = [NSString stringWithFormat:@"收货人：%@",[dic objectForKey:@"person"]];
-                self->phonelab.text   = [dic objectForKey:@"phone"];
-                self->addresslab.text = [NSString stringWithFormat:@"收货地址：%@",[NSString stringWithFormat:@"%@%@%@%@",[dic objectForKey:@"receiveProvince"],[dic objectForKey:@"receiveCity"],[dic objectForKey:@"receiveDistrict"],[dic objectForKey:@"address"]]];
-                if (self->namelab.text.length <= 0) {
-                    [self->btn setTitle:@"请选择收货地址" forState:UIControlStateNormal];
+                if (array.count>0) {
+                    NSDictionary *dic = [array firstObject];
+                    self->addressID = [dic objectForKey:@"id"];
+                    self->addresslab.text = [NSString stringWithFormat:@"%@%@%@%@",[dic objectForKey:@"receiveProvince"],[dic objectForKey:@"receiveCity"],[dic objectForKey:@"receiveDistrict"],[dic objectForKey:@"address"]];
                 }else{
                     [self->btn setTitle:@"" forState:UIControlStateNormal];
                 }
+            }else{
+                [self->btn setTitle:@"" forState:UIControlStateNormal];
             }
         //NSLog(@"----%@",diction);
     } enError:^(NSError *error) {
@@ -177,12 +176,12 @@
     
     
     
-    headerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 750)];
+    headerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 730)];
     headerV.userInteractionEnabled = YES;
     self.tableview1.tableHeaderView = headerV;
     
-    footerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 100)];
-    self.tableview1.tableFooterView = footerV;
+//    footerV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 1)];
+//    self.tableview1.tableFooterView = footerV;
     
     
     _headerImg = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_WIDTH)];
@@ -266,31 +265,31 @@
     bgv.userInteractionEnabled = YES;
     [headerV addSubview:bgv];
     
-    addreimg = [[UIImageView alloc]initWithFrame:CGRectMake(10, 37.5, 25, 25)];
-    addreimg.image = [UIImage imageNamed:@"sz1"];
-    [bgv addSubview:addreimg];
+    addtitlab = [[UILabel alloc]initWithFrame:CGRectMake(10, 20, 70, 20)];
+    addtitlab.text = @"配送至：";
+    [bgv addSubview:addtitlab];
     
-    jiantou = [[UIImageView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-25, 40, 20, 20)];
+    jiantou = [[UIImageView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-25, 20, 20, 20)];
     jiantou.image = [UIImage imageNamed:@"箭头3"];
     [bgv addSubview:jiantou];
     
-    namelab = [[UILabel alloc]initWithFrame:CGRectMake(40, 20, SCREEN_WIDTH-180, 20)];
-    namelab.font = [UIFont systemFontOfSize:14];
-    [bgv addSubview:namelab];
+//    namelab = [[UILabel alloc]initWithFrame:CGRectMake(40, 20, SCREEN_WIDTH-180, 20)];
+//    namelab.font = [UIFont systemFontOfSize:14];
+//    [bgv addSubview:namelab];
+//
+//    phonelab = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-135, 20, 110, 20)];
+//    phonelab.font = [UIFont systemFontOfSize:14];
+//    phonelab.textAlignment = NSTextAlignmentRight;
+//    [bgv addSubview:phonelab];
     
-    phonelab = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-135, 20, 110, 20)];
-    phonelab.font = [UIFont systemFontOfSize:14];
-    phonelab.textAlignment = NSTextAlignmentRight;
-    [bgv addSubview:phonelab];
     
-    
-    addresslab = [[UILabel alloc]initWithFrame:CGRectMake(40, 45, SCREEN_WIDTH-65, 50)];
+    addresslab = [[UILabel alloc]initWithFrame:CGRectMake(85, 0, SCREEN_WIDTH-110, 60)];
     addresslab.font = [UIFont systemFontOfSize:14];
     addresslab.numberOfLines = 0;
     [bgv addSubview:addresslab];
     
     btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.frame = CGRectMake(0, 0, SCREEN_WIDTH, 100);
+    btn.frame = CGRectMake(0, 0, SCREEN_WIDTH, 60);
     [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(getaddress) forControlEvents:UIControlEventTouchUpInside];
     [bgv addSubview:btn];
@@ -303,16 +302,30 @@
     
     
     numberLab = [[UILabel alloc]init];
-    numberLab.text = @"购买数量";
+    numberLab.text = @"数量：";
     [headerV addSubview:numberLab];
-    tf = [[UITextField alloc]init];
-    tf.delegate = self;
-    tf.text = @"1";
-    tf.borderStyle = UITextBorderStyleRoundedRect;
-    tf.textAlignment = NSTextAlignmentCenter;
-    tf.keyboardType = UIKeyboardTypePhonePad;
-    [headerV addSubview:tf];
-   
+    productnumber = @"1";
+    LRWeakSelf(self);
+    btns = [[HJCAjustNumButton alloc] init];
+    btns.callBack = ^(NSString *currentNum){
+        self->productnumber = currentNum;
+        NSInteger inde0 = [weakSelf.zuidagoumainum integerValue];
+        NSInteger inde1 = [currentNum integerValue];
+        //NSLog(@"%ld------%ld",inde0,inde1);
+        if (inde0 < inde1) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"超过最大购买数量" message:[NSString stringWithFormat:@"最大购买数量%ld",inde0] preferredStyle:1];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            }];
+            [alert addAction:cancel];
+            [weakSelf presentViewController:alert animated:YES completion:nil];
+        }
+        
+    };
+    [headerV addSubview:btns];
+    
+    
+    
+    
     if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"token.text"]]==YES){
         [self lodinfo];
     }
@@ -340,23 +353,6 @@
 }
 
 
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
-    return YES;
-}
-- (void)textFieldDidEndEditing:(UITextField *)textField{
-    NSInteger inde0 = [zuidagoumainum integerValue];
-    NSInteger inde1 = [textField.text integerValue];
-    //NSLog(@"%ld------%ld",inde0,inde1);
-    if (inde0 < inde1) {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"超过最大购买数量" message:[NSString stringWithFormat:@"最大购买数量%ld",inde0] preferredStyle:1];
-        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            [self->tf becomeFirstResponder];
-        }];
-        [alert addAction:cancel];
-        [self presentViewController:alert animated:YES completion:nil];
-    }
-}
-
 
 
 - (void)onRightNavBtnClick {
@@ -374,7 +370,7 @@
     NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSLog(@"******%@",diction);
+//        NSLog(@"******%@",diction);
         
         NSString *videoId;
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
@@ -410,12 +406,11 @@
                 self->line2.frame = CGRectMake(0, 10+SCREEN_WIDTH+self->titleHeight+105, SCREEN_WIDTH, 5);
                 
                 
-                self->bgv.frame = CGRectMake(0, SCREEN_WIDTH+self->titleHeight+120, SCREEN_WIDTH, 100);
-                self->line3.frame = CGRectMake(0, SCREEN_WIDTH+self->titleHeight+220, SCREEN_WIDTH, 5);
+                self->bgv.frame = CGRectMake(0, SCREEN_WIDTH+self->titleHeight+120, SCREEN_WIDTH, 60);
+                self->line3.frame = CGRectMake(0, SCREEN_WIDTH+self->titleHeight+180, SCREEN_WIDTH, 5);
                 
-                self->numberLab.frame =  CGRectMake(10, SCREEN_WIDTH+self->titleHeight+230, 80, 40);
-                self->tf.frame =  CGRectMake(95, SCREEN_WIDTH+self->titleHeight+230, 100, 40);
-                
+                self->numberLab.frame =  CGRectMake(10, SCREEN_WIDTH+self->titleHeight+190, 80, 40);
+                self->btns.frame = CGRectMake(90, SCREEN_WIDTH+self->titleHeight+190, 150, 40);
                 
                 
                 NSDictionary *attribtDic1 = @{NSStrikethroughStyleAttributeName: [NSNumber numberWithInteger:NSUnderlineStyleSingle]};
@@ -442,7 +437,7 @@
                 }
                 
                 
-                self->zuidagoumainum = [dicti objectForKey:@"unitQuantity"];
+                weakSelf.zuidagoumainum = [dicti objectForKey:@"unitQuantity"];
             }
         }
         [weakSelf.tableview1 reloadData];
@@ -474,13 +469,12 @@
     }else{
         if ([isorno_star isEqualToString:@"no"])
         {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"活动暂未开始" message:@"温馨提示" preferredStyle:1];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"活动暂未开始" preferredStyle:1];
             UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             }];
             [alert addAction:cancel];
             [self presentViewController:alert animated:YES completion:nil];
-        }
-        else
+        }else
         {
             [self commitOrder];
         }
@@ -488,19 +482,20 @@
 }
 - (void)commitOrder{
     __weak typeof(self) weakSelf = self;
-    if (self.idString.length > 0 && addressID.length > 0 && tf.text.length > 0) {
+    if (self.idString.length > 0 && addressID.length > 0 && productnumber.length > 0) {
         NSDictionary *dic = @{@"skuId":self.idStr,
-                              @"quantity":tf.text,
+                              @"quantity":productnumber,
                               @"addressId":addressID};
+//         NSLog(@"--=====%@",dic);
         [Manager requestPOSTWithURLStr:KURLNSString(@"promotion/crush/confirm") paramDic:dic token:nil finish:^(id responseObject) {
             NSDictionary *diction = [Manager returndictiondata:responseObject];
-            //NSLog(@"--%@",diction);
+//            NSLog(@"--%@",diction);
             NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
             if ([code isEqualToString:@"200"]){
                 weakSelf.tfSheetView = [[TFSheetView alloc]init];
                 //取消
                 weakSelf.tfSheetView.cancelBlock = ^{
-                    ProductOrder_TwoDetails_ViewController *or = [[ProductOrder_TwoDetails_ViewController alloc]init];
+                    DaiFuKuan_ViewController *or = [[DaiFuKuan_ViewController alloc]init];
                     or.orderNo = [diction objectForKey:@"object"];
                     or.orderStatus = @"待付款";
                     [self.navigationController pushViewController:or animated:YES];
@@ -509,6 +504,20 @@
                 //微信支付
                 weakSelf.tfSheetView.wxBlock = ^{
                     //NSLog(@"微信支付");
+                    
+                    if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"weixin://"]])
+                    {
+                        [weakSelf doWXPay:[diction objectForKey:@"object"]];
+                    }
+                    else
+                    {
+                        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"该手机未安装微信，请安装好再进行支付" preferredStyle:1];
+                        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"关闭" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                        }];
+                        [alert addAction:cancel];
+                        [weakSelf presentViewController:alert animated:YES completion:nil];
+                    }
+                    
                     [weakSelf.tfSheetView disMissView];
                 };
                 //支付宝支付
@@ -524,7 +533,7 @@
                 login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
                 [weakSelf presentViewController:login animated:YES completion:nil];
             }else{
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:[diction objectForKey:@"object"] message:@"温馨提示" preferredStyle:1];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:[diction objectForKey:@"object"] preferredStyle:1];
                 UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                 }];
                 [alert addAction:cancel];
@@ -547,6 +556,70 @@
     } enError:^(NSError *error) {
         NSLog(@"%@",error);
     }];
+}
+
+//微信
+- (void)doWXPay:(NSString *)orderNo{
+    orderNum = orderNo;
+    if (self.timer_s != nil) {
+        [self.timer_s invalidate];
+        self.timer_s = nil;
+    }
+    self.timer_s = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerAction:) userInfo:nil repeats:YES];
+    
+    __weak typeof(self) weakSelf = self;
+    NSString *str = [NSString stringWithFormat:@"order/weixin/h5/%@",orderNo];
+    NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
+        NSDictionary *diction = [Manager returndictiondata:responseObject];
+        //        NSLog(@"%@",diction);
+        
+        UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",[diction objectForKey:@"msg"]]];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+        [request setValue:@"test-shop.dxracer.com.cn://" forHTTPHeaderField:@"Referer"];
+        [webView loadRequest:request];
+        webView.hidden = YES;
+        [weakSelf.view addSubview:webView];
+        
+    } enError:^(NSError *error) {
+        //        NSLog(@"%@",error);
+    }];
+}
+
+
+- (void)timerAction:(NSTimer *)timer{
+    [self judjePayFailAndSuccess];
+}
+
+- (void)judjePayFailAndSuccess{
+    if ([Manager judgeWhetherIsEmptyAnyObject:orderNum]==YES) {
+        __weak typeof(self) weakSelf = self;
+        NSString *str = [NSString stringWithFormat:@"order/payment/check/%@",orderNum];
+        NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        
+        [Manager requestPOSTWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
+            NSDictionary *diction = [Manager returndictiondata:responseObject];
+            //            NSLog(@"111-----------%@",diction);
+            //            NSString *code = [diction objectForKey:@"code"]
+            if ([[diction objectForKey:@"msg"] isEqualToString:@"yes"]) {
+                YiFuKuan_ViewController *vvv = [[YiFuKuan_ViewController alloc]init];
+                vvv.orderNo = self->orderNum;
+                [weakSelf.navigationController pushViewController:vvv animated:YES];
+                [weakSelf.timer_s invalidate];
+                weakSelf.timer_s = nil;
+            }
+        } enError:^(NSError *error) {
+            //            NSLog(@"222-----------%@",error);
+        }];
+    }
+}
+- (void)viewDidDisappear:(BOOL)animated{
+    if (self.timer_s != nil) {
+        [self.timer_s invalidate];
+        self.timer_s = nil;
+    }
 }
 
 
@@ -588,29 +661,25 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     // 消除导航影响
-    //[self.dropView viewControllerWillAppear];
+//    [self.dropView viewControllerWillAppear];
     self.tabBarController.tabBar.hidden = YES;
     
-   
     
     
     
-    if (namelab.text.length <= 0) {
-        [btn setTitle:@"请选择收货地址" forState:UIControlStateNormal];
+    
+    
+    if (addresslab.text.length <= 0) {
+        [btn setTitle:@"" forState:UIControlStateNormal];
     }
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chuanzhi:) name:@"chuanzhi" object:nil];
 }
 - (void)chuanzhi:(NSNotification *)text {
     NSDictionary *dic = text.userInfo;
-    namelab.text = [NSString stringWithFormat:@"收货人：%@",[dic objectForKey:@"name"]];
-    phonelab.text = [dic objectForKey:@"phone"];
-    addresslab.text = [NSString stringWithFormat:@"收货地址：%@",[dic objectForKey:@"address"]];
+    addresslab.text = [NSString stringWithFormat:@"%@",[dic objectForKey:@"address"]];
     addressID = [dic objectForKey:@"id"];
-    if (namelab.text.length <= 0) {
-        [btn setTitle:@"请选择收货地址" forState:UIControlStateNormal];
-    }else{
-        [btn setTitle:@"" forState:UIControlStateNormal];
-    }
+    [btn setTitle:@"" forState:UIControlStateNormal];
 }
 
 
@@ -621,7 +690,7 @@
     [super viewWillDisappear:animated];
     //    self.tabBarController.tabBar.hidden = YES;
     // 消除导航影响
-    //[self.dropView viewControllerWillDisappear];
+//    [self.dropView viewControllerWillDisappear];
 }
 
 
@@ -641,6 +710,19 @@
         [btn1 setTitle:@"马上抢" forState:UIControlStateNormal];
         [btn1 addTarget:self action:@selector(cilck1) forControlEvents:UIControlEventTouchUpInside];
         [_tabbarView addSubview:btn1];
+        
+        CAGradientLayer *_gradientLayer = [CAGradientLayer layer];
+        _gradientLayer.bounds = btn1.bounds;
+        _gradientLayer.borderWidth = 0;
+        _gradientLayer.frame = btn1.bounds;
+        _gradientLayer.colors = [NSArray arrayWithObjects:
+                                 (id)RGBACOLOR(220, 20, 60, 1.0).CGColor,
+                                 (id)RGBACOLOR(255, 0, 0, 1.0).CGColor, nil ,nil];
+        _gradientLayer.startPoint = CGPointMake(0, 0);
+        _gradientLayer.endPoint   = CGPointMake(1.0, 1.0);
+        [btn1.layer insertSublayer:_gradientLayer atIndex:0];
+        
+        
         
         
 //        UIButton *btn3 = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -778,7 +860,7 @@
     NSString *str = [NSString stringWithFormat:@"product/img/%@",self.idString];
     [Manager requestPOSTWithURLStr:KURLNSString(str) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        //        NSLog(@"******%@",diction);
+//        NSLog(@"******%@",diction);
         [weakSelf.dataArray1 removeAllObjects];
         NSMutableArray *arr = (NSMutableArray *)diction;
         for (NSDictionary *dic in arr) {
@@ -938,7 +1020,7 @@
     
     NSDate *startDate = [NSDate date];
     NSString* dateString = [dateFormatter stringFromDate:startDate];
-    NSLog(@"现在的时间 === %@",dateString);
+//    NSLog(@"现在的时间 === %@",dateString);
     
     
     NSTimeInterval  timeInterval =[endDate_tomorrow timeIntervalSinceDate:startDate];

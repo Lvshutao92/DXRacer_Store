@@ -8,7 +8,12 @@
 
 #import "DWQSelectAttributes.h"
 
+
+
+
 @implementation DWQSelectAttributes
+
+
 
 -(instancetype)initWithTitle:(NSString *)title titleArr:(NSArray *)titleArr andFrame:(CGRect)frame{
     
@@ -19,8 +24,8 @@
         self.title = title;
         
         self.attributesArray = [NSArray arrayWithArray:titleArr];
-        
         [self rankView];
+        
     }
     return self;
 }
@@ -32,7 +37,7 @@
     self.packView.dwq_y = 0;
     
     UILabel *line = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, screen_Width, 0.5)];
-    line.backgroundColor = [UIColor lightGrayColor];
+    line.backgroundColor = [UIColor colorWithWhite:.8 alpha:.85];
     [self.packView addSubview:line];
     
     UILabel *titleLB = [[UILabel alloc] initWithFrame:CGRectMake(20, 5, screen_Width, 25)];
@@ -46,56 +51,67 @@
     int count = 0;
     float btnWidth = 0;
     float viewHeight = 0;
+    
+    
+
+    
+    
     for (int i = 0; i < self.attributesArray.count; i++) {
+        
+        
+        
         
         NSString *btnName = self.attributesArray[i];
         
-        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [btn setBackgroundColor:BackgroundColor];
-        [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+        self.btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.btn setBackgroundColor:BackgroundColor];
+        [self.btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [self.btn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
         
-        btn.titleLabel.font = [UIFont systemFontOfSize:14];
-        [btn setTitle:btnName forState:UIControlStateNormal];
-        [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+        self.btn.titleLabel.font = [UIFont systemFontOfSize:14];
+        [self.btn setTitle:btnName forState:UIControlStateNormal];
+        [self.btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         
-        btn.layer.cornerRadius = 5;
-        btn.layer.masksToBounds = YES;
+        self.btn.layer.cornerRadius = 5;
+        self.btn.layer.masksToBounds = YES;
+        
+        
+        
         
         NSDictionary *dict = [NSDictionary dictionaryWithObject:FONT(13) forKey:NSFontAttributeName];
         CGSize btnSize = [btnName sizeWithAttributes:dict];
         
-        btn.dwq_width = btnSize.width + 15;
-        btn.dwq_height = btnSize.height + 12;
+        self.btn.dwq_width = btnSize.width + 15;
+        self.btn.dwq_height = btnSize.height + 12;
         
         if (i==0)
         {
-            btn.dwq_x = 20;
+            self.btn.dwq_x = 20;
             
-            btnWidth += CGRectGetMaxX(btn.frame);
+            btnWidth += CGRectGetMaxX(self.btn.frame);
         }
         else{
             
            
             
-            btnWidth += CGRectGetMaxX(btn.frame)+20;
+            btnWidth += CGRectGetMaxX(self.btn.frame)+20;
             if (btnWidth > screen_Width) {
                 count++;
-                btn.dwq_x = 20;
-                btnWidth = CGRectGetMaxX(btn.frame);
+                self.btn.dwq_x = 20;
+                btnWidth = CGRectGetMaxX(self.btn.frame);
             }
             else{
                 
-                btn.dwq_x += btnWidth - btn.dwq_width;
+                self.btn.dwq_x += btnWidth - self.btn.dwq_width;
             }
         }
-        btn.dwq_y += count * (btn.dwq_height+10)+10;
+        self.btn.dwq_y += count * (self.btn.dwq_height+10)+10;
         
-        viewHeight = CGRectGetMaxY(btn.frame)+10;
+        viewHeight = CGRectGetMaxY(self.btn.frame)+10;
         
-        [self.btnView addSubview:btn];
+        [self.btnView addSubview:self.btn];
         
-        btn.tag = 10000+i;
+        self.btn.tag = 10000+i;
         
         
 //                if ([btnName isEqualToString:self.selectStr])
@@ -106,14 +122,21 @@
 //                }
         
         
-        if (btn.tag == 10000) {
-            self.selectBtn = btn;
+        if (self.btn.tag == 10000) {
+            self.selectBtn = self.btn;
             self.selectBtn.backgroundColor = SelectColor;
             [self.selectBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         }
         
         
+        
+        
+        
+        
+        
     }
+    
+    
     self.btnView.dwq_height = viewHeight;
     self.packView.dwq_height = self.btnView.dwq_height+CGRectGetMaxY(titleLB.frame);
     
@@ -121,15 +144,12 @@
     
     [self addSubview:self.packView];
     
-    [Manager sharedManager].gouwuNumHeight = self.packView.dwq_height;
+    [Manager sharedManager].gouwuNumHeight = self.dwq_y+self.packView.dwq_height;
+    
 //    NSLog(@"----%lf------%lf",self.dwq_y,self.packView.dwq_height);
-    
-    
 }
 
-
 -(void)btnClick:(UIButton *)btn{
-   
     if (![self.selectBtn isEqual:btn]) {
         self.selectBtn.backgroundColor = BackgroundColor;
         self.selectBtn.selected = NO;
@@ -144,9 +164,9 @@
     self.selectBtn = btn;
     
     if ([self.delegate respondsToSelector:@selector(selectBtnTitle:andBtn:)]) {
-        
         [self.delegate selectBtnTitle:btn.titleLabel.text andBtn:self.selectBtn];
     }
 }
+
 
 @end

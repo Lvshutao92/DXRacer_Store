@@ -33,6 +33,10 @@
 #import "LoginViewController.h"
 #import "RegisterViewController.h"
 
+#import "FaPiao_ViewController.h"
+
+
+
 //控件
 #import "HJCAjustNumButton.h"
 #import "KGCustomButton.h"
@@ -42,13 +46,13 @@
 #import "PYSearch.h"
 #import "IrregularLabel.h"
 #import "EasyAlertView.h"
-#import "CZHDatePickerView.h"
-#import "DatePickerHeader.h"
 
 #import "DXSearchBar.h"
 #import "LLPhotoBrowser.h"
 
 #import "TFSheetView.h"
+
+#import "DateTimePickerView.h"
 //cell view
 #import "PersonCell.h"
 #import "ShoopingCell.h"
@@ -72,6 +76,15 @@
 #import "XTGuidePagesViewController.h"
 #import "CALayer+Transition.h"
 
+
+
+#import "WNXRefresgHeader.h"
+
+
+
+// $(SRCROOT)/项目名称/PrefixHeader.pch
+
+
 //判断 iOS 8 或更高的系统版本
 #define IOS_VERSION_8_OR_LATER (([[[UIDevice currentDevice] systemVersion] floatValue] >=8.0)? (YES):(NO))
 
@@ -92,7 +105,11 @@
 [View.layer setBorderColor:[Color CGColor]]
 
 //弱引用/强引用
-#define LRWeakSelf(type)  __weak typeof(type) weak##type = type;
+//#define LRWeakSelf(type)  __weak typeof(type) weak##type = type;
+
+#define LRWeakSelf(type)   __weak typeof(type) weakSelf = type;
+
+
 #define LRStrongSelf(type)  __strong typeof(type) type = weak##type;
 //获取屏幕 宽度、高度
 #define SCREEN_WIDTH ([UIScreen mainScreen].bounds.size.width)
@@ -119,15 +136,31 @@
 
 
 //显示头像的域名是
+<<<<<<< HEAD
 #define NSString(str) [NSString stringWithFormat:@"http://test-shop-img.dxracer.com.cn/%@",str]
 //#define NSString(str) [NSString stringWithFormat:@"http://10.0.0.2/%@",str]
+=======
+#define NSString(str) [NSString stringWithFormat:@"http://image-shop.dxracer.com.cn/%@",str]
+//#define NSString(str) [NSString stringWithFormat:@"http://test-shop-img.dxracer.com.cn/%@",str]
+//#define NSString(str) [NSString stringWithFormat:@"http://10.0.0.2/%@",str]
+
+>>>>>>> 0ef056ab9288b59458eaeaa02aa2fc5d7ec3f8af
 
 #define CHECKWORD @""
 //#define KURLNSString(str) [NSString stringWithFormat:@"http://10.0.0.2:8080/dxracer-mall-api/app/%@",str]
+//#define KURLNSString(str) [NSString stringWithFormat:@"http://10.0.0.2:8081/mall/app/%@",str]
+//#define KURLNSString(str) [NSString stringWithFormat:@"http://test-shop.dxracer.com.cn:8084/mall/app/%@",str]
+#define KURLNSString(str) [NSString stringWithFormat:@"http://server-shop.dxracer.cn/mall/app/%@",str]
 
+
+
+<<<<<<< HEAD
 //#define KURLNSString(str) [NSString stringWithFormat:@"http://10.0.0.2:8081/mall/app/%@",str]
 
 #define KURLNSString(str) [NSString stringWithFormat:@"http://test-shop.dxracer.com.cn:8084/mall/app/%@",str]
+=======
+
+>>>>>>> 0ef056ab9288b59458eaeaa02aa2fc5d7ec3f8af
 
 
 #import "UIView+DWQExtension.h"
@@ -138,9 +171,6 @@
 
 #define BackgroundColor [UIColor colorWithRed:240/255.0f green:240/255.0f blue:244/255.0f alpha:1]
 #define SelectColor        [UIColor colorWithRed:238/255.0f green:10/255.0f blue:35/255.0f alpha:1]
-
-
-
 
 
 #define YYISiPhoneX [[UIScreen mainScreen] bounds].size.width >=375.0f && [[UIScreen mainScreen] bounds].size.height >=812.0f&& YYIS_IPHONE

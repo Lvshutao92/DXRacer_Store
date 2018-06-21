@@ -120,6 +120,11 @@
 @property (nonatomic,strong)NSString *productType;
 
 @property (nonatomic,strong)NSString *lockQuantity;
+
+@property (nonatomic,strong)NSString *brandName;
+@property (nonatomic,strong)NSString *catalogName;
+@property (nonatomic,strong)NSString *seriesName;
+@property (nonatomic,strong)NSString *typeName;
 @end
 
 
