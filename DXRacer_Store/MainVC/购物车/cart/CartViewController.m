@@ -257,10 +257,6 @@
             make.width.equalTo(@100);
             
             
-            
-            
-            
-            
         }];
         
         //价格显示
@@ -344,6 +340,8 @@
                 
                 
             }
+            
+           
         } enError:^(NSError *error) {
             //NSLog(@"error******%@",error);
         }];
@@ -611,6 +609,8 @@
                     {
                         [weakSelf setupMainView];
                     }
+                    
+                   
                 }
             } enError:^(NSError *error) {
             }];

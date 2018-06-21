@@ -113,7 +113,7 @@
             NSDictionary *invDic = [diction objectForKey:@"shippingInvoice"];
             self->invioceTypeLab.text = [invDic objectForKey:@"invoiceType"];
             self->invioceTitleLab.text = [invDic objectForKey:@"invoiceTitle"];
-            
+            self->invioceContentLab.text = [invDic objectForKey:@"receivePerson"];
             
             
             

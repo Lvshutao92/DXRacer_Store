@@ -38,7 +38,7 @@
 
 
 - (void)zhuce{
-    __weak typeof (self) weakSelf = self;
+    LRWeakSelf(self);
     if (text1.text != nil && text2.text != nil && text3.text != nil && textf.text != nil) {
         
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -70,7 +70,7 @@
     }
 }
 - (void)wangjimima{
-    __weak typeof (self) weakSelf = self;
+    LRWeakSelf(self);
     if (text1.text != nil && text2.text != nil && text3.text != nil && textf.text != nil) {
         
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -129,7 +129,7 @@
     if ([textField isEqual:text1]) {
         if ([XYQRegexPatternHelper validateMobile:text1.text] == YES){
             if ([self.string isEqualToString:@"注册"]) {
-                __weak typeof (self) weakSelf = self;
+                LRWeakSelf(self);
                 NSString *url = [NSString stringWithFormat:@"customer/validate?userName=%@",text1.text];
                 //        NSLog(@"666-------%@",url);
                 [Manager requestPOSTWithURLStr:KURLNSString(url) paramDic:nil token:nil finish:^(id responseObject) {
@@ -149,7 +149,7 @@
                     NSLog(@"%@",error);
                 }];
             }else{
-                __weak typeof (self) weakSelf = self;
+                LRWeakSelf(self);
                 NSString *url = [NSString stringWithFormat:@"customer/validate?userName=%@",text1.text];
                 //        NSLog(@"666-------%@",url);
                 [Manager requestPOSTWithURLStr:KURLNSString(url) paramDic:nil token:nil finish:^(id responseObject) {
@@ -188,7 +188,7 @@
 
 
 - (void)getYZM{
-//    __weak typeof (self) weakSelf = self;
+//    LRWeakSelf(self);
     if (textf.text != nil) {
         NSDictionary *dic = @{@"verificationCode":textf.text,@"mobile":text1.text};
         [Manager requestPOSTWithURLStr:KURLNSString(@"customer/register/shortmessage") paramDic:dic token:nil finish:^(id responseObject) {
@@ -211,7 +211,7 @@
 
 
 - (void)cilckimg{
-//    __weak typeof (self) weakSelf = self;
+//   LRWeakSelf(self);
     if ([XYQRegexPatternHelper validateMobile:text1.text] == YES){
         [textf becomeFirstResponder];
         NSString *urlStr = [NSString stringWithFormat:@"customer/%@/verification.png",text1.text];

@@ -61,7 +61,7 @@
 
 -(void)setUpReflash
 {
-    __weak typeof (self) weakSelf = self;
+    LRWeakSelf(self);
     WNXRefresgHeader *header = [WNXRefresgHeader headerWithRefreshingBlock:^{
         [weakSelf getInfomation];
     }];
@@ -69,7 +69,7 @@
     self.tableview.mj_header = header;
 }
 - (void)getInfomation{
-    __weak typeof (self) weakSelf = self;
+    LRWeakSelf(self);
     [Manager requestPOSTWithURLStr:KURLNSString(@"account") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
 //        NSLog(@"%@",diction);

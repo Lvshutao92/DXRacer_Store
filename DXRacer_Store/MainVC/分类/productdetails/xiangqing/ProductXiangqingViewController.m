@@ -328,7 +328,7 @@
     }
 }
 - (void)addCurt{
-    __weak typeof(self) weakSelf = self;
+     LRWeakSelf(self);
     NSDictionary *dic = @{@"productItemId":stringID,
                           @"quantity":productnumber};
     [Manager requestPOSTWithURLStr:KURLNSString(@"order/shopping/add") paramDic:dic token:nil finish:^(id responseObject) {
@@ -349,9 +349,6 @@
     }];
     
 }
-
-
-
 
 
 
@@ -422,6 +419,8 @@
                                 self.selectView.LB_kucun.text= @"";
                                 self.selectView.LB_stock.text = @"";
                                 [self.selectView.headImage sd_setImageWithURL:[NSURL URLWithString:NSString(@"121")]placeholderImage:[UIImage imageNamed:@"zw"]];
+                                
+                                stringID = @"";
                                 for (NSDictionary *dict in productItemList_Arr) {
                                     if ([[dict objectForKey:@"productModelAttrs"]isEqualToString:st]) {
                                         stringID = [dict objectForKey:@"id"];
@@ -472,6 +471,9 @@
                                 
                                 
                                 
+                                NSLog(@"-----%@",stringID);
+                                
+                                
 //                                if (stringID.length <=0){
 //                                    if ([stringPrice floatValue]>0) {
 //                                        self.selectView.LB_price.text = [Manager jinegeshi:stringPrice];
@@ -514,6 +516,11 @@
     }else{
         guigeLab.text = [NSString stringWithFormat:@"已选：%@",productCanshu];
     }
+    
+    
+    
+   
+    
     
     
     for (Model *model in self.cuxiaoArr) {

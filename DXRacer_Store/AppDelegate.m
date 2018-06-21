@@ -37,24 +37,6 @@ UIBackgroundTaskIdentifier taskId;
     [IQKeyboardManager sharedManager].enable = YES;
     [IQKeyboardManager sharedManager].shouldResignOnTouchOutside = YES;
 
-    
-//    if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"token.text"]]==YES){
-//        NSDictionary *dic = @{@"passWord":[Manager redingwenjianming:@"password.text"],
-//                              @"loginName":[Manager redingwenjianming:@"phone.text"]};
-//        [Manager requestPOSTWithURLStr:KURLNSString(@"customer/login") paramDic:dic token:nil finish:^(id responseObject) {
-//            NSDictionary *diction = [Manager returndictiondata:responseObject];
-//            NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
-//            if ([code isEqualToString:@"200"]) {
-//                [Manager writewenjianming:@"token.text" content:[[diction objectForKey:@"object"]objectForKey:@"token"]];
-//                [Manager writewenjianming:@"userid.text" content:[[diction objectForKey:@"object"]objectForKey:@"userId"]];
-//            }
-//            //NSLog(@"----%@",diction);
-//        } enError:^(NSError *error) {
-//            NSLog(@"---%@",error);
-//        }];
-//    }
-    
-    
     //测试的时候改变info 里的版本号就可以了
     NSArray *images = @[@"gud1.jpg",@"gud2.jpg",@"gud3.jpg",@"gud4.jpg",@"av3.jpg"];
     BOOL y = [XTGuidePagesViewController isShow];
@@ -69,38 +51,16 @@ UIBackgroundTaskIdentifier taskId;
     
     [self requestAuthorizationAddressBook];
 
-//    [WXApi startLogByLevel:WXLogLevelNormal logBlock:^(NSString *log) {
-//        NSLog(@"log : %@", log);
-//    }];
-//    //向微信注册,发起支付必须注册
-//    [WXApi registerApp:@"wxc6a4ecf6eccfc55c"];//注册appid
-    
+
     
     [self initShortcutItems];
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    //进入后台后可继续运行定时器
-//    [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
-//    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:3600 target:self selector:@selector(timeFireMethod)userInfo:nil repeats:YES];
-//    [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+
     
     return YES;
 }
-
-
-
-
-
-
 
 
 
@@ -221,59 +181,9 @@ UIBackgroundTaskIdentifier taskId;
                             forState:UIControlStateNormal];
     }
     self.window.rootViewController = self.mainVC;
-//    [self.window makeKeyWindow];
-//    self.window.rootViewController = vc;
     [self.window.layer transitionWithAnimType:TransitionAnimTypeRamdom subType:TransitionSubtypesFromRamdom curve:TransitionCurveRamdom duration:2.0f];
 }
 
-- (void)timeFireMethod{
-    //已登录，刷新token
-//    if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"token.text"]]==YES) {
-//        [Manager clickLogin];
-//    }
-}
-
-- (void)applicationDidEnterBackground:(UIApplication *)application {
-    //NSLog(@"\n ===> 程序进入后台 !");
-    //开启一个后台任务
-//    taskId = [application beginBackgroundTaskWithExpirationHandler:^{
-//        //结束指定的任务
-//        [application endBackgroundTask:taskId];
-//    }];
-//    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerAction:) userInfo:nil repeats:YES];
-}
-- (void)timerAction:(NSTimer *)timer {
-//    count++;
-//    if (count % 3600 == 0) {
-//        UIApplication *application = [UIApplication sharedApplication];
-//        //结束旧的后台任务
-//        [application endBackgroundTask:taskId];
-//        //开启一个新的后台
-//        taskId = [application beginBackgroundTaskWithExpirationHandler:NULL];
-//        if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"token.text"]]==YES) {
-//            [Manager clickLogin];
-//        }
-//    }
-//    NSLog(@"-----%ld",count);
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-    //已登录，刷新token
-//    if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"token.text"]]==YES) {
-//        [Manager clickLogin];
-//    }
-    //NSLog(@"\n ===> 程序重新激活 !");
-}
-- (void)applicationWillTerminate:(UIApplication *)application {
-//    NSLog(@"\n ===> 程序意外暂行 !");
-//    [Manager remove:@"phone.text"];
-//    [Manager remove:@"password.text"];
-//    [Manager remove:@"token.text"];
-//    [Manager remove:@"userid.text"];
-//    [Manager remove:@"img.text"];
-//    [Manager remove:@"nikname.text"];
-//    [Manager remove:@"password.text"];
-}
 
 
 
@@ -299,15 +209,6 @@ UIBackgroundTaskIdentifier taskId;
         });
     }
 }
-
-
-
-//- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
-//    [WXApi handleOpenURL:url delegate:[PaymentAction sharedManager]];
-//    return YES;
-//}
-
-
 
 
 //支付宝支付
@@ -460,7 +361,15 @@ UIBackgroundTaskIdentifier taskId;
 
 
 
-
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+    //NSLog(@"\n ===> 程序进入后台 !");
+}
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    //NSLog(@"\n ===> 程序重新激活 !");
+}
+- (void)applicationWillTerminate:(UIApplication *)application {
+    //    NSLog(@"\n ===> 程序意外暂行 !");
+}
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     //NSLog(@"\n ===> 程序进入前台 !");
     

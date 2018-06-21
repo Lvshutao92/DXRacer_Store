@@ -68,7 +68,7 @@
 
 
 - (void)clickLogin{
-    __weak typeof (self) weakSelf = self;
+    LRWeakSelf(self);
     if ([Manager judgeWhetherIsEmptyAnyObject:text1.text]==YES &&  [Manager judgeWhetherIsEmptyAnyObject:text2.text]==YES) {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.label.text = NSLocalizedString(@"加载中....", @"HUD loading title");
@@ -103,10 +103,11 @@
 
 
 
+
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField{
     if ([textField isEqual:text1]) {
         if ([XYQRegexPatternHelper validateMobile:text1.text] == YES){
-            __weak typeof (self) weakSelf = self;
+            LRWeakSelf(self);
             NSString *url = [NSString stringWithFormat:@"customer/validate?userName=%@",text1.text];
             [Manager requestPOSTWithURLStr:KURLNSString(url) paramDic:nil token:nil finish:^(id responseObject) {
                 NSDictionary *diction = [Manager returndictiondata:responseObject];

@@ -184,13 +184,13 @@
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index{
     
 //    Model *model = [_lunboArray objectAtIndex:index];
-//    
+//
 //    Home_fenleilist_ViewController *details = [[Home_fenleilist_ViewController alloc]init];
-//    
+//
 //    details.idstr = model.id;
-//    
+//
 //    details.navigationItem.title = @"分类";
-//    
+//
 //    [self.navigationController pushViewController:details animated:YES];
 }
 
@@ -264,7 +264,7 @@
     
     img1 = [[UIImageView alloc]init];
     LRViewBorderRadius(img1, 0, .5, [UIColor colorWithWhite:.9 alpha:.3]);
-    img1.image = [UIImage imageNamed:@"秒杀-3"];
+    img1.image = [UIImage imageNamed:@"miao1"];
     img1.userInteractionEnabled = YES;
     img1.backgroundColor = [UIColor whiteColor];
     img1.contentMode = UIViewContentModeScaleAspectFit;

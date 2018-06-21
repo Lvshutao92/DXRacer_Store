@@ -144,7 +144,6 @@
 + (void)logout;
 
 
-
 + (CGFloat )returnDaohanglanHeight;
 + (CGFloat )returnDianchitiaoHeight;
 // 根据图片url获取图片尺寸
