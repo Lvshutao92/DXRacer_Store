@@ -316,7 +316,7 @@
     [self.view addSubview:bgimg];
     
     UIButton *cancel = [UIButton buttonWithType:UIButtonTypeCustom];
-    cancel.frame = CGRectMake(20, 30, 30, 30);
+    cancel.frame = CGRectMake(20, kStatusBarHeight+10, 30, 30);
     [cancel setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
     [cancel addTarget:self action:@selector(clickcancel) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:cancel];

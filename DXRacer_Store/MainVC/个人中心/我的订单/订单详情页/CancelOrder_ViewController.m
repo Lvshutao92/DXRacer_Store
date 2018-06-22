@@ -308,7 +308,7 @@
     line3.backgroundColor = RGBACOLOR(237, 236, 242, 1);
     [footerBgv1 addSubview:line3];
     
-    ProductTotalPriceLab = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-90, 0, 80, 30)];
+    ProductTotalPriceLab = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-130, 0, 120, 30)];
     [footerBgv1 addSubview:ProductTotalPriceLab];
     
     freightLab = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-90, 30, 80, 30)];

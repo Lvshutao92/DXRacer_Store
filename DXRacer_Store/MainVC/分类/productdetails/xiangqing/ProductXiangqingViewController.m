@@ -391,6 +391,7 @@
     self.selectView.LB_kucun.text= @"";
     
     
+    
     for (int i=0; i < _standardList.count; i++)
     {
         
@@ -404,23 +405,20 @@
                         if ([view.selectBtn.titleLabel.text isEqualToString:title]) {
                             if (![self.attributesArray containsObject:view.selectBtn.titleLabel.text]) {
                                 [self.attributesArray addObject:view.selectBtn.titleLabel.text];
-                                
                                 [afe replaceObjectAtIndex:i withObject:[dic_sID objectForKey:view.selectBtn.titleLabel.text]];
-                                
                                 [abc replaceObjectAtIndex:i withObject:view.selectBtn.titleLabel.text];
-                                
                                 st = [afe componentsJoinedByString:@","];
                                 
-                                
                                 priceLab.text = @"";
-                                self.selectView.LB_price.text = @"已下架";
+                                self.selectView.LB_price.text = @"";
                                 self.selectView.LB_detail.text = @"";
                                 self.selectView.LB_showSales.text = @"";
                                 self.selectView.LB_kucun.text= @"";
                                 self.selectView.LB_stock.text = @"";
-                                [self.selectView.headImage sd_setImageWithURL:[NSURL URLWithString:NSString(@"121")]placeholderImage:[UIImage imageNamed:@"zw"]];
-                                
+                                self.selectView.headImage.image = [UIImage imageNamed:@"yxj"];
                                 stringID = @"";
+                                
+                                
                                 for (NSDictionary *dict in productItemList_Arr) {
                                     if ([[dict objectForKey:@"productModelAttrs"]isEqualToString:st]) {
                                         stringID = [dict objectForKey:@"id"];
@@ -471,7 +469,7 @@
                                 
                                 
                                 
-                                NSLog(@"-----%@",stringID);
+//                                NSLog(@"-----%@",stringID);
                                 
                                 
 //                                if (stringID.length <=0){
@@ -708,10 +706,10 @@
         }
         
         if (self->stringID.length <= 0) {
-             weakSelf.selectView.LB_price.text = @"已下架";
+             weakSelf.selectView.LB_price.text = @"";
              weakSelf.selectView.LB_kucun.text= @"";
+            weakSelf.selectView.headImage.image = [UIImage imageNamed:@"yxj"];
         }
-        
         
         for (Model *model in self.cuxiaoArr) {
             //NSLog(@"%@----%@",stringID,model.productItemId);
@@ -1080,7 +1078,7 @@
     NSString *str = [NSString stringWithFormat:@"product/img/%@",self.idStr];
     [Manager requestPOSTWithURLStr:KURLNSString(str) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSLog(@"******%@",diction);
+//        NSLog(@"******%@",diction);
         [weakSelf.dataArray1 removeAllObjects];
         NSMutableArray *arr = (NSMutableArray *)diction;
         for (NSDictionary *dic in arr) {

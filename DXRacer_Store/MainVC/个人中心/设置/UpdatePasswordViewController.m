@@ -25,7 +25,7 @@
     
     textf0 = [[UITextField alloc]initWithFrame:CGRectMake(20, kNavBarHAbove7, SCREEN_WIDTH-40, 50)];
     textf0.delegate = self;
-    textf0.borderStyle = UIAccessibilityTraitNone;
+    textf0.borderStyle  =  UIAccessibilityTraitNone;
     textf0.clearButtonMode = UITextFieldViewModeWhileEditing;
     textf0.placeholder = @"请输入旧密码";
     textf0.secureTextEntry = YES;

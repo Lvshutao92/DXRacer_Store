@@ -48,12 +48,9 @@
     
     //商品图片
     headImage = [[UIImageView alloc] initWithFrame:CGRectMake(20, -20, 90, 90)];
-//    headImage.image = [UIImage imageNamed:@"凯迪拉克.jpg"];
     headImage.layer.cornerRadius = 4;
     headImage.backgroundColor = [UIColor whiteColor];
-    headImage.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    headImage.layer.borderWidth = 1;
-    [headImage.layer setMasksToBounds:YES];
+    headImage.contentMode = UIViewContentModeScaleAspectFit;
     [whiteView addSubview:headImage];
     
     cancelBtn= [UIButton buttonWithType:UIButtonTypeCustom];

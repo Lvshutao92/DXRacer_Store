@@ -29,6 +29,7 @@
 @implementation CartTableViewCell
 
 - (void)awakeFromNib {
+    [super awakeFromNib];
     // Initialization code
 }
 

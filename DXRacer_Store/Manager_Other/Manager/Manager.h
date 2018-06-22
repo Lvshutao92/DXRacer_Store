@@ -29,7 +29,7 @@
 @interface Manager : NSObject
 
 
-//获取字符串的宽度
+////获取字符串的宽度
 +(float) widthForString:(NSString *)value fontSize:(float)fontSize andHeight:(float)height;
 //获得字符串的高度
 +(float) heightForString:(NSString *)value fontSize:(float)fontSize andWidth:(float)width;

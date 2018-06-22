@@ -523,19 +523,19 @@
     
     
     
-    UILabel *label5 = [[UILabel alloc]initWithFrame:CGRectMake(20, 20, 80, 30)];
+    UILabel *label5 = [[UILabel alloc]initWithFrame:CGRectMake(20, kStatusBarHeight, 80, 30)];
     label5.text = @"价格区间";
     [self.upView addSubview:label5];
-    text1 = [[UITextField alloc]initWithFrame:CGRectMake(10, 60, 80, 35)];
+    text1 = [[UITextField alloc]initWithFrame:CGRectMake(10, kStatusBarHeight+40, 80, 35)];
     text1.delegate = self;
     text1.text = @"";
     text1.borderStyle = UITextBorderStyleRoundedRect;
     [_upView addSubview:text1];
-    UILabel *lin = [[UILabel alloc]initWithFrame:CGRectMake(90, 60, 40, 35)];
+    UILabel *lin = [[UILabel alloc]initWithFrame:CGRectMake(90, kStatusBarHeight+40, 40, 35)];
     lin.text = @"-";
     lin.textAlignment = NSTextAlignmentCenter;
     [self.upView addSubview:lin];
-    text2 = [[UITextField alloc]initWithFrame:CGRectMake(130, 60, 80, 35)];
+    text2 = [[UITextField alloc]initWithFrame:CGRectMake(130, kStatusBarHeight+40, 80, 35)];
     text2.delegate = self;
     text2.text = @"";
     text2.borderStyle = UITextBorderStyleRoundedRect;
@@ -545,11 +545,11 @@
     lin.textColor = [UIColor lightGrayColor];
     
     
-    label1 = [[UILabel alloc]initWithFrame:CGRectMake(20, 105, 80, 30)];
+    label1 = [[UILabel alloc]initWithFrame:CGRectMake(20, kStatusBarHeight+85, 80, 30)];
     label1.text = @"品牌";
     [self.upView addSubview:label1];
     CGFloat w = 0;//保存前一个button的宽以及前一个button距离屏幕边缘的距离
-    CGFloat h = 145;//用来控制button距离父视图的高
+    CGFloat h = 125+kStatusBarHeight;//用来控制button距离父视图的高
     for (int i = 0; i < self.array1.count; i++) {
         button1 = [UIButton buttonWithType:UIButtonTypeSystem];
         button1.tag = 100 + i;
