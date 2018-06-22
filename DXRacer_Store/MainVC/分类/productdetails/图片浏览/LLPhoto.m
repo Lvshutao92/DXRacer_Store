@@ -165,6 +165,11 @@
     }
 }
 
+
+
+
+
+
 #pragma mark - UIScrollViewDelegate
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
     return _imageView;

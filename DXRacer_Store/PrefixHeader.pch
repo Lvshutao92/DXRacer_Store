@@ -20,6 +20,7 @@
 #import <UIImageView+WebCache.h>
 #import <IQKeyboardManager/IQKeyboardManager.h>
 #import <Masonry/Masonry.h>
+#import <FLAnimatedImage/FLAnimatedImage.h>
 /// iOS 9前的框架
 #import <AddressBook/AddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
@@ -69,6 +70,8 @@
 
 #import "CreateOrderCell.h"
 #import "BigImgTableViewCell.h"
+
+#import "FLAnimatideImgCell.h"
 //model
 #import "Model.h"
 #import "Model_A.h"

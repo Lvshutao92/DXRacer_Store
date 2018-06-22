@@ -413,7 +413,7 @@
                                 
                                 
                                 priceLab.text = @"";
-                                self.selectView.LB_price.text = @"";
+                                self.selectView.LB_price.text = @"已下架";
                                 self.selectView.LB_detail.text = @"";
                                 self.selectView.LB_showSales.text = @"";
                                 self.selectView.LB_kucun.text= @"";
@@ -549,7 +549,6 @@
 
 - (void)getDetailsInfo{
    
-    
     __weak typeof(self) weakSelf = self;
     NSString *str = [NSString stringWithFormat:@"product/%@",self.idStr];
     NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -708,7 +707,10 @@
             weakSelf.selectView.LB_kucun.text= @"库存:0";
         }
         
-       
+        if (self->stringID.length <= 0) {
+             weakSelf.selectView.LB_price.text = @"已下架";
+             weakSelf.selectView.LB_kucun.text= @"";
+        }
         
         
         for (Model *model in self.cuxiaoArr) {
@@ -1017,7 +1019,10 @@
         self.tableview2 = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
         self.tableview2.delegate = self;
         self.tableview2.dataSource = self;
-        [self.tableview2 registerNib:[UINib nibWithNibName:@"BigImgTableViewCell" bundle:nil] forCellReuseIdentifier:@"cell2"];
+//        [self.tableview2 registerNib:[UINib nibWithNibName:@"BigImgTableViewCell" bundle:nil] forCellReuseIdentifier:@"cell2"];
+        
+        [self.tableview2 registerClass:[FLAnimatideImgCell class] forCellReuseIdentifier:@"cell2"];
+        
         [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(pullUpToReloadMoreData:)];
         self.tableview2.separatorStyle = UITableViewCellSeparatorStyleNone;
         self.tableview2.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(pullDownToReloadData:)];
@@ -1075,7 +1080,7 @@
     NSString *str = [NSString stringWithFormat:@"product/img/%@",self.idStr];
     [Manager requestPOSTWithURLStr:KURLNSString(str) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-//        NSLog(@"******%@",diction);
+        NSLog(@"******%@",diction);
         [weakSelf.dataArray1 removeAllObjects];
         NSMutableArray *arr = (NSMutableArray *)diction;
         for (NSDictionary *dic in arr) {
@@ -1142,24 +1147,40 @@
     }
     if ([tableView isEqual:self.tableview2]) {
         static NSString *identifierCell = @"cell2";
-        BigImgTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        FLAnimatideImgCell *cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil) {
-            cell = [[BigImgTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifierCell];
+            cell = [[FLAnimatideImgCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifierCell];
         }
         Model *model = [self.dataArray1 objectAtIndex:indexPath.row];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         
-        SDWebImageManager *manager = [SDWebImageManager sharedManager];
-        NSString* key = [manager cacheKeyForURL:[NSURL URLWithString:NSString(model.imgUrl)]];
-        SDImageCache* cache = [SDImageCache sharedImageCache];
-        //此方法会先从memory中取。
-        cell.img.image = [cache imageFromDiskCacheForKey:key];
+//        SDWebImageManager *manager = [SDWebImageManager sharedManager];
+//        NSString* key = [manager cacheKeyForURL:[NSURL URLWithString:NSString(model.imgUrl)]];
+//        SDImageCache* cache = [SDImageCache sharedImageCache];
+//        //此方法会先从memory中取。
+//        cell.flanimatedImgView.image = [cache imageFromDiskCacheForKey:key];
         
-        [cell.img sd_setImageWithURL:[NSURL URLWithString:NSString(model.imgUrl)] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+        
+       
+        
+        
+        
+        [cell.flanimatedImgView sd_setImageWithURL:[NSURL URLWithString:NSString(model.imgUrl)] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
             CGSize size = image.size;
             self->imgheight = SCREEN_WIDTH/size.width*size.height;
+            cell.flanimatedImgView.frame = CGRectMake(0, 0, SCREEN_WIDTH, self->imgheight);
         }];
+        
+        
+        
+        
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            // 处理耗时操作的代码块...
+            FLAnimatedImage *animatedImg = [FLAnimatedImage animatedImageWithGIFData:[NSData dataWithContentsOfURL:[NSURL URLWithString:NSString(model.imgUrl)]]];
+            [cell.flanimatedImgView setAnimatedImage:animatedImg];
+        });
+        
         
         return cell;
     }

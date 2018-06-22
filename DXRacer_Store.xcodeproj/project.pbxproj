@@ -191,6 +191,7 @@
 		75DCF9842098035F00FEBBD9 /* FourVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DCF9832098035F00FEBBD9 /* FourVC.m */; };
 		75DCF9872098036D00FEBBD9 /* FiveVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DCF9862098036D00FEBBD9 /* FiveVC.m */; };
 		75DCF98B209803B000FEBBD9 /* TWScrollViewVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DCF98A209803B000FEBBD9 /* TWScrollViewVC.m */; };
+		75FD53DA20DCA67D0022F644 /* FLAnimatideImgCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 75FD53D920DCA67D0022F644 /* FLAnimatideImgCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -601,6 +602,8 @@
 		75DCF9862098036D00FEBBD9 /* FiveVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FiveVC.m; sourceTree = "<group>"; };
 		75DCF989209803B000FEBBD9 /* TWScrollViewVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TWScrollViewVC.h; sourceTree = "<group>"; };
 		75DCF98A209803B000FEBBD9 /* TWScrollViewVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TWScrollViewVC.m; sourceTree = "<group>"; };
+		75FD53D820DCA67D0022F644 /* FLAnimatideImgCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FLAnimatideImgCell.h; sourceTree = "<group>"; };
+		75FD53D920DCA67D0022F644 /* FLAnimatideImgCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FLAnimatideImgCell.m; sourceTree = "<group>"; };
 		A0FF64E1904B14EFDF545529 /* Pods-DXRacer_Store.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DXRacer_Store.release.xcconfig"; path = "Pods/Target Support Files/Pods-DXRacer_Store/Pods-DXRacer_Store.release.xcconfig"; sourceTree = "<group>"; };
 		B2A3ED19B3A101E48CADFEC0 /* Pods-DXRacer_Store.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DXRacer_Store.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DXRacer_Store/Pods-DXRacer_Store.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1413,6 +1416,8 @@
 				75A3D34E20ADBDBE00ABA831 /* FrankPagesView.m */,
 				75A3D35620ADBDCF00ABA831 /* ProductXiangqingViewController.h */,
 				75A3D35720ADBDD000ABA831 /* ProductXiangqingViewController.m */,
+				75FD53D820DCA67D0022F644 /* FLAnimatideImgCell.h */,
+				75FD53D920DCA67D0022F644 /* FLAnimatideImgCell.m */,
 				088C643820AFEEE8003FE5D1 /* BiaogeTableViewCell.h */,
 				088C643920AFEEE8003FE5D1 /* BiaogeTableViewCell.m */,
 				088C643A20AFEEE8003FE5D1 /* BiaogeTableViewCell.xib */,
@@ -1477,6 +1482,7 @@
 				08A8346E20941560000BCFBB /* Frameworks */,
 				08A8346F20941560000BCFBB /* Resources */,
 				126AD2264651FC09BD9D8B6F /* [CP] Copy Pods Resources */,
+				57595F04CDA7F2A956AF6708 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1652,6 +1658,21 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DXRacer_Store/Pods-DXRacer_Store-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		57595F04CDA7F2A956AF6708 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DXRacer_Store/Pods-DXRacer_Store-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		6C09DB9FC36CEDDA22E047AB /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1775,6 +1796,7 @@
 				0858BC43209B0A6900C4489B /* IrregularLabel.m in Sources */,
 				0858BC25209AB2F800C4489B /* UIView+PYExtension.m in Sources */,
 				086F055320AD0E3800CD508C /* CreateOrderCell.m in Sources */,
+				75FD53DA20DCA67D0022F644 /* FLAnimatideImgCell.m in Sources */,
 				0858BC3D209ADF7A00C4489B /* GetACouponViewController.m in Sources */,
 				086F054F20AD0B3800CD508C /* CreateOrderViewController.m in Sources */,
 				0858BC22209AB2F800C4489B /* PYSearchConst.m in Sources */,

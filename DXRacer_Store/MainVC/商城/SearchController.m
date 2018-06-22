@@ -41,6 +41,14 @@
 }
 
 
+
+
+
+
+
+
+
+
 //懒加载
 -(UICollectionViewFlowLayout *)flowLayout{
     if (!_flowLayout) {

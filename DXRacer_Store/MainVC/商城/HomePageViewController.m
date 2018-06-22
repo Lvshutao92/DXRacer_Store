@@ -144,7 +144,7 @@
                         [btn setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
                         
                         
-                        LRViewBorderRadius(btn, 0, .5, [UIColor colorWithWhite:.9 alpha:.3]);
+//                        LRViewBorderRadius(btn, 0, .5, [UIColor colorWithWhite:.9 alpha:.3]);
                         [btn addTarget:self action:@selector(clickbt:) forControlEvents:UIControlEventTouchUpInside];
                         [btn setTitle:model.linkUrl forState:UIControlStateNormal];
                         
@@ -338,11 +338,6 @@
 }
 
 
-
-
-
-
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 0;
 }
@@ -404,12 +399,8 @@
 -(UIView*)NavigationBa
 {
     view_bar =[[UIView alloc]init];
-    
     CGFloat hei;
-    
     CGFloat hh;
-    
-    
     if ([[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone X"]||[[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone Simulator"]) {
         hei = 88;
         hh = 44;

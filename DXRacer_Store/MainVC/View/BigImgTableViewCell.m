@@ -20,14 +20,6 @@
 
     // Configure the view for the selected state
 }
-- (CGFloat )returnCellHeight:(NSString *)str{
-    NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:str]];
-    UIImage *image = [UIImage imageWithData:data];
-    CGSize size = image.size;
-    CGFloat height = SCREEN_WIDTH/size.width*size.height;
-    
-    return height;
-}
 
 
 @end

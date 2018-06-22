@@ -48,6 +48,7 @@
 
 @implementation PersonViewController
 - (void)viewWillAppear:(BOOL)animated{
+    
     self.tabBarController.tabBar.hidden = NO;
     
     
@@ -116,10 +117,6 @@
 
 
 
-- (void)viewWillDisappear:(BOOL)animated{
-}
-
-
 - (void)clickedit {
     if ([Manager redingwenjianming:@"token.text"] != nil) {
         AccountEditTableViewController *addr = [[AccountEditTableViewController alloc]init];
@@ -152,7 +149,17 @@
     self.dataArray = [@[@"我的订单",@"我的优惠券",@"领券中心",@"我的收藏",@"QQ客服",@"联系我们",@"关于我们"]mutableCopy];
     
     
-    UIBarButtonItem *bar = [[UIBarButtonItem alloc]initWithTitle:@"设置" style:UIBarButtonItemStylePlain target:self action:@selector(clickedit)];
+    
+    
+    
+    
+    UIView *btnview = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];
+    UIButton *szbtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    szbtn.frame = CGRectMake(14, 7, 30, 30);
+    [szbtn setImage:[UIImage imageNamed:@"设置-2"] forState:UIControlStateNormal];
+    [szbtn addTarget:self action:@selector(clickedit) forControlEvents:UIControlEventTouchUpInside];
+    [btnview addSubview:szbtn];
+    UIBarButtonItem *bar = [[UIBarButtonItem alloc]initWithCustomView:btnview];
     self.navigationItem.rightBarButtonItem = bar;
     
     

@@ -154,18 +154,9 @@ UIBackgroundTaskIdentifier taskId;
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
     }
     
-    
    
+  
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -183,16 +174,6 @@ UIBackgroundTaskIdentifier taskId;
     self.window.rootViewController = self.mainVC;
     [self.window.layer transitionWithAnimType:TransitionAnimTypeRamdom subType:TransitionSubtypesFromRamdom curve:TransitionCurveRamdom duration:2.0f];
 }
-
-
-
-
-
-
-
-
-
-
 //获取联系人
 - (void)requestAuthorizationAddressBook {
     // 判断是否授权
@@ -201,16 +182,14 @@ UIBackgroundTaskIdentifier taskId;
         // 请求授权
         ABAddressBookRef addressBookRef =  ABAddressBookCreate();
         ABAddressBookRequestAccessWithCompletion(addressBookRef, ^(bool granted, CFErrorRef error) {
-            if (granted) {  // 授权成功
+            if (granted) {  //授权成功
                 
-            } else {        // 授权失败
+            } else {        //授权失败
                 NSLog(@"授权失败！");
             }
         });
     }
 }
-
-
 //支付宝支付
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
