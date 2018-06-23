@@ -349,6 +349,10 @@
     
     
     seacherStr = @"";
+    
+    if ([[Manager redingwenjianming:@"huancun.text"] isEqualToString:@"you"]) {
+        [self getDataFromlocal];
+    }
     [self setUpReflash];
  }
 
@@ -744,6 +748,32 @@
 
 
 
+- (void)getDataFromlocal {
+    //从本地取数据
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSString *file = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
+        NSString *filewebCaches = [file stringByAppendingPathComponent:@"FL_Casher"];
+        NSMutableArray  *fileDic = [NSMutableArray arrayWithContentsOfFile:filewebCaches];
+        //NSLog(@"%@",filewebCaches);
+        //判断是否存在缓存  存在 则取数据  不存在 就请求网络
+        if (fileDic == nil) {
+            [self setUpReflash];
+        }else {
+            [self havecasher:fileDic];
+        }
+        //回到主线程刷新ui
+        //        dispatch_async(dispatch_get_main_queue(), ^{
+        [self.goosdCollectionView reloadData];
+        //        });
+    });
+}
+- (void)havecasher:(NSMutableArray *)arr{
+    [self.dataArray removeAllObjects];
+    for (NSDictionary *dicc in arr) {
+        Model *model = [Model mj_objectWithKeyValues:dicc];
+        [self.dataArray addObject:model];
+    }
+}
 
 
 //刷新数据
@@ -772,6 +802,7 @@
     
     [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
+        
         //NSLog(@"******%@",diction);
         [weakSelf.dataArray removeAllObjects];
         self->number = [[diction objectForKey:@"total"] integerValue];
@@ -789,6 +820,15 @@
         
         if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"itemsList"]] == YES) {
             NSMutableArray *arr = [diction objectForKey:@"itemsList"];
+             [Manager writewenjianming:@"huancun.text" content:@"you"];
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                NSString *file = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
+                NSString *filewebCaches = [file stringByAppendingPathComponent:@"FL_Casher"];
+                [arr writeToFile:filewebCaches atomically:YES];
+            });
+            
+            
+            
             for (NSDictionary *dicc in arr) {
                 Model *model = [Model mj_objectWithKeyValues:dicc];
                 [weakSelf.dataArray addObject:model];
@@ -797,19 +837,19 @@
         self->page = 10;
         [weakSelf.goosdCollectionView reloadData];
         [weakSelf.goosdCollectionView.mj_header endRefreshing];
-        
-//        if (weakSelf.dataArray.count == 0) {
-//            UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
-//            lab.text = @"抱歉！暂无该商品";
-//            lab.textAlignment = NSTextAlignmentCenter;
-//            lab.textColor = [UIColor lightGrayColor];
-//            [weakSelf.view addSubview:lab];
-//        }
     } enError:^(NSError *error) {
-        
 //        NSLog(@"------%@",error);
     }];
 }
+
+
+
+
+
+
+
+
+
 
 
 - (void)loddeSLList{

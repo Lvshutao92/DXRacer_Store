@@ -1160,8 +1160,6 @@
 //        cell.flanimatedImgView.image = [cache imageFromDiskCacheForKey:key];
         
         
-       
-        
         
         
         [cell.flanimatedImgView sd_setImageWithURL:[NSURL URLWithString:NSString(model.imgUrl)] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
@@ -1169,8 +1167,6 @@
             self->imgheight = SCREEN_WIDTH/size.width*size.height;
             cell.flanimatedImgView.frame = CGRectMake(0, 0, SCREEN_WIDTH, self->imgheight);
         }];
-        
-        
         
         
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
@@ -1207,9 +1203,6 @@
     
     return cell;
 }
-
-
-
 
 
 

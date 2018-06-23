@@ -192,6 +192,7 @@
 		75DCF9872098036D00FEBBD9 /* FiveVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DCF9862098036D00FEBBD9 /* FiveVC.m */; };
 		75DCF98B209803B000FEBBD9 /* TWScrollViewVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DCF98A209803B000FEBBD9 /* TWScrollViewVC.m */; };
 		75FD53DA20DCA67D0022F644 /* FLAnimatideImgCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 75FD53D920DCA67D0022F644 /* FLAnimatideImgCell.m */; };
+		75FD53E020DD59EC0022F644 /* FMDBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 75FD53DF20DD59EC0022F644 /* FMDBManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -604,6 +605,8 @@
 		75DCF98A209803B000FEBBD9 /* TWScrollViewVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TWScrollViewVC.m; sourceTree = "<group>"; };
 		75FD53D820DCA67D0022F644 /* FLAnimatideImgCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FLAnimatideImgCell.h; sourceTree = "<group>"; };
 		75FD53D920DCA67D0022F644 /* FLAnimatideImgCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FLAnimatideImgCell.m; sourceTree = "<group>"; };
+		75FD53DE20DD59EC0022F644 /* FMDBManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FMDBManager.h; sourceTree = "<group>"; };
+		75FD53DF20DD59EC0022F644 /* FMDBManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FMDBManager.m; sourceTree = "<group>"; };
 		A0FF64E1904B14EFDF545529 /* Pods-DXRacer_Store.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DXRacer_Store.release.xcconfig"; path = "Pods/Target Support Files/Pods-DXRacer_Store/Pods-DXRacer_Store.release.xcconfig"; sourceTree = "<group>"; };
 		B2A3ED19B3A101E48CADFEC0 /* Pods-DXRacer_Store.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DXRacer_Store.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DXRacer_Store/Pods-DXRacer_Store.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1231,6 +1234,8 @@
 				08F82A9620941DDE00D36A68 /* GTMDefines.h */,
 				08F82A9220941DDD00D36A68 /* Manager.h */,
 				08F82A9320941DDD00D36A68 /* Manager.m */,
+				75FD53DE20DD59EC0022F644 /* FMDBManager.h */,
+				75FD53DF20DD59EC0022F644 /* FMDBManager.m */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -1772,6 +1777,7 @@
 				75A3D35420ADBDC000ABA831 /* FrankMiddleToolbar.m in Sources */,
 				0858BC39209ADCCE00C4489B /* CouponsThreeVC.m in Sources */,
 				0858BC46209B0BD100C4489B /* GetACouponCell.m in Sources */,
+				75FD53E020DD59EC0022F644 /* FMDBManager.m in Sources */,
 				0866F19220AEC56C0035AD95 /* openssl_wrapper.m in Sources */,
 				0887E86C20ABE4EB00174C84 /* DWQSelectView.m in Sources */,
 				084D2337209C07B100776B84 /* RegisterViewController.m in Sources */,

@@ -36,7 +36,7 @@ UIBackgroundTaskIdentifier taskId;
     //键盘处理
     [IQKeyboardManager sharedManager].enable = YES;
     [IQKeyboardManager sharedManager].shouldResignOnTouchOutside = YES;
-
+   
     //测试的时候改变info 里的版本号就可以了
     NSArray *images = @[@"gud1.jpg",@"gud2.jpg",@"gud3.jpg",@"gud4.jpg",@"av3.jpg"];
     BOOL y = [XTGuidePagesViewController isShow];
@@ -56,7 +56,7 @@ UIBackgroundTaskIdentifier taskId;
     [self initShortcutItems];
     
     
-    
+    [NSThread sleepForTimeInterval:1];
 
     
     return YES;

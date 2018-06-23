@@ -48,6 +48,8 @@
 @property(nonatomic,strong)NSMutableArray *dataArray2;
 @property(nonatomic,strong)NSMutableArray *dataArray3;
 
+
+
 @end
 
 @implementation HomePageViewController
@@ -66,6 +68,12 @@
                     Model *model = [Model mj_objectWithKeyValues:dicc];
                     [weakSelf.lunboArray addObject:model];
                 }
+                [Manager writewenjianming:@"SY_IMG_huancun.text" content:@"you"];
+                dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                    NSString *file = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
+                    NSString *filewebCaches = [file stringByAppendingPathComponent:@"SY_IMG_Casher"];
+                    [weakSelf.lunboArray writeToFile:filewebCaches atomically:YES];
+                });
             }
         }
         NSMutableArray *array = [NSMutableArray arrayWithCapacity:1];
@@ -102,6 +110,14 @@
         if ([code isEqualToString:@"200"]){
             if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"object"]] == YES) {
                 NSMutableArray *arr = [diction objectForKey:@"object"];
+                
+                [Manager writewenjianming:@"SY_GuangGao_huancun.text" content:@"you"];
+                dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                    NSString *file = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
+                    NSString *filewebCaches = [file stringByAppendingPathComponent:@"SY_GuangGao_Casher"];
+                    [weakSelf.lunboArray writeToFile:filewebCaches atomically:YES];
+                });
+                
                 
                 CGFloat he = 0.0;
                 CGFloat imgheight= 0.0;
@@ -241,7 +257,6 @@
         hei = -20;
     }
     
-    
     self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, hei, SCREEN_WIDTH, SCREEN_HEIGHT+hei+10) style:UITableViewStylePlain];
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableview.dataSource = self;
@@ -249,6 +264,10 @@
     self.tableview.showsVerticalScrollIndicator = NO;
     [self.tableview registerNib:[UINib nibWithNibName:@"Table_4_Cell" bundle:nil] forCellReuseIdentifier:@"Table_4_Cell"];
     [self.view addSubview:self.tableview];
+    
+    
+    
+    
     
     
     headerV = [[UIView alloc]init];
@@ -312,16 +331,22 @@
     [self NavigationBa];
     
     
+    
+    if ([[Manager redingwenjianming:@"SY_IMG_huancun.text"] isEqualToString:@"you"]) {
+        [self getDataFromlocal1];
+    }
+    if ([[Manager redingwenjianming:@"SY_GuangGao_huancun.text"] isEqualToString:@"you"]) {
+        [self getDataFromlocal2];
+    }
     [self setUpReflash];
 }
 
 
-
-
+//刷新数据
 -(void)setUpReflash
 {
-    LRWeakSelf(self)
-    WNXRefresgHeader *header = [WNXRefresgHeader headerWithRefreshingBlock:^{
+    __weak typeof (self) weakSelf = self;
+    self.tableview.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             // 处理耗时操作的代码块...
             [weakSelf getTopPic];
@@ -333,9 +358,156 @@
             });
         });
     }];
-    [header beginRefreshing];
-    self.tableview.mj_header = header;
+    [self.tableview.mj_header beginRefreshing];
 }
+
+
+
+
+
+- (void)getDataFromlocal1 {
+    //从本地取数据
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSString *file = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
+        NSString *filewebCaches = [file stringByAppendingPathComponent:@"SY_IMG_Casher"];
+        NSMutableArray  *fileDic = [NSMutableArray arrayWithContentsOfFile:filewebCaches];
+        //NSLog(@"%@",filewebCaches);
+        //判断是否存在缓存  存在 则取数据  不存在 就请求网络
+        if (fileDic == nil) {
+            [self getTopPic];
+        }else {
+            [self havecasher1:fileDic];
+        }
+        [self.tableview reloadData];
+    });
+}
+- (void)havecasher1:(NSMutableArray *)arr{
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:1];
+    NSMutableArray *array1 = [NSMutableArray arrayWithCapacity:1];
+    [array removeAllObjects];
+    [array1 removeAllObjects];
+    for (Model *mo in self.lunboArray) {
+        [array addObject:NSString(mo.phoneUrl)];
+        [array1 addObject:mo.title1];
+    }
+    if (array.count > 0) {
+        self.cycleScrollView.localizationImageNamesGroup = array;
+    }
+}
+
+- (void)getDataFromlocal2 {
+    //从本地取数据
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSString *file = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
+        NSString *filewebCaches = [file stringByAppendingPathComponent:@"SY_GuangGao_Casher"];
+        NSMutableArray  *fileDic = [NSMutableArray arrayWithContentsOfFile:filewebCaches];
+        //NSLog(@"%@",filewebCaches);
+        //判断是否存在缓存  存在 则取数据  不存在 就请求网络
+        if (fileDic == nil) {
+            [self getGuanggao];
+        }else {
+            [self havecasher2:fileDic];
+        }
+        [self.tableview reloadData];
+    });
+}
+- (void)havecasher2:(NSMutableArray *)arr{
+    CGFloat he = 0.0;
+    CGFloat imgheight= 0.0;
+    
+    for (int j = 0; j<arr.count; j++) {
+        self->index_j = j;
+        NSMutableArray *arr1 = [arr[j] objectForKey:@"list"];
+        [self.dataArray1 removeAllObjects];
+        for (NSDictionary *dic in arr1) {
+            Model *model = [Model mj_objectWithKeyValues:dic];
+            [self.dataArray1 addObject:model];
+        }
+        CGFloat heit = 0.0;
+        int b = 0;
+        for (int i = 0; i<self.dataArray1.count; i++) {
+            Model *model = [self.dataArray1 objectAtIndex:i];
+            
+            if (b == 0) {
+                he =  he + imgheight;
+            }
+            
+            
+            NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:NSString(model.imgUrl)]];
+            UIImage *image = [UIImage imageWithData:data];
+            CGSize size = image.size;
+            CGFloat wid = [model.proportion floatValue]/100*SCREEN_WIDTH;
+            
+            if (size.width>0) {
+                imgheight = wid/size.width*size.height;
+            }
+            
+            
+            
+            
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+            
+            btn.frame = CGRectMake(heit, 200+he, wid, imgheight);
+            
+            btn.adjustsImageWhenHighlighted=NO;
+            [btn setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+            
+            
+            //                        LRViewBorderRadius(btn, 0, .5, [UIColor colorWithWhite:.9 alpha:.3]);
+            [btn addTarget:self action:@selector(clickbt:) forControlEvents:UIControlEventTouchUpInside];
+            [btn setTitle:model.linkUrl forState:UIControlStateNormal];
+            
+            
+            SDWebImageManager *manager = [SDWebImageManager sharedManager];
+            NSString* key = [manager cacheKeyForURL:[NSURL URLWithString:NSString(model.imgUrl)]];
+            SDImageCache* cache = [SDImageCache sharedImageCache];
+            //此方法会先从memory中取。
+            [btn setBackgroundImage:[cache imageFromDiskCacheForKey:key] forState:UIControlStateNormal];
+            
+            [btn setBackgroundImage:[Manager imageFromURLString:NSString(model.imgUrl)] forState:UIControlStateNormal];
+            
+            btn.tag = i;
+            [self->headerV addSubview:btn];
+            b++;
+            heit = heit + wid;
+        }
+    }
+    //NSLog(@"----%f",he+imgheight+200);
+    CGFloat gao = SCREEN_WIDTH/2*18/32;
+    //NSLog(@"-------%lf",gao);
+    self->img1.frame = CGRectMake(0, he+imgheight+200+5, SCREEN_WIDTH/2, gao);
+    self->img2.frame = CGRectMake(SCREEN_WIDTH/2, he+imgheight+200+5, SCREEN_WIDTH/2, gao);
+    //                self->centerV.frame = CGRectMake(0, he+imgheight+200+20+gao, SCREEN_WIDTH, 100);
+    self->headerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, he+imgheight+200+5+gao);
+}
+
+
+
+
+
+
+
+
+
+
+//-(void)setUpReflash
+//{
+//    LRWeakSelf(self)
+//    WNXRefresgHeader *header = [WNXRefresgHeader headerWithRefreshingBlock:^{
+//        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//            // 处理耗时操作的代码块...
+//            [weakSelf getTopPic];
+//            [weakSelf getGuanggao];
+//            [weakSelf getBottomInfo];
+//            //通知主线程刷新
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                [weakSelf.tableview reloadData];
+//            });
+//        });
+//    }];
+//    [header beginRefreshing];
+//    self.tableview.mj_header = header;
+//}
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -621,7 +793,7 @@
     __weak typeof(self) weakSelf = self;
     [Manager requestGETWithURLStr:KURLNSString(@"index/index/product") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSLog(@"******%@",[diction objectForKey:@"object"]);
+//        NSLog(@"******%@",[diction objectForKey:@"object"]);
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
             self->fhlab.text = @"热门推荐";
@@ -639,25 +811,18 @@
                 }
             }
         }
-        
         NSInteger hangshu;
         if (weakSelf.dataArray3.count%2 == 1) {
             hangshu = weakSelf.dataArray3.count/2 + 1;
         }else{
             hangshu = weakSelf.dataArray3.count/2;
         }
-       
-        
         if (weakSelf.dataArray3.count == 0) {
             hangshu = 0;
         }
-        
-        
         [weakSelf initCollectionView3:hangshu];
         
-        
-        
-         [weakSelf.tableview reloadData];
+        [weakSelf.tableview reloadData];
         [weakSelf.collectionView3 reloadData];
     } enError:^(NSError *error) {
 //        NSLog(@"------%@",error);
@@ -695,7 +860,9 @@
     
     
     
-    
+//    [self getTopPic];
+//    [self getGuanggao];
+//    [self getBottomInfo];
     
 }
 

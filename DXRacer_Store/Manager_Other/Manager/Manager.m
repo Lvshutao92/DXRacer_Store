@@ -797,6 +797,9 @@ static Manager *manager = nil;
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     
+    
+    
+    
     [manager.requestSerializer setValue:@"application/json;charset=utf-8" forHTTPHeaderField:@"Content-Type"];
 
     if ([Manager redingwenjianming:@"token.text"] != nil) {
