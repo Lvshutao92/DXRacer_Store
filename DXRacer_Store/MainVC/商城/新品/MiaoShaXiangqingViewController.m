@@ -498,7 +498,7 @@
                     DaiFuKuan_ViewController *or = [[DaiFuKuan_ViewController alloc]init];
                     or.orderNo = [diction objectForKey:@"object"];
                     or.orderStatus = @"待付款";
-                    [self.navigationController pushViewController:or animated:YES];
+                    [weakSelf.navigationController pushViewController:or animated:YES];
                     [weakSelf.tfSheetView disMissView];
                 };
                 //微信支付
@@ -526,7 +526,7 @@
                     [weakSelf doAPPay:[diction objectForKey:@"object"]];
                     [weakSelf.tfSheetView disMissView];
                 };
-                [weakSelf.tfSheetView showInView:self.view];
+                [weakSelf.tfSheetView showInView:weakSelf.view];
             }else  if ([code isEqualToString:@"401"]){
                 [Manager logout];
                 LoginViewController *login = [[LoginViewController alloc]init];
@@ -802,7 +802,7 @@
         self.tableview2 = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
         self.tableview2.delegate = self;
         self.tableview2.dataSource = self;
-        [self.tableview2 registerNib:[UINib nibWithNibName:@"BigImgTableViewCell" bundle:nil] forCellReuseIdentifier:@"cell2"];
+        [self.tableview2 registerClass:[FLAnimatideImgCell class] forCellReuseIdentifier:@"cell2"];
         [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(pullUpToReloadMoreData:)];
         self.tableview2.separatorStyle = UITableViewCellSeparatorStyleNone;
         self.tableview2.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(pullDownToReloadData:)];
@@ -926,30 +926,37 @@
     }
     if ([tableView isEqual:self.tableview2]) {
         static NSString *identifierCell = @"cell2";
-        BigImgTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        FLAnimatideImgCell *cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil) {
-            cell = [[BigImgTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifierCell];
+            cell = [[FLAnimatideImgCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifierCell];
         }
         Model *model = [self.dataArray1 objectAtIndex:indexPath.row];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
-        //        imgheight = [cell returnCellHeight:NSString(model.imgUrl)];
         
+//        SDWebImageManager *manager = [SDWebImageManager sharedManager];
+//        NSString* key = [manager cacheKeyForURL:[NSURL URLWithString:NSString(model.imgUrl)]];
+//        SDImageCache* cache = [SDImageCache sharedImageCache];
+//        //此方法会先从memory中取。
+//        cell.img.image = [cache imageFromDiskCacheForKey:key];
+
+//        [cell.img sd_setImageWithURL:[NSURL URLWithString:NSString(model.imgUrl)] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+//            CGSize size = image.size;
+//            self->imgheight = SCREEN_WIDTH/size.width*size.height;
+//        }];
         
-        SDWebImageManager *manager = [SDWebImageManager sharedManager];
-        NSString* key = [manager cacheKeyForURL:[NSURL URLWithString:NSString(model.imgUrl)]];
-        SDImageCache* cache = [SDImageCache sharedImageCache];
-        //此方法会先从memory中取。
-        cell.img.image = [cache imageFromDiskCacheForKey:key];
-        
-        
-        
-        
-        [cell.img sd_setImageWithURL:[NSURL URLWithString:NSString(model.imgUrl)] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+        [cell.flanimatedImgView sd_setImageWithURL:[NSURL URLWithString:NSString(model.imgUrl)] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
             CGSize size = image.size;
             self->imgheight = SCREEN_WIDTH/size.width*size.height;
+            cell.flanimatedImgView.frame = CGRectMake(0, 0, SCREEN_WIDTH, self->imgheight);
         }];
         
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            FLAnimatedImage *animatedImg = [FLAnimatedImage animatedImageWithGIFData:[NSData dataWithContentsOfURL:[NSURL URLWithString:NSString(model.imgUrl)]]];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [cell.flanimatedImgView setAnimatedImage:animatedImg];
+            });
+        });
         return cell;
     }
     if ([tableView isEqual:self.tableview3]) {

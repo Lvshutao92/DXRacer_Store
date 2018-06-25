@@ -456,7 +456,7 @@
                         [weakSelf doAPPay:[diction objectForKey:@"msg"]];
                         [weakSelf.tfSheetView disMissView];
                     };
-                    [weakSelf.tfSheetView showInView:self.view];
+                    [weakSelf.tfSheetView showInView:weakSelf.view];
                 }else  if ([code isEqualToString:@"401"]){
                     [Manager logout];
                     [weakSelf.navigationController popViewControllerAnimated:YES];

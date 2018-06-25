@@ -358,9 +358,10 @@
 -(void)dismiss
 {
     //    center.y = center.y+self.view.frame.size.height;
+    LRWeakSelf(self);
     [UIView animateWithDuration: 0.35 animations: ^{
-        self.selectView.frame =CGRectMake(0, screen_Height, screen_Width, screen_Height);
-        self.backgroundView.transform = CGAffineTransformIdentity;
+        weakSelf.selectView.frame =CGRectMake(0, screen_Height, screen_Width, screen_Height);
+        weakSelf.backgroundView.transform = CGAffineTransformIdentity;
     } completion: nil];
     
 }
@@ -711,7 +712,7 @@
             weakSelf.selectView.headImage.image = [UIImage imageNamed:@"yxj"];
         }
         
-        for (Model *model in self.cuxiaoArr) {
+        for (Model *model in weakSelf.cuxiaoArr) {
             //NSLog(@"%@----%@",stringID,model.productItemId);
             if ([model.productItemId isEqualToString:self->stringID]) {
                 self->activityNameLab.text =model.activityName;
@@ -738,18 +739,18 @@
         }
 
         if (videoId.length > 0) {
-            self.detailsV = [[LZProductDetails alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_WIDTH)];
+            weakSelf.detailsV = [[LZProductDetails alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_WIDTH)];
             [self->headerV addSubview:self.detailsV];
-            __weak typeof(self) weakSelf = self;
+            LRStrongSelf(weakSelf);
             self.detailsV.scrollOptBlock = ^(NSInteger index) {
                 NSMutableArray *array = [NSMutableArray arrayWithCapacity:1];
                 [array removeAllObjects];
-                for (Model *mo in weakSelf.lunboArray) {
+                for (Model *mo in strongSelf.lunboArray) {
                     [array addObject:NSString(mo.listImg)];
                 }
                 LLPhotoBrowser *photoBrowser = [[LLPhotoBrowser alloc] initWithImages:(NSArray *)array currentIndex:index-1];
-                photoBrowser.delegate = weakSelf;
-                [weakSelf presentViewController:photoBrowser animated:YES completion:nil];
+                photoBrowser.delegate = strongSelf;
+                [strongSelf presentViewController:photoBrowser animated:YES completion:nil];
             };
             [array insertObject:videoId atIndex:0];
             [weakSelf.detailsV updateUIWithImageAndVideoArray:array];
@@ -800,9 +801,10 @@
 
 #pragma mark --弹出规格属性
 -(void)chooseViewClick{
+    LRWeakSelf(self);
         [UIView animateWithDuration: 0.35 animations: ^{
-            self.backgroundView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.9, 0.9);
-            self.selectView.frame =CGRectMake(0, 0, screen_Width, screen_Height);
+            weakSelf.backgroundView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.9, 0.9);
+            weakSelf.selectView.frame =CGRectMake(0, 0, screen_Width, screen_Height);
         } completion: nil];
 }
 
@@ -1168,11 +1170,11 @@
             cell.flanimatedImgView.frame = CGRectMake(0, 0, SCREEN_WIDTH, self->imgheight);
         }];
         
-        
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
-            // 处理耗时操作的代码块...
             FLAnimatedImage *animatedImg = [FLAnimatedImage animatedImageWithGIFData:[NSData dataWithContentsOfURL:[NSURL URLWithString:NSString(model.imgUrl)]]];
-            [cell.flanimatedImgView setAnimatedImage:animatedImg];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [cell.flanimatedImgView setAnimatedImage:animatedImg];
+            });
         });
         
         

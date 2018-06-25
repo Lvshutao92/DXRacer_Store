@@ -749,22 +749,21 @@
 
 
 - (void)getDataFromlocal {
-    //从本地取数据
+    LRWeakSelf(self);
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         NSString *file = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
         NSString *filewebCaches = [file stringByAppendingPathComponent:@"FL_Casher"];
         NSMutableArray  *fileDic = [NSMutableArray arrayWithContentsOfFile:filewebCaches];
-        //NSLog(@"%@",filewebCaches);
-        //判断是否存在缓存  存在 则取数据  不存在 就请求网络
         if (fileDic == nil) {
-            [self setUpReflash];
+            [weakSelf setUpReflash];
         }else {
-            [self havecasher:fileDic];
+            [weakSelf havecasher:fileDic];
         }
         //回到主线程刷新ui
-        //        dispatch_async(dispatch_get_main_queue(), ^{
-        [self.goosdCollectionView reloadData];
-        //        });
+        LRStrongSelf(weakSelf);
+        dispatch_async(dispatch_get_main_queue(), ^{
+        [strongSelf.goosdCollectionView reloadData];
+        });
     });
 }
 - (void)havecasher:(NSMutableArray *)arr{
@@ -785,8 +784,8 @@
     }];
     [self.goosdCollectionView.mj_header beginRefreshing];
     self.goosdCollectionView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-        if (self.dataArray.count == self->number) {
-            [self.goosdCollectionView.mj_footer setState:MJRefreshStateNoMoreData];
+        if (weakSelf.dataArray.count == self->number) {
+            [weakSelf.goosdCollectionView.mj_footer setState:MJRefreshStateNoMoreData];
         }else {
             [weakSelf loddeSLList];
         }

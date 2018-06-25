@@ -431,6 +431,7 @@
     
     button.selected = !button.selected;
     isSelect = button.selected;
+    
     if (isSelect) {
         for (CartModel *model in dataArray) {
             [selectGoods addObject:model];
@@ -448,7 +449,7 @@
         cell = [[CartTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cellID"];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//    cell.isSelected = isSelect;
+    cell.isSelected = isSelect;
     
     //是否被选中
     if ([selectGoods containsObject:[dataArray objectAtIndex:indexPath.row]]) {

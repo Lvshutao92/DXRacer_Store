@@ -128,7 +128,7 @@ CG_INLINE CGRect CGRectMakes(CGFloat x, CGFloat y, CGFloat width, CGFloat height
                 UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
                 btn.frame = CGRectMake(SCREEN_WIDTH/2-60, SCREEN_HEIGHT/2-22.5, 120, 45);
                 [btn setTitle:@"去登录" forState:UIControlStateNormal];
-                [btn addTarget:self action:@selector(ciclk) forControlEvents:UIControlEventTouchUpInside];
+                [btn addTarget:weakSelf action:@selector(ciclk) forControlEvents:UIControlEventTouchUpInside];
                 LRViewBorderRadius(btn, 8, 1, [UIColor colorWithWhite:.7 alpha:.5]);
                 [btn setTitleColor:[UIColor colorWithWhite:.7 alpha:.5] forState:UIControlStateNormal];
                 [v addSubview:btn];
@@ -341,7 +341,7 @@ CG_INLINE CGRect CGRectMakes(CGFloat x, CGFloat y, CGFloat width, CGFloat height
         }
         text4.text = self.string6;
     }
-    
+    LRWeakSelf(self);
     SQCustomButton *btn = [[SQCustomButton alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-80, 0, 80, 100)
                                                           type:SQCustomButtonTopImageType
                                                      imageSize:CGSizeMake(30, 30) midmargin:15];
@@ -353,7 +353,7 @@ CG_INLINE CGRect CGRectMakes(CGFloat x, CGFloat y, CGFloat width, CGFloat height
     [self.scrollview addSubview:btn];
     [btn touchAction:^(SQCustomButton * _Nonnull button) {
         
-        [self JudgeAddressBookPower];
+        [weakSelf JudgeAddressBookPower];
         
     }];
    

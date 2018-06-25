@@ -206,6 +206,7 @@
 
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
+    LRWeakSelf(self);
     if ([textField isEqual:text1]) {
         [self textresoponse];
         return NO;
@@ -216,11 +217,11 @@
         } config:nil buttonArray:nil callback:^(EasyAlertView *showview, long index) {
             if (index == 0) {
                 self->text3.text = @"增值税普通发票";
-                [self putong];
+                [weakSelf putong];
             }
             if (index == 1) {
                 self->text3.text = @"增值税专用发票";
-                [self zhuanyong];
+                [weakSelf zhuanyong];
             }
         }];
         [alertV addAlertItemWithTitleArray:@[@"增值税普通发票",@"增值税专用发票"] callback:nil];

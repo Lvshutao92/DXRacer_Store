@@ -143,7 +143,7 @@
                         [alert addAction:cancel];
                         [weakSelf presentViewController:alert animated:YES completion:nil];
                     }else{
-                        [self cilckimg];
+                        [weakSelf cilckimg];
                     }
                 } enError:^(NSError *error) {
                     NSLog(@"%@",error);
@@ -163,7 +163,7 @@
                         [alert addAction:cancel];
                         [weakSelf presentViewController:alert animated:YES completion:nil];
                     }else{
-                        [self cilckimg];
+                        [weakSelf cilckimg];
                     }
                 } enError:^(NSError *error) {
                     NSLog(@"%@",error);

@@ -75,6 +75,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     PInfoCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    LRWeakSelf(self);
     if (indexPath.row == 0) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"用户名不可修改" preferredStyle:1];
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
@@ -108,8 +109,8 @@
                     LRViewBorderRadius(btn, 8, 1, [UIColor colorWithWhite:.7 alpha:.5]);
                     [btn setTitleColor:[UIColor colorWithWhite:.7 alpha:.5] forState:UIControlStateNormal];
                     [v addSubview:btn];
-                    [self.view addSubview:v];
-                    [self.view bringSubviewToFront:v];
+                    [weakSelf.view addSubview:v];
+                    [weakSelf.view bringSubviewToFront:v];
                 }
             } enError:^(NSError *error) {
                 NSLog(@"%@",error);
@@ -158,8 +159,8 @@
                     LRViewBorderRadius(btn, 8, 1, [UIColor colorWithWhite:.7 alpha:.5]);
                     [btn setTitleColor:[UIColor colorWithWhite:.7 alpha:.5] forState:UIControlStateNormal];
                     [v addSubview:btn];
-                    [self.view addSubview:v];
-                    [self.view bringSubviewToFront:v];
+                    [weakSelf.view addSubview:v];
+                    [weakSelf.view bringSubviewToFront:v];
                 }
             } enError:^(NSError *error) {
                 NSLog(@"%@",error);

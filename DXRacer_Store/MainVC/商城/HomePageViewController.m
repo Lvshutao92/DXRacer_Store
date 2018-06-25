@@ -161,7 +161,7 @@
                         
                         
 //                        LRViewBorderRadius(btn, 0, .5, [UIColor colorWithWhite:.9 alpha:.3]);
-                        [btn addTarget:self action:@selector(clickbt:) forControlEvents:UIControlEventTouchUpInside];
+                        [btn addTarget:weakSelf action:@selector(clickbt:) forControlEvents:UIControlEventTouchUpInside];
                         [btn setTitle:model.linkUrl forState:UIControlStateNormal];
                         
                         
@@ -366,19 +366,20 @@
 
 
 - (void)getDataFromlocal1 {
-    //从本地取数据
+    LRWeakSelf(self);
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         NSString *file = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
         NSString *filewebCaches = [file stringByAppendingPathComponent:@"SY_IMG_Casher"];
         NSMutableArray  *fileDic = [NSMutableArray arrayWithContentsOfFile:filewebCaches];
-        //NSLog(@"%@",filewebCaches);
-        //判断是否存在缓存  存在 则取数据  不存在 就请求网络
         if (fileDic == nil) {
-            [self getTopPic];
+            [weakSelf getTopPic];
         }else {
-            [self havecasher1:fileDic];
+            [weakSelf havecasher1:fileDic];
         }
-        [self.tableview reloadData];
+        LRStrongSelf(weakSelf);
+        dispatch_async(dispatch_get_main_queue(), ^{
+             [strongSelf.tableview reloadData];
+        });
     });
 }
 - (void)havecasher1:(NSMutableArray *)arr{
@@ -396,25 +397,25 @@
 }
 
 - (void)getDataFromlocal2 {
-    //从本地取数据
+    LRWeakSelf(self);
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         NSString *file = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
         NSString *filewebCaches = [file stringByAppendingPathComponent:@"SY_GuangGao_Casher"];
         NSMutableArray  *fileDic = [NSMutableArray arrayWithContentsOfFile:filewebCaches];
-        //NSLog(@"%@",filewebCaches);
-        //判断是否存在缓存  存在 则取数据  不存在 就请求网络
         if (fileDic == nil) {
-            [self getGuanggao];
+            [weakSelf getGuanggao];
         }else {
-            [self havecasher2:fileDic];
+            [weakSelf havecasher2:fileDic];
         }
-        [self.tableview reloadData];
+        LRStrongSelf(weakSelf);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [strongSelf.tableview reloadData];
+        });
     });
 }
 - (void)havecasher2:(NSMutableArray *)arr{
     CGFloat he = 0.0;
     CGFloat imgheight= 0.0;
-    
     for (int j = 0; j<arr.count; j++) {
         self->index_j = j;
         NSMutableArray *arr1 = [arr[j] objectForKey:@"list"];
@@ -427,58 +428,40 @@
         int b = 0;
         for (int i = 0; i<self.dataArray1.count; i++) {
             Model *model = [self.dataArray1 objectAtIndex:i];
-            
             if (b == 0) {
                 he =  he + imgheight;
             }
-            
-            
             NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:NSString(model.imgUrl)]];
             UIImage *image = [UIImage imageWithData:data];
             CGSize size = image.size;
             CGFloat wid = [model.proportion floatValue]/100*SCREEN_WIDTH;
-            
             if (size.width>0) {
                 imgheight = wid/size.width*size.height;
             }
-            
-            
-            
-            
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-            
-            btn.frame = CGRectMake(heit, 200+he, wid, imgheight);
-            
+                        btn.frame = CGRectMake(heit, 200+he, wid, imgheight);
             btn.adjustsImageWhenHighlighted=NO;
             [btn setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
-            
-            
-            //                        LRViewBorderRadius(btn, 0, .5, [UIColor colorWithWhite:.9 alpha:.3]);
             [btn addTarget:self action:@selector(clickbt:) forControlEvents:UIControlEventTouchUpInside];
             [btn setTitle:model.linkUrl forState:UIControlStateNormal];
-            
-            
             SDWebImageManager *manager = [SDWebImageManager sharedManager];
             NSString* key = [manager cacheKeyForURL:[NSURL URLWithString:NSString(model.imgUrl)]];
             SDImageCache* cache = [SDImageCache sharedImageCache];
-            //此方法会先从memory中取。
             [btn setBackgroundImage:[cache imageFromDiskCacheForKey:key] forState:UIControlStateNormal];
-            
             [btn setBackgroundImage:[Manager imageFromURLString:NSString(model.imgUrl)] forState:UIControlStateNormal];
-            
             btn.tag = i;
-            [self->headerV addSubview:btn];
+            [headerV addSubview:btn];
             b++;
             heit = heit + wid;
         }
     }
-    //NSLog(@"----%f",he+imgheight+200);
     CGFloat gao = SCREEN_WIDTH/2*18/32;
-    //NSLog(@"-------%lf",gao);
-    self->img1.frame = CGRectMake(0, he+imgheight+200+5, SCREEN_WIDTH/2, gao);
-    self->img2.frame = CGRectMake(SCREEN_WIDTH/2, he+imgheight+200+5, SCREEN_WIDTH/2, gao);
-    //                self->centerV.frame = CGRectMake(0, he+imgheight+200+20+gao, SCREEN_WIDTH, 100);
-    self->headerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, he+imgheight+200+5+gao);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self->img1.frame = CGRectMake(0, he+imgheight+200+5, SCREEN_WIDTH/2, gao);
+        self->img2.frame = CGRectMake(SCREEN_WIDTH/2, he+imgheight+200+5, SCREEN_WIDTH/2, gao);
+        self->headerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, he+imgheight+200+5+gao);
+    });
+    
 }
 
 

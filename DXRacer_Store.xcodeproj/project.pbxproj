@@ -1183,6 +1183,10 @@
 		08F82A8E20941D7A00D36A68 /* Manager_Other */ = {
 			isa = PBXGroup;
 			children = (
+				082D0D9620B4036F00886BDF /* dx.png */,
+				082DAF0F20B81B0800834A42 /* 客服.png */,
+				087B548920B2AA5C00C50DE6 /* xppd.jpg */,
+				083B561220D363AD00D84C8E /* miao1.png */,
 				75159BD520B0FA9F00F80AD3 /* 引导页 */,
 				08F82A9120941DB400D36A68 /* Manager */,
 				08F82A9020941DAA00D36A68 /* thirdPath */,
@@ -1259,10 +1263,6 @@
 		08F82AA120941F9100D36A68 /* 商城 */ = {
 			isa = PBXGroup;
 			children = (
-				082D0D9620B4036F00886BDF /* dx.png */,
-				082DAF0F20B81B0800834A42 /* 客服.png */,
-				087B548920B2AA5C00C50DE6 /* xppd.jpg */,
-				083B561220D363AD00D84C8E /* miao1.png */,
 				082D0D8F20B3AFEB00886BDF /* topfenlei */,
 				0888FB9820999422003D2A9F /* 新品 */,
 				083197EF20AA83990069176E /* HomePageViewController.h */,
@@ -1276,9 +1276,9 @@
 		08F82AA220941F9800D36A68 /* 分类 */ = {
 			isa = PBXGroup;
 			children = (
+				0887E81E20ABB95100174C84 /* productdetails */,
 				08F82AAB2094201F00D36A68 /* ClassifyViewController.h */,
 				08F82AAC2094201F00D36A68 /* ClassifyViewController.m */,
-				0887E81E20ABB95100174C84 /* productdetails */,
 				086C11E920A99D5100E654C4 /* ProductDetailsViewController.h */,
 				086C11EA20A99D5100E654C4 /* ProductDetailsViewController.m */,
 			);
@@ -2029,6 +2029,37 @@
 					"$(PROJECT_DIR)/DXRacer_Store/WechtSDK1.8.2",
 				);
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"FLAnimatedImage\"",
+					"-l\"FMDB\"",
+					"-l\"IQKeyboardManager\"",
+					"-l\"MBProgressHUD\"",
+					"-l\"MJExtension\"",
+					"-l\"MJRefresh\"",
+					"-l\"Masonry\"",
+					"-l\"SDWebImage\"",
+					"-l\"XYQRegexPattern\"",
+					"-l\"sqlite3\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"UIKit\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "dxracer.com.cn.DXRacer-Store";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2076,6 +2107,37 @@
 					"$(PROJECT_DIR)/DXRacer_Store/WechtSDK1.8.2",
 				);
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"FLAnimatedImage\"",
+					"-l\"FMDB\"",
+					"-l\"IQKeyboardManager\"",
+					"-l\"MBProgressHUD\"",
+					"-l\"MJExtension\"",
+					"-l\"MJRefresh\"",
+					"-l\"Masonry\"",
+					"-l\"SDWebImage\"",
+					"-l\"XYQRegexPattern\"",
+					"-l\"sqlite3\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"UIKit\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "dxracer.com.cn.DXRacer-Store";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";

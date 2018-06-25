@@ -51,6 +51,7 @@
     headImage.layer.cornerRadius = 4;
     headImage.backgroundColor = [UIColor whiteColor];
     headImage.contentMode = UIViewContentModeScaleAspectFit;
+    LRViewBorderRadius(headImage, 5, 1, [UIColor colorWithWhite:.8 alpha:.3]);
     [whiteView addSubview:headImage];
     
     cancelBtn= [UIButton buttonWithType:UIButtonTypeCustom];

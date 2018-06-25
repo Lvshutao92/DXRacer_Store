@@ -184,8 +184,8 @@
     }];
     [self.goosdCollectionView.mj_header beginRefreshing];
     self.goosdCollectionView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-        if (self.dataArray.count == self->number) {
-            [self.goosdCollectionView.mj_footer setState:MJRefreshStateNoMoreData];
+        if (weakSelf.dataArray.count == self->number) {
+            [weakSelf.goosdCollectionView.mj_footer setState:MJRefreshStateNoMoreData];
         }else {
             [weakSelf loddeSLList];
         }
