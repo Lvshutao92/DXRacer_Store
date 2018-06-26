@@ -121,7 +121,12 @@
     
     UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 50)];
     self.tableview.tableFooterView = v;
+    
+    
 }
+
+
+
 
 - (void)getOrderStatus{
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -176,7 +181,7 @@
         
         
         if (weakSelf.sectionArray.count == 0) {
-            UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+            UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT/2-150, SCREEN_WIDTH, 100)];
             lab.text = @"暂无任何订单";
             lab.textAlignment = NSTextAlignmentCenter;
             lab.textColor = [UIColor lightGrayColor];

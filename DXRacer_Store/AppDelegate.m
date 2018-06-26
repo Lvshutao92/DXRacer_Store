@@ -37,27 +37,36 @@ UIBackgroundTaskIdentifier taskId;
     [IQKeyboardManager sharedManager].enable = YES;
     [IQKeyboardManager sharedManager].shouldResignOnTouchOutside = YES;
    
-    //测试的时候改变info 里的版本号就可以了
-    NSArray *images = @[@"gud1.jpg",@"gud2.jpg",@"gud3.jpg",@"gud4.jpg",@"av3.jpg"];
-    BOOL y = [XTGuidePagesViewController isShow];
-    if (y) {
-        XTGuidePagesViewController *xt = [[XTGuidePagesViewController alloc] init];
-        self.window.rootViewController = xt;
-        xt.delegate = self;
-        [xt guidePageControllerWithImages:images];
-    }else{
-        [self clickEnter];
+//    //测试的时候改变info 里的版本号就可以了
+//    NSArray *images = @[@"gud1.jpg",@"gud2.jpg",@"gud3.jpg",@"gud4.jpg",@"av3.jpg"];
+//    BOOL y = [XTGuidePagesViewController isShow];
+//    if (y) {
+//        XTGuidePagesViewController *xt = [[XTGuidePagesViewController alloc] init];
+//        self.window.rootViewController = xt;
+//        xt.delegate = self;
+//        [xt guidePageControllerWithImages:images];
+//    }else{
+//        [self clickEnter];
+//    }
+    
+    
+    
+    self.window.backgroundColor = [UIColor whiteColor];
+    self.mainVC = [[MainTabbarViewController alloc]init];
+    self.mainVC.selectedIndex = 0;
+    for (UIBarItem *item in self.mainVC.tabBar.items) {
+        [item setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                      [UIFont fontWithName:@"Helvetica" size:13.0], NSFontAttributeName, nil]
+                            forState:UIControlStateNormal];
     }
+    self.window.rootViewController = self.mainVC;
+    [self.window makeKeyWindow];
     
     [self requestAuthorizationAddressBook];
 
-
-    
     [self initShortcutItems];
     
-    
     [NSThread sleepForTimeInterval:1];
-
     
     return YES;
 }

@@ -120,27 +120,6 @@
     
     
     
-    UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-80, SCREEN_HEIGHT-170, 60, 60)];
-    LRViewBorderRadius(lab, 30, 0, [UIColor clearColor]);
-    lab.backgroundColor = [UIColor colorWithWhite:.97 alpha:.3];
-//    [self.view addSubview:lab];
-//    [self.view bringSubviewToFront:lab];
-    
-    lab1 = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 60, 29.5)];
-    lab1.text = @"1";
-    lab1.textAlignment = NSTextAlignmentCenter;
-    [lab addSubview:lab1];
-    
-    UILabel *line = [[UILabel alloc]initWithFrame:CGRectMake(0, 29.5, 60, 1)];
-    line.backgroundColor = [UIColor colorWithWhite:.8 alpha:.5];
-    [lab addSubview:line];
-    
-    
-    lab2 = [[UILabel alloc]initWithFrame:CGRectMake(0, 30.5, 60, 30)];
-    lab2.textAlignment = NSTextAlignmentCenter;
-    [lab addSubview:lab2];
-    
-    
     seacherStr = @"";
     [self setUpReflash];
 }
@@ -204,16 +183,6 @@
         [weakSelf.dataArray removeAllObjects];
         self->number = [[diction objectForKey:@"total"] integerValue];
 
-        NSInteger yeshu;
-        if (self->number % 10 != 0) {
-            yeshu = self->number/10+1;
-        }else{
-            yeshu = self->number/10;
-        }
-        if (yeshu == 0) {
-            yeshu = 1;
-        }
-        self->lab2.text = [NSString stringWithFormat:@"%ld",yeshu];
 
         if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"itemsList"]] == YES) {
             NSMutableArray *arr = [diction objectForKey:@"itemsList"];
@@ -241,10 +210,11 @@
 - (void)loddeSLList{
     [self.goosdCollectionView.mj_header endRefreshing];
     __weak typeof(self) weakSelf = self;
-    NSString *str = [NSString stringWithFormat:@"product/type?type=%@&startRow=%ld&pageSize=10",self.idstr,page];
+    NSString *str = [NSString stringWithFormat:@"product/search?type=%@&startRow=%ld&pageSize=10",self.idstr,page];
     NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
+//        NSLog(@"-------******%@",diction);
         if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"itemsList"]] == YES) {
             NSMutableArray *arr = [diction objectForKey:@"itemsList"];
             for (NSDictionary *dicc in arr) {
@@ -264,27 +234,6 @@
 
 
 
-
-
-- (void)collectionView:(UICollectionView *)collectionView
-  didEndDisplayingCell:(UICollectionViewCell *)cell
-    forItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSIndexPath *firstIndexPath = [[self.goosdCollectionView indexPathsForVisibleItems] firstObject];
-    // 赋值给记录当前坐标的变量
-    NSInteger yeshu;
-    if (firstIndexPath.row % 10 != 0) {
-        yeshu = firstIndexPath.row/10+1;
-    }else{
-        yeshu = firstIndexPath.row/10;
-    }
-    
-    if (yeshu == 0) {
-        yeshu = 1;
-    }
-    
-    self->lab1.text = [NSString stringWithFormat:@"%ld",yeshu];
-    
-}
 
 
 

@@ -91,7 +91,9 @@
     int index = scrollView.contentOffset.x/scrollView.frame.size.width;
 //    NSLog(@"当前第几页====%d",index);
     
-    
+    NSDictionary *dict = [[NSDictionary alloc]init];
+    NSNotification *notification =[NSNotification notificationWithName:@"refresh" object:nil userInfo:dict];
+    [[NSNotificationCenter defaultCenter] postNotification:notification];
     
     /**
      *  此方法用于改变x轴
@@ -126,7 +128,9 @@
         self->_MeScroolView.contentOffset = CGPointMake((btn.tag-1000)*MeW, 0);
     }];
     
-    
+    NSDictionary *dict = [[NSDictionary alloc]init];
+    NSNotification *notification =[NSNotification notificationWithName:@"refresh" object:nil userInfo:dict];
+    [[NSNotificationCenter defaultCenter] postNotification:notification];
     
 }
 

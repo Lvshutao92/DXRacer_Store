@@ -1154,21 +1154,14 @@
         Model *model = [self.dataArray1 objectAtIndex:indexPath.row];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
-        
-//        SDWebImageManager *manager = [SDWebImageManager sharedManager];
-//        NSString* key = [manager cacheKeyForURL:[NSURL URLWithString:NSString(model.imgUrl)]];
-//        SDImageCache* cache = [SDImageCache sharedImageCache];
-//        //此方法会先从memory中取。
-//        cell.flanimatedImgView.image = [cache imageFromDiskCacheForKey:key];
-        
-        
-        
+        cell.imgview.hidden = YES;
         
         [cell.flanimatedImgView sd_setImageWithURL:[NSURL URLWithString:NSString(model.imgUrl)] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
             CGSize size = image.size;
             self->imgheight = SCREEN_WIDTH/size.width*size.height;
             cell.flanimatedImgView.frame = CGRectMake(0, 0, SCREEN_WIDTH, self->imgheight);
         }];
+        
         
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             FLAnimatedImage *animatedImg = [FLAnimatedImage animatedImageWithGIFData:[NSData dataWithContentsOfURL:[NSURL URLWithString:NSString(model.imgUrl)]]];

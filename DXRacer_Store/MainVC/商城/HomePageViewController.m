@@ -110,15 +110,16 @@
         if ([code isEqualToString:@"200"]){
             if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"object"]] == YES) {
                 NSMutableArray *arr = [diction objectForKey:@"object"];
-                
                 [Manager writewenjianming:@"SY_GuangGao_huancun.text" content:@"you"];
                 dispatch_async(dispatch_get_global_queue(0, 0), ^{
                     NSString *file = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
                     NSString *filewebCaches = [file stringByAppendingPathComponent:@"SY_GuangGao_Casher"];
-                    [weakSelf.lunboArray writeToFile:filewebCaches atomically:YES];
+                    [arr writeToFile:filewebCaches atomically:YES];
                 });
                 
                 
+                
+               
                 CGFloat he = 0.0;
                 CGFloat imgheight= 0.0;
 
@@ -160,7 +161,7 @@
                         [btn setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
                         
                         
-//                        LRViewBorderRadius(btn, 0, .5, [UIColor colorWithWhite:.9 alpha:.3]);
+                        LRViewBorderRadius(btn, 0, .5, [UIColor colorWithWhite:.9 alpha:.3]);
                         [btn addTarget:weakSelf action:@selector(clickbt:) forControlEvents:UIControlEventTouchUpInside];
                         [btn setTitle:model.linkUrl forState:UIControlStateNormal];
                         
@@ -200,7 +201,6 @@
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index{
     
 //    Model *model = [_lunboArray objectAtIndex:index];
-//
 //    Home_fenleilist_ViewController *details = [[Home_fenleilist_ViewController alloc]init];
 //
 //    details.idstr = model.id;
@@ -283,7 +283,7 @@
     
     img1 = [[UIImageView alloc]init];
     LRViewBorderRadius(img1, 0, .5, [UIColor colorWithWhite:.9 alpha:.3]);
-    img1.image = [UIImage imageNamed:@"miao1"];
+    img1.image = [UIImage imageNamed:@"miao"];
     img1.userInteractionEnabled = YES;
     img1.backgroundColor = [UIColor whiteColor];
     img1.contentMode = UIViewContentModeScaleAspectFit;
@@ -294,7 +294,7 @@
     img2 = [[UIImageView alloc]init];
     LRViewBorderRadius(img2, 0, .5, [UIColor colorWithWhite:.9 alpha:.3]);
     
-    img2.image = [UIImage imageNamed:@"xppd.jpg"];
+    img2.image = [UIImage imageNamed:@"xppd"];
     
     img2.userInteractionEnabled = YES;
     UITapGestureRecognizer *tap2 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickbtn2:)];
@@ -332,14 +332,26 @@
     
     
     
-    if ([[Manager redingwenjianming:@"SY_IMG_huancun.text"] isEqualToString:@"you"]) {
-        [self getDataFromlocal1];
-    }
-    if ([[Manager redingwenjianming:@"SY_GuangGao_huancun.text"] isEqualToString:@"you"]) {
-        [self getDataFromlocal2];
-    }
-    [self setUpReflash];
+    LRWeakSelf(self);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        if ([[Manager redingwenjianming:@"SY_IMG_huancun.text"] isEqualToString:@"you"]) {
+            [weakSelf getDataFromlocal1];
+        }
+        if ([[Manager redingwenjianming:@"SY_GuangGao_huancun.text"] isEqualToString:@"you"]) {
+            [weakSelf getDataFromlocal2];
+        }
+        if ([[Manager redingwenjianming:@"SY_bottom_huancun.text"] isEqualToString:@"you"]) {
+            [weakSelf getDataFromlocal3];
+        }
+    });
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf setUpReflash];
+    });
 }
+
+
+
+
 
 
 //刷新数据
@@ -355,6 +367,7 @@
             //通知主线程刷新
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf.tableview reloadData];
+                [weakSelf.collectionView3 reloadData];
             });
         });
     }];
@@ -442,6 +455,7 @@
                         btn.frame = CGRectMake(heit, 200+he, wid, imgheight);
             btn.adjustsImageWhenHighlighted=NO;
             [btn setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+            LRViewBorderRadius(btn, 0, .5, [UIColor colorWithWhite:.9 alpha:.3]);
             [btn addTarget:self action:@selector(clickbt:) forControlEvents:UIControlEventTouchUpInside];
             [btn setTitle:model.linkUrl forState:UIControlStateNormal];
             SDWebImageManager *manager = [SDWebImageManager sharedManager];
@@ -466,7 +480,52 @@
 
 
 
-
+- (void)getDataFromlocal3 {
+    LRWeakSelf(self);
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSString *file = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
+        NSString *filewebCaches = [file stringByAppendingPathComponent:@"SY_bottom_Casher"];
+        NSMutableArray  *fileDic = [NSMutableArray arrayWithContentsOfFile:filewebCaches];
+        if (fileDic == nil) {
+            [weakSelf getTopPic];
+        }else {
+            [weakSelf havecasher3:fileDic];
+        }
+        LRStrongSelf(weakSelf);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [strongSelf.tableview reloadData];
+            [strongSelf.collectionView3 reloadData];
+        });
+    });
+}
+- (void)havecasher3:(NSMutableArray *)arr{
+    self->fhlab.text = @"热门推荐";
+    self->fhlab.font = [UIFont systemFontOfSize:20];
+    self->fhlab.textAlignment = NSTextAlignmentCenter;
+    self->fhlab.textColor = [UIColor redColor];
+    [Manager changeWordSpaceForLabel:self->fhlab WithSpace:20];
+    
+    
+    [self.dataArray3 removeAllObjects];
+    for (NSDictionary *dicc in arr) {
+        Model *model = [Model mj_objectWithKeyValues:dicc];
+        [self.dataArray3 addObject:model];
+    }
+    
+    
+    NSInteger hangshu;
+    if (self.dataArray3.count%2 == 1) {
+        hangshu = self.dataArray3.count/2 + 1;
+    }else{
+        hangshu = self.dataArray3.count/2;
+    }
+    if (self.dataArray3.count == 0) {
+        hangshu = 0;
+    }
+    [self initCollectionView3:hangshu];
+    [self.tableview reloadData];
+    [self.collectionView3 reloadData];
+}
 
 
 
@@ -793,6 +852,14 @@
                     [weakSelf.dataArray3 addObject:model];
                 }
             }
+            
+            [Manager writewenjianming:@"SY_bottom_huancun.text" content:@"you"];
+            LRStrongSelf(weakSelf);
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                NSString *file = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
+                NSString *filewebCaches = [file stringByAppendingPathComponent:@"SY_bottom_Casher"];
+                [strongSelf.dataArray3 writeToFile:filewebCaches atomically:YES];
+            });
         }
         NSInteger hangshu;
         if (weakSelf.dataArray3.count%2 == 1) {

@@ -98,17 +98,13 @@
             [self->dataArray removeAllObjects];
             self->selectAll.selected = NO;
         }
-        
      
         [self->myTableView reloadData];
         [weakSelf setupMainView];
         [weakSelf setupBottomView];
         
-        
-        
         if ([code isEqualToString:@"401"] ){
             [Manager logout];
-
             UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-kTabBarHeight-50)];
             v.backgroundColor = [UIColor whiteColor];
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -119,12 +115,9 @@
             [btn setTitleColor:[UIColor colorWithWhite:.7 alpha:.5] forState:UIControlStateNormal];
             [v addSubview:btn];
             [weakSelf.view addSubview:v];
-            //[weakSelf.view bringSubviewToFront:v];
         }
-//        [hud hideAnimated:YES];
     } enError:^(NSError *error) {
-//        [hud hideAnimated:YES];
-        NSLog(@"-------%@",error);
+        //NSLog(@"-------%@",error);
     }];
     
  

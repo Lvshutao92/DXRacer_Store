@@ -13,6 +13,7 @@
 #import "PersonViewController.h"
 
 #import "CartViewController.h"
+#import "ZhuYe_ViewController.h"
 @interface MainTabbarViewController ()
 
 @end

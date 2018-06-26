@@ -14,6 +14,6 @@
 @property(nonatomic,strong)FLAnimatedImageView *flanimatedImgView;
 
 
-
+@property(nonatomic,strong)UIImageView *imgview;
 
 @end

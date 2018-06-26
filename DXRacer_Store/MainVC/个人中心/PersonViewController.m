@@ -48,15 +48,10 @@
 
 @implementation PersonViewController
 - (void)viewWillAppear:(BOOL)animated{
-    
+    [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = NO;
     
-    
     [self getInfomation];
-    if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"phone.text"]] != YES) {
-        user1.text = @"登录/注册";
-        userImg.image = [UIImage imageNamed:@"tx.jpg"];
-    }
 }
 
 
@@ -70,45 +65,34 @@
     self.tableview.mj_header = header;
 }
 - (void)getInfomation{
+    if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"phone.text"]] != YES) {
+        user1.text = @"登录/注册";
+        userImg.image = [UIImage imageNamed:@"人"];
+    }
     LRWeakSelf(self);
     [Manager requestPOSTWithURLStr:KURLNSString(@"account") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-//        NSLog(@"%@",diction);
-        
-        [Manager writewenjianming:@"img.text" content:[diction objectForKey:@"iconUrl"]];
-        [Manager writewenjianming:@"nikname.text" content:[diction objectForKey:@"nickName"]];
-        
-        [self->userImg sd_setImageWithURL:[NSURL URLWithString:[diction objectForKey:@"iconUrl"]]placeholderImage:[UIImage imageNamed:@"tx.jpg"]];
-        
-        if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"phone.text"]] == YES) {
-            if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"nickName"]]==YES) {
-                self->user1.text = [diction objectForKey:@"nickName"];
-            }else{
-                self->user1.text = [Manager redingwenjianming:@"phone.text"];
-                self->userImg.image = [UIImage imageNamed:@"tx.jpg"];
-            }
-        }else{
-            self->user1.text = @"登录/注册";
-            self->userImg.image = [UIImage imageNamed:@"tx.jpg"];
-        }
-        
-        
+        //NSLog(@"----%@",diction);
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"401"]){
             [Manager logout];
             self->user1.text = @"登录/注册";
-            self->userImg.image = [UIImage imageNamed:@"tx.jpg"];
-//            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"您的账号已在其他设备登录，请重新登录" message:@"温馨提示" preferredStyle:1];
-//            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-//            }];
-//            [alert addAction:cancel];
-//            UIAlertAction *sure = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//                LoginViewController *login = [[LoginViewController alloc]init];
-//                login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-//                [weakSelf presentViewController:login animated:YES completion:nil];
-//            }];
-//            [alert addAction:sure];
-//            [weakSelf presentViewController:alert animated:YES completion:nil];
+            self->userImg.image = [UIImage imageNamed:@"人"];
+        }else{
+            [Manager writewenjianming:@"img.text" content:[diction objectForKey:@"iconUrl"]];
+            [Manager writewenjianming:@"nikname.text" content:[diction objectForKey:@"nickName"]];
+            if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"phone.text"]] == YES) {
+                if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"nickName"]]==YES) {
+                    self->user1.text = [diction objectForKey:@"nickName"];
+                    [self->userImg sd_setImageWithURL:[NSURL URLWithString:[diction objectForKey:@"iconUrl"]]];
+                }else{
+                    self->user1.text = [Manager redingwenjianming:@"phone.text"];
+                    self->userImg.image = [UIImage imageNamed:@"人"];
+                }
+            }else{
+                self->user1.text = @"登录/注册";
+                self->userImg.image = [UIImage imageNamed:@"人"];
+            }
         }
         [weakSelf.tableview.mj_header endRefreshing];
     } enError:^(NSError *error) {
@@ -143,14 +127,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    
-    
-    
     self.dataArray = [@[@"我的订单",@"我的优惠券",@"领券中心",@"我的收藏",@"QQ客服",@"联系我们",@"关于我们"]mutableCopy];
-    
-    
-    
-    
     
     
     UIView *btnview = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];
@@ -190,23 +167,44 @@
     [v addSubview:imgV];
     
 
+    //*************订单*********************
+    /*
+    UILabel *bgv0 = [[UILabel alloc]initWithFrame:CGRectMake(0, 200, SCREEN_WIDTH, 49)];
+    bgv0.backgroundColor = [UIColor whiteColor];
+    bgv0.userInteractionEnabled = YES;
+    [v addSubview:bgv0];
     
-    
-     /*
-    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 200, SCREEN_WIDTH, 55)];
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, 100, 49)];
     label.backgroundColor = [UIColor whiteColor];
-    label.text = @"  我的订单";
-    [v addSubview:label];
+    label.text = @"我的订单";
+    [bgv0 addSubview:label];
+    
+    button5 = [[SQCustomButton alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-95, 0, 90, 49)
+                                              type:SQCustomButtonRightImageType
+                                         imageSize:CGSizeMake(25, 25) midmargin:0];
+    button5.isShowSelectBackgroudColor = NO;
+    button5.imageView.image = [UIImage imageNamed:@"箭头3"];
+    button5.titleLabel.text = @"查看更多";
+    button5.titleLabel.font = [UIFont systemFontOfSize:16];
+    [bgv0 addSubview:button5];
+    [button5 touchAction:^(SQCustomButton * _Nonnull button) {
+        if ([Manager redingwenjianming:@"phone.text"]!= nil){
+            TWScrollViewVC *scr = [[TWScrollViewVC alloc] initWithAddVCARY:@[[OneVC new],[TwoVC new],[ThreeVC new],[FourVC new],[FiveVC new]]TitleS:@[@"全部订单",@"待付款",@"待发货",@"待收货",@"已完成"] index:0];
+            [self.navigationController pushViewController:scr animated:YES];
+        }else{
+            LoginViewController *login = [[LoginViewController alloc]init];
+            login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+            [self presentViewController:login animated:YES completion:nil];
+        }
+    }];
+    
+    
     UILabel *bgv = [[UILabel alloc]initWithFrame:CGRectMake(0, 250, SCREEN_WIDTH, 100)];
     bgv.backgroundColor = [UIColor whiteColor];
     bgv.userInteractionEnabled = YES;
     [v addSubview:bgv];
     
-    
-    
-    
-   
-    button1 = [[SQCustomButton alloc]initWithFrame:CGRectMake(0, 15, SCREEN_WIDTH/5, 70)
+    button1 = [[SQCustomButton alloc]initWithFrame:CGRectMake(0, 15, SCREEN_WIDTH/4, 70)
                                               type:SQCustomButtonTopImageType
                                          imageSize:CGSizeMake(35, 35) midmargin:10];
     button1.isShowSelectBackgroudColor = NO;
@@ -215,7 +213,7 @@
     [bgv addSubview:button1];
     [button1 touchAction:^(SQCustomButton * _Nonnull button) {
         if ([Manager redingwenjianming:@"phone.text"]!= nil){
-            TWScrollViewVC *scr = [[TWScrollViewVC alloc] initWithAddVCARY:@[[OneVC new],[TwoVC new],[ThreeVC new],[FourVC new],[FiveVC new]]TitleS:@[@"待付款",@"待发货",@"待收货",@"已完成",@"售后"] index:0];
+            TWScrollViewVC *scr = [[TWScrollViewVC alloc] initWithAddVCARY:@[[OneVC new],[TwoVC new],[ThreeVC new],[FourVC new],[FiveVC new]]TitleS:@[@"全部订单",@"待付款",@"待发货",@"待收货",@"已完成"] index:1];
             [self.navigationController pushViewController:scr animated:YES];
         }else{
             LoginViewController *login = [[LoginViewController alloc]init];
@@ -224,7 +222,7 @@
         }
     }];
     
-    button2 = [[SQCustomButton alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/5, 15, SCREEN_WIDTH/5, 70)
+    button2 = [[SQCustomButton alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/4, 15, SCREEN_WIDTH/4, 70)
                                               type:SQCustomButtonTopImageType
                                          imageSize:CGSizeMake(35, 35) midmargin:10];
     button2.isShowSelectBackgroudColor = NO;
@@ -233,7 +231,7 @@
     [bgv addSubview:button2];
     [button2 touchAction:^(SQCustomButton * _Nonnull button) {
         if ([Manager redingwenjianming:@"phone.text"]!= nil){
-            TWScrollViewVC *scr = [[TWScrollViewVC alloc] initWithAddVCARY:@[[OneVC new],[TwoVC new],[ThreeVC new],[FourVC new],[FiveVC new]]TitleS:@[@"待付款",@"待发货",@"待收货",@"已完成",@"售后"] index:1];
+            TWScrollViewVC *scr = [[TWScrollViewVC alloc] initWithAddVCARY:@[[OneVC new],[TwoVC new],[ThreeVC new],[FourVC new],[FiveVC new]]TitleS:@[@"全部订单",@"待付款",@"待发货",@"待收货",@"已完成"] index:2];
             [self.navigationController pushViewController:scr animated:YES];
         }else{
             LoginViewController *login = [[LoginViewController alloc]init];
@@ -243,7 +241,7 @@
     }];
     
     
-    button3 = [[SQCustomButton alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/5*2, 15, SCREEN_WIDTH/5, 70)
+    button3 = [[SQCustomButton alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/4*2, 15, SCREEN_WIDTH/4, 70)
                                               type:SQCustomButtonTopImageType
                                          imageSize:CGSizeMake(35, 35) midmargin:10];
     button3.isShowSelectBackgroudColor = NO;
@@ -252,7 +250,7 @@
     [bgv addSubview:button3];
     [button3 touchAction:^(SQCustomButton * _Nonnull button) {
         if ([Manager redingwenjianming:@"phone.text"]!= nil){
-            TWScrollViewVC *scr = [[TWScrollViewVC alloc] initWithAddVCARY:@[[OneVC new],[TwoVC new],[ThreeVC new],[FourVC new],[FiveVC new]]TitleS:@[@"待付款",@"待发货",@"待收货",@"已完成",@"售后"] index:2];
+            TWScrollViewVC *scr = [[TWScrollViewVC alloc] initWithAddVCARY:@[[OneVC new],[TwoVC new],[ThreeVC new],[FourVC new],[FiveVC new]]TitleS:@[@"全部订单",@"待付款",@"待发货",@"待收货",@"已完成"] index:3];
             [self.navigationController pushViewController:scr animated:YES];
         }else{
             LoginViewController *login = [[LoginViewController alloc]init];
@@ -261,7 +259,7 @@
         }
     }];
     
-    button4 = [[SQCustomButton alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/5*3, 15, SCREEN_WIDTH/5, 70)
+    button4 = [[SQCustomButton alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/4*3, 15, SCREEN_WIDTH/4, 70)
                                               type:SQCustomButtonTopImageType
                                          imageSize:CGSizeMake(35, 35) midmargin:10];
     button4.isShowSelectBackgroudColor = NO;
@@ -270,25 +268,7 @@
     [bgv addSubview:button4];
     [button4 touchAction:^(SQCustomButton * _Nonnull button) {
         if ([Manager redingwenjianming:@"phone.text"]!= nil){
-            TWScrollViewVC *scr = [[TWScrollViewVC alloc] initWithAddVCARY:@[[OneVC new],[TwoVC new],[ThreeVC new],[FourVC new],[FiveVC new]]TitleS:@[@"待付款",@"待发货",@"待收货",@"已完成",@"售后"] index:3];
-            [self.navigationController pushViewController:scr animated:YES];
-        }else{
-            LoginViewController *login = [[LoginViewController alloc]init];
-            login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-            [self presentViewController:login animated:YES completion:nil];
-        }
-    }];
-    
-    button5 = [[SQCustomButton alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/5*4, 15, SCREEN_WIDTH/5, 70)
-                                              type:SQCustomButtonTopImageType
-                                         imageSize:CGSizeMake(35, 35) midmargin:10];
-    button5.isShowSelectBackgroudColor = NO;
-    button5.imageView.image = [UIImage imageNamed:@"售后"];
-    button5.titleLabel.text = @"售后";
-    [bgv addSubview:button5];
-    [button5 touchAction:^(SQCustomButton * _Nonnull button) {
-        if ([Manager redingwenjianming:@"phone.text"]!= nil){
-            TWScrollViewVC *scr = [[TWScrollViewVC alloc] initWithAddVCARY:@[[OneVC new],[TwoVC new],[ThreeVC new],[FourVC new],[FiveVC new]]TitleS:@[@"待付款",@"待发货",@"待收货",@"已完成",@"售后"] index:4];
+            TWScrollViewVC *scr = [[TWScrollViewVC alloc] initWithAddVCARY:@[[OneVC new],[TwoVC new],[ThreeVC new],[FourVC new],[FiveVC new]]TitleS:@[@"全部订单",@"待付款",@"待发货",@"待收货",@"已完成"] index:4];
             [self.navigationController pushViewController:scr animated:YES];
         }else{
             LoginViewController *login = [[LoginViewController alloc]init];
@@ -302,6 +282,12 @@
     button4.backgroundColor = [UIColor whiteColor];
     button5.backgroundColor = [UIColor whiteColor];
     */
+    
+    
+    
+    
+    
+    
     
     UILabel *botomV = [[UILabel alloc]initWithFrame:CGRectMake(0, 140, SCREEN_WIDTH, 60)];
     botomV.backgroundColor = [UIColor colorWithWhite:.8 alpha:.3];
@@ -317,13 +303,14 @@
     btn.titleLabel.font = [UIFont systemFontOfSize:16];
     [botomV addSubview:btn];
     [botomV bringSubviewToFront:btn];
+    LRWeakSelf(self);
     [btn touchAction:^(SQCustomButton * _Nonnull button) {
         if ([Manager redingwenjianming:@"phone.text"]!= nil){
-            [self dengdaiupdate];
+            [weakSelf dengdaiupdate];
         }else{
             LoginViewController *login = [[LoginViewController alloc]init];
             login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-            [self presentViewController:login animated:YES completion:nil];
+            [weakSelf presentViewController:login animated:YES completion:nil];
         }
     }];
     

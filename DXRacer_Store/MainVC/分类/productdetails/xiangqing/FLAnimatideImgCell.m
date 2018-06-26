@@ -23,7 +23,13 @@
 
 
 
-
+- (UIImageView *)imgview{
+    if (_imgview == nil) {
+        self.imgview = [[FLAnimatedImageView alloc]init];
+        self.imgview.frame = CGRectMake(0, 0, SCREEN_WIDTH, 220);
+    }
+    return _imgview;
+}
 - (FLAnimatedImageView *)flanimatedImgView{
     if (_flanimatedImgView == nil) {
         self.flanimatedImgView = [[FLAnimatedImageView alloc]init];
@@ -34,6 +40,7 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        [self.contentView addSubview:self.imgview];
         [self.contentView addSubview:self.flanimatedImgView];
     }
     return self;

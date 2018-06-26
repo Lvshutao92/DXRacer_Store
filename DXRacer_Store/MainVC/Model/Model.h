@@ -13,6 +13,10 @@
 @property (nonatomic,assign) NSInteger number;
 
 
+@property (nonatomic,strong) NSString *width;
+@property (nonatomic,strong) NSString *height;
+
+
 @property (nonatomic,strong) NSString *amount;
 @property (nonatomic,strong) NSString *business_id;
 @property (nonatomic,strong) NSString *chair_color_name;

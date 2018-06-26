@@ -73,14 +73,14 @@
     
     
     
-    LB_stock = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(headImage.frame)+20, CGRectGetMaxY(LB_price.frame), 100, 20)];
+    LB_stock = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(headImage.frame)+20, CGRectGetMaxY(LB_price.frame), 120, 20)];
     LB_stock.textColor = [UIColor grayColor];
     LB_stock.font = [UIFont systemFontOfSize:10];
     [whiteView addSubview:LB_stock];
     
     
     
-    LB_kucun = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(headImage.frame)+120, CGRectGetMaxY(LB_price.frame), SCREEN_WIDTH-CGRectGetMaxX(headImage.frame)-120, 20)];
+    LB_kucun = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(headImage.frame)+140, CGRectGetMaxY(LB_price.frame), SCREEN_WIDTH-CGRectGetMaxX(headImage.frame)-120, 20)];
     LB_kucun.textColor = [UIColor blueColor];
     LB_kucun.font = [UIFont systemFontOfSize:14];
     LB_kucun.text = @"";

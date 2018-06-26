@@ -142,7 +142,7 @@
 
 - (void)setupview{
     bgimg = [[UIImageView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/2-45, SCREEN_HEIGHT/2-250, 90, 90)];
-    bgimg.image = [UIImage imageNamed:@"tx.jpg"];
+    bgimg.image = [UIImage imageNamed:@"人"];
     LRViewBorderRadius(bgimg, 45, 0, [UIColor whiteColor]);
     bgimg.userInteractionEnabled = YES;
     [self.view addSubview:bgimg];
