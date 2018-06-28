@@ -62,6 +62,10 @@ UIBackgroundTaskIdentifier taskId;
     self.window.rootViewController = self.mainVC;
     [self.window makeKeyWindow];
     
+    
+  
+    
+    
     [self requestAuthorizationAddressBook];
 
     [self initShortcutItems];

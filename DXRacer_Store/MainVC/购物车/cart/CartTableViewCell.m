@@ -165,7 +165,7 @@
     //时间
     self.dateLabel = [[UILabel alloc]init];
     self.dateLabel.font = [UIFont systemFontOfSize:18];
-    self.dateLabel.textColor = [UIColor redColor];
+    self.dateLabel.textColor = RGBACOLOR(49, 184, 243, 1);
 //    self.dateLabel.text = @"2015-12-03 17:49";
     [bgView addSubview:self.dateLabel];
     
@@ -173,8 +173,8 @@
     self.priceLabel = [[UILabel alloc]init];
     self.priceLabel.font = [UIFont boldSystemFontOfSize:12];
     self.priceLabel.textColor = [UIColor whiteColor];
-    self.priceLabel.backgroundColor = [UIColor redColor];
-    LRViewBorderRadius(self.priceLabel, 10, 0, [UIColor clearColor]);
+    self.priceLabel.backgroundColor = RGBACOLOR(49, 184, 243, 1);
+//    LRViewBorderRadius(self.priceLabel, 10, 0, [UIColor clearColor]);
     self.priceLabel.textAlignment = NSTextAlignmentCenter;
     [bgView addSubview:self.priceLabel];
     

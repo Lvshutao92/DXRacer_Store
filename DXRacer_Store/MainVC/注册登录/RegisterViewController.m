@@ -390,7 +390,7 @@
     
     btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(30, SCREEN_HEIGHT/2+90, SCREEN_WIDTH-60, 50);
-    btn.backgroundColor = [UIColor redColor];
+    btn.backgroundColor = RGBACOLOR(49, 184, 243, 1);
     LRViewBorderRadius(btn, 8, 0, [UIColor clearColor]);
     
     
@@ -401,16 +401,16 @@
        [btn setTitle:@"提交" forState:UIControlStateNormal];
     }
     
-    CAGradientLayer *_gradientLayer = [CAGradientLayer layer];
-    _gradientLayer.bounds = btn.bounds;
-    _gradientLayer.borderWidth = 0;
-    _gradientLayer.frame = btn.bounds;
-    _gradientLayer.colors = [NSArray arrayWithObjects:
-                             (id)RGBACOLOR(220, 20, 60, 1.0).CGColor,
-                             (id)RGBACOLOR(255, 0, 0, 1.0).CGColor, nil ,nil];
-    _gradientLayer.startPoint = CGPointMake(0, 0);
-    _gradientLayer.endPoint   = CGPointMake(1.0, 1.0);
-    [btn.layer insertSublayer:_gradientLayer atIndex:0];
+//    CAGradientLayer *_gradientLayer = [CAGradientLayer layer];
+//    _gradientLayer.bounds = btn.bounds;
+//    _gradientLayer.borderWidth = 0;
+//    _gradientLayer.frame = btn.bounds;
+//    _gradientLayer.colors = [NSArray arrayWithObjects:
+//                             (id)RGBACOLOR(220, 20, 60, 1.0).CGColor,
+//                             (id)RGBACOLOR(255, 0, 0, 1.0).CGColor, nil ,nil];
+//    _gradientLayer.startPoint = CGPointMake(0, 0);
+//    _gradientLayer.endPoint   = CGPointMake(1.0, 1.0);
+//    [btn.layer insertSublayer:_gradientLayer atIndex:0];
     
     
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];

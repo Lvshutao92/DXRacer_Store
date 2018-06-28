@@ -109,7 +109,7 @@
             v.backgroundColor = [UIColor whiteColor];
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
             btn.frame = CGRectMake(SCREEN_WIDTH/2-60, SCREEN_HEIGHT/2-22.5, 120, 45);
-            [btn setTitle:@"去登录" forState:UIControlStateNormal];
+            [btn setTitle:@"前往登录" forState:UIControlStateNormal];
             [btn addTarget:self action:@selector(ciclk) forControlEvents:UIControlEventTouchUpInside];
             LRViewBorderRadius(btn, 8, 1, [UIColor colorWithWhite:.7 alpha:.5]);
             [btn setTitleColor:[UIColor colorWithWhite:.7 alpha:.5] forState:UIControlStateNormal];
@@ -228,11 +228,11 @@
         priceLabel = [[UILabel alloc]init];
         priceLabel.text = @"￥0.00";
         priceLabel.font = [UIFont boldSystemFontOfSize:16];
-        priceLabel.textColor = [UIColor redColor];
+        priceLabel.textColor = RGBACOLOR(49, 184, 243, 1);
         [bgView addSubview:priceLabel];
         //结算按钮
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn.backgroundColor = [UIColor redColor];
+        btn.backgroundColor = RGBACOLOR(49, 184, 243, 1);
         [btn setTitle:@"去结算" forState:UIControlStateNormal];
         [btn addTarget:self action:@selector(goPayBtnClick) forControlEvents:UIControlEventTouchUpInside];
         [bgView addSubview:btn];
@@ -270,7 +270,7 @@
         
     }else{
         UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn1.backgroundColor = [UIColor redColor];
+        btn1.backgroundColor = RGBACOLOR(49, 184, 243, 1);
         [btn1 setTitle:@"删除" forState:UIControlStateNormal];
         [btn1 addTarget:self action:@selector(clickgodeleate) forControlEvents:UIControlEventTouchUpInside];
         [bgView addSubview:btn1];

@@ -356,7 +356,7 @@
     [footerBgv1 addSubview:freightLab];
     
     shifukuanLab = [[UILabel alloc]initWithFrame:CGRectMake(10, 61, SCREEN_WIDTH-20, 39)];
-    shifukuanLab.textColor = [UIColor redColor];
+    shifukuanLab.textColor = RGBACOLOR(49, 184, 243, 1);
     [footerBgv1 addSubview:shifukuanLab];
     
     ProductTotalPriceLab.font = [UIFont systemFontOfSize:15];
@@ -394,7 +394,7 @@
     cell.lab2.text = [NSString stringWithFormat:@"X%@",model.quantity];
     
     cell.lab5.text = model.productAttrs;
-    
+    cell.lab3.textColor = RGBACOLOR(49, 184, 243, 1);
     return cell;
 }
 
@@ -464,7 +464,7 @@
     [self.view addSubview:v];
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.backgroundColor = [UIColor redColor];
+    btn.backgroundColor = RGBACOLOR(49, 184, 243, 1);
     btn.frame = CGRectMake(SCREEN_WIDTH-95, 10, 90, 30);
     [btn setTitle:btn1Title forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:14];

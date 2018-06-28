@@ -29,6 +29,7 @@
     NSInteger index_j;
     
     CGFloat collectionVHeight;
+    
 }
 @property(nonatomic,strong)UISearchBar *customSearchBar;
 
@@ -105,7 +106,7 @@
     __weak typeof(self) weakSelf = self;
     [Manager requestGETWithURLStr:KURLNSString(@"index/advert") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-//        NSLog(@"******%@",diction);
+//        NSLog(@"111111******%@",diction);
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
             if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"object"]] == YES) {
@@ -180,14 +181,16 @@
                         heit = heit + wid;
                     }
                 }
-                //NSLog(@"----%f",he+imgheight+200);
                 CGFloat gao = SCREEN_WIDTH/2*18/32;
-                //NSLog(@"-------%lf",gao);
                 self->img1.frame = CGRectMake(0, he+imgheight+200+5, SCREEN_WIDTH/2, gao);
                 self->img2.frame = CGRectMake(SCREEN_WIDTH/2, he+imgheight+200+5, SCREEN_WIDTH/2, gao);
-//                self->centerV.frame = CGRectMake(0, he+imgheight+200+20+gao, SCREEN_WIDTH, 100);
                 self->headerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, he+imgheight+200+5+gao);
             }
+        }else{
+            CGFloat gao = SCREEN_WIDTH/2*18/32;
+            self->img1.frame = CGRectMake(0, 200+5, SCREEN_WIDTH/2, gao);
+            self->img2.frame = CGRectMake(SCREEN_WIDTH/2, 200, SCREEN_WIDTH/2, gao);
+            self->headerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, 200+gao);
         }
         [weakSelf.tableview reloadData];
     } enError:^(NSError *error) {
@@ -302,51 +305,33 @@
     [self->headerV addSubview:img2];
     
     
-    
-//    centerV = [[UIView alloc]init];
-//    centerV.backgroundColor = [UIColor whiteColor];
-//    [headerV addSubview:centerV];
-//    cenLab1 = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, SCREEN_WIDTH, 40)];
-//    cenLab1.textAlignment = NSTextAlignmentCenter;
-//    cenLab1.text = @"8.15中秋佳节";
-//    cenLab1.font = [UIFont systemFontOfSize:28];
-//    [centerV addSubview:cenLab1];
-//    cenLab2 = [[UILabel alloc] initWithFrame:CGRectMake(0, 65, SCREEN_WIDTH, 20)];
-//    cenLab2.textAlignment = NSTextAlignmentCenter;
-//    cenLab2.text = @"预定抢半价 椅子低价秒";
-//    cenLab2.font = [UIFont systemFontOfSize:16];
-//    cenLab2.textColor = [UIColor grayColor];
-//    [centerV addSubview:cenLab2];
-    
-    
-    
     footerV = [[UIView alloc]init];
     self.tableview.tableFooterView = footerV;
     footerV.backgroundColor = [UIColor colorWithWhite:.9 alpha:.3];
-    
-    fhlab = [[UILabel alloc]init];
-    [footerV addSubview:fhlab];
-    
+   
     
     [self NavigationBa];
     
     
     
+//    LRWeakSelf(self);
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+//        if ([[Manager redingwenjianming:@"SY_IMG_huancun.text"] isEqualToString:@"you"]) {
+//            [weakSelf getDataFromlocal1];
+//        }
+//        if ([[Manager redingwenjianming:@"SY_GuangGao_huancun.text"] isEqualToString:@"you"]) {
+//            [weakSelf getDataFromlocal2];
+//        }
+//        if ([[Manager redingwenjianming:@"SY_bottom_huancun.text"] isEqualToString:@"you"]) {
+//            [weakSelf getDataFromlocal3];
+//        }
+//    });
+    
     LRWeakSelf(self);
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        if ([[Manager redingwenjianming:@"SY_IMG_huancun.text"] isEqualToString:@"you"]) {
-            [weakSelf getDataFromlocal1];
-        }
-        if ([[Manager redingwenjianming:@"SY_GuangGao_huancun.text"] isEqualToString:@"you"]) {
-            [weakSelf getDataFromlocal2];
-        }
-        if ([[Manager redingwenjianming:@"SY_bottom_huancun.text"] isEqualToString:@"you"]) {
-            [weakSelf getDataFromlocal3];
-        }
-    });
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf setUpReflash];
-    });
+    if ([[Manager redingwenjianming:@"SY_IMG_huancun.text"] isEqualToString:@"you"]) {
+        [weakSelf getDataFromlocal1];
+    }
+    [self setUpReflash];
 }
 
 
@@ -499,13 +484,7 @@
     });
 }
 - (void)havecasher3:(NSMutableArray *)arr{
-    self->fhlab.text = @"热门推荐";
-    self->fhlab.font = [UIFont systemFontOfSize:20];
-    self->fhlab.textAlignment = NSTextAlignmentCenter;
-    self->fhlab.textColor = [UIColor redColor];
-    [Manager changeWordSpaceForLabel:self->fhlab WithSpace:20];
-    
-    
+   
     [self.dataArray3 removeAllObjects];
     for (NSDictionary *dicc in arr) {
         Model *model = [Model mj_objectWithKeyValues:dicc];
@@ -756,14 +735,7 @@
 - (void) initCollectionView3:(NSInteger )hangshu
 {
     
-    if (hangshu == 0) {
-        footerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, 0);
-        fhlab.frame= CGRectMake(SCREEN_WIDTH/2-75, 0, 150, 0);
-    }else{
-        footerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, 50 + hangshu * 255);
-        fhlab.frame= CGRectMake(SCREEN_WIDTH/2-75, 0, 150, 50);
-    }
-    
+    footerV.frame = CGRectMake(0, 0, SCREEN_WIDTH, 10+hangshu * 255);
     
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
@@ -773,7 +745,7 @@
     flowLayout.minimumInteritemSpacing = 0;
     flowLayout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
     //设置CollectionView的属性
-    self.collectionView3 = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 50, SCREEN_WIDTH, 255*hangshu) collectionViewLayout:flowLayout];
+    self.collectionView3 = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 10, SCREEN_WIDTH, 255*hangshu) collectionViewLayout:flowLayout];
     self.collectionView3.backgroundColor = [UIColor whiteColor];
     self.collectionView3.delegate = self;
     self.collectionView3.dataSource = self;
@@ -811,14 +783,13 @@
     }
     
     cell.lab1.text = model.promotionTitle;
-    
     cell.lab2.text = model.model_name;
-    cell.lab3.text = model.model_no;
-    cell.lab4.text = [Manager jinegeshi:model.sale_price];
+    cell.lab4.text = model.model_no;
+    cell.lab3.text = [Manager jinegeshi:model.sale_price];
     
     
-    cell.lab1.backgroundColor = [UIColor redColor];
-    
+    cell.lab1.backgroundColor = RGBACOLOR(49, 184, 243, 1);
+    cell.lab3.textColor = RGBACOLOR(49, 184, 243, 1);
     return cell;
 }
 #pragma mark  点击CollectionView触发事件
@@ -838,12 +809,7 @@
 //        NSLog(@"******%@",[diction objectForKey:@"object"]);
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
-            self->fhlab.text = @"热门推荐";
-            self->fhlab.font = [UIFont systemFontOfSize:20];
-            self->fhlab.textAlignment = NSTextAlignmentCenter;
-            self->fhlab.textColor = [UIColor redColor];
-            [Manager changeWordSpaceForLabel:self->fhlab WithSpace:20];
-            
+           
             if ([Manager judgeWhetherIsEmptyAnyObject:[diction objectForKey:@"object"]] == YES) {
                 NSMutableArray *arr = [diction objectForKey:@"object"];
                 [weakSelf.dataArray3 removeAllObjects];

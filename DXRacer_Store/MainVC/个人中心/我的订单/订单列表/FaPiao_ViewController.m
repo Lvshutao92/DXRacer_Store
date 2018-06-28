@@ -72,7 +72,7 @@
     
     comitbtn = [UIButton buttonWithType:UIButtonTypeCustom];
     comitbtn.frame = CGRectMake(0, SCREEN_HEIGHT-50, SCREEN_WIDTH, 50);
-    comitbtn.backgroundColor = [UIColor redColor];
+    comitbtn.backgroundColor = RGBACOLOR(49, 184, 243, 1);
     [comitbtn setTitle:@"提交" forState:UIControlStateNormal];
     [comitbtn addTarget:self action:@selector(clicksave) forControlEvents:UIControlEventTouchUpInside];
 //    NSLog(@"------%@",self.status);
@@ -515,18 +515,18 @@
         [self putong];
     }
     
-    lab1.textColor = [UIColor redColor];
-    lab2.textColor = [UIColor redColor];
-    lab3.textColor = [UIColor redColor];
-    lab4.textColor = [UIColor redColor];
-    lab5.textColor = [UIColor redColor];
-    lab6.textColor = [UIColor redColor];
-    
-    lab7.textColor = [UIColor redColor];
-    lab8.textColor = [UIColor redColor];
-    lab9.textColor = [UIColor redColor];
-    lab10.textColor = [UIColor redColor];
-    lab11.textColor = [UIColor redColor];
+//    lab1.textColor = [UIColor redColor];
+//    lab2.textColor = [UIColor redColor];
+//    lab3.textColor = [UIColor redColor];
+//    lab4.textColor = [UIColor redColor];
+//    lab5.textColor = [UIColor redColor];
+//    lab6.textColor = [UIColor redColor];
+//
+//    lab7.textColor = [UIColor redColor];
+//    lab8.textColor = [UIColor redColor];
+//    lab9.textColor = [UIColor redColor];
+//    lab10.textColor = [UIColor redColor];
+//    lab11.textColor = [UIColor redColor];
 }
 
 

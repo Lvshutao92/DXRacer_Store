@@ -31,7 +31,7 @@
         username.text = [Manager redingwenjianming:@"nikname.text"];
     }
     phone.text = [Manager redingwenjianming:@"phone.text"];
-    [userImg sd_setImageWithURL:[NSURL URLWithString:[Manager redingwenjianming:@"img.text"]]placeholderImage:[UIImage imageNamed:@"tx.jpg"]];
+    [userImg sd_setImageWithURL:[NSURL URLWithString:[Manager redingwenjianming:@"img.text"]]placeholderImage:[UIImage imageNamed:@"人"]];
 }
 - (void)viewWillDisappear:(BOOL)animated{
     self.tabBarController.tabBar.hidden = YES;
@@ -60,7 +60,7 @@
     btns.frame = CGRectMake(0, 15, SCREEN_WIDTH, 50);
     btns.backgroundColor = [UIColor whiteColor];
     [btns setTitle:@"退出登录" forState:UIControlStateNormal];
-    [btns setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    [btns setTitleColor:RGBACOLOR(49, 184, 243, 1) forState:UIControlStateNormal];
     [btns addTarget:self action:@selector(cilckFooterImg) forControlEvents:UIControlEventTouchUpInside];
     [footer addSubview:btns];
     //header

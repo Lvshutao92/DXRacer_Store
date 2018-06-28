@@ -20,15 +20,15 @@
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        
         [self.navigationBar setBarTintColor:[UIColor whiteColor]];
         [self.navigationBar setTintColor:[UIColor blackColor]];
-        
         self.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor blackColor]};
+//        [self.navigationController.navigationBar setBarTintColor: RGBACOLOR(49, 184, 243, 1)];
+//        [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+//        self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
     }
     return self;
 }
-
 
 
 - (void)didReceiveMemoryWarning {

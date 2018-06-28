@@ -102,15 +102,19 @@
     self.navigationController.navigationBarHidden = NO;
     
     for (UIButton *btn in _btn1arr) {
+        btn.backgroundColor =  [UIColor colorWithWhite:.9 alpha:.3];
         [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     }
     for (UIButton *btn in _btn2arr) {
+        btn.backgroundColor =  [UIColor colorWithWhite:.9 alpha:.3];
         [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     }
     for (UIButton *btn in _btn3arr) {
+        btn.backgroundColor =  [UIColor colorWithWhite:.9 alpha:.3];
         [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     }
     for (UIButton *btn in _btn4arr) {
+        btn.backgroundColor =  [UIColor colorWithWhite:.9 alpha:.3];
         [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     }
     str1 = @"";
@@ -203,6 +207,7 @@
         [weakSelf xilie];
         [weakSelf leixing];
         [weakSelf fenlei];
+//        [weakSelf performSelectorOnMainThread:@selector(click) withObject:nil waitUntilDone:YES];
 //        //通知主线程刷新
 //        dispatch_async(dispatch_get_main_queue(), ^{
 //            [weakSelf.tableview reloadData];
@@ -224,9 +229,7 @@
     [self.window addGestureRecognizer:tap];
     [self.window makeKeyAndVisible];
     
-    self.upView = [[UIScrollView alloc] initWithFrame:CGRectMake(100, 0, SCREEN_WIDTH-100, SCREEN_HEIGHT-50)];
-    self.upView.backgroundColor = [UIColor whiteColor];
-    [self.window addSubview:self.upView];
+   
     
 }
 
@@ -373,8 +376,10 @@
     str1 = model.id;
     for (UIButton *btn in _btn1arr) {
         if (btn.tag == sender.tag) {
-            [btn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+            btn.backgroundColor = [UIColor redColor];
+            [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         }else{
+            btn.backgroundColor =  [UIColor colorWithWhite:.9 alpha:.3];
             [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         }
     }
@@ -385,8 +390,12 @@
     str2 = model.id;
     for (UIButton *btn in _btn2arr) {
         if (btn.tag == sender.tag) {
-            [btn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+//            [btn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+            btn.backgroundColor = [UIColor redColor];
+            [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         }else{
+//            [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            btn.backgroundColor =  [UIColor colorWithWhite:.9 alpha:.3];
             [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         }
     }
@@ -397,8 +406,10 @@
     str3 = model.id;
     for (UIButton *btn in _btn3arr) {
         if (btn.tag == sender.tag) {
-            [btn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+            btn.backgroundColor = [UIColor redColor];
+            [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         }else{
+            btn.backgroundColor =  [UIColor colorWithWhite:.9 alpha:.3];
             [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         }
     }
@@ -409,8 +420,10 @@
     str4 = model.id;
     for (UIButton *btn in _btn4arr) {
         if (btn.tag == sender.tag) {
-            [btn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+            btn.backgroundColor = [UIColor redColor];
+            [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         }else{
+            btn.backgroundColor =  [UIColor colorWithWhite:.9 alpha:.3];
             [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         }
     }
@@ -418,15 +431,19 @@
 }
 - (void)chongzhi{
     for (UIButton *btn in _btn1arr) {
+        btn.backgroundColor =  [UIColor colorWithWhite:.9 alpha:.3];
         [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     }
     for (UIButton *btn in _btn2arr) {
+        btn.backgroundColor =  [UIColor colorWithWhite:.9 alpha:.3];
         [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     }
     for (UIButton *btn in _btn3arr) {
+        btn.backgroundColor =  [UIColor colorWithWhite:.9 alpha:.3];
         [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     }
     for (UIButton *btn in _btn4arr) {
+        btn.backgroundColor =  [UIColor colorWithWhite:.9 alpha:.3];
         [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     }
     str1 = @"";
@@ -451,6 +468,14 @@
 
 
 - (void)clickshaixuan{
+    if ( self.upView != nil) {
+        self.upView = nil;
+    }
+    
+    
+    self.upView = [[UIScrollView alloc] initWithFrame:CGRectMake(100, 0, SCREEN_WIDTH-100, SCREEN_HEIGHT-50)];
+    self.upView.backgroundColor = [UIColor whiteColor];
+    [self.window addSubview:self.upView];
     str1 = @"";
     str2 = @"";
     str3 = @"";
@@ -459,6 +484,8 @@
     [UIView animateWithDuration:.3 animations:^{
         self.window.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }];
+    
+    
     
     UIButton *btn1 = [[UIButton alloc]initWithFrame:CGRectMake(100, SCREEN_HEIGHT-50, (SCREEN_WIDTH-100)/2, 50)];
 //    btn1.backgroundColor = [UIColor orangeColor];
@@ -550,7 +577,7 @@
         
         
         [button1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [button1 setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
+        [button1 setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
         
         
         Model *model = [self.array1 objectAtIndex:i];
@@ -690,11 +717,11 @@
     
     _upView.contentSize = CGSizeMake(0, h4+60);
     
-    label1.textColor = [UIColor orangeColor];
-    label2.textColor = [UIColor orangeColor];
-    label3.textColor = [UIColor orangeColor];
-    label4.textColor = [UIColor orangeColor];
-    label5.textColor = [UIColor orangeColor];
+    label1.textColor = RGBACOLOR(49, 184, 243, 1);
+    label2.textColor = RGBACOLOR(49, 184, 243, 1);
+    label3.textColor = RGBACOLOR(49, 184, 243, 1);
+    label4.textColor = RGBACOLOR(49, 184, 243, 1);
+    label5.textColor = RGBACOLOR(49, 184, 243, 1);
     label1.font = [UIFont fontWithName:@"Helvetica-Bold" size:16];
     label2.font = [UIFont fontWithName:@"Helvetica-Bold" size:16];
     label3.font = [UIFont fontWithName:@"Helvetica-Bold" size:16];
@@ -703,15 +730,19 @@
 }
 - (void)tapAction{
     for (UIButton *btn in _btn1arr) {
+        btn.backgroundColor =  [UIColor colorWithWhite:.9 alpha:.3];
         [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     }
     for (UIButton *btn in _btn2arr) {
+        btn.backgroundColor =  [UIColor colorWithWhite:.9 alpha:.3];
         [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     }
     for (UIButton *btn in _btn3arr) {
+        btn.backgroundColor =  [UIColor colorWithWhite:.9 alpha:.3];
         [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     }
     for (UIButton *btn in _btn4arr) {
+        btn.backgroundColor =  [UIColor colorWithWhite:.9 alpha:.3];
         [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     }
     str1 = @"";
@@ -873,7 +904,8 @@
         cell.lab3.text = model.series_name;
         
         
-        cell.lab4.backgroundColor = [UIColor redColor];
+        cell.lab4.backgroundColor = RGBACOLOR(49, 184, 243, 1);
+        cell.lab2.textColor = RGBACOLOR(49, 184, 243, 1);
         
         if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
             cell.lab4.hidden = NO;
@@ -900,13 +932,14 @@
         cell.lab2.text = model.series_name;
         
         
-        cell.lab4.backgroundColor = [UIColor redColor];
+        cell.lab4.backgroundColor = RGBACOLOR(49, 184, 243, 1);
+        cell.lab3.textColor = RGBACOLOR(49, 184, 243, 1);
         
         if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
             cell.lab4.hidden = NO;
             cell.lab2height.constant = 20;
             cell.lab4height.constant = 20;
-            LRViewBorderRadius(cell.lab4, 10, 0, [UIColor clearColor]);
+//            LRViewBorderRadius(cell.lab4, 10, 0, [UIColor clearColor]);
             
             //NSLog(@"-==-=-=-=-=-=-%f",[Manager widthForString:model.promotionTitle fontSize:15 andHeight:20]);
             if ([Manager widthForString:model.promotionTitle fontSize:14 andHeight:20] > (SCREEN_WIDTH-150)) {

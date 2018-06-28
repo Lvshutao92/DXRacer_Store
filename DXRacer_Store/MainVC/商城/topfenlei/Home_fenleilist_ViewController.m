@@ -263,7 +263,11 @@
         cell.lab1.text       = model.model_name;
         cell.lab2.text     = model.sale_price;
         cell.lab3.text = model.series_name;
-        cell.lab4.backgroundColor = [UIColor redColor];
+        cell.lab4.backgroundColor = RGBACOLOR(49, 184, 243, 1);
+        cell.lab2.textColor = RGBACOLOR(49, 184, 243, 1);
+        
+        
+        
         if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
             cell.lab4.hidden = NO;
             if ([Manager widthForString:model.promotionTitle fontSize:14 andHeight:20] > (SCREEN_WIDTH/2)) {
@@ -289,12 +293,13 @@
         cell.lab1.text       = model.model_name;
         cell.lab3.text     = model.sale_price;
         cell.lab2.text = model.series_name;
-        cell.lab4.backgroundColor =  [UIColor redColor];
+        cell.lab4.backgroundColor = RGBACOLOR(49, 184, 243, 1);
+        cell.lab3.textColor = RGBACOLOR(49, 184, 243, 1);
         if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
             cell.lab4.hidden = NO;
             cell.lab2height.constant = 20;
             cell.lab4height.constant = 20;
-            LRViewBorderRadius(cell.lab4, 10, 0, [UIColor clearColor]);
+//            LRViewBorderRadius(cell.lab4, 10, 0, [UIColor clearColor]);
             
             //NSLog(@"-==-=-=-=-=-=-%f",[Manager widthForString:model.promotionTitle fontSize:15 andHeight:20]);
             if ([Manager widthForString:model.promotionTitle fontSize:14 andHeight:20] > (SCREEN_WIDTH-150)) {

@@ -53,7 +53,7 @@
         self->str3   = [diction objectForKey:@"sex"];
         self->str4   = [diction objectForKey:@"birthday"];
         
-        [self->userImg sd_setImageWithURL:[NSURL URLWithString:[diction objectForKey:@"iconUrl"]]placeholderImage:[UIImage imageNamed:@"tx.jpg"]];
+        [self->userImg sd_setImageWithURL:[NSURL URLWithString:[diction objectForKey:@"iconUrl"]]placeholderImage:[UIImage imageNamed:@"人"]];
        
         [weakSelf.tableview reloadData];
     } enError:^(NSError *error) {

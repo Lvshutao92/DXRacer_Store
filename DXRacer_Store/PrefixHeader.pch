@@ -141,9 +141,6 @@
 #define KURLNSString(str) [NSString stringWithFormat:@"http://server-shop.dxracer.cn/mall/app/%@",str]
 
 
-
-
-
 #import "UIView+DWQExtension.h"
 
 #define FONT(s)       [UIFont systemFontOfSize:s]

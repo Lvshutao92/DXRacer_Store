@@ -46,6 +46,14 @@
     [self.view addSubview:self.tableview];
     
     [self setUpReflash];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chuanzhi:) name:@"tongzhi" object:nil];
+    
+}
+- (void)chuanzhi:(NSNotification *)text{
+    LRWeakSelf(self);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [weakSelf setUpReflash];
+    });
 }
 
 
@@ -136,11 +144,11 @@
     }else{
         cell.lab3.text = @"距结束";
         cell.lab3.textColor = [UIColor whiteColor];
-        cell.lab3.backgroundColor = [UIColor redColor];
+        cell.lab3.backgroundColor =  RGBACOLOR(49, 184, 243, 1);
         [cell downSecondHandle:model.crush_model.endTime starDate:startDate];
     }
     
-    
+    cell.lab4.textColor = RGBACOLOR(49, 184, 243, 1);
     cell.lab4.text = [Manager jinegeshi:model.crush_model.salePrice];
     
     NSDictionary *attribtDic2 = @{NSStrikethroughStyleAttributeName: [NSNumber numberWithInteger:NSUnderlineStyleSingle]};

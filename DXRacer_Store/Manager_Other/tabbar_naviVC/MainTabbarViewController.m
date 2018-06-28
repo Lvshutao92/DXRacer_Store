@@ -40,9 +40,13 @@
 - (instancetype)init {
     if (self = [super init]) {
         HomePageViewController *oneVc = [[HomePageViewController alloc]init];
+//        ZhuYe_ViewController *oneVc = [[ZhuYe_ViewController alloc]init];
+        
         MainNavigationViewController *mainoneVC = [[MainNavigationViewController alloc]initWithRootViewController:oneVc];
-        oneVc.title = @"首页";
+//        oneVc.title = @"首页";
         mainoneVC.tabBarItem.image = [UIImage imageNamed:@"1"];
+        mainoneVC.tabBarItem.title = @"首页";
+        oneVc.navigationItem.title = @"迪瑞克斯";
         mainoneVC.tabBarItem.selectedImage = [UIImage imageNamed:@"01"];
 
         ClassifyViewController *twoVc = [[ClassifyViewController alloc]init];
@@ -64,7 +68,7 @@
         mainfourVC.tabBarItem.image = [UIImage imageNamed:@"4"];
         mainfourVC.tabBarItem.selectedImage = [UIImage imageNamed:@"04"];
 
-        self.tabBar.tintColor = [UIColor redColor];
+        self.tabBar.tintColor = RGBACOLOR(49, 184, 243, 1);
         self.viewControllers = @[mainoneVC,maintwoVc,mainthreeVC,mainfourVC];
     }
     return self;

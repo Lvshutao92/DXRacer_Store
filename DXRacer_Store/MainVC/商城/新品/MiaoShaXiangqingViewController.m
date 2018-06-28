@@ -202,7 +202,7 @@
     [headerV addSubview:activityNameLab];
     
     activityPriceLab = [[UILabel alloc]init];
-    activityPriceLab.textColor = [UIColor redColor];
+    activityPriceLab.textColor = RGBACOLOR(49, 184, 243, 1);
     activityPriceLab.textAlignment = NSTextAlignmentLeft;
     [headerV addSubview:activityPriceLab];
     
@@ -422,7 +422,7 @@
                 self->guigeLab.backgroundColor = RGBACOLOR(0, 174, 10, 1);
             }else{
                 self->guigeLab.text = @"距结束";
-                self->guigeLab.backgroundColor = [UIColor redColor];
+                self->guigeLab.backgroundColor = RGBACOLOR(49, 184, 243, 1);
             }
             if ([Manager judgeWhetherIsEmptyAnyObject:[[diction objectForKey:@"object"]objectForKey:@"crush"]] == YES){
                 NSDictionary *dicti = [[diction objectForKey:@"object"]objectForKey:@"crush"];
@@ -706,23 +706,10 @@
         
         UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
         btn1.frame = CGRectMake(0, 0, SCREEN_WIDTH, 55);
-        btn1.backgroundColor = [UIColor redColor];
+        btn1.backgroundColor = RGBACOLOR(49, 184, 243, 1);
         [btn1 setTitle:@"马上抢" forState:UIControlStateNormal];
         [btn1 addTarget:self action:@selector(cilck1) forControlEvents:UIControlEventTouchUpInside];
         [_tabbarView addSubview:btn1];
-        
-        CAGradientLayer *_gradientLayer = [CAGradientLayer layer];
-        _gradientLayer.bounds = btn1.bounds;
-        _gradientLayer.borderWidth = 0;
-        _gradientLayer.frame = btn1.bounds;
-        _gradientLayer.colors = [NSArray arrayWithObjects:
-                                 (id)RGBACOLOR(220, 20, 60, 1.0).CGColor,
-                                 (id)RGBACOLOR(255, 0, 0, 1.0).CGColor, nil ,nil];
-        _gradientLayer.startPoint = CGPointMake(0, 0);
-        _gradientLayer.endPoint   = CGPointMake(1.0, 1.0);
-        [btn1.layer insertSublayer:_gradientLayer atIndex:0];
-        
-        
         
         
 //        UIButton *btn3 = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -1026,12 +1013,11 @@
     NSDate *endDate_tomorrow = [[NSDate alloc] initWithTimeIntervalSinceReferenceDate:([endDate timeIntervalSinceReferenceDate])];
     
     NSDate *startDate = [NSDate date];
-    NSString* dateString = [dateFormatter stringFromDate:startDate];
+//    NSString* dateString = [dateFormatter stringFromDate:startDate];
 //    NSLog(@"现在的时间 === %@",dateString);
     
     
     NSTimeInterval  timeInterval =[endDate_tomorrow timeIntervalSinceDate:startDate];
-    
     
     if (_timer==nil) {
         __block int timeout = timeInterval; //倒计时时间
@@ -1053,7 +1039,9 @@
                 }else{
                     int days = (int)(timeout/(3600*24));
                     if (days==0) {
-                        self.dayLabel.text = @"";
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            self.dayLabel.text = @"";
+                        });
                     }
                     int hours = (int)((timeout-days*24*3600)/3600);
                     int minute = (int)(timeout-days*24*3600-hours*3600)/60;

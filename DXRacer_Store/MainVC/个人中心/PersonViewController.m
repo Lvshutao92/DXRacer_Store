@@ -51,6 +51,7 @@
     [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = NO;
     
+    
     [self getInfomation];
 }
 
@@ -426,7 +427,7 @@
         [webView loadRequest:request];
         [self.view addSubview:webView];
     }else if (indexPath.row == 5) {
-        NSMutableString *str=[[NSMutableString alloc]initWithFormat:@"tel:%@",@"4009005033"];
+        NSMutableString *str=[[NSMutableString alloc]initWithFormat:@"tel:%@",@"051083599633"];
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
     }else{
         AboutUsViewController *about = [[AboutUsViewController alloc]init];

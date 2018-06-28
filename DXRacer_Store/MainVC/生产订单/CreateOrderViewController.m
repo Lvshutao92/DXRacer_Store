@@ -366,8 +366,10 @@
     
     
     
-    
-    
+    cell.line2.backgroundColor = RGBACOLOR(49, 184, 243, 1);
+    cell.lab3.textColor = RGBACOLOR(49, 184, 243, 1);
+    cell.lab5.textColor = RGBACOLOR(49, 184, 243, 1);
+    cell.lab6.backgroundColor = RGBACOLOR(49, 184, 243, 1);
     self.totalPrice.text = [Manager jinegeshi:[NSString stringWithFormat:@"%.2f",zongjiage]];
     
     
@@ -618,13 +620,13 @@
     
     UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
     btn1.frame = CGRectMake(SCREEN_WIDTH-120, 0, 120, 55);
-    btn1.backgroundColor = [UIColor redColor];
+    btn1.backgroundColor = RGBACOLOR(49, 184, 243, 1);
     [btn1 setTitle:@"提交订单" forState:UIControlStateNormal];
     [btn1 addTarget:self action:@selector(commitOrder) forControlEvents:UIControlEventTouchUpInside];
     [view addSubview:btn1];
     
     self.totalPrice = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-140, 55)];
-    self.totalPrice.textColor = [UIColor redColor];
+    self.totalPrice.textColor = RGBACOLOR(49, 184, 243, 1);
     
     self.totalPrice.text = [Manager jinegeshi:[NSString stringWithFormat:@"%.2f",zongjiage]];
     

@@ -31,23 +31,13 @@
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(0, SCREEN_HEIGHT-50, SCREEN_WIDTH, 50);
-    btn.backgroundColor = [UIColor redColor];
+    btn.backgroundColor = RGBACOLOR(49, 184, 243, 1);
     [btn setTitle:@"新增收货地址" forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(clickAddAddress) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btn];
     [self.view bringSubviewToFront:btn];
     
-    CAGradientLayer *_gradientLayer = [CAGradientLayer layer];
-    _gradientLayer.bounds = btn.bounds;
-    _gradientLayer.borderWidth = 0;
-    _gradientLayer.frame = btn.bounds;
-    _gradientLayer.colors = [NSArray arrayWithObjects:
-                             (id)RGBACOLOR(220, 20, 60, 1.0).CGColor,
-                             (id)RGBACOLOR(255, 0, 0, 1.0).CGColor, nil ,nil];
-    _gradientLayer.startPoint = CGPointMake(0, 0);
-    _gradientLayer.endPoint   = CGPointMake(1.0, 1.0);
-    [btn.layer insertSublayer:_gradientLayer atIndex:0];
-    
+  
     
     
     self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-50) style:UITableViewStylePlain];
@@ -122,6 +112,8 @@
             [alert addAction:cancel];
             [weakSelf presentViewController:alert animated:YES completion:nil];
         }
+        
+       
         //NSLog(@"----%@",diction);
     } enError:^(NSError *error) {
         //NSLog(@"----%@",error);
@@ -220,16 +212,6 @@
         }
         [weakSelf.tableview reloadData];
         [hud hideAnimated:YES];
-        
-        if (weakSelf.arr.count == 0) {
-            UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
-            lab.text = @"无收货地址，前往添加";
-            lab.textColor = [UIColor lightGrayColor];
-            lab.textAlignment = NSTextAlignmentCenter;
-            [weakSelf.view addSubview:lab];
-        }
-        
-        
     } enError:^(NSError *error) {
         [hud hideAnimated:YES];
         //NSLog(@"----%@",error);

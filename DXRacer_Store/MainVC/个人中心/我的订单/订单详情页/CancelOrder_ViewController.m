@@ -321,7 +321,7 @@
     //    [footerBgv1 addSubview:label3];
     
     shifukuanLab = [[UILabel alloc]initWithFrame:CGRectMake(20, 61, SCREEN_WIDTH-40, 39)];
-    shifukuanLab.textColor = [UIColor redColor];
+    shifukuanLab.textColor = RGBACOLOR(49, 184, 243, 1);
     [footerBgv1 addSubview:shifukuanLab];
     
     ProductTotalPriceLab.font = [UIFont systemFontOfSize:15];
@@ -358,6 +358,7 @@
     
     cell.lab2.text = [NSString stringWithFormat:@"X%@",model.quantity];
     cell.lab5.text = model.productAttrs;
+    cell.lab3.textColor = RGBACOLOR(49, 184, 243, 1);
     return cell;
 }
 
