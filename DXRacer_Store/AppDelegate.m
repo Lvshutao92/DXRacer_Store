@@ -37,30 +37,28 @@ UIBackgroundTaskIdentifier taskId;
     [IQKeyboardManager sharedManager].enable = YES;
     [IQKeyboardManager sharedManager].shouldResignOnTouchOutside = YES;
    
-//    //测试的时候改变info 里的版本号就可以了
-//    NSArray *images = @[@"gud1.jpg",@"gud2.jpg",@"gud3.jpg",@"gud4.jpg",@"av3.jpg"];
-//    BOOL y = [XTGuidePagesViewController isShow];
-//    if (y) {
-//        XTGuidePagesViewController *xt = [[XTGuidePagesViewController alloc] init];
-//        self.window.rootViewController = xt;
-//        xt.delegate = self;
-//        [xt guidePageControllerWithImages:images];
-//    }else{
-//        [self clickEnter];
-//    }
-    
-    
-    
-    self.window.backgroundColor = [UIColor whiteColor];
-    self.mainVC = [[MainTabbarViewController alloc]init];
-    self.mainVC.selectedIndex = 0;
-    for (UIBarItem *item in self.mainVC.tabBar.items) {
-        [item setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                      [UIFont fontWithName:@"Helvetica" size:13.0], NSFontAttributeName, nil]
-                            forState:UIControlStateNormal];
+    //测试的时候改变info 里的版本号就可以了
+    NSArray *images = @[@"gud1.jpg",@"gud2.jpg",@"gud3.jpg",@"gud4.jpg"];
+    BOOL y = [XTGuidePagesViewController isShow];
+    if (y) {
+        XTGuidePagesViewController *xt = [[XTGuidePagesViewController alloc] init];
+        self.window.rootViewController = xt;
+        xt.delegate = self;
+        [xt guidePageControllerWithImages:images];
+    }else{
+        [self clickEnter];
     }
-    self.window.rootViewController = self.mainVC;
-    [self.window makeKeyWindow];
+    
+//    self.window.backgroundColor = [UIColor whiteColor];
+//    self.mainVC = [[MainTabbarViewController alloc]init];
+//    self.mainVC.selectedIndex = 0;
+//    for (UIBarItem *item in self.mainVC.tabBar.items) {
+//        [item setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+//                                      [UIFont fontWithName:@"Helvetica" size:13.0], NSFontAttributeName, nil]
+//                            forState:UIControlStateNormal];
+//    }
+//    self.window.rootViewController = self.mainVC;
+//    [self.window makeKeyWindow];
     
     
   
@@ -103,14 +101,7 @@ UIBackgroundTaskIdentifier taskId;
                                                                                       icon:icon3
                                                                                   userInfo:nil];
         
-        
-//        UIApplicationShortcutIcon * icon4 = [UIApplicationShortcutIcon iconWithTemplateImageName:@"自定义的图片"];
-//        UIApplicationShortcutItem * item4 = [[UIApplicationShortcutItem alloc]initWithType:@"item4"
-//                                                                            localizedTitle:@"QQ客服"
-//                                                                         localizedSubtitle:@""
-//                                                                                      icon:icon4
-//                                                                                  userInfo:nil];
-        
+ 
         
         UIApplicationShortcutIcon * icon5 = [UIApplicationShortcutIcon iconWithTemplateImageName:@"a6"];
         UIApplicationShortcutItem * item5 = [[UIApplicationShortcutItem alloc]initWithType:@"item5"
@@ -155,15 +146,8 @@ UIBackgroundTaskIdentifier taskId;
             MainTabbarViewController *tabBarController = (MainTabbarViewController *)self.window.rootViewController;
             MainNavigationViewController *nav = (MainNavigationViewController *)tabBarController.selectedViewController;
             [nav pushViewController:xppd animated:YES];
-    }else if ([type isEqualToString:@"item4"]) {
-        UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectZero];
-        NSString *qqstr = [NSString stringWithFormat:@"mqq://im/chat?chat_type=wpa&uin=%@&version=1&src_type=web",@"309718069"];
-        NSURL *url = [NSURL URLWithString:qqstr];
-        NSURLRequest *request = [NSURLRequest requestWithURL:url];
-        [webView loadRequest:request];
-        [self.window addSubview:webView];
     }else if ([type isEqualToString:@"item5"]) {
-        NSMutableString *str=[[NSMutableString alloc]initWithFormat:@"tel:%@",@"4009005033"];
+        NSMutableString *str=[[NSMutableString alloc]initWithFormat:@"tel:%@",@"051083599633"];
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
     }
     

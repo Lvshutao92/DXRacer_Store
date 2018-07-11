@@ -72,7 +72,7 @@
     
     comitbtn = [UIButton buttonWithType:UIButtonTypeCustom];
     comitbtn.frame = CGRectMake(0, SCREEN_HEIGHT-50, SCREEN_WIDTH, 50);
-    comitbtn.backgroundColor = RGBACOLOR(49, 184, 243, 1);
+    comitbtn.backgroundColor = RGB_AB;
     [comitbtn setTitle:@"提交" forState:UIControlStateNormal];
     [comitbtn addTarget:self action:@selector(clicksave) forControlEvents:UIControlEventTouchUpInside];
 //    NSLog(@"------%@",self.status);
@@ -161,7 +161,7 @@
 //    NSLog(@"6666666------%@",dic);
     [Manager requestPOSTWithURLStr:KURLNSString(@"order/invoice/save") paramDic:dic token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        NSLog(@"------%@",diction);
+//        NSLog(@"------%@",diction);
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"编辑完成✅" message:@"温馨提示" preferredStyle:1];

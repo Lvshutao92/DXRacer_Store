@@ -50,10 +50,62 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = NO;
-    
+    [self SetNavBarHidden:YES];
     
     [self getInfomation];
 }
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self SetNavBarHidden:NO];
+}
+
+
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    // 返回你所需要的状态栏样式
+    return UIStatusBarStyleLightContent;
+}
+#pragma mark - NavItem
+-(void) SetNavBarHidden:(BOOL) isHidden
+{
+    self.navigationController.navigationBarHidden = isHidden;
+}
+-(UIView*)NavigationBa
+{
+    view_bar =[[UIView alloc]init];
+    view_bar.frame=CGRectMake(0, 0, SCREEN_WIDTH, kNavBarHAbove7);
+    //    view_bar.backgroundColor=[UIColor clearColor];
+    [self.view addSubview: view_bar];
+    
+    
+    
+    CAGradientLayer *gradient = [CAGradientLayer layer];
+    gradient.frame = view_bar.bounds;
+    //    gradient.frame = self.navigationController.navigationBar.bounds;
+    gradient.colors = [NSArray arrayWithObjects:(id)[RGBACOLOR(65, 105, 225, 1) CGColor],(id)[RGBACOLOR(49, 184, 243, 1) CGColor], nil];
+    [view_bar.layer insertSublayer:gradient atIndex:0];
+    //    [self.navigationController.navigationBar.layer insertSublayer:gradient above:0];
+    
+    
+    
+    UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(60, kStatusBarHeight, SCREEN_WIDTH-120, 44)];
+    lab.text = @"我的";
+    lab.textAlignment = NSTextAlignmentCenter;
+    lab.textColor = [UIColor whiteColor];
+    [view_bar addSubview:lab];
+    
+    
+    UIButton *szbtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    szbtn.frame = CGRectMake(SCREEN_WIDTH-40, kStatusBarHeight+7, 30, 30);
+    [szbtn setImage:[UIImage imageNamed:@"设置-2"] forState:UIControlStateNormal];
+    [szbtn addTarget:self action:@selector(clickedit) forControlEvents:UIControlEventTouchUpInside];
+    [view_bar addSubview:szbtn];
+    
+    [self.view bringSubviewToFront:view_bar];
+    return view_bar;
+}
+
+
 
 
 -(void)setUpReflash
@@ -128,22 +180,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
+    
     self.dataArray = [@[@"我的订单",@"我的优惠券",@"领券中心",@"我的收藏",@"QQ客服",@"联系我们",@"关于我们"]mutableCopy];
     
     
-    UIView *btnview = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];
-    UIButton *szbtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    szbtn.frame = CGRectMake(14, 7, 30, 30);
-    [szbtn setImage:[UIImage imageNamed:@"设置-2"] forState:UIControlStateNormal];
-    [szbtn addTarget:self action:@selector(clickedit) forControlEvents:UIControlEventTouchUpInside];
-    [btnview addSubview:szbtn];
-    UIBarButtonItem *bar = [[UIBarButtonItem alloc]initWithCustomView:btnview];
-    self.navigationItem.rightBarButtonItem = bar;
+//    UIView *btnview = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];
+//    UIButton *szbtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    szbtn.frame = CGRectMake(14, 7, 30, 30);
+//    [szbtn setImage:[UIImage imageNamed:@"设置-2"] forState:UIControlStateNormal];
+//    [szbtn addTarget:self action:@selector(clickedit) forControlEvents:UIControlEventTouchUpInside];
+//    [btnview addSubview:szbtn];
+//    UIBarButtonItem *bar = [[UIBarButtonItem alloc]initWithCustomView:btnview];
+//    self.navigationItem.rightBarButtonItem = bar;
     
     
     
    
-    self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) style:UITableViewStylePlain];
+    self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, -kStatusBarHeight, SCREEN_WIDTH, SCREEN_HEIGHT+kStatusBarHeight) style:UITableViewStylePlain];
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
@@ -151,23 +204,34 @@
     [self.tableview registerNib:[UINib nibWithNibName:@"PersonCell" bundle:nil] forCellReuseIdentifier:@"cell"];
     [self.view addSubview:self.tableview];
     
+//    [self NavigationBa];
     
     
-    
-    v = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 200)];
+    v = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 200+kNavBarHAbove7)];
     v.backgroundColor = [UIColor colorWithWhite:.8 alpha:.3];
     self.tableview.tableHeaderView = v;
     UIView *vv = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 50)];
     self.tableview.tableFooterView = vv;
     
-    imgV = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 200)];
+    imgV = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 200+kNavBarHAbove7)];
     imgV.userInteractionEnabled = YES;
-    imgV.image = [UIImage imageNamed:@"topUser"];
+//    imgV.image = [UIImage imageNamed:@"topUser"];
     imgV.contentMode = UIViewContentModeScaleAspectFill;
     imgV.clipsToBounds=YES;
     [v addSubview:imgV];
     
 
+    CAGradientLayer *gradient = [CAGradientLayer layer];
+    gradient.frame = imgV.bounds;
+    //    gradient.frame = self.navigationController.navigationBar.bounds;
+    gradient.colors = [NSArray arrayWithObjects:(id)[RGB_B CGColor],(id)[RGB_A CGColor],(id)[RGB_B CGColor], nil];
+    [imgV.layer insertSublayer:gradient atIndex:0];
+    
+    UIButton *szbtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    szbtn.frame = CGRectMake(SCREEN_WIDTH-45, kStatusBarHeight+7, 30, 30);
+    [szbtn setImage:[UIImage imageNamed:@"设置"] forState:UIControlStateNormal];
+    [szbtn addTarget:self action:@selector(clickedit) forControlEvents:UIControlEventTouchUpInside];
+    [imgV addSubview:szbtn];
     //*************订单*********************
     /*
     UILabel *bgv0 = [[UILabel alloc]initWithFrame:CGRectMake(0, 200, SCREEN_WIDTH, 49)];
@@ -290,7 +354,7 @@
     
     
     
-    UILabel *botomV = [[UILabel alloc]initWithFrame:CGRectMake(0, 140, SCREEN_WIDTH, 60)];
+    UILabel *botomV = [[UILabel alloc]initWithFrame:CGRectMake(0, 140+kNavBarHAbove7, SCREEN_WIDTH, 60)];
     botomV.backgroundColor = [UIColor colorWithWhite:.8 alpha:.3];
     botomV.userInteractionEnabled = YES;
     [imgV addSubview:botomV];
@@ -298,9 +362,9 @@
                                                               type:SQCustomButtonRightImageType
                                                          imageSize:CGSizeMake(25, 25) midmargin:0];
     btn.isShowSelectBackgroudColor = NO;
-    btn.imageView.image = [UIImage imageNamed:@"箭头3"];
+    btn.imageView.image = [UIImage imageNamed:@"箭头-2"];
     btn.titleLabel.text = @"去购物抵扣";
-    btn.titleLabel.textColor = [UIColor grayColor];
+    btn.titleLabel.textColor = [UIColor blackColor];
     btn.titleLabel.font = [UIFont systemFontOfSize:16];
     [botomV addSubview:btn];
     [botomV bringSubviewToFront:btn];
@@ -326,13 +390,13 @@
     
     
     
-    userImg = [[UIImageView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/2-45, 20, 90, 90)];
+    userImg = [[UIImageView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/2-45, 20+kStatusBarHeight, 90, 90)];
     LRViewBorderRadius(userImg, 45, 0, [UIColor clearColor]);
     userImg.userInteractionEnabled = YES;
     [imgV addSubview:userImg];
     
     
-    user1 = [[UILabel alloc]initWithFrame:CGRectMake(50, 110, SCREEN_WIDTH-100, 30)];
+    user1 = [[UILabel alloc]initWithFrame:CGRectMake(50, 110+kStatusBarHeight, SCREEN_WIDTH-100, 30)];
     user1.textColor = [UIColor whiteColor];
     user1.textAlignment = NSTextAlignmentCenter;
     user1.numberOfLines = 0;
@@ -439,8 +503,6 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 55;
 }
-
-
 
 
 

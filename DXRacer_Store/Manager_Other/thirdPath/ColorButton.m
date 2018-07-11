@@ -22,7 +22,7 @@
 }
 
 - (UIImage*) buttonImageFromColors:(NSArray*)colors ByGradientType:(GradientType)gradientType{
-    NSMutableArray *ar = [NSMutableArray array];
+    NSMutableArray *ar = [NSMutableArray arrayWithCapacity:1];
     for(UIColor *c in colors) {
         [ar addObject:(id)c.CGColor];
     }
@@ -55,9 +55,11 @@
     }
     CGContextDrawLinearGradient(context, gradient, start, end, kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation);
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    CGGradientRelease(gradient);
+    
     CGContextRestoreGState(context);
-    CGColorSpaceRelease(colorSpace);
+    CGGradientRelease(gradient);
+//    CGColorSpaceRelease(colorSpace);
+//    CFRelease((__bridge CFTypeRef)(ar));
     UIGraphicsEndImageContext();
     return image;
 }

@@ -23,6 +23,7 @@
 
 @implementation AccountEditTableViewController
 - (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = YES;
     
     if ([Manager judgeWhetherIsEmptyAnyObject:[Manager redingwenjianming:@"nikname.text"]]!=YES) {
@@ -34,6 +35,7 @@
     [userImg sd_setImageWithURL:[NSURL URLWithString:[Manager redingwenjianming:@"img.text"]]placeholderImage:[UIImage imageNamed:@"人"]];
 }
 - (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
     self.tabBarController.tabBar.hidden = YES;
 }
 - (NSMutableArray *)arr{
@@ -60,7 +62,7 @@
     btns.frame = CGRectMake(0, 15, SCREEN_WIDTH, 50);
     btns.backgroundColor = [UIColor whiteColor];
     [btns setTitle:@"退出登录" forState:UIControlStateNormal];
-    [btns setTitleColor:RGBACOLOR(49, 184, 243, 1) forState:UIControlStateNormal];
+    [btns setTitleColor:RGB_AB forState:UIControlStateNormal];
     [btns addTarget:self action:@selector(cilckFooterImg) forControlEvents:UIControlEventTouchUpInside];
     [footer addSubview:btns];
     //header

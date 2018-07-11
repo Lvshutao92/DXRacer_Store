@@ -21,6 +21,7 @@
 
 @implementation LoginViewController
 - (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     if ([Manager sharedManager].mobile != nil) {
         text1.text = [Manager sharedManager].mobile;
         [text2 becomeFirstResponder];
@@ -184,7 +185,7 @@
     
     btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(30, SCREEN_HEIGHT/2+15, SCREEN_WIDTH-60, 50);
-    btn.backgroundColor = RGBACOLOR(49, 184, 243, 1);
+    btn.backgroundColor = RGB_AB;
     LRViewBorderRadius(btn, 8, 0, [UIColor clearColor]);
     [btn setTitle:@"登录" forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];

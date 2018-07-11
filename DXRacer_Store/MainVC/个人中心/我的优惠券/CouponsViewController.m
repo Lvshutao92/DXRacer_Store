@@ -18,9 +18,11 @@
 
 @implementation CouponsViewController
 - (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = YES;
 }
 - (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
     self.tabBarController.tabBar.hidden = YES;
 }
 -(instancetype)initWithAddVCARY:(NSArray *)VCS TitleS:(NSArray *)TitleS index:(NSInteger)index{

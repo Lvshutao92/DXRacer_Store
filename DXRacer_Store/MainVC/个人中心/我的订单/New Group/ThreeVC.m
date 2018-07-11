@@ -59,6 +59,7 @@
 @implementation ThreeVC
 
 - (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = YES;
     
     [self getOrderStatus];
@@ -97,12 +98,14 @@
 
 
 - (void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
     if (self.timer != nil) {
         [self.timer invalidate];
         self.timer = nil;
     }
 }
 - (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
     self.tabBarController.tabBar.hidden = YES;
 }
 

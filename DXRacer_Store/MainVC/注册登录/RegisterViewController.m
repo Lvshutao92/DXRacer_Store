@@ -192,7 +192,7 @@
     if (textf.text != nil) {
         NSDictionary *dic = @{@"verificationCode":textf.text,@"mobile":text1.text};
         [Manager requestPOSTWithURLStr:KURLNSString(@"customer/register/shortmessage") paramDic:dic token:nil finish:^(id responseObject) {
-            NSDictionary *diction = [Manager returndictiondata:responseObject];
+//            NSDictionary *diction = [Manager returndictiondata:responseObject];
 //            NSLog(@"----%@",diction);
         } enError:^(NSError *error) {
 //            NSLog(@"%@",error);
@@ -302,12 +302,7 @@
 
 
 - (void)setupview{
-    CGFloat hei;
-    if ([[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone X"]||[[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone Simulator"]) {
-        hei = 44;
-    }else{
-        hei = 20;
-    }
+   
     
     bgimg = [[UIImageView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH/2-45, SCREEN_HEIGHT/2-270, 90, 90)];
     bgimg.image = [UIImage imageNamed:@"人"];
@@ -390,7 +385,7 @@
     
     btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(30, SCREEN_HEIGHT/2+90, SCREEN_WIDTH-60, 50);
-    btn.backgroundColor = RGBACOLOR(49, 184, 243, 1);
+    btn.backgroundColor = RGB_AB;
     LRViewBorderRadius(btn, 8, 0, [UIColor clearColor]);
     
     

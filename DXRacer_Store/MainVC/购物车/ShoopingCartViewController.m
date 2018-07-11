@@ -74,6 +74,7 @@
 }
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = NO;
     //每次进入购物车的时候把选择的置空
     [deleateArr removeAllObjects];

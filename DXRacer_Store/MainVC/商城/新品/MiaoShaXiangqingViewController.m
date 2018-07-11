@@ -202,7 +202,7 @@
     [headerV addSubview:activityNameLab];
     
     activityPriceLab = [[UILabel alloc]init];
-    activityPriceLab.textColor = RGBACOLOR(49, 184, 243, 1);
+    activityPriceLab.textColor = RGB_AB;
     activityPriceLab.textAlignment = NSTextAlignmentLeft;
     [headerV addSubview:activityPriceLab];
     
@@ -372,7 +372,7 @@
         NSDictionary *diction = [Manager returndictiondata:responseObject];
 //        NSLog(@"******%@",diction);
         
-        NSString *videoId;
+//        NSString *videoId;
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
             
@@ -387,7 +387,7 @@
                 NSDictionary *dicti = [[diction objectForKey:@"object"]objectForKey:@"product"];
                 self->titleHeight = [Manager getLabelHeightWithContent:[dicti objectForKey:@"modelName"] andLabelWidth:SCREEN_WIDTH-30 andLabelFontSize:17];
                 self->titleLab.text = [dicti objectForKey:@"modelName"];
-                videoId = [dicti objectForKey:@"video"];
+//                videoId = [dicti objectForKey:@"video"];
                 self->priceLab.text = [Manager jinegeshi:[dicti objectForKey:@"salePrice"]];
                 self->titleLab.frame = CGRectMake(5, 10+SCREEN_WIDTH, SCREEN_WIDTH-10, self->titleHeight);
                 self->priceLab.frame = CGRectMake(5, 10+SCREEN_WIDTH+self->titleHeight+10, 100, 20);
@@ -422,7 +422,7 @@
                 self->guigeLab.backgroundColor = RGBACOLOR(0, 174, 10, 1);
             }else{
                 self->guigeLab.text = @"距结束";
-                self->guigeLab.backgroundColor = RGBACOLOR(49, 184, 243, 1);
+                self->guigeLab.backgroundColor = RGB_AB;
             }
             if ([Manager judgeWhetherIsEmptyAnyObject:[[diction objectForKey:@"object"]objectForKey:@"crush"]] == YES){
                 NSDictionary *dicti = [[diction objectForKey:@"object"]objectForKey:@"crush"];
@@ -616,6 +616,7 @@
     }
 }
 - (void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
     if (self.timer_s != nil) {
         [self.timer_s invalidate];
         self.timer_s = nil;
@@ -706,7 +707,7 @@
         
         UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
         btn1.frame = CGRectMake(0, 0, SCREEN_WIDTH, 55);
-        btn1.backgroundColor = RGBACOLOR(49, 184, 243, 1);
+        btn1.backgroundColor = RGB_AB;;
         [btn1 setTitle:@"马上抢" forState:UIControlStateNormal];
         [btn1 addTarget:self action:@selector(cilck1) forControlEvents:UIControlEventTouchUpInside];
         [_tabbarView addSubview:btn1];

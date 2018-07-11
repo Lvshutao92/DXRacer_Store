@@ -84,6 +84,7 @@
 
 
 - (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     [self getOrderDetailsInfomation];
 }
 
@@ -219,7 +220,10 @@
     
     //地址
     UIImageView *addreimg = [[UIImageView alloc]initWithFrame:CGRectMake(5, 37.5, 25, 25)];
-    addreimg.image = [UIImage imageNamed:@"sz1"];
+    UIImage *theImage = [UIImage imageNamed:@"sz1"];
+    theImage = [theImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    addreimg.image = theImage;
+    [addreimg setTintColor:RGB_AB];
     [bglab addSubview:addreimg];
     namelab = [[UILabel alloc]initWithFrame:CGRectMake(35, 15, SCREEN_WIDTH-50, 25)];
     namelab.font = [UIFont systemFontOfSize:14];
@@ -343,7 +347,7 @@
     //    [footerBgv1 addSubview:label3];
     
     shifukuanLab = [[UILabel alloc]initWithFrame:CGRectMake(10, 61, SCREEN_WIDTH-20, 39)];
-    shifukuanLab.textColor =  RGBACOLOR(49, 184, 243, 1);
+    shifukuanLab.textColor =  RGB_AB;
     [footerBgv1 addSubview:shifukuanLab];
     
     ProductTotalPriceLab.font = [UIFont systemFontOfSize:15];
@@ -380,7 +384,7 @@
     
     cell.lab2.text = [NSString stringWithFormat:@"X%@",model.quantity];
     cell.lab5.text = model.productAttrs;
-    cell.lab3.textColor = RGBACOLOR(49, 184, 243, 1);
+    cell.lab3.textColor = RGB_AB;
     return cell;
 }
 

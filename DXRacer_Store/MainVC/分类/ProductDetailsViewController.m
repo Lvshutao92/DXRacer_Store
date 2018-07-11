@@ -759,15 +759,18 @@
     return _lunboArray;
 }
 - (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = YES;
     [self SetNavBarHidden:YES];
      [ _webView.scrollView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
 }
 - (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
     self.tabBarController.tabBar.hidden = YES;
     [_webView.scrollView removeObserver:self forKeyPath:@"contentOffset"];
 }
 - (void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
     [self SetNavBarHidden:NO];
 }
 @end

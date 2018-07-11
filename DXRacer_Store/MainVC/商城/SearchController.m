@@ -116,7 +116,6 @@
     
  
     
-    
     [self setUpReflash];
 }
 
@@ -232,8 +231,8 @@
         cell.lab1.text       = model.model_name;
         cell.lab2.text     = model.sale_price;
         cell.lab3.text = model.series_name;
-        cell.lab4.backgroundColor = RGBACOLOR(49, 184, 243, 1);
-        cell.lab2.textColor = RGBACOLOR(49, 184, 243, 1);
+        cell.lab4.backgroundColor = RGB_AB;
+        cell.lab2.textColor = RGB_AB;
         if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
             cell.lab4.hidden = NO;
             if ([Manager widthForString:model.promotionTitle fontSize:15 andHeight:20] > (SCREEN_WIDTH/2)) {
@@ -264,8 +263,8 @@
         cell.lab1.text       = model.model_name;
         cell.lab3.text     = model.sale_price;
         cell.lab2.text = model.series_name;
-        cell.lab4.backgroundColor = RGBACOLOR(49, 184, 243, 1);
-        cell.lab3.textColor = RGBACOLOR(49, 184, 243, 1);
+        cell.lab4.backgroundColor = RGB_AB;
+        cell.lab3.textColor = RGB_AB;
         
         if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
             cell.lab4.hidden = NO;

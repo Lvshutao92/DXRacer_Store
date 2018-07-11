@@ -60,6 +60,7 @@
 
 
 - (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = YES;
     
     [self getOrderStatus];
@@ -98,12 +99,14 @@
 
 
 - (void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
     if (self.timer != nil) {
         [self.timer invalidate];
         self.timer = nil;
     }
 }
 - (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
     self.tabBarController.tabBar.hidden = YES;
 }
 
@@ -217,7 +220,7 @@
     
     cell.lab5.text = [dict objectForKey:@"productAttrs"];
     
-    cell.lab3.textColor = RGBACOLOR(49, 184, 243, 1);
+    cell.lab3.textColor = RGB_AB;
     return cell;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -258,7 +261,7 @@
     }
     lab2.text = str;
     lab2.font = [UIFont fontWithName:@"Helvetica-Bold" size:16];
-    lab2.textColor = RGBACOLOR(49, 184, 243, 1);
+    lab2.textColor = RGB_AB;
     lab2.textAlignment = NSTextAlignmentRight;
     [lab addSubview:lab2];
     return view;
@@ -396,7 +399,7 @@
         btn.frame = CGRectMake(SCREEN_WIDTH-80, 10, 70, 30);
         [btn setTitle:@"去支付" forState:UIControlStateNormal];
         [btn setTitleColor:RGBACOLOR(49, 184, 243, 1) forState:UIControlStateNormal];
-        LRViewBorderRadius(btn, 15, 1, RGBACOLOR(49, 184, 243, 1));
+        LRViewBorderRadius(btn, 15, 1, RGB_AB);
         btn.titleLabel.font = [UIFont systemFontOfSize:14];
         [btn addTarget:self action:@selector(clickBtn:) forControlEvents:UIControlEventTouchUpInside];
         btn.tag = 100 + section;

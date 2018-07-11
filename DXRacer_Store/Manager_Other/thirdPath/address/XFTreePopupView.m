@@ -41,7 +41,8 @@
 
 - (instancetype)initWithDataSource:(id)dataSource Commit:(void(^)(NSArray *))selectItems;
 {
-    if ([super init])
+    self = [super init];
+    if (self)
     {
         _commitBlock = selectItems;
         

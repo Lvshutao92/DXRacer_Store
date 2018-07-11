@@ -592,23 +592,25 @@
 -(UIView*)NavigationBa
 {
     view_bar =[[UIView alloc]init];
-    CGFloat hei;
-    CGFloat hh;
-    if ([[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone X"]||[[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone Simulator"]) {
-        hei = 88;
-        hh = 44;
-    }else{
-        hei = 64;
-        hh = 20;
-    }
-   
-    view_bar .frame=CGRectMake(0, 0, SCREEN_WIDTH, hei);
-    
-    
+    view_bar .frame=CGRectMake(0, 0, SCREEN_WIDTH, kNavBarHAbove7);
     view_bar.backgroundColor=[UIColor clearColor];
     [self.view addSubview: view_bar];
     
-    _customSearchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(40, hh+7, SCREEN_WIDTH-80, 30)];
+    
+    
+    
+    
+//    CAGradientLayer *gradient = [CAGradientLayer layer];
+//    gradient.frame = view_bar.bounds;
+//    gradient.colors = [NSArray arrayWithObjects:(id)[[UIColor blackColor] CGColor], (id)[[UIColor whiteColor] CGColor], nil];
+//    [view_bar.layer insertSublayer:gradient atIndex:0];
+    
+    
+    
+    
+    
+    
+    _customSearchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(40, kStatusBarHeight+7, SCREEN_WIDTH-80, 30)];
     _customSearchBar.delegate = self;
     for (UIView *subview in _customSearchBar.subviews) {
         for(UIView* grandSonView in subview.subviews){
@@ -633,17 +635,17 @@
     
     UIImage *theImage = [UIImage imageNamed:@"dx"];
     //theImage = [theImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    UIButton* meBtn=[[UIButton alloc]initWithFrame:CGRectMake(10, hh+7, 30, 30)];
+    UIButton* meBtn=[[UIButton alloc]initWithFrame:CGRectMake(10, kStatusBarHeight+7, 30, 30)];
     LRViewBorderRadius(meBtn, 15, 0, [UIColor clearColor]);
-    [meBtn setBackgroundImage:theImage forState:UIControlStateNormal];
+    [meBtn setImage:theImage forState:UIControlStateNormal];
     //[meBtn setTintColor:[UIColor blackColor]];
     [meBtn addTarget:self action:@selector(onLeftNavBtnClick) forControlEvents:UIControlEventTouchUpInside];
     [view_bar addSubview:meBtn];
     
     UIImage *theImage1 = [UIImage imageNamed:@"客服"];
     //    theImage1 = [theImage1 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    UIButton * readerBtn=[[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-40, hh+7, 30, 30)];
-    [readerBtn setBackgroundImage:theImage1 forState:UIControlStateNormal];
+    UIButton * readerBtn=[[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-40, kStatusBarHeight+7, 30, 30)];
+    [readerBtn setImage:theImage1 forState:UIControlStateNormal];
     [readerBtn addTarget:self action:@selector(onRightNavBtnClick) forControlEvents:UIControlEventTouchUpInside];
     //    [readerBtn setTintColor:[UIColor blackColor]];
     [view_bar addSubview:readerBtn];
@@ -883,6 +885,7 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
     [self SetNavBarHidden:NO];
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
 }

@@ -129,8 +129,13 @@
     [headerV addSubview:bgv];
     
     UIImageView *addreimg = [[UIImageView alloc]initWithFrame:CGRectMake(10, 37.5, 25, 25)];
-    addreimg.image = [UIImage imageNamed:@"sz1"];
     [bgv addSubview:addreimg];
+    
+    UIImage *theImage = [UIImage imageNamed:@"sz1"];
+    theImage = [theImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    addreimg.image = theImage;
+    [addreimg setTintColor:RGB_AB];
+    
     
     UIImageView *jiantou = [[UIImageView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-25, 40, 20, 20)];
     jiantou.image = [UIImage imageNamed:@"箭头3"];
@@ -367,9 +372,9 @@
     
     
     cell.line2.backgroundColor = RGBACOLOR(49, 184, 243, 1);
-    cell.lab3.textColor = RGBACOLOR(49, 184, 243, 1);
-    cell.lab5.textColor = RGBACOLOR(49, 184, 243, 1);
-    cell.lab6.backgroundColor = RGBACOLOR(49, 184, 243, 1);
+    cell.lab3.textColor = RGB_AB;
+    cell.lab5.textColor = RGB_AB;
+    cell.lab6.backgroundColor = RGB_AB;
     self.totalPrice.text = [Manager jinegeshi:[NSString stringWithFormat:@"%.2f",zongjiage]];
     
     
@@ -553,6 +558,7 @@
     }
 }
 - (void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
     if (self.timer != nil) {
         [self.timer invalidate];
         self.timer = nil;
@@ -620,13 +626,13 @@
     
     UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
     btn1.frame = CGRectMake(SCREEN_WIDTH-120, 0, 120, 55);
-    btn1.backgroundColor = RGBACOLOR(49, 184, 243, 1);
+    btn1.backgroundColor = RGB_AB;
     [btn1 setTitle:@"提交订单" forState:UIControlStateNormal];
     [btn1 addTarget:self action:@selector(commitOrder) forControlEvents:UIControlEventTouchUpInside];
     [view addSubview:btn1];
     
     self.totalPrice = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-140, 55)];
-    self.totalPrice.textColor = RGBACOLOR(49, 184, 243, 1);
+    self.totalPrice.textColor = RGB_AB;
     
     self.totalPrice.text = [Manager jinegeshi:[NSString stringWithFormat:@"%.2f",zongjiage]];
     
@@ -637,6 +643,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = YES;
     if (namelab.text.length <= 0) {
         [btn setTitle:@"请选择收货地址" forState:UIControlStateNormal];
@@ -658,6 +665,7 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
     self.tabBarController.tabBar.hidden = YES;
 }
 

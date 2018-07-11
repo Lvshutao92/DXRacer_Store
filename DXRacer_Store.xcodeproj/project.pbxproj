@@ -47,8 +47,6 @@
 		084D2330209BEE1000776B84 /* AccountEditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 084D232F209BEE1000776B84 /* AccountEditTableViewController.m */; };
 		084D2334209C07A300776B84 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 084D2333209C07A300776B84 /* LoginViewController.m */; };
 		084D2337209C07B100776B84 /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 084D2336209C07B100776B84 /* RegisterViewController.m */; };
-		0856BCDA20BBA4BE00FB7CBB /* gud4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0856BCD720BBA4BC00FB7CBB /* gud4.jpg */; };
-		0856BCDB20BBA4BE00FB7CBB /* gud3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0856BCD820BBA4BD00FB7CBB /* gud3.jpg */; };
 		0858BC20209AB2F800C4489B /* PYSearch.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0858BC14209AB2F500C4489B /* PYSearch.bundle */; };
 		0858BC21209AB2F800C4489B /* UIColor+PYExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 0858BC16209AB2F500C4489B /* UIColor+PYExtension.m */; };
 		0858BC22209AB2F800C4489B /* PYSearchConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 0858BC18209AB2F600C4489B /* PYSearchConst.m */; };
@@ -191,6 +189,8 @@
 		75DCF9842098035F00FEBBD9 /* FourVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DCF9832098035F00FEBBD9 /* FourVC.m */; };
 		75DCF9872098036D00FEBBD9 /* FiveVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DCF9862098036D00FEBBD9 /* FiveVC.m */; };
 		75DCF98B209803B000FEBBD9 /* TWScrollViewVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DCF98A209803B000FEBBD9 /* TWScrollViewVC.m */; };
+		75F8860820E4C6E100553450 /* gud3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 75F8860720E4C6E100553450 /* gud3.jpg */; };
+		75F8860A20E4C6ED00553450 /* gud4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 75F8860920E4C6ED00553450 /* gud4.jpg */; };
 		75FD53DA20DCA67D0022F644 /* FLAnimatideImgCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 75FD53D920DCA67D0022F644 /* FLAnimatideImgCell.m */; };
 		75FD53E020DD59EC0022F644 /* FMDBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 75FD53DF20DD59EC0022F644 /* FMDBManager.m */; };
 /* End PBXBuildFile section */
@@ -279,8 +279,6 @@
 		084D2333209C07A300776B84 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		084D2335209C07B100776B84 /* RegisterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
 		084D2336209C07B100776B84 /* RegisterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
-		0856BCD720BBA4BC00FB7CBB /* gud4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = gud4.jpg; sourceTree = "<group>"; };
-		0856BCD820BBA4BD00FB7CBB /* gud3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = gud3.jpg; sourceTree = "<group>"; };
 		0858BC14209AB2F500C4489B /* PYSearch.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = PYSearch.bundle; sourceTree = "<group>"; };
 		0858BC16209AB2F500C4489B /* UIColor+PYExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+PYExtension.m"; sourceTree = "<group>"; };
 		0858BC17209AB2F600C4489B /* PYSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYSearch.h; sourceTree = "<group>"; };
@@ -604,6 +602,8 @@
 		75DCF9862098036D00FEBBD9 /* FiveVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FiveVC.m; sourceTree = "<group>"; };
 		75DCF989209803B000FEBBD9 /* TWScrollViewVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TWScrollViewVC.h; sourceTree = "<group>"; };
 		75DCF98A209803B000FEBBD9 /* TWScrollViewVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TWScrollViewVC.m; sourceTree = "<group>"; };
+		75F8860720E4C6E100553450 /* gud3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = gud3.jpg; sourceTree = "<group>"; };
+		75F8860920E4C6ED00553450 /* gud4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = gud4.jpg; sourceTree = "<group>"; };
 		75FD53D820DCA67D0022F644 /* FLAnimatideImgCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FLAnimatideImgCell.h; sourceTree = "<group>"; };
 		75FD53D920DCA67D0022F644 /* FLAnimatideImgCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FLAnimatideImgCell.m; sourceTree = "<group>"; };
 		75FD53DE20DD59EC0022F644 /* FMDBManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FMDBManager.h; sourceTree = "<group>"; };
@@ -1405,8 +1405,8 @@
 				75159BDD20B0FB7000F80AD3 /* av3.jpg */,
 				088B78A920C535DE00494108 /* gud1.jpg */,
 				088B78A820C535DE00494108 /* gud2.jpg */,
-				0856BCD820BBA4BD00FB7CBB /* gud3.jpg */,
-				0856BCD720BBA4BC00FB7CBB /* gud4.jpg */,
+				75F8860720E4C6E100553450 /* gud3.jpg */,
+				75F8860920E4C6ED00553450 /* gud4.jpg */,
 			);
 			path = "引导页";
 			sourceTree = "<group>";
@@ -1590,7 +1590,6 @@
 				75159BE020B0FC0D00F80AD3 /* stip.png in Resources */,
 				0831981520AAC4020069176E /* yizi.jpg in Resources */,
 				08A834812094156F000BCFBB /* LaunchScreen.storyboard in Resources */,
-				0856BCDB20BBA4BE00FB7CBB /* gud3.jpg in Resources */,
 				082495B020B55E2A006FD6DB /* play@3x.png in Resources */,
 				75159BDE20B0FB7000F80AD3 /* av3.jpg in Resources */,
 				083197FE20AAAF0D0069176E /* Collec_2_Cell.xib in Resources */,
@@ -1602,7 +1601,6 @@
 				0866F13E20AEC52E0035AD95 /* AlipaySDK.bundle in Resources */,
 				088C641B20AFBF49003FE5D1 /* BigImgTableViewCell.xib in Resources */,
 				0890FB9C20C7747A00AAE3F7 /* README.txt in Resources */,
-				0856BCDA20BBA4BE00FB7CBB /* gud4.jpg in Resources */,
 				0871B9B420A0298B0035B3B7 /* PInfoCell.xib in Resources */,
 				088B78AA20C535DF00494108 /* gud2.jpg in Resources */,
 				0831980320AAB7400069176E /* Collec_3_Cell.xib in Resources */,
@@ -1611,6 +1609,7 @@
 				08A8347E2094156F000BCFBB /* Assets.xcassets in Resources */,
 				0864B9A620CF65190069988E /* no-content.png in Resources */,
 				086F057E20AD4AC200CD508C /* cart_unSelect_btn@2x.png in Resources */,
+				75F8860820E4C6E100553450 /* gud3.jpg in Resources */,
 				088B78AB20C535DF00494108 /* gud1.jpg in Resources */,
 				75BC2A6B20E215AD0016A15C /* miao.png in Resources */,
 				0831980920AAB8EA0069176E /* FL_1_Cell.xib in Resources */,
@@ -1623,6 +1622,7 @@
 				082495B120B55E2A006FD6DB /* play@2x.png in Resources */,
 				08A8347C20941560000BCFBB /* Main.storyboard in Resources */,
 				086F058620AD4AC200CD508C /* cart_default_bg.png in Resources */,
+				75F8860A20E4C6ED00553450 /* gud4.jpg in Resources */,
 				0858BC20209AB2F800C4489B /* PYSearch.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -18,6 +18,7 @@
 
 @implementation XPPD_ViewController
 - (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = YES;
     
     [Manager requestPOSTWithURLStr:KURLNSString(@"account") paramDic:nil token:nil finish:^(id responseObject) {
@@ -32,6 +33,7 @@
    
 }
 - (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
     self.tabBarController.tabBar.hidden = YES;
 }
 - (void)viewDidLoad {
@@ -144,11 +146,11 @@
     }else{
         cell.lab3.text = @"距结束";
         cell.lab3.textColor = [UIColor whiteColor];
-        cell.lab3.backgroundColor =  RGBACOLOR(49, 184, 243, 1);
+        cell.lab3.backgroundColor =  RGB_AB;;
         [cell downSecondHandle:model.crush_model.endTime starDate:startDate];
     }
     
-    cell.lab4.textColor = RGBACOLOR(49, 184, 243, 1);
+    cell.lab4.textColor = RGB_AB;;
     cell.lab4.text = [Manager jinegeshi:model.crush_model.salePrice];
     
     NSDictionary *attribtDic2 = @{NSStrikethroughStyleAttributeName: [NSNumber numberWithInteger:NSUnderlineStyleSingle]};

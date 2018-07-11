@@ -75,6 +75,7 @@
 
 @implementation DaiFuKuan_ViewController
 - (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     [self getOrderDetailsInfomation];
 }
 - (void)viewDidLoad {
@@ -222,8 +223,16 @@
     
     //地址
     UIImageView *addreimg = [[UIImageView alloc]initWithFrame:CGRectMake(5, 37.5, 25, 25)];
-    addreimg.image = [UIImage imageNamed:@"sz1"];
+    UIImage *theImage = [UIImage imageNamed:@"sz1"];
+    theImage = [theImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    addreimg.image = theImage;
+    [addreimg setTintColor:RGB_AB];
     [bglab addSubview:addreimg];
+    
+    
+    
+    
+    
     namelab = [[UILabel alloc]initWithFrame:CGRectMake(35, 15, SCREEN_WIDTH-50, 25)];
     namelab.font = [UIFont systemFontOfSize:14];
     [bglab addSubview:namelab];
@@ -346,7 +355,7 @@
     //    [footerBgv1 addSubview:label3];
     
     shifukuanLab = [[UILabel alloc]initWithFrame:CGRectMake(10, 61, SCREEN_WIDTH-20, 39)];
-    shifukuanLab.textColor =  RGBACOLOR(49, 184, 243, 1);
+    shifukuanLab.textColor =  RGB_AB;
     [footerBgv1 addSubview:shifukuanLab];
     
     ProductTotalPriceLab.font = [UIFont systemFontOfSize:15];
@@ -384,7 +393,7 @@
     cell.lab2.text = [NSString stringWithFormat:@"X%@",model.quantity];
     cell.lab5.text = model.productAttrs;
     
-    cell.lab3.textColor = RGBACOLOR(49, 184, 243, 1);
+    cell.lab3.textColor = RGB_AB;
     return cell;
 }
 
@@ -509,6 +518,7 @@
     }
 }
 - (void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
     if (self.timer != nil) {
         [self.timer invalidate];
         self.timer = nil;
@@ -562,7 +572,7 @@
     [self.view addSubview:v];
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.backgroundColor =  RGBACOLOR(49, 184, 243, 1);
+    btn.backgroundColor =  RGB_AB;
     btn.frame = CGRectMake(SCREEN_WIDTH-95, 10, 90, 30);
     [btn setTitle:btn1Title forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:14];

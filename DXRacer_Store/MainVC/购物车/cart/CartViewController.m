@@ -30,6 +30,8 @@
     
     BOOL isedit;
     UIButton *editbtn;
+    
+    UIView *view_bar;
 }
 
 
@@ -39,7 +41,9 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = NO;
+    [self SetNavBarHidden:YES];
     //每次进入购物车的时候把选择的置空
     [selectGoods removeAllObjects];
     
@@ -49,7 +53,22 @@
     priceLabel.text = [NSString stringWithFormat:@"￥0.00"];
     [self creatData];
     [self setupBottomView];
+    
+    
+   
 }
+
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self SetNavBarHidden:NO];
+}
+
+
+
+
+
+
 /**
  *  @author LQQ, 16-02-18 11:02:16
  *
@@ -105,7 +124,7 @@
         
         if ([code isEqualToString:@"401"] ){
             [Manager logout];
-            UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-kTabBarHeight-50)];
+            UIView *v = [[UIView alloc]initWithFrame:CGRectMake(0, kNavBarHAbove7, SCREEN_WIDTH, SCREEN_HEIGHT-kTabBarHeight-50-kNavBarHAbove7)];
             v.backgroundColor = [UIColor whiteColor];
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
             btn.frame = CGRectMake(SCREEN_WIDTH/2-60, SCREEN_HEIGHT/2-22.5, 120, 45);
@@ -136,19 +155,74 @@
     
     self.view.backgroundColor = RGBCOLOR(245, 246, 248);
     
-    editbtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    editbtn.frame = CGRectMake(0, 0, 50, 30) ;
-    [editbtn setTitle:@"编辑" forState:UIControlStateNormal];
-    [editbtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [editbtn addTarget:self action:@selector(clickEdit) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *bar = [[UIBarButtonItem alloc]initWithCustomView:editbtn];
-    self.navigationItem.rightBarButtonItem = bar;
+    [self NavigationBa];
+//    editbtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    editbtn.frame = CGRectMake(0, 0, 50, 30) ;
+//    [editbtn setTitle:@"编辑" forState:UIControlStateNormal];
+//    [editbtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//    [editbtn addTarget:self action:@selector(clickEdit) forControlEvents:UIControlEventTouchUpInside];
+//    UIBarButtonItem *bar = [[UIBarButtonItem alloc]initWithCustomView:editbtn];
+//    self.navigationItem.rightBarButtonItem = bar;
     
     dataArray = [[NSMutableArray alloc]init];
     selectGoods = [[NSMutableArray alloc]init];
     [self setupMainView];
-    self.title = @"购物车";
+    
+//    self.title = @"购物车";
 }
+
+
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    // 返回你所需要的状态栏样式
+    return UIStatusBarStyleLightContent;
+}
+#pragma mark - NavItem
+-(void) SetNavBarHidden:(BOOL) isHidden
+{
+    self.navigationController.navigationBarHidden = isHidden;
+}
+-(UIView*)NavigationBa
+{
+    view_bar =[[UIView alloc]init];
+    view_bar.frame=CGRectMake(0, 0, SCREEN_WIDTH, kNavBarHAbove7);
+    //    view_bar.backgroundColor=[UIColor clearColor];
+    [self.view addSubview: view_bar];
+    
+    
+    
+    CAGradientLayer *gradient = [CAGradientLayer layer];
+    gradient.frame = view_bar.bounds;
+    //    gradient.frame = self.navigationController.navigationBar.bounds;
+    gradient.colors = [NSArray arrayWithObjects:(id)[RGB_A CGColor],(id)[RGB_B CGColor], nil];
+    [view_bar.layer insertSublayer:gradient atIndex:0];
+    //    [self.navigationController.navigationBar.layer insertSublayer:gradient above:0];
+    
+    
+    
+    UILabel *lab = [[UILabel alloc]initWithFrame:CGRectMake(60, kStatusBarHeight, SCREEN_WIDTH-120, 44)];
+    lab.text = @"购物车";
+    lab.textAlignment = NSTextAlignmentCenter;
+    lab.textColor = [UIColor whiteColor];
+    [view_bar addSubview:lab];
+    
+   
+    editbtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    editbtn.frame = CGRectMake(SCREEN_WIDTH-60, kStatusBarHeight+7, 50, 30) ;
+    [editbtn setTitle:@"编辑" forState:UIControlStateNormal];
+    [editbtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [editbtn addTarget:self action:@selector(clickEdit) forControlEvents:UIControlEventTouchUpInside];
+    [view_bar addSubview:editbtn];
+    
+    return view_bar;
+}
+
+
+
+
+
+
+
 - (void)clickEdit {
     if (isedit == NO) {
         [editbtn setTitle:@"完成" forState:UIControlStateNormal];
@@ -204,6 +278,18 @@
     [selectAll setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [selectAll addTarget:self action:@selector(selectAllBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [bgView addSubview:selectAll];
+    
+    UIImage *theImage = [UIImage imageNamed:@"cart_unSelect_btn"];
+    theImage = [theImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [selectAll setImage:theImage forState:UIControlStateSelected];
+    [selectAll setTintColor:RGB_AB];
+    
+    UIImage *theImage1 = [UIImage imageNamed:@"cart_selected_btn"];
+    theImage1 = [theImage1 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [selectAll setImage:theImage1 forState:UIControlStateSelected];
+    [selectAll setTintColor:RGB_AB];
+    
+    
     //全选按钮
     [selectAll mas_makeConstraints:^(MASConstraintMaker *make) {
         //        make.left.equalTo(bgView).offset(10);
@@ -228,11 +314,11 @@
         priceLabel = [[UILabel alloc]init];
         priceLabel.text = @"￥0.00";
         priceLabel.font = [UIFont boldSystemFontOfSize:16];
-        priceLabel.textColor = RGBACOLOR(49, 184, 243, 1);
+        priceLabel.textColor = RGB_AB;
         [bgView addSubview:priceLabel];
         //结算按钮
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn.backgroundColor = RGBACOLOR(49, 184, 243, 1);
+        btn.backgroundColor = RGB_AB;
         [btn setTitle:@"去结算" forState:UIControlStateNormal];
         [btn addTarget:self action:@selector(goPayBtnClick) forControlEvents:UIControlEventTouchUpInside];
         [bgView addSubview:btn];
@@ -270,7 +356,7 @@
         
     }else{
         UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn1.backgroundColor = RGBACOLOR(49, 184, 243, 1);
+        btn1.backgroundColor = RGB_AB;
         [btn1 setTitle:@"删除" forState:UIControlStateNormal];
         [btn1 addTarget:self action:@selector(clickgodeleate) forControlEvents:UIControlEventTouchUpInside];
         [bgView addSubview:btn1];
@@ -363,7 +449,7 @@
     {
         UIView *vi = [self.view viewWithTag:TAG_BACKGROUNDVIEW];
         [vi removeFromSuperview];
-        myTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - kTabBarHeight -50) style:UITableViewStylePlain];
+        myTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, kNavBarHAbove7, SCREEN_WIDTH, SCREEN_HEIGHT - kTabBarHeight - 50 - kNavBarHAbove7) style:UITableViewStylePlain];
         myTableView.delegate = self;
         myTableView.dataSource = self;
         myTableView.rowHeight = 100;
@@ -378,7 +464,7 @@
 -(void)cartEmptyShow
 {
     //默认视图背景
-    UIView *backgroundView = [[UIView alloc]initWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, SCREEN_HEIGHT - kTabBarHeight- 50)];
+    UIView *backgroundView = [[UIView alloc]initWithFrame:CGRectMake(0, kNavBarHAbove7, SCREEN_WIDTH, SCREEN_HEIGHT - kTabBarHeight- 50-kNavBarHAbove7)];
     backgroundView.backgroundColor = [UIColor whiteColor];
     backgroundView.tag = TAG_BACKGROUNDVIEW;
     [self.view addSubview:backgroundView];

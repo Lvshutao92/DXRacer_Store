@@ -64,7 +64,7 @@
     LRViewBorderRadius(btn, 5, 0, [UIColor clearColor]);
     [btn setTitle:@"提交" forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(clicksave) forControlEvents:UIControlEventTouchUpInside];
-    btn.backgroundColor = RGBACOLOR(49, 184, 243, 1);
+    btn.backgroundColor = RGB_AB;
     [self.view addSubview:btn];
     
    

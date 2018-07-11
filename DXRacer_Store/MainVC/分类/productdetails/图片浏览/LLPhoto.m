@@ -73,7 +73,7 @@
     if (URL == nil) {
         URL = [NSURL URLWithString:[path stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     }
-    
+    LRWeakSelf(self);
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         
         NSData *data;
@@ -83,7 +83,7 @@
         else if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
             data = [NSData dataWithContentsOfFile:path];
         }
-        
+        LRStrongSelf(weakSelf);
         if (data) {
             NSDictionary *dic        = @{(NSString *)kCGImagePropertyGIFLoopCount:@0};
             NSDictionary *properties = @{(__bridge_transfer NSString *)kCGImagePropertyGIFDictionary:dic};
@@ -94,39 +94,34 @@
                 
                 if (imageCount == 1) {//单张图片
                     CGImageRef cgimage = CGImageSourceCreateImageAtIndex(imageSourceRef, 0, NULL);
-                    _currentImage = [UIImage imageWithCGImage:cgimage];
+                    self->_currentImage = [UIImage imageWithCGImage:cgimage];
                     
                     CFRelease(cgimage);
-                    CFRelease(imageSourceRef);
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        [self layoutImageView];
+                        [strongSelf layoutImageView];
                     });
-                }
-                else if (imageCount > 1) {//gif图片
-                    
+                }else if (imageCount > 1) {//gif图片
                     NSMutableArray *times    = [[NSMutableArray alloc] initWithCapacity:imageCount];
-                    
                     for (size_t i = 0; i < imageCount; i++) {
-                        
                         CGImageRef cgimage = CGImageSourceCreateImageAtIndex(imageSourceRef, i, NULL);
                         UIImage *image = [UIImage imageWithCGImage:cgimage];
                         CFRelease(cgimage);
                         if (i == 0) {
-                            _currentImage = image;
+                            self->_currentImage = image;
                         }
-                        [_images addObject:image];
+                        [self->_images addObject:image];
                         
                         NSDictionary *properties    = (__bridge_transfer NSDictionary *)CGImageSourceCopyPropertiesAtIndex(imageSourceRef, i, NULL);
                         NSDictionary *gifProperties = [properties valueForKey:(__bridge NSString *)kCGImagePropertyGIFDictionary];
                         NSString *gifDelayTime      = [gifProperties valueForKey:(__bridge NSString*)kCGImagePropertyGIFDelayTime];
                         [times addObject:gifDelayTime];
-                        _totalTime += [gifDelayTime floatValue];
+                        self->_totalTime += [gifDelayTime floatValue];
                     }
-                    CFRelease(imageSourceRef);
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        [self layoutImageView];
+                        [strongSelf layoutImageView];
                     });
                 }
+                CFRelease(imageSourceRef);
             }
         }
     });

@@ -64,7 +64,7 @@
     //商品价格
     LB_price = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(headImage.frame)+20, 10, 150, 20)];
 //    LB_price.text = @"¥100";
-    LB_price.textColor = RGBACOLOR(49, 184, 243, 1);
+    LB_price.textColor = RGB_AB;
     LB_price.font = [UIFont systemFontOfSize:16];
     [whiteView addSubview:LB_price];
     
@@ -81,7 +81,7 @@
     
     
     LB_kucun = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(headImage.frame)+140, CGRectGetMaxY(LB_price.frame), SCREEN_WIDTH-CGRectGetMaxX(headImage.frame)-120, 20)];
-    LB_kucun.textColor = RGBACOLOR(49, 184, 243, 1);
+    LB_kucun.textColor = RGB_AB;
     LB_kucun.font = [UIFont systemFontOfSize:14];
     LB_kucun.text = @"";
     [whiteView addSubview:LB_kucun];
@@ -89,7 +89,7 @@
     
     //已售件数
     LB_showSales = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(LB_stock.frame), CGRectGetMaxY(LB_stock.frame), 100, 20)];
-    LB_showSales.textColor = RGBACOLOR(49, 184, 243, 1);
+    LB_showSales.textColor = RGB_AB;
     
 //    NSString *sellStr = [NSString stringWithFormat:@"已售 %@ 件",self.showSales];
     
@@ -109,7 +109,7 @@
     LB_detail = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(headImage.frame)+20, CGRectGetMaxY(LB_stock.frame), 150, 20)];
     LB_detail.text = @"请选择 尺码 颜色分类";
     LB_detail.numberOfLines = 0;
-    LB_detail.textColor = RGBACOLOR(49, 184, 243, 1);
+    LB_detail.textColor = RGB_AB;
     LB_detail.font = [UIFont systemFontOfSize:15];
     [whiteView addSubview:LB_detail];
     //分界线
@@ -121,7 +121,7 @@
     addBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     addBtn.frame = CGRectMake(0, whiteView.dwq_height-50, whiteView.frame.size.width, 50);
     
-    [addBtn setBackgroundColor:RGBACOLOR(49, 184, 243, 1)];
+    [addBtn setBackgroundColor:RGB_AB];
     [addBtn setTitleColor:[UIColor whiteColor] forState:0];
     addBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     [addBtn setTitle:@"加入购物车" forState:0];
@@ -135,7 +135,7 @@
     //立即购买按钮
     buyBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     buyBtn.frame = CGRectMake(whiteView.frame.size.width/2,  whiteView.dwq_height-50, whiteView.frame.size.width/2, 50);
-    [buyBtn setBackgroundColor:RGBACOLOR(49, 184, 243, 1)];
+    [buyBtn setBackgroundColor:RGB_AB];
     [buyBtn setTitleColor:[UIColor whiteColor] forState:0];
     buyBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     [buyBtn setTitle:@"立即购买" forState:0];

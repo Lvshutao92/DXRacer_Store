@@ -19,10 +19,12 @@
 
 @implementation AddrViewController
 - (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = YES;
     [self lodinfo];
 }
 - (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
     self.tabBarController.tabBar.hidden = YES;
 }
 - (void)viewDidLoad {
@@ -31,7 +33,7 @@
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(0, SCREEN_HEIGHT-50, SCREEN_WIDTH, 50);
-    btn.backgroundColor = RGBACOLOR(49, 184, 243, 1);
+    btn.backgroundColor = RGB_AB;
     [btn setTitle:@"新增收货地址" forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(clickAddAddress) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btn];
@@ -163,7 +165,10 @@
     if ([model.isDefault isEqualToString:@"N"]) {
         cell.img1.image = [UIImage imageNamed:@"yuanhuan"];
     }else{
-        cell.img1.image = [UIImage imageNamed:@"seleyuanhuan"];
+        UIImage *theImage = [UIImage imageNamed:@"seleyuanhuan"];
+        theImage = [theImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.img1.image = theImage;
+        [cell.img1 setTintColor:RGB_AB];
     }
     
     

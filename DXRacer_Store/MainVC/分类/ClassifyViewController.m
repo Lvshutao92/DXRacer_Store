@@ -41,6 +41,10 @@
     
     UITextField *text1;
     UITextField *text2;
+    
+    
+    UIView *view_bar;
+    UISearchBar *_customSearchBar;
 }
 @property (nonatomic, strong) UIScrollView *upView;
 @property (nonatomic, strong) UIWindow *window;
@@ -99,7 +103,9 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = NO;
-    self.navigationController.navigationBarHidden = NO;
+    
+    [self SetNavBarHidden:YES];
+    
     
     for (UIButton *btn in _btn1arr) {
         btn.backgroundColor =  [UIColor colorWithWhite:.9 alpha:.3];
@@ -122,6 +128,16 @@
     str3 = @"";
     str4 = @"";
 }
+
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self SetNavBarHidden:NO];
+}
+
+
+
+
 
 
 //懒加载
@@ -199,7 +215,7 @@
     str2 = @"";
     str3 = @"";
     str4 = @"";
-    
+    [self NavigationBa];
     
     LRWeakSelf(self)
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
@@ -207,11 +223,10 @@
         [weakSelf xilie];
         [weakSelf leixing];
         [weakSelf fenlei];
-//        [weakSelf performSelectorOnMainThread:@selector(click) withObject:nil waitUntilDone:YES];
-//        //通知主线程刷新
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [weakSelf.tableview reloadData];
-//        });
+        //通知主线程刷新
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.goosdCollectionView reloadData];
+        });
     });
     
     
@@ -229,9 +244,25 @@
     [self.window addGestureRecognizer:tap];
     [self.window makeKeyAndVisible];
     
-   
-    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 - (void)pinpai{
     __weak typeof(self) weakSelf = self;
@@ -299,34 +330,28 @@
     [self registrationCell];
     
     
-    CGFloat hei;
-    if ([[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone X"]||[[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone Simulator"]) {
-        hei = 44;
-    }else{
-        hei = 20;
-    }
-    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 2, SCREEN_WIDTH, 40)];//allocate titleView
-    [titleView setBackgroundColor:[UIColor whiteColor]];
-    self.searchBar = [[DXSearchBar alloc] init];
-    self.searchBar.delegate = self;
-    self.searchBar.placeholder = @"请输入商品名称";
-    self.searchBar.frame = CGRectMake(70, 2.5, SCREEN_WIDTH-140, 35);
-    self.searchBar.backgroundColor = [UIColor whiteColor];
-    [[[self.searchBar.subviews objectAtIndex:0].subviews objectAtIndex:1] setTintColor:[UIColor clearColor]];
-    LRViewBorderRadius(titleView, 10, 1, [UIColor colorWithWhite:.99 alpha:2]);
-    [titleView addSubview:self.searchBar];
-    self.navigationItem.titleView = titleView;
-    
-    UIButton *bbb = [[UIButton alloc] initWithFrame:CGRectMake(10, 7, 30, 30)];
-    [bbb setImage:[UIImage imageNamed:@"筛选"] forState:UIControlStateNormal];
-    [bbb setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [bbb addTarget:self action:@selector(clickshaixuan) forControlEvents:UIControlEventTouchUpInside];
-    [titleView addSubview:bbb];
-
-    picBtn = [[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-60, 7, 30, 30)];
-    [picBtn setImage:[UIImage imageNamed:@"分类2"] forState:UIControlStateNormal];
-    [picBtn addTarget:self action:@selector(clickqiehuan) forControlEvents:UIControlEventTouchUpInside];
-    [titleView addSubview:picBtn];
+//    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 2, SCREEN_WIDTH, 40)];//allocate titleView
+//    [titleView setBackgroundColor:[UIColor whiteColor]];
+//    self.searchBar = [[DXSearchBar alloc] init];
+//    self.searchBar.delegate = self;
+//    self.searchBar.placeholder = @"请输入商品名称";
+//    self.searchBar.frame = CGRectMake(70, 2.5, SCREEN_WIDTH-140, 35);
+//    self.searchBar.backgroundColor = [UIColor whiteColor];
+//    [[[self.searchBar.subviews objectAtIndex:0].subviews objectAtIndex:1] setTintColor:[UIColor clearColor]];
+//    LRViewBorderRadius(titleView, 10, 1, [UIColor colorWithWhite:.99 alpha:2]);
+//    [titleView addSubview:self.searchBar];
+//    self.navigationItem.titleView = titleView;
+//
+//    UIButton *bbb = [[UIButton alloc] initWithFrame:CGRectMake(10, 7, 30, 30)];
+//    [bbb setImage:[UIImage imageNamed:@"筛选"] forState:UIControlStateNormal];
+//    [bbb setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//    [bbb addTarget:self action:@selector(clickshaixuan) forControlEvents:UIControlEventTouchUpInside];
+//    [titleView addSubview:bbb];
+//
+//    picBtn = [[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-60, 7, 30, 30)];
+//    [picBtn setImage:[UIImage imageNamed:@"分类2"] forState:UIControlStateNormal];
+//    [picBtn addTarget:self action:@selector(clickqiehuan) forControlEvents:UIControlEventTouchUpInside];
+//    [titleView addSubview:picBtn];
 
     
     
@@ -337,6 +362,91 @@
     }
     [self setUpReflash];
  }
+
+
+
+
+
+
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    // 返回你所需要的状态栏样式
+    return UIStatusBarStyleLightContent;
+}
+#pragma mark - NavItem
+-(void) SetNavBarHidden:(BOOL) isHidden
+{
+    self.navigationController.navigationBarHidden = isHidden;
+}
+-(UIView*)NavigationBa
+{
+    view_bar =[[UIView alloc]init];
+    view_bar .frame=CGRectMake(0, 0, SCREEN_WIDTH, kNavBarHAbove7);
+    //    view_bar.backgroundColor=[UIColor clearColor];
+    [self.view addSubview: view_bar];
+    
+    
+    
+    CAGradientLayer *gradient = [CAGradientLayer layer];
+    gradient.frame = view_bar.bounds;
+    //    gradient.frame = self.navigationController.navigationBar.bounds;
+    gradient.colors = [NSArray arrayWithObjects:(id)[RGB_A CGColor],(id)[RGB_B CGColor], nil];
+    [view_bar.layer insertSublayer:gradient atIndex:0];
+    //    [self.navigationController.navigationBar.layer insertSublayer:gradient above:0];
+    
+    
+    _customSearchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(40, kStatusBarHeight+7, SCREEN_WIDTH-80, 30)];
+    _customSearchBar.delegate = self;
+    for (UIView *subview in _customSearchBar.subviews) {
+        for(UIView* grandSonView in subview.subviews){
+            if ([grandSonView isKindOfClass:NSClassFromString(@"UISearchBarBackground")]) {
+                grandSonView.alpha = 0.0f;
+            }else if([grandSonView isKindOfClass:NSClassFromString(@"UISearchBarTextField")] ){
+                //NSLog(@"Keep textfiedld bkg color");
+            }else{
+                grandSonView.alpha = 0.0f;
+            }
+        }
+    }
+    
+    UITextField *searchField = [_customSearchBar valueForKey:@"searchField"];
+    if (searchField) {
+        LRViewBorderRadius(searchField, 19, 0, [UIColor clearColor]);
+    }
+    LRViewBorderRadius(_customSearchBar, 22, 0, [UIColor clearColor]);
+    _customSearchBar.placeholder = @"请输入商品名称";
+    [view_bar addSubview:_customSearchBar];
+    
+    
+    UIImage *theImage = [UIImage imageNamed:@"筛选1"];
+    //theImage = [theImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    UIButton* meBtn=[[UIButton alloc]initWithFrame:CGRectMake(10, kStatusBarHeight+7, 30, 30)];
+    LRViewBorderRadius(meBtn, 15, 0, [UIColor clearColor]);
+    [meBtn setImage:theImage forState:UIControlStateNormal];
+    //[meBtn setTintColor:[UIColor blackColor]];
+    [meBtn addTarget:self action:@selector(clickshaixuan) forControlEvents:UIControlEventTouchUpInside];
+    [view_bar addSubview:meBtn];
+    
+    UIImage *theImage1 = [UIImage imageNamed:@"分类2"];
+    //    theImage1 = [theImage1 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    picBtn=[[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-40, kStatusBarHeight+7, 30, 30)];
+    [picBtn setImage:theImage1 forState:UIControlStateNormal];
+    [picBtn addTarget:self action:@selector(clickqiehuan) forControlEvents:UIControlEventTouchUpInside];
+    //    [readerBtn setTintColor:[UIColor blackColor]];
+    [view_bar addSubview:picBtn];
+    
+    return view_bar;
+}
+
+
+
+
+
+
+
+
+
+
 
 - (void)clickqiehuan{
     if (self.isPermutation == YES) {
@@ -717,11 +827,11 @@
     
     _upView.contentSize = CGSizeMake(0, h4+60);
     
-    label1.textColor = RGBACOLOR(49, 184, 243, 1);
-    label2.textColor = RGBACOLOR(49, 184, 243, 1);
-    label3.textColor = RGBACOLOR(49, 184, 243, 1);
-    label4.textColor = RGBACOLOR(49, 184, 243, 1);
-    label5.textColor = RGBACOLOR(49, 184, 243, 1);
+    label1.textColor = RGB_AB;
+    label2.textColor = RGB_AB;
+    label3.textColor = RGB_AB;
+    label4.textColor = RGB_AB;
+    label5.textColor = RGB_AB;
     label1.font = [UIFont fontWithName:@"Helvetica-Bold" size:16];
     label2.font = [UIFont fontWithName:@"Helvetica-Bold" size:16];
     label3.font = [UIFont fontWithName:@"Helvetica-Bold" size:16];
@@ -904,8 +1014,8 @@
         cell.lab3.text = model.series_name;
         
         
-        cell.lab4.backgroundColor = RGBACOLOR(49, 184, 243, 1);
-        cell.lab2.textColor = RGBACOLOR(49, 184, 243, 1);
+        cell.lab4.backgroundColor = RGB_AB;
+        cell.lab2.textColor = RGB_AB;
         
         if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
             cell.lab4.hidden = NO;
@@ -932,8 +1042,8 @@
         cell.lab2.text = model.series_name;
         
         
-        cell.lab4.backgroundColor = RGBACOLOR(49, 184, 243, 1);
-        cell.lab3.textColor = RGBACOLOR(49, 184, 243, 1);
+        cell.lab4.backgroundColor = RGB_AB;
+        cell.lab3.textColor = RGB_AB;
         
         if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
             cell.lab4.hidden = NO;

@@ -31,11 +31,13 @@
 
 @implementation XSTP_ViewController
 - (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = YES;
     self.navigationController.navigationBar.hidden = NO;
     
 }
 - (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
     self.tabBarController.tabBar.hidden = YES;
 }
 
@@ -199,8 +201,8 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             [cell.img sd_setImageWithURL:[NSURL URLWithString:NSString(model.model_img)]placeholderImage:[UIImage imageNamed:@""]];
         });
-        cell.lab4.backgroundColor = RGBACOLOR(49, 184, 243, 1);
-        cell.lab2.textColor = RGBACOLOR(49, 184, 243, 1);
+        cell.lab4.backgroundColor = RGB_AB;
+        cell.lab2.textColor = RGB_AB;
         
         cell.lab1.text       = model.model_name;
         cell.lab2.text     = [Manager jinegeshi:model.sale_price];
@@ -233,8 +235,8 @@
         cell.lab3.text     = [Manager jinegeshi:model.sale_price];
         cell.lab2.text = model.series_name;
         
-        cell.lab4.backgroundColor = RGBACOLOR(49, 184, 243, 1);
-        cell.lab3.textColor = RGBACOLOR(49, 184, 243, 1);
+        cell.lab4.backgroundColor =RGB_AB;
+        cell.lab3.textColor = RGB_AB;
         
         if ([Manager judgeWhetherIsEmptyAnyObject:model.promotionTitle]==YES) {
             cell.lab4.hidden = NO;

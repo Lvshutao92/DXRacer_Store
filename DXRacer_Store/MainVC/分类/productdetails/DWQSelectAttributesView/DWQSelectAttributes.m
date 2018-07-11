@@ -124,7 +124,7 @@
         
         if (self.btn.tag == 10000) {
             self.selectBtn = self.btn;
-            self.selectBtn.backgroundColor = RGBACOLOR(49, 184, 243, 1);;
+            self.selectBtn.backgroundColor = RGB_AB;
             [self.selectBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         }
         
@@ -156,9 +156,9 @@
         [self.selectBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         //        NSLog(@"%@-----%@",btn.titleLabel.text,[self.rankArray[btn.tag-10000] sequence]);
     }else{
-        btn.backgroundColor = RGBACOLOR(49, 184, 243, 1);
+        btn.backgroundColor = RGB_AB;
     }
-    btn.backgroundColor = RGBACOLOR(49, 184, 243, 1);
+    btn.backgroundColor = RGB_AB;
     btn.selected = YES;
     
     self.selectBtn = btn;

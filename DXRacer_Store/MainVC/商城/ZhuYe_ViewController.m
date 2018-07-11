@@ -231,7 +231,6 @@
     Home_fenleilist_ViewController *details = [[Home_fenleilist_ViewController alloc]init];
     details.idstr = sender.titleLabel.text;
     details.navigationItem.title = @"分类";
-    
     [self.navigationController pushViewController:details animated:YES];
 }
 
@@ -255,9 +254,9 @@
     [super viewDidLoad];
     self.view.backgroundColor =[UIColor whiteColor];
     
+   
     
-    
-    self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) style:UITableViewStylePlain];
+    self.tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, kNavBarHAbove7, SCREEN_WIDTH, SCREEN_HEIGHT-kNavBarHAbove7) style:UITableViewStylePlain];
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
@@ -577,48 +576,142 @@
 
 
 
-
-
-
-
-
--(void)NavigationBa
-{
-    
-   
-    UIView *v2 = [[UIView alloc]initWithFrame:CGRectMake(0, kStatusBarHeight, 25, 44)];
-    UIButton * readerBtn=[[UIButton alloc] initWithFrame:CGRectMake(0, 9.5, 25, 25)];
-    [readerBtn setImage:[UIImage imageNamed:@"客服-2"] forState:UIControlStateNormal];
-    [readerBtn addTarget:self action:@selector(onRightNavBtnClick) forControlEvents:UIControlEventTouchUpInside];
-    [v2 addSubview:readerBtn];
-    UIBarButtonItem *bar1 = [[UIBarButtonItem alloc]initWithCustomView:v2];
-    
-    
-    UIView *v3 = [[UIView alloc]initWithFrame:CGRectMake(0, kStatusBarHeight, 25, 44)];
-    UIButton * readerBtn3=[[UIButton alloc] initWithFrame:CGRectMake(0, 9.5, 25, 25)];
-    [readerBtn3 setImage:[UIImage imageNamed:@"search-2"] forState:UIControlStateNormal];
-    [readerBtn3 addTarget:self action:@selector(onRightNavBtnClick3) forControlEvents:UIControlEventTouchUpInside];
-    [v3 addSubview:readerBtn3];
-    UIBarButtonItem *bar2 = [[UIBarButtonItem alloc]initWithCustomView:v3];
-    
-    self.navigationItem.leftBarButtonItem = bar1;
-    self.navigationItem.rightBarButtonItem = bar2;
-   
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    // 返回你所需要的状态栏样式
+    return UIStatusBarStyleLightContent;
 }
+
+
+
+#pragma mark - NavItem
+-(void) SetNavBarHidden:(BOOL) isHidden
+{
+    self.navigationController.navigationBarHidden = isHidden;
+}
+-(UIView*)NavigationBa
+{
+    view_bar =[[UIView alloc]init];
+    view_bar .frame=CGRectMake(0, 0, SCREEN_WIDTH, kNavBarHAbove7);
+//    view_bar.backgroundColor=[UIColor clearColor];
+    [self.view addSubview: view_bar];
+    
+    
+    
+    
+    
+    CAGradientLayer *gradient = [CAGradientLayer layer];
+    gradient.frame = view_bar.bounds;
+//    gradient.frame = self.navigationController.navigationBar.bounds;
+    gradient.colors = [NSArray arrayWithObjects:(id)[RGB_A CGColor],(id)[RGB_B CGColor], nil];
+    [view_bar.layer insertSublayer:gradient atIndex:0];
+//    [self.navigationController.navigationBar.layer insertSublayer:gradient above:0];
+    
+    
+    
+    
+    
+    _customSearchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(40, kStatusBarHeight+7, SCREEN_WIDTH-80, 30)];
+    _customSearchBar.delegate = self;
+    for (UIView *subview in _customSearchBar.subviews) {
+        for(UIView* grandSonView in subview.subviews){
+            if ([grandSonView isKindOfClass:NSClassFromString(@"UISearchBarBackground")]) {
+                grandSonView.alpha = 0.0f;
+            }else if([grandSonView isKindOfClass:NSClassFromString(@"UISearchBarTextField")] ){
+                //NSLog(@"Keep textfiedld bkg color");
+            }else{
+                grandSonView.alpha = 0.0f;
+            }
+        }
+    }
+    
+    UITextField *searchField = [_customSearchBar valueForKey:@"searchField"];
+    if (searchField) {
+        LRViewBorderRadius(searchField, 19, 0, [UIColor clearColor]);
+    }
+    LRViewBorderRadius(_customSearchBar, 22, 0, [UIColor clearColor]);
+    _customSearchBar.placeholder = @"请输入商品名称";
+    [view_bar addSubview:self.customSearchBar];
+    
+    
+    UIImage *theImage = [UIImage imageNamed:@"dx"];
+    //theImage = [theImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    UIButton* meBtn=[[UIButton alloc]initWithFrame:CGRectMake(10, kStatusBarHeight+7, 30, 30)];
+    LRViewBorderRadius(meBtn, 15, 0, [UIColor clearColor]);
+    [meBtn setImage:theImage forState:UIControlStateNormal];
+    //[meBtn setTintColor:[UIColor blackColor]];
+    [meBtn addTarget:self action:@selector(onLeftNavBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    [view_bar addSubview:meBtn];
+    
+    UIImage *theImage1 = [UIImage imageNamed:@"客服"];
+    //    theImage1 = [theImage1 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    UIButton * readerBtn=[[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-40, kStatusBarHeight+7, 30, 30)];
+    [readerBtn setImage:theImage1 forState:UIControlStateNormal];
+    [readerBtn addTarget:self action:@selector(onRightNavBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    //    [readerBtn setTintColor:[UIColor blackColor]];
+    [view_bar addSubview:readerBtn];
+    
+    return view_bar;
+}
+//-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+//    CGFloat hei;
+//    if ([[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone X"]||[[[Manager sharedManager] iphoneType]isEqualToString:@"iPhone Simulator"]) {
+//        hei = 44;
+//    }else{
+//        hei = 20;
+//    }
+//    if(self.tableview.contentOffset.y<-hei) {
+//        [view_bar setHidden:YES];
+//    }else if(self.tableview.contentOffset.y<=0){
+//        [view_bar setHidden:NO];
+//        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.0001];
+//    }else if(self.tableview.contentOffset.y<10){
+//        [view_bar setHidden:NO];
+//        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.1];
+//    }else if(self.tableview.contentOffset.y<20){
+//        [view_bar setHidden:NO];
+//        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.2];
+//    }else if(self.tableview.contentOffset.y<30){
+//        [view_bar setHidden:NO];
+//        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.3];
+//    }else if(self.tableview.contentOffset.y<40){
+//        [view_bar setHidden:NO];
+//        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.4];
+//    }else if(self.tableview.contentOffset.y<50){
+//        [view_bar setHidden:NO];
+//        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.5];
+//    }else if(self.tableview.contentOffset.y<60){
+//        [view_bar setHidden:NO];
+//        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.6];
+//    }else if(self.tableview.contentOffset.y<70){
+//        [view_bar setHidden:NO];
+//        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.7];
+//    }else if(self.tableview.contentOffset.y<80){
+//        [view_bar setHidden:NO];
+//        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.8];
+//    }else if(self.tableview.contentOffset.y<90){
+//        [view_bar setHidden:NO];
+//        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:.9];
+//    }else{
+//        [view_bar setHidden:NO];
+//        view_bar.backgroundColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:1];
+//    }
+//}
+
 
 - (void)onLeftNavBtnClick {
     //NSLog(@"扫一扫");
 }
-- (void)onRightNavBtnClick3{
-    [self getHotSearch];
-}
 - (void)onRightNavBtnClick {
+    
+    
     UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectZero];
     NSString *qqstr = [NSString stringWithFormat:@"mqq://im/chat?chat_type=wpa&uin=%@&version=1&src_type=web",@"309718069"];
     NSURL *url = [NSURL URLWithString:qqstr];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     [webView loadRequest:request];
     [self.view addSubview:webView];
+    
+    
 }
 
 
@@ -697,8 +790,8 @@
     cell.lab3.text = [Manager jinegeshi:model.sale_price];
     
     
-    cell.lab1.backgroundColor = RGBACOLOR(49, 184, 243, 1);
-    cell.lab3.textColor = RGBACOLOR(49, 184, 243, 1);
+    cell.lab1.backgroundColor = RGB_AB;
+    cell.lab3.textColor = RGB_AB;
     return cell;
 }
 #pragma mark  点击CollectionView触发事件
@@ -780,16 +873,19 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = NO;
+    [self SetNavBarHidden:YES];
     
-//    [self.navigationController.navigationBar setBarTintColor: RGBACOLOR(49, 184, 243, 1)];
-//    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-//    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
+    
+    
+    //    [self getTopPic];
+    //    [self getGuanggao];
+    //    [self getBottomInfo];
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
-//    [self.navigationController.navigationBar setBarTintColor: [UIColor whiteColor]];
-//    [self.navigationController.navigationBar setTintColor:[UIColor blackColor]];
-//    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor blackColor]};
+    [super viewWillDisappear:animated];
+    [self SetNavBarHidden:NO];
 }
 
 

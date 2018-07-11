@@ -44,7 +44,7 @@ CG_INLINE CGRect CGRectMakes(CGFloat x, CGFloat y, CGFloat width, CGFloat height
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(0, SCREEN_HEIGHT-50, SCREEN_WIDTH, 50);
-    btn.backgroundColor = RGBACOLOR(49, 184, 243, 1);
+    btn.backgroundColor =RGB_AB;
     [btn setTitle:@"保存" forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(clickAddAddress) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btn];
@@ -402,6 +402,7 @@ CG_INLINE CGRect CGRectMakes(CGFloat x, CGFloat y, CGFloat width, CGFloat height
         }else {
             NSLog(@"请到设置>隐私>通讯录打开本应用的权限设置");
         }
+        CFRelease(addressBook);
     }
 }
 
@@ -448,6 +449,8 @@ CG_INLINE CGRect CGRectMakes(CGFloat x, CGFloat y, CGFloat width, CGFloat height
         self->text1.text = str1;
         self->text2.text = str2;
     }];
+    CFRelease(valuesRef);
+    CFRelease(value);
 }
 
 

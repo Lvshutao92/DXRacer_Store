@@ -133,6 +133,18 @@
     [self.selectBtn addTarget:self action:@selector(selectBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [bgView addSubview:self.selectBtn];
     
+    
+    UIImage *theImage = [UIImage imageNamed:@"cart_unSelect_btn"];
+    theImage = [theImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [self.selectBtn setImage:theImage forState:UIControlStateSelected];
+    [self.selectBtn setTintColor:RGB_AB];
+    
+    UIImage *theImage1 = [UIImage imageNamed:@"cart_selected_btn"];
+    theImage1 = [theImage1 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [self.selectBtn setImage:theImage1 forState:UIControlStateSelected];
+    [self.selectBtn setTintColor:RGB_AB];
+    
+    
     //照片背景
     UIView *imageBgView = [[UIView alloc]init];
     
@@ -165,7 +177,7 @@
     //时间
     self.dateLabel = [[UILabel alloc]init];
     self.dateLabel.font = [UIFont systemFontOfSize:18];
-    self.dateLabel.textColor = RGBACOLOR(49, 184, 243, 1);
+    self.dateLabel.textColor = RGB_AB;
 //    self.dateLabel.text = @"2015-12-03 17:49";
     [bgView addSubview:self.dateLabel];
     
@@ -173,7 +185,7 @@
     self.priceLabel = [[UILabel alloc]init];
     self.priceLabel.font = [UIFont boldSystemFontOfSize:12];
     self.priceLabel.textColor = [UIColor whiteColor];
-    self.priceLabel.backgroundColor = RGBACOLOR(49, 184, 243, 1);
+    self.priceLabel.backgroundColor = RGB_AB;
 //    LRViewBorderRadius(self.priceLabel, 10, 0, [UIColor clearColor]);
     self.priceLabel.textAlignment = NSTextAlignmentCenter;
     [bgView addSubview:self.priceLabel];
@@ -184,6 +196,9 @@
     [addBtn setImage:[UIImage imageNamed:@"cart_addBtn_highlight"] forState:UIControlStateHighlighted];
     [addBtn addTarget:self action:@selector(addBtnClick) forControlEvents:UIControlEventTouchUpInside];
     [bgView addSubview:addBtn];
+    
+    
+    
     
     //数量减按钮
     UIButton *cutBtn = [UIButton buttonWithType:UIButtonTypeCustom];

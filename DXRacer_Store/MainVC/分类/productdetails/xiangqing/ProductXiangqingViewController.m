@@ -158,7 +158,7 @@
     titleLab.numberOfLines = 0;
     [headerV addSubview:titleLab];
     priceLab = [[UILabel alloc]init];
-    priceLab.textColor = RGBACOLOR(49, 184, 243, 1);
+    priceLab.textColor = RGB_AB;
     [headerV addSubview:priceLab];
     
     activityNameLab = [[UILabel alloc]init];
@@ -167,7 +167,7 @@
     [headerV addSubview:activityNameLab];
     
     activityPriceLab = [[UILabel alloc]init];
-    activityPriceLab.textColor = RGBACOLOR(49, 184, 243, 1);
+    activityPriceLab.textColor = RGB_AB;
     activityPriceLab.textAlignment = NSTextAlignmentLeft;
     [headerV addSubview:activityPriceLab];
     
@@ -889,7 +889,7 @@
         
         btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
         btn2.frame = CGRectMake(0, 0, SCREEN_WIDTH, 55);
-        btn2.backgroundColor = RGBACOLOR(49, 184, 243, 1);
+        btn2.backgroundColor = RGB_AB;
         [btn2 setTitle:@"加入购物车" forState:UIControlStateNormal];
         [btn2 addTarget:self action:@selector(cllll:) forControlEvents:UIControlEventTouchUpInside];
         
