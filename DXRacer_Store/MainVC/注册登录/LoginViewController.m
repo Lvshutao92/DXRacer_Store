@@ -213,6 +213,8 @@
     [self.view addSubview:wjmmBtn];
     
     
+    text1.keyboardAppearance = UIKeyboardAppearanceLight;
+    text2.keyboardAppearance = UIKeyboardAppearanceLight;
 }
 
 

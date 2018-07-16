@@ -98,15 +98,18 @@
 
 
 
-
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    
+    
+    
+}
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+   
     self.tabBarController.tabBar.hidden = NO;
-    
     [self SetNavBarHidden:YES];
-    
-    
     for (UIButton *btn in _btn1arr) {
         btn.backgroundColor =  [UIColor colorWithWhite:.9 alpha:.3];
         [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];

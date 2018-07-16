@@ -122,9 +122,9 @@
 //rgb alpha颜色
 #define RGBACOLOR(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)]
 
-#define RGB_AB [UIColor colorWithRed:220/255.0 green:20/255.0 blue:60/255.0 alpha:1.0]
-#define RGB_A [UIColor colorWithRed:220/255.0 green:20/255.0 blue:60/255.0 alpha:1.0]
-#define RGB_B [UIColor colorWithRed:255/255.0 green:105/255.0 blue:180/250.0 alpha:1.0]
+#define RGB_AB [UIColor colorWithRed:255/255.0 green:0/255.0 blue:0/255.0 alpha:1.0]
+#define RGB_A [UIColor colorWithRed:255/255.0 green:0/255.0 blue:0/255.0 alpha:1.0]
+#define RGB_B [UIColor colorWithRed:255/255.0 green:99/255.0 blue:71/250.0 alpha:1.0]
 
 //获取当前语言
 #define CurrentLanguage ([[NSLocale preferredLanguages] objectAtIndex:0])

@@ -872,17 +872,17 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    self.tabBarController.tabBar.hidden = NO;
-    [self SetNavBarHidden:YES];
-    
-    
-    
     //    [self getTopPic];
     //    [self getGuanggao];
     //    [self getBottomInfo];
-    
+    self.tabBarController.tabBar.hidden = NO;
+    [self SetNavBarHidden:YES];
 }
-
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    
+   
+}
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self SetNavBarHidden:NO];

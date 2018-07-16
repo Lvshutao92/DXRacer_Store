@@ -42,7 +42,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.tabBarController.tabBar.hidden = NO;
+   self.tabBarController.tabBar.hidden = NO;
     [self SetNavBarHidden:YES];
     //每次进入购物车的时候把选择的置空
     [selectGoods removeAllObjects];
@@ -57,7 +57,11 @@
     
    
 }
-
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    
+    
+}
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];

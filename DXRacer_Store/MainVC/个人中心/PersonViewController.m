@@ -50,9 +50,13 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = NO;
-    [self SetNavBarHidden:YES];
-    
+     [self SetNavBarHidden:YES];
     [self getInfomation];
+}
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    
+   
 }
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
