@@ -1016,7 +1016,6 @@
         cell.lab2.text     = model.sale_price;
         cell.lab3.text = model.series_name;
         
-        
         cell.lab4.backgroundColor = RGB_AB;
         cell.lab2.textColor = RGB_AB;
         

@@ -79,6 +79,7 @@
         [Manager requestPOSTWithURLStr:KURLNSString(@"customer/login") paramDic:dic token:nil finish:^(id responseObject) {
             NSDictionary *diction = [Manager returndictiondata:responseObject];
             NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
+            NSLog(@"code ==== %@",code);
             if ([code isEqualToString:@"200"]) {
                 [Manager writewenjianming:@"phone.text" content:self->text1.text];
                 [Manager writewenjianming:@"password.text" content:self->text2.text];
@@ -114,13 +115,13 @@
                 NSDictionary *diction = [Manager returndictiondata:responseObject];
                 NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
                 if (![code isEqualToString:@"500"]) {
-                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"用户名不存在" message:@"温馨提示" preferredStyle:1];
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[diction objectForKey:@"msg"] message:@"温馨提示" preferredStyle:1];
                     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                     }];
                     [alert addAction:cancel];
                     [weakSelf presentViewController:alert animated:YES completion:nil];
                 }
-                //NSLog(@"----%@",diction);
+                NSLog(@"----%@",[diction objectForKey:@"msg"]);
             } enError:^(NSError *error) {
                 NSLog(@"%@",error);
             }];

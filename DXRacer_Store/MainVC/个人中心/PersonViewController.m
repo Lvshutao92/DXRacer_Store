@@ -26,6 +26,9 @@
 
 #import "GetACouponViewController.h"
 #import "AboutUsViewController.h"
+
+#import "DXRacer_Store-Swift.h"
+#import "ShouHouOrderViewController.h"
 @interface PersonViewController ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate>
 {
     SQCustomButton *button1;
@@ -129,7 +132,6 @@
     LRWeakSelf(self);
     [Manager requestPOSTWithURLStr:KURLNSString(@"account") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        //NSLog(@"----%@",diction);
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"401"]){
             [Manager logout];
@@ -153,6 +155,7 @@
         }
         [weakSelf.tableview.mj_header endRefreshing];
     } enError:^(NSError *error) {
+        NSLog(@"error === %@",error);
     }];
 }
 
@@ -185,7 +188,7 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     
-    self.dataArray = [@[@"我的订单",@"我的优惠券",@"领券中心",@"我的收藏",@"QQ客服",@"联系我们",@"关于我们"]mutableCopy];
+    self.dataArray = [@[@"全部订单",@"售后订单",@"我的优惠券",@"领券中心",@"我的收藏",@"QQ客服",@"联系我们",@"关于我们"]mutableCopy];
     
     
 //    UIView *btnview = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];
@@ -236,6 +239,9 @@
     [szbtn setImage:[UIImage imageNamed:@"设置"] forState:UIControlStateNormal];
     [szbtn addTarget:self action:@selector(clickedit) forControlEvents:UIControlEventTouchUpInside];
     [imgV addSubview:szbtn];
+    
+    
+    
     //*************订单*********************
     /*
     UILabel *bgv0 = [[UILabel alloc]initWithFrame:CGRectMake(0, 200, SCREEN_WIDTH, 49)];
@@ -456,9 +462,20 @@
             [self presentViewController:login animated:YES completion:nil];
         }else{
             OneVC *vc = [[OneVC alloc]init];
+            vc.navigationItem.title = @"全部订单";
             [self.navigationController pushViewController:vc animated:YES];
         }
     }else if (indexPath.row == 1){
+        if ([Manager redingwenjianming:@"phone.text"] == nil){
+            LoginViewController *login = [[LoginViewController alloc]init];
+            login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+            [self presentViewController:login animated:YES completion:nil];
+        }else{
+            ShouHouOrderViewController *vc = [[ShouHouOrderViewController alloc]init];
+            vc.navigationItem.title = @"售后订单";
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+    }else if (indexPath.row == 2){
         if ([Manager redingwenjianming:@"phone.text"]!= nil){
             [self dengdaiupdate];
 //            CouponsViewController *scr = [[CouponsViewController alloc] initWithAddVCARY:@[[CouponsOneVC new],[CouponsTwoVC new],[CouponsThreeVC new]]TitleS:@[@"未使用",@"已使用",@"已过期"] index:0];
@@ -468,7 +485,7 @@
             login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
             [self presentViewController:login animated:YES completion:nil];
         }
-    }else if (indexPath.row == 2){
+    }else if (indexPath.row == 3){
         if ([Manager redingwenjianming:@"phone.text"]!= nil){
             [self dengdaiupdate];
 //            GetACouponViewController *about = [[GetACouponViewController alloc]init];
@@ -479,7 +496,7 @@
             login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
             [self presentViewController:login animated:YES completion:nil];
         }
-    }else if (indexPath.row == 3){
+    }else if (indexPath.row == 4){
         if ([Manager redingwenjianming:@"phone.text"]!= nil){
             [self dengdaiupdate];
         }else{
@@ -487,18 +504,18 @@
             login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
             [self presentViewController:login animated:YES completion:nil];
         }
-    }else if (indexPath.row == 4){
+    }else if (indexPath.row == 5){
         UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectZero];
         NSString *qqstr = [NSString stringWithFormat:@"mqq://im/chat?chat_type=wpa&uin=%@&version=1&src_type=web",@"309718069"];
         NSURL *url = [NSURL URLWithString:qqstr];
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
         [webView loadRequest:request];
         [self.view addSubview:webView];
-    }else if (indexPath.row == 5) {
+    }else if (indexPath.row == 6) {
         NSMutableString *str=[[NSMutableString alloc]initWithFormat:@"tel:%@",@"051083599633"];
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
     }else{
-        AboutUsViewController *about = [[AboutUsViewController alloc]init];
+        AboutOurViewController *about = [[AboutOurViewController alloc]init];
         about.navigationItem.title = @"关于我们";
         [self.navigationController pushViewController:about animated:YES];
     }

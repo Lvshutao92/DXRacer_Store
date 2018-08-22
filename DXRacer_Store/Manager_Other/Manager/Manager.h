@@ -161,5 +161,20 @@
 
 
 @property(nonatomic,strong)NSMutableArray *arr_K;
+
+
+
+
+
+
++ (CGFloat)getHeighWithString:(NSString *)string withWidth:(CGFloat)width withFont:(UIFont *)font;
+
+
+
+
+
+
+
+
 @end
 

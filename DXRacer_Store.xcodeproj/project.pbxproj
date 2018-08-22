@@ -176,6 +176,10 @@
 		755AED7A2094C3D100BCFB71 /* Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 755AED792094C3D100BCFB71 /* Model.m */; };
 		755D87CA20B10971008F892E /* XTGuidePagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 755D87C720B10970008F892E /* XTGuidePagesViewController.m */; };
 		755D87CB20B10971008F892E /* CALayer+Transition.m in Sources */ = {isa = PBXBuildFile; fileRef = 755D87C820B10970008F892E /* CALayer+Transition.m */; };
+		7584A7F4212D088A00C9C4F7 /* AboutOurViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7584A7F3212D088A00C9C4F7 /* AboutOurViewController.swift */; };
+		7584A7F6212D3B4200C9C4F7 /* ReturnShoppingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7584A7F5212D3B4200C9C4F7 /* ReturnShoppingViewController.swift */; };
+		7584A7F8212D4C5F00C9C4F7 /* NetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7584A7F7212D4C5F00C9C4F7 /* NetManager.swift */; };
+		7584A7FD212D695000C9C4F7 /* ShouHouOrderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7584A7FC212D695000C9C4F7 /* ShouHouOrderViewController.m */; };
 		75A3D35320ADBDC000ABA831 /* FrankPagesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A3D34E20ADBDBE00ABA831 /* FrankPagesView.m */; };
 		75A3D35420ADBDC000ABA831 /* FrankMiddleToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A3D34F20ADBDBF00ABA831 /* FrankMiddleToolbar.m */; };
 		75A3D35520ADBDC000ABA831 /* FrankDropBounsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A3D35020ADBDBF00ABA831 /* FrankDropBounsView.m */; };
@@ -577,6 +581,12 @@
 		755D87C720B10970008F892E /* XTGuidePagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XTGuidePagesViewController.m; sourceTree = "<group>"; };
 		755D87C820B10970008F892E /* CALayer+Transition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+Transition.m"; sourceTree = "<group>"; };
 		755D87C920B10971008F892E /* CALayer+Transition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+Transition.h"; sourceTree = "<group>"; };
+		7584A7F2212D088A00C9C4F7 /* DXRacer_Store-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DXRacer_Store-Bridging-Header.h"; sourceTree = "<group>"; };
+		7584A7F3212D088A00C9C4F7 /* AboutOurViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutOurViewController.swift; sourceTree = "<group>"; };
+		7584A7F5212D3B4200C9C4F7 /* ReturnShoppingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReturnShoppingViewController.swift; sourceTree = "<group>"; };
+		7584A7F7212D4C5F00C9C4F7 /* NetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetManager.swift; sourceTree = "<group>"; };
+		7584A7FB212D695000C9C4F7 /* ShouHouOrderViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShouHouOrderViewController.h; sourceTree = "<group>"; };
+		7584A7FC212D695000C9C4F7 /* ShouHouOrderViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShouHouOrderViewController.m; sourceTree = "<group>"; };
 		75A3D34C20ADBDBE00ABA831 /* FrankDropBounsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankDropBounsView.h; sourceTree = "<group>"; };
 		75A3D34D20ADBDBE00ABA831 /* FrankMiddleToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrankMiddleToolbar.h; sourceTree = "<group>"; };
 		75A3D34E20ADBDBE00ABA831 /* FrankPagesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrankPagesView.m; sourceTree = "<group>"; };
@@ -715,6 +725,7 @@
 			children = (
 				0858BC2A209AC15300C4489B /* AboutUsViewController.h */,
 				0858BC2B209AC15300C4489B /* AboutUsViewController.m */,
+				7584A7F3212D088A00C9C4F7 /* AboutOurViewController.swift */,
 			);
 			path = "关于我们";
 			sourceTree = "<group>";
@@ -1118,11 +1129,13 @@
 				08A8347420941560000BCFBB /* AppDelegate.h */,
 				08A8347520941560000BCFBB /* AppDelegate.m */,
 				08F82A9920941DFA00D36A68 /* PrefixHeader.pch */,
+				7584A7F7212D4C5F00C9C4F7 /* NetManager.swift */,
 				08A8347A20941560000BCFBB /* Main.storyboard */,
 				08A8347D2094156F000BCFBB /* Assets.xcassets */,
 				08A8347F2094156F000BCFBB /* LaunchScreen.storyboard */,
 				08A834822094156F000BCFBB /* Info.plist */,
 				08A834832094156F000BCFBB /* main.m */,
+				7584A7F2212D088A00C9C4F7 /* DXRacer_Store-Bridging-Header.h */,
 			);
 			path = DXRacer_Store;
 			sourceTree = "<group>";
@@ -1171,6 +1184,9 @@
 				08171B8920C67ADB00151ECD /* FaPiao_ViewController.m */,
 				75DCF9792098033000FEBBD9 /* OneVC.h */,
 				75DCF97A2098033000FEBBD9 /* OneVC.m */,
+				7584A7F5212D3B4200C9C4F7 /* ReturnShoppingViewController.swift */,
+				7584A7FB212D695000C9C4F7 /* ShouHouOrderViewController.h */,
+				7584A7FC212D695000C9C4F7 /* ShouHouOrderViewController.m */,
 				0840A4A120CE581F003BE93C /* ABABViewController.h */,
 				0840A4A220CE581F003BE93C /* ABABViewController.m */,
 				0866F0C520AE76020035AD95 /* DZFOrderCell.h */,
@@ -1547,6 +1563,7 @@
 				TargetAttributes = {
 					08A8347020941560000BCFBB = {
 						CreatedOnToolsVersion = 9.3;
+						LastSwiftMigration = 0940;
 					};
 					08A834882094156F000BCFBB = {
 						CreatedOnToolsVersion = 9.3;
@@ -1732,6 +1749,8 @@
 				08F82A9820941DDE00D36A68 /* GTMBase64.m in Sources */,
 				087B548F20B2ACE200C50DE6 /* XSTP_ViewController.m in Sources */,
 				08A8347620941560000BCFBB /* AppDelegate.m in Sources */,
+				7584A7F6212D3B4200C9C4F7 /* ReturnShoppingViewController.swift in Sources */,
+				7584A7F4212D088A00C9C4F7 /* AboutOurViewController.swift in Sources */,
 				0866F1A420AECBB90035AD95 /* APOrderInfo.m in Sources */,
 				085F82E020C0D84100B112B0 /* YiFaHuo_ViewController.m in Sources */,
 				0831980D20AAB8FF0069176E /* FL_2_Cell.m in Sources */,
@@ -1820,6 +1839,8 @@
 				0871B9D020A040A20035B3B7 /* EasyShowUtils.m in Sources */,
 				0871B9C320A03FE50035B3B7 /* EasyAlertGlobalConfig.m in Sources */,
 				084D2330209BEE1000776B84 /* AccountEditTableViewController.m in Sources */,
+				7584A7F8212D4C5F00C9C4F7 /* NetManager.swift in Sources */,
+				7584A7FD212D695000C9C4F7 /* ShouHouOrderViewController.m in Sources */,
 				75A3D35820ADBDD000ABA831 /* ProductXiangqingViewController.m in Sources */,
 				08F82AD620944EE900D36A68 /* TAPageControl.m in Sources */,
 				086F057F20AD4AC200CD508C /* CartModel.m in Sources */,
@@ -1996,8 +2017,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8549J8BJBB;
+				DEVELOPMENT_TEAM = WV3JLG8ZFM;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2064,6 +2087,11 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "dxracer.com.cn.DXRacer-Store";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "DXRacer_Store/DXRacer_Store-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 arm64 armv7s";
 			};
@@ -2075,8 +2103,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8549J8BJBB;
+				DEVELOPMENT_TEAM = WV3JLG8ZFM;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2142,6 +2172,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "dxracer.com.cn.DXRacer-Store";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "DXRacer_Store/DXRacer_Store-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 arm64 armv7s";
 			};
@@ -2150,6 +2184,7 @@
 		08A834A12094156F000BCFBB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8549J8BJBB;
@@ -2169,6 +2204,7 @@
 		08A834A22094156F000BCFBB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8549J8BJBB;
@@ -2188,6 +2224,7 @@
 		08A834A42094156F000BCFBB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8549J8BJBB;
 				INFOPLIST_FILE = DXRacer_StoreUITests/Info.plist;
@@ -2206,6 +2243,7 @@
 		08A834A52094156F000BCFBB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8549J8BJBB;
 				INFOPLIST_FILE = DXRacer_StoreUITests/Info.plist;

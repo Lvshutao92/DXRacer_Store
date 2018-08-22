@@ -1,12 +1,12 @@
 //
-//  OneVC.m
+//  ShouHouOrderViewController.m
 //  DXRacer_Store
 //
-//  Created by 吕书涛 on 2018/5/1.
+//  Created by 吕书涛 on 2018/8/22.
 //  Copyright © 2018年 ilovedxracer. All rights reserved.
 //
 
-#import "OneVC.h"
+#import "ShouHouOrderViewController.h"
 #import "DZFOrderCell.h"
 
 
@@ -35,9 +35,7 @@
 
 
 #import "ABABViewController.h"
-
-
-@interface OneVC ()<UITableViewDelegate,UITableViewDataSource>
+@interface ShouHouOrderViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
     NSString *orderNum;
 }
@@ -55,10 +53,10 @@
 
 
 @property(nonatomic,strong)TFSheetView *tfSheetView;
+
 @end
 
-@implementation OneVC
-
+@implementation ShouHouOrderViewController
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -81,15 +79,15 @@
         
         [Manager requestPOSTWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
             NSDictionary *diction = [Manager returndictiondata:responseObject];
-//            NSString *code = [diction objectForKey:@"code"]
-//           NSLog(@"222-----------%@",diction);
+            //            NSString *code = [diction objectForKey:@"code"]
+            //           NSLog(@"222-----------%@",diction);
             if ([[diction objectForKey:@"msg"] isEqualToString:@"yes"]) {
                 [weakSelf getOrderList];
                 [weakSelf.timer invalidate];
                 weakSelf.timer = nil;
             }
         } enError:^(NSError *error) {
-//            NSLog(@"222-----------%@",error);
+            //            NSLog(@"222-----------%@",error);
         }];
     }
 }
@@ -137,7 +135,7 @@
     __weak typeof (self) weakSelf = self;
     [Manager requestGETWithURLStr:KURLNSString(@"order/enums") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-//        NSLog(@"==////======%@",diction);
+        //        NSLog(@"==////======%@",diction);
         [weakSelf.statusArray removeAllObjects];
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
@@ -157,7 +155,7 @@
 
 - (void)getOrderList{
     __weak typeof (self) weakSelf = self;
-    [Manager requestGETWithURLStr:KURLNSString(@"order/list") paramDic:nil token:nil finish:^(id responseObject) {
+    [Manager requestGETWithURLStr:KURLNSString(@"refund/getRefundOrderList") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
         //NSLog(@"%@",diction);
         [weakSelf.dataArray removeAllObjects];
@@ -165,15 +163,15 @@
         [weakSelf.sectionArrayStatus removeAllObjects];
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
-                for (NSDictionary *dic1 in [diction objectForKey:@"object"]) {
-                    [weakSelf.sectionArrayStatus addObject:[[dic1 objectForKey:@"order"]objectForKey:@"orderStatus"]];
-                    
-                    [weakSelf.sectionArray addObject:[[dic1 objectForKey:@"order"]objectForKey:@"orderNo"]];
-                    
-                    NSMutableDictionary *dictt = [NSMutableDictionary dictionaryWithCapacity:1];
-                    [dictt setObject:[dic1 objectForKey:@"orderItems"] forKey:[[dic1 objectForKey:@"order"]objectForKey:@"orderNo"]];
-                    [weakSelf.dataArray addObject:dictt];
-                }
+            for (NSDictionary *dic1 in [diction objectForKey:@"object"]) {
+                [weakSelf.sectionArrayStatus addObject:[[dic1 objectForKey:@"order"]objectForKey:@"orderStatus"]];
+                
+                [weakSelf.sectionArray addObject:[[dic1 objectForKey:@"order"]objectForKey:@"orderNo"]];
+                
+                NSMutableDictionary *dictt = [NSMutableDictionary dictionaryWithCapacity:1];
+                [dictt setObject:[dic1 objectForKey:@"orderItems"] forKey:[[dic1 objectForKey:@"order"]objectForKey:@"orderNo"]];
+                [weakSelf.dataArray addObject:dictt];
+            }
         }else  if ([code isEqualToString:@"401"]){
             [Manager logout];
             [weakSelf.navigationController popViewControllerAnimated:YES];
@@ -270,16 +268,16 @@
 - (void)clickBtn:(UIButton *)sender{
     __weak typeof(self) weakSelf = self;
     NSString *orderNo = [self.sectionArray objectAtIndex:sender.tag-100];
-//    NSLog(@"---%@",orderNo);
+    //    NSLog(@"---%@",orderNo);
     self.tfSheetView = [[TFSheetView alloc]init];
     //取消
     self.tfSheetView.cancelBlock = ^{
-//        NSLog(@"取消");
+        //        NSLog(@"取消");
         [weakSelf.tfSheetView disMissView];
     };
     //微信支付
     self.tfSheetView.wxBlock = ^{
-//        NSLog(@"微信支付");
+        //        NSLog(@"微信支付");
         
         if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"weixin://"]])
         {
@@ -297,7 +295,7 @@
     };
     //支付宝支付
     self.tfSheetView.zfbBlock = ^{
-//        NSLog(@"支付宝支付");
+        //        NSLog(@"支付宝支付");
         [weakSelf doAPPay:orderNo];
         [weakSelf.tfSheetView disMissView];
     };
@@ -311,10 +309,10 @@
         NSString *base64Decoded = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
         
         [[AlipaySDK defaultService] payOrder:base64Decoded fromScheme:@"dxracerdiruikesi" callback:^(NSDictionary *resultDic) {
-//            NSLog(@"*****************************result%@",resultDic);
+            //            NSLog(@"*****************************result%@",resultDic);
         }];
     } enError:^(NSError *error) {
-//        NSLog(@"%@",error);
+        //        NSLog(@"%@",error);
     }];
 }
 //微信
@@ -324,15 +322,15 @@
         [self.timer invalidate];
         self.timer = nil;
     }
-   self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerAction:) userInfo:nil repeats:YES];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerAction:) userInfo:nil repeats:YES];
     
     __weak typeof(self) weakSelf = self;
     NSString *str = [NSString stringWithFormat:@"order/weixin/h5/%@",orderNo];
     NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-
+    
     [Manager requestGETWithURLStr:KURLNSString(utf) paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-//        NSLog(@"%@",diction);
+        //        NSLog(@"%@",diction);
         
         UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
         NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",[diction objectForKey:@"msg"]]];
@@ -343,7 +341,7 @@
         [weakSelf.view addSubview:webView];
         
     } enError:^(NSError *error) {
-//        NSLog(@"%@",error);
+        //        NSLog(@"%@",error);
     }];
 }
 
@@ -380,14 +378,14 @@
     
     NSString *str;
     for (Model *model in self.statusArray) {
-//        NSLog(@"%@---------%@",model.key,model.value);
+        //        NSLog(@"%@---------%@",model.key,model.value);
         if ([model.key isEqualToString:[self.sectionArrayStatus objectAtIndex:section]]) {
             str = model.key;
         }
     }
     
     if ([str isEqualToString:@"01"]) {
-    
+        
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.frame = CGRectMake(10, 10, 40, 30);
         [button setTitle:@"⏰" forState:UIControlStateNormal];
@@ -475,7 +473,7 @@
         view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 60);
         lab.frame  = CGRectMake(0, 1, SCREEN_WIDTH, 49);
     }else{
-       
+        
         view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 10);
         lab.frame  = CGRectMake(0, 1, SCREEN_WIDTH, 0);
     }
@@ -498,10 +496,10 @@
     
     UIAlertAction *sure = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         
-//        NSLog(@"-------%@",[self.sectionArray objectAtIndex:sender.tag]);
+        //        NSLog(@"-------%@",[self.sectionArray objectAtIndex:sender.tag]);
         __weak typeof(self) weakSelf = self;
         NSString *str = [NSString stringWithFormat:@"order/receive/%@",[self.sectionArray objectAtIndex:sender.tag]];
-//        NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        //        NSString *utf = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         [Manager requestPOSTWithURLStr:KURLNSString(str) paramArr:nil token:nil finish:^(id responseObject) {
             NSDictionary *diction = [Manager returndictiondata:responseObject];
             //NSLog(@"%@",diction);
@@ -655,4 +653,5 @@
     }
     return _dataArray;
 }
+
 @end
