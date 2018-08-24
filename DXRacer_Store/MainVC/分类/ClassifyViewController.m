@@ -906,6 +906,7 @@
         [weakSelf loddeList];
     }];
     [self.goosdCollectionView.mj_header beginRefreshing];
+    
     self.goosdCollectionView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
         if (weakSelf.dataArray.count == self->number) {
             [weakSelf.goosdCollectionView.mj_footer setState:MJRefreshStateNoMoreData];

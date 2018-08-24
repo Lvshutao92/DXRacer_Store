@@ -55,14 +55,14 @@ class ReturnShoppingViewController: UIViewController,UITextViewDelegate {
     }
 
     @objc func clickCommit(){
-        print(textf.text!,orderNo)
+        //print(textf.text!,orderNo)
         
         let pinjieStr = "refund/creare?orderNo=" + (orderNo as String) + "&remarks=" + textf.text
         let returnStr = NetManager.URLNSString(string: pinjieStr)
         
         let url = returnStr.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
 
-        print(returnStr)
+        //print(returnStr)
         
         Manager.requestPOST(withURLStr: url, paramDic: ["":""], token: nil, finish: { (response) in
             let dct = Manager.returndictiondata(response as! Data)
