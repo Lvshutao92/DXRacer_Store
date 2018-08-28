@@ -45,6 +45,7 @@
 
 @property (nonatomic,strong)NSMutableArray *sectionArrayStatus;
 
+@property(nonatomic,strong)NSMutableArray *shiFouKeYiTuiHuo;
 
 @property (nonatomic,strong)NSTimer *timer;
 
@@ -159,15 +160,18 @@
     __weak typeof (self) weakSelf = self;
     [Manager requestGETWithURLStr:KURLNSString(@"order/list") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        //NSLog(@"%@",diction);
+        NSLog(@"%@",diction);
         [weakSelf.dataArray removeAllObjects];
         [weakSelf.sectionArray removeAllObjects];
         [weakSelf.sectionArrayStatus removeAllObjects];
+        [weakSelf.shiFouKeYiTuiHuo removeAllObjects];
+        
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
+            
                 for (NSDictionary *dic1 in [diction objectForKey:@"object"]) {
                     [weakSelf.sectionArrayStatus addObject:[[dic1 objectForKey:@"order"]objectForKey:@"orderStatus"]];
-                    
+                    [weakSelf.shiFouKeYiTuiHuo addObject:[dic1 objectForKey:@"canRefund"]];
                     [weakSelf.sectionArray addObject:[[dic1 objectForKey:@"order"]objectForKey:@"orderNo"]];
                     
                     NSMutableDictionary *dictt = [NSMutableDictionary dictionaryWithCapacity:1];
@@ -357,9 +361,18 @@
             str = model.key;
         }
     }
-    if ([str isEqualToString:@"01"] || [str isEqualToString:@"02"] || [str isEqualToString:@"05"] || [str isEqualToString:@"06"] || [str isEqualToString:@"07"]){
+    NSString *shifoutuihuo = [NSString stringWithFormat:@"%@",[self.shiFouKeYiTuiHuo objectAtIndex:section]];
+    
+    if ([str isEqualToString:@"01"] || [str isEqualToString:@"02"] || [str isEqualToString:@"05"] || [str isEqualToString:@"06"]){
         return 60;
+    }else if ([str isEqualToString:@"07"]) {
+        if ([shifoutuihuo isEqualToString:@"0"]) {
+            return 10;
+        }else{
+            return 60;
+        }
     }
+    
     return 10;
 }
 - (void)clickbutton{
@@ -448,6 +461,7 @@
         view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 60);
         lab.frame  = CGRectMake(0, 1, SCREEN_WIDTH, 49);
     }else if ([str isEqualToString:@"07"]) {
+       
         
         UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
         btn2.frame = CGRectMake(SCREEN_WIDTH-100, 10, 90, 30);
@@ -457,10 +471,19 @@
         btn2.titleLabel.font = [UIFont systemFontOfSize:14];
         btn2.tag = section;
         [btn2 addTarget:self action:@selector(clickReturnShopping:) forControlEvents:UIControlEventTouchUpInside];
-        [lab addSubview:btn2];
         
-        view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 60);
-        lab.frame  = CGRectMake(0, 1, SCREEN_WIDTH, 49);
+        
+        NSString *shifoutuihuo = [NSString stringWithFormat:@"%@",[self.shiFouKeYiTuiHuo objectAtIndex:section]];
+        if ([shifoutuihuo isEqualToString:@"0"]) {
+            view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 10);
+            lab.frame  = CGRectMake(0, 1, SCREEN_WIDTH, 0);
+        }else{
+            [lab addSubview:btn2];
+            view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 60);
+            lab.frame  = CGRectMake(0, 1, SCREEN_WIDTH, 49);
+        }
+        
+        
     }else if ([str isEqualToString:@"06"]) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.frame = CGRectMake(SCREEN_WIDTH-100, 10, 90, 30);
@@ -655,4 +678,13 @@
     }
     return _dataArray;
 }
+- (NSMutableArray *)shiFouKeYiTuiHuo{
+    if (_shiFouKeYiTuiHuo == nil) {
+        self.shiFouKeYiTuiHuo = [NSMutableArray arrayWithCapacity:1];
+    }
+    return _shiFouKeYiTuiHuo;
+}
+
+
+
 @end

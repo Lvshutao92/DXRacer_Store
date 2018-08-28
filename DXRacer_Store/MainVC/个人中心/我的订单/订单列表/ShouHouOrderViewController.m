@@ -133,9 +133,9 @@
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.label.text = NSLocalizedString(@"加载中....", @"HUD loading title");
     __weak typeof (self) weakSelf = self;
-    [Manager requestGETWithURLStr:KURLNSString(@"order/enums") paramDic:nil token:nil finish:^(id responseObject) {
+    [Manager requestGETWithURLStr:KURLNSString(@"refund/enums") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        //        NSLog(@"==////======%@",diction);
+        //NSLog(@"==////======%@",diction);
         [weakSelf.statusArray removeAllObjects];
         NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
         if ([code isEqualToString:@"200"]){
@@ -157,25 +157,27 @@
     __weak typeof (self) weakSelf = self;
     [Manager requestGETWithURLStr:KURLNSString(@"refund/getRefundOrderList") paramDic:nil token:nil finish:^(id responseObject) {
         NSDictionary *diction = [Manager returndictiondata:responseObject];
-        //NSLog(@"%@",diction);
+        NSMutableArray *arr = (NSMutableArray *)diction;
+        NSLog(@"---------%@",diction);
         [weakSelf.dataArray removeAllObjects];
         [weakSelf.sectionArray removeAllObjects];
         [weakSelf.sectionArrayStatus removeAllObjects];
-        NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
-        if ([code isEqualToString:@"200"]){
-            for (NSDictionary *dic1 in [diction objectForKey:@"object"]) {
-                [weakSelf.sectionArrayStatus addObject:[[dic1 objectForKey:@"order"]objectForKey:@"orderStatus"]];
+//        NSString *code = [NSString stringWithFormat:@"%@",[diction objectForKey:@"code"]];
+//        if ([code isEqualToString:@"200"]){
+            for (NSDictionary *dic1 in arr) {
+                [weakSelf.sectionArrayStatus addObject:[[dic1 objectForKey:@"refundOrder"]objectForKey:@"refundOrderStatus"]];
                 
-                [weakSelf.sectionArray addObject:[[dic1 objectForKey:@"order"]objectForKey:@"orderNo"]];
+                [weakSelf.sectionArray addObject:[[dic1 objectForKey:@"refundOrder"]objectForKey:@"orderNo"]];
+                
                 
                 NSMutableDictionary *dictt = [NSMutableDictionary dictionaryWithCapacity:1];
-                [dictt setObject:[dic1 objectForKey:@"orderItems"] forKey:[[dic1 objectForKey:@"order"]objectForKey:@"orderNo"]];
+                [dictt setObject:[dic1 objectForKey:@"refundOrderItems"] forKey:[[dic1 objectForKey:@"refundOrder"]objectForKey:@"orderNo"]];
                 [weakSelf.dataArray addObject:dictt];
             }
-        }else  if ([code isEqualToString:@"401"]){
-            [Manager logout];
-            [weakSelf.navigationController popViewControllerAnimated:YES];
-        }
+//        }else  if ([code isEqualToString:@"401"]){
+//            [Manager logout];
+//            [weakSelf.navigationController popViewControllerAnimated:YES];
+//        }
         
         
         [weakSelf.tableview reloadData];
@@ -212,7 +214,7 @@
     });
     cell.lab1.text = [dict objectForKey:@"productTitle"];
     cell.lab1.numberOfLines = 0;
-    cell.lab3.text = [Manager jinegeshi:[dict objectForKey:@"orderFee"]];
+    cell.lab3.text = [Manager jinegeshi:[dict objectForKey:@"productFee"]];
     cell.lab4.text = [dict objectForKey:@"productItemNo"];
     cell.lab2.text = [NSString stringWithFormat:@"X%@",[dict objectForKey:@"quantity"]];
     
@@ -349,134 +351,12 @@
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    NSString *str;
-    for (Model *model in self.statusArray) {
-        if ([model.key isEqualToString:[self.sectionArrayStatus objectAtIndex:section]]) {
-            str = model.key;
-        }
-    }
-    if ([str isEqualToString:@"01"] || [str isEqualToString:@"02"] || [str isEqualToString:@"05"] || [str isEqualToString:@"06"] || [str isEqualToString:@"07"]){
-        return 60;
-    }
     return 10;
 }
-- (void)clickbutton{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"订单生成30分钟后自动取消，快前往支付吧" preferredStyle:1];
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-    }];
-    [alert addAction:cancel];
-    [self presentViewController:alert animated:YES completion:nil];
-}
+
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     UIView *view = [[UIView alloc]init];
     view.backgroundColor = RGBACOLOR(237, 236, 242, 1);
-    
-    UILabel *lab = [[UILabel alloc]init];
-    lab.backgroundColor = [UIColor whiteColor];
-    lab.userInteractionEnabled = YES;
-    [view addSubview:lab];
-    
-    NSString *str;
-    for (Model *model in self.statusArray) {
-        //        NSLog(@"%@---------%@",model.key,model.value);
-        if ([model.key isEqualToString:[self.sectionArrayStatus objectAtIndex:section]]) {
-            str = model.key;
-        }
-    }
-    
-    if ([str isEqualToString:@"01"]) {
-        
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.frame = CGRectMake(10, 10, 40, 30);
-        [button setTitle:@"⏰" forState:UIControlStateNormal];
-        [button addTarget:self action:@selector(clickbutton) forControlEvents:UIControlEventTouchUpInside];
-        [lab addSubview:button];
-        
-        
-        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn.frame = CGRectMake(SCREEN_WIDTH-80, 10, 70, 30);
-        [btn setTitle:@"去支付" forState:UIControlStateNormal];
-        [btn setTitleColor:RGB_AB forState:UIControlStateNormal];
-        LRViewBorderRadius(btn, 15, 1, RGB_AB);
-        btn.titleLabel.font = [UIFont systemFontOfSize:14];
-        [btn addTarget:self action:@selector(clickBtn:) forControlEvents:UIControlEventTouchUpInside];
-        btn.tag = 100 + section;
-        [lab addSubview:btn];
-        
-        UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn1.frame = CGRectMake(SCREEN_WIDTH-190, 10, 90, 30);
-        [btn1 setTitle:@"取消订单" forState:UIControlStateNormal];
-        [btn1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        LRViewBorderRadius(btn1, 15, 1, [UIColor blackColor]);
-        btn1.titleLabel.font = [UIFont systemFontOfSize:14];
-        btn1.tag = section;
-        [btn1 addTarget:self action:@selector(clickCancelOrder:) forControlEvents:UIControlEventTouchUpInside];
-        [lab addSubview:btn1];
-        
-        
-        view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 60);
-        lab.frame  = CGRectMake(0, 1, SCREEN_WIDTH, 49);
-        
-    }else if ([str isEqualToString:@"02"]) {
-        
-        UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn2.frame = CGRectMake(SCREEN_WIDTH-100, 10, 90, 30);
-        [btn2 setTitle:@"取消订单" forState:UIControlStateNormal];
-        [btn2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        LRViewBorderRadius(btn2, 15, 1, [UIColor blackColor]);
-        btn2.titleLabel.font = [UIFont systemFontOfSize:14];
-        btn2.tag = section;
-        [btn2 addTarget:self action:@selector(clickCancelOrder:) forControlEvents:UIControlEventTouchUpInside];
-        [lab addSubview:btn2];
-        
-        view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 60);
-        lab.frame  = CGRectMake(0, 1, SCREEN_WIDTH, 49);
-    }else if ([str isEqualToString:@"05"]) {
-        
-        UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn2.frame = CGRectMake(SCREEN_WIDTH-100, 10, 90, 30);
-        [btn2 setTitle:@"取消订单" forState:UIControlStateNormal];
-        [btn2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        LRViewBorderRadius(btn2, 15, 1, [UIColor blackColor]);
-        btn2.titleLabel.font = [UIFont systemFontOfSize:14];
-        btn2.tag = section;
-        [btn2 addTarget:self action:@selector(clickCancelOrder:) forControlEvents:UIControlEventTouchUpInside];
-        [lab addSubview:btn2];
-        
-        view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 60);
-        lab.frame  = CGRectMake(0, 1, SCREEN_WIDTH, 49);
-    }else if ([str isEqualToString:@"07"]) {
-        
-        UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn2.frame = CGRectMake(SCREEN_WIDTH-100, 10, 90, 30);
-        [btn2 setTitle:@"退货退款" forState:UIControlStateNormal];
-        [btn2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        LRViewBorderRadius(btn2, 15, 1, [UIColor blackColor]);
-        btn2.titleLabel.font = [UIFont systemFontOfSize:14];
-        btn2.tag = section;
-        [btn2 addTarget:self action:@selector(clickReturnShopping:) forControlEvents:UIControlEventTouchUpInside];
-        [lab addSubview:btn2];
-        
-        view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 60);
-        lab.frame  = CGRectMake(0, 1, SCREEN_WIDTH, 49);
-    }else if ([str isEqualToString:@"06"]) {
-        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn.frame = CGRectMake(SCREEN_WIDTH-100, 10, 90, 30);
-        [btn setTitle:@"确认收货" forState:UIControlStateNormal];
-        [btn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-        LRViewBorderRadius(btn, 15, 1, [UIColor redColor]);
-        btn.titleLabel.font = [UIFont systemFontOfSize:14];
-        btn.tag = section;
-        [btn addTarget:self action:@selector(clickShouHuo:) forControlEvents:UIControlEventTouchUpInside];
-        [lab addSubview:btn];
-        
-        view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 60);
-        lab.frame  = CGRectMake(0, 1, SCREEN_WIDTH, 49);
-    }else{
-        
-        view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 10);
-        lab.frame  = CGRectMake(0, 1, SCREEN_WIDTH, 0);
-    }
     
     return view;
 }
@@ -564,63 +444,30 @@
 
 
 
-// 01---------待付款
-// 02---------已付款
-// 03---------取消中
-
-// 04---------已取消
-
-// 05---------待发货
-
-// 06---------已发货
-// 07---------已签收
 
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSString *str;
-    for (Model *model in self.statusArray) {
-        if ([model.key isEqualToString:[self.sectionArrayStatus objectAtIndex:indexPath.section]]) {
-            str = model.value;
-        }
-    }
-    if ([str isEqualToString:@"待付款"]){
-        DaiFuKuan_ViewController *or = [[DaiFuKuan_ViewController alloc]init];
-        or.orderNo = [self.sectionArray objectAtIndex:indexPath.section];
-        or.orderStatus = str;
-        [self.navigationController pushViewController:or animated:YES];
-    }
-    else if ([str isEqualToString:@"已付款"]) {
-        YiFuKuan_ViewController *or = [[YiFuKuan_ViewController alloc]init];
-        or.orderNo = [self.sectionArray objectAtIndex:indexPath.section];
-        or.orderStatus = str;
-        [self.navigationController pushViewController:or animated:YES];
-    }
-    else if ([str isEqualToString:@"待发货"]) {
-        DaiFaHuo_ViewController *or = [[DaiFaHuo_ViewController alloc]init];
-        or.orderNo = [self.sectionArray objectAtIndex:indexPath.section];
-        or.orderStatus = str;
-        [self.navigationController pushViewController:or animated:YES];
-    }
-    else if ([str isEqualToString:@"已发货"]){
-        YiFaHuo_ViewController *or = [[YiFaHuo_ViewController alloc]init];
-        or.orderNo = [self.sectionArray objectAtIndex:indexPath.section];
-        or.orderStatus = str;
-        [self.navigationController pushViewController:or animated:YES];
-    }
-    else if ([str isEqualToString:@"已签收"]){
-        YiQianShou_ViewController *or = [[YiQianShou_ViewController alloc]init];
-        or.orderNo = [self.sectionArray objectAtIndex:indexPath.section];
-        or.orderStatus = str;
-        [self.navigationController pushViewController:or animated:YES];
-    }
-    else {
-        CancelOrder_ViewController *or = [[CancelOrder_ViewController alloc]init];
-        or.orderNo = [self.sectionArray objectAtIndex:indexPath.section];
-        or.orderStatus = str;
-        [self.navigationController pushViewController:or animated:YES];
-    }
+  
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

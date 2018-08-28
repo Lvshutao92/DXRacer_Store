@@ -260,7 +260,7 @@
     
     userImg = [[UIImageView alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-85, 10, 60, 60)];
     LRViewBorderRadius(userImg, 30, 0, [UIColor clearColor]);
-    userImg.backgroundColor = [UIColor grayColor];
+    userImg.backgroundColor = [UIColor whiteColor];
     [v addSubview:userImg];
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
