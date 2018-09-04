@@ -137,14 +137,14 @@
 
 
 //显示头像的域名是
-//#define NSString(str) [NSString stringWithFormat:@"http://image-shop.dxracer.com.cn/%@",str]
-//#define CHECKWORD @""
-//#define KURLNSString(str) [NSString stringWithFormat:@"http://server-shop.dxracer.cn/mall/app/%@",str]
-
-
 #define NSString(str) [NSString stringWithFormat:@"http://image-shop.dxracer.com.cn/%@",str]
 #define CHECKWORD @""
-#define KURLNSString(str) [NSString stringWithFormat:@"http://10.0.0.79:8080/mall/app/%@",str]
+#define KURLNSString(str) [NSString stringWithFormat:@"http://server-shop.dxracer.cn/mall/app/%@",str]
+
+
+//#define NSString(str) [NSString stringWithFormat:@"http://image-shop.dxracer.com.cn/%@",str]
+//#define CHECKWORD @""
+//#define KURLNSString(str) [NSString stringWithFormat:@"http://10.0.0.79:8080/mall/app/%@",str]
 
 
 #import "UIView+DWQExtension.h"

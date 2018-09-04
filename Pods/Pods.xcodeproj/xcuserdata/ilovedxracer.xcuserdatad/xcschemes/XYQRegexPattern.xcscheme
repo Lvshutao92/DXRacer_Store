@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C1305BD2C7234F051E51E1911B81AC87"
+               BlueprintIdentifier = "AA4B836F15B18E8AD725C4A5E3A42FD3"
                BlueprintName = "XYQRegexPattern"
                ReferencedContainer = "container:Pods.xcodeproj"
                BuildableName = "libXYQRegexPattern.a">

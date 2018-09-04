@@ -40,6 +40,19 @@ DEPENDENCIES:
   - SDWebImage (~> 4.2.3)
   - XYQRegexPattern (~> 2.0.0)
 
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - AFNetworking
+    - FLAnimatedImage
+    - FMDB
+    - IQKeyboardManager
+    - Masonry
+    - MBProgressHUD
+    - MJExtension
+    - MJRefresh
+    - SDWebImage
+    - XYQRegexPattern
+
 SPEC CHECKSUMS:
   AFNetworking: 8ac6017b94ea105479f7776e5288e48ae9c59bb4
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
@@ -54,4 +67,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: a8903541629ebbd73679e705fd43b7cc57cf0131
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.5.0
